@@ -1,15 +1,7 @@
 extends Node
 
-var item_names := {
-	"wings" : "Wings",
-	"iron knees" : "Iron Knees",
-	"thickblood" : "Blod Compression",
-}
-var item_descriptions := {
-	"wings" : "I don't fear the ground anymore.",
-	"iron knees" : "Unsnappable legs.",
-	"thickblood" : "Your veins and muscles become able to hold higher pressures",
-}
+var items := {}
+
 var spell_names := {
 	"fuck you" : "Fuck You",
 	"evilsight" : "Sight Of Evil",
@@ -21,7 +13,6 @@ var spell_descriptions := {
 
 var rooms := []
 
-var items := ["wings", "iron knees", "thickblood", "heal"]
 var spells := ["fuck you", "evilsight"]
 
 var player_items := []
@@ -39,6 +30,21 @@ func _ready():
 	Cam = get_tree().get_nodes_in_group("Camera")[0]
 	player_wands[0] = Wand.new()
 	player_wands[1] = Wand.new()
+	
+	register_item("heal", "Heal", "Return the flesh to a state previous", preload("res://Sprites/Items/Heal.png"))
+	register_item("ironknees", "Iron Knees", "Fear the ground no more", preload("res://Sprites/Items/IronKnees.png"))
+	register_item("thickblood", "Thick Blood", "Pressurized Veins", preload("res://Sprites/Items/ThickBlood.png"))
+	register_item("wings", "Butterfly Wings", "Metamorphosis", preload("res://Sprites/Items/Wings.png"))
+	
+
+
+func register_item(name_id:String, name:String, desc:String, texture:Texture):
+	var new := Item.new()
+	new.name = name
+	new.description = desc
+	new.texture = texture
+	new.id = name_id
+	items[name_id] = new
 
 
 func _process(delta):

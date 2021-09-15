@@ -148,7 +148,7 @@ func _ready():
 	max_point += Vector2(64, 32)
 	min_point /= 8.0
 	min_point -= Vector2(64, 32)
-	print("Step 4: Filling empty space from", min_point, " to ", max_point)
+	print("Step 5: Filling empty space from", min_point, " to ", max_point)
 	print("Area: ", (max_point.x - min_point.x) * (max_point.y - min_point.y))
 	for x in range(min_point.x, max_point.x):
 		for y in range(min_point.y, max_point.y):
@@ -159,7 +159,18 @@ func _ready():
 					break
 			if set:
 				set_cell(x, y, 0)
+	print("Step 6: Adding enemies")
+#	var added := 0
+#	for a in areas:
+#		var pos :Vector2 = (a.position*8.0 + Vector2(randf(), randf())*a.size*8.0)
+#		var n := preload("res://Enemies/MagicDrone.tscn").instance()
+#		add_child(n)
+#		n.position = pos
+#		added += 1
+#		print(Vector2(randf(), randf())*a.size*8.0)
+#	print("Added ", added, " enemies")
 	print("Generation finished!")
+	
 
 func search_for(group:String, new_room, room, element)-> Array:
 	var connected_door

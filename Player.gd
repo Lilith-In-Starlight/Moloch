@@ -133,7 +133,7 @@ func _physics_process(delta):
 				if is_on_floor():
 					state = STATES.ON_GROUND
 					if speed_before_collision.y > 800:
-						if not Items.player_items.has("iron knees"):
+						if not Items.player_items.has("ironknees"):
 							var message := "Broken Leg"
 							if randi()%2 == 0:
 								message = "Broken Both Legs"
