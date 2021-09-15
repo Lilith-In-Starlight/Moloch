@@ -12,7 +12,8 @@ func _ready():
 	print("Step 1: Generating layout of the world")
 	var rooms := 0
 	var generated_end_room := false
-	while not generated_end_room or rooms <= 25:
+	var treasure_rooms := 0
+	while not generated_end_room or rooms <= 25 or treasure_rooms < 1:
 		for room in get_children():
 			for element in room.get_children():
 				var new_room = null
@@ -20,18 +21,25 @@ func _ready():
 				var connected_door
 				var tries := 0
 				var new_area :Rect2
+				var is_treasure := false
 				if element.is_in_group("LeftDoor") and not element.is_in_group("DontTry"):
 					while search_new_room and tries < 10:
 						tries += 1
 						if new_room != null:
 							new_room.queue_free()
-						new_room = Rooms.rooms[randi()%Rooms.rooms.size()].instance()
+						if treasure_rooms < 4 and randf()<0.05 and rooms > 12:
+							is_treasure = true
+							new_room = preload("res://Rooms/Sacrifice/TreasureRoom1.tscn").instance()
+						else:
+							new_room = Rooms.rooms[randi()%Rooms.rooms.size()].instance()
 						var results := search_for("RightDoor", new_room, room, element)
 						search_new_room = results[0]
 						connected_door = results[1]
 						new_area = results[2]
 					element.add_to_group("DontTry")
 					if tries < 10:
+						if is_treasure:
+							treasure_rooms += 1
 						connected_door.remove_from_group("RightDoor")
 						element.remove_from_group("LeftDoor")
 				
@@ -40,13 +48,19 @@ func _ready():
 						tries += 1
 						if new_room != null:
 							new_room.queue_free()
-						new_room = Rooms.rooms[randi()%Rooms.rooms.size()].instance()
+						if treasure_rooms < 4 and randf()<0.05 and rooms > 12:
+							is_treasure = true
+							new_room = preload("res://Rooms/Sacrifice/TreasureRoom1.tscn").instance()
+						else:
+							new_room = Rooms.rooms[randi()%Rooms.rooms.size()].instance()
 						var results := search_for("LeftDoor", new_room, room, element)
 						search_new_room = results[0]
 						connected_door = results[1]
 						new_area = results[2]
 					element.add_to_group("DontTry")
 					if tries < 10:
+						if is_treasure:
+							treasure_rooms += 1
 						connected_door.remove_from_group("LeftDoor")
 						element.remove_from_group("RightDoor")
 				
@@ -160,15 +174,16 @@ func _ready():
 			if set:
 				set_cell(x, y, 0)
 	print("Step 6: Adding enemies")
-#	var added := 0
-#	for a in areas:
-#		var pos :Vector2 = (a.position*8.0 + Vector2(randf(), randf())*a.size*8.0)
-#		var n := preload("res://Enemies/MagicDrone.tscn").instance()
-#		add_child(n)
-#		n.position = pos
-#		added += 1
-#		print(Vector2(randf(), randf())*a.size*8.0)
-#	print("Added ", added, " enemies")
+	var added := 0
+	for a in areas:
+		for i in randi()%3:
+			if randf()<0.5:
+				var pos :Vector2 = (a.position + Vector2(randf(), randf())*a.size)
+				var n := preload("res://Enemies/MagicDrone.tscn").instance()
+				add_child(n)
+				n.position = pos
+				added += 1
+	print("Added ", added, " enemies")
 	print("Generation finished!")
 	
 

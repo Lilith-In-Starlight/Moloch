@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Spells/Ray.gd" type="Script" id=1]
+
+[node name="Ray" type="RayCast2D"]
+enabled = true
+collision_mask = 74
+script = ExtResource( 1 )
+
+[node name="Line2D" type="Line2D" parent="."]
+width = 2.0
+default_color = Color( 0, 0.952941, 1, 1 )

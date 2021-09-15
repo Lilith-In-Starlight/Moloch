@@ -9,6 +9,8 @@ enum STATES {
 const WALK_ACCEL := 90.0
 const JUMP_ACCEL := -370.0
 
+var Cam :Camera2D
+
 var gravity_accel := 15.0
 var gravity_direction := Vector2(0, 1)
 
@@ -16,34 +18,34 @@ var speed := Vector2()
 
 var state :int = STATES.ON_AIR
 
-var broken_left_leg := false
-var broken_right_leg := false
-var blood := 1.0 # Juice
-var poked_holes := 0 # Poke a hole on the flesh to let the juice out
-
 var speed_before_collision := Vector2(0, 0)
-var temperature := 30.0
 var jump_buffer := 0.2
 var coyote_time := 0.2
 var lwjump_buffer := 0.2
 var rwjump_buffer := 0.2
 
-var max_blood := 1.0
+var health := Items.player_health
+
+func _ready():
+	Cam = get_tree().get_nodes_in_group("Camera")[0]
 
 func _process(delta):
-	
+	var coffset := get_local_mouse_position()/4.0
+	Cam.offset += (coffset-Cam.offset)/10.0
+	if health.temperature > 145 or health.soul <= 0.0 or health.blood <= 0.0:
+		get_tree().reload_current_scene()
 	if Items.player_items.has("thickblood"):
 		Items.player_items.erase("thickblood")
-		max_blood *= 2.0
-		blood *= 2.0
+		health.max_blood *= 2.0
+		health.blood *= 2.0
 		
 	if Items.player_items.has("heal"):
 		Items.player_items.erase("heal")
-		blood = max_blood
-		temperature = 30.0
-		poked_holes = 0
-		broken_left_leg = false
-		broken_right_leg = false
+		health.soul = 1.0
+		health.blood = health.max_blood
+		health.temperature = 30.0
+		health.poked_holes = 0
+		health.broken_moving_appendages = 0
 	
 	if Items.player_wands[Items.selected_wand] is Wand and Input.is_action_just_pressed("Interact1") and not Items.player_wands[Items.selected_wand].running:
 		Items.player_wands[Items.selected_wand].running = true
@@ -57,7 +59,7 @@ func _process(delta):
 		Items.selected_wand = (Items.selected_wand + 1) % 6
 		
 func _physics_process(delta):
-	blood -= poked_holes * (0.5+randf())*0.0005
+	health.blood -= health.poked_holes * (0.5+randf())*0.0005
 	set_collision_mask_bit(2, not Input.is_key_pressed(KEY_S))
 	
 	
@@ -69,42 +71,42 @@ func _physics_process(delta):
 				if not is_on_floor():
 					state = STATES.ON_AIR
 				
-				if (Input.is_action_just_pressed("jump") or jump_buffer > 0.0) and (not broken_left_leg or not broken_right_leg):
+				if (Input.is_action_just_pressed("jump") or jump_buffer > 0.0) and health.broken_moving_appendages < 2:
 					speed.y += JUMP_ACCEL * gravity_direction.y
 					coyote_time = 0.0
-					if broken_left_leg or broken_right_leg: 
+					if health.broken_moving_appendages == 1: 
 						speed.y *= 0.6+randf()*0.4
 					state = STATES.ON_AIR
-					temperature += 0.002
+					health.temperature += 0.002
 				jump_buffer = 0.0
 				
-				if (not broken_left_leg and not broken_right_leg):
+				if health.broken_moving_appendages == 0:
 					var haxis := 0.0
 					if Input.is_action_pressed("left"):
 						speed.x -= WALK_ACCEL
 						haxis = -1.0
-						temperature += 0.001
+						health.temperature += 0.001
 					elif Input.is_action_pressed("right"):
 						speed.x += WALK_ACCEL
 						haxis = 1.0
-						temperature += 0.001
+						health.temperature += 0.001
 					else:
-						temperature = move_toward(temperature, 30, 0.002)
+						health.temperature = move_toward(health.temperature, 30, 0.002)
 					if abs(haxis)<0.5:
 						speed.x *= pow(0.8, delta*60)
 					elif sign(haxis)!=sign(speed.x):
 						speed.x *= pow(0.9, delta*60)
 					else:
 						speed.x *= pow(0.75, delta*60)
-				elif (broken_left_leg and broken_right_leg):
+				elif health.broken_moving_appendages == 2:
 					if Input.is_action_pressed("left"):
 						speed.x -= WALK_ACCEL
-						temperature += 0.0003
+						health.temperature += 0.0003
 					elif Input.is_action_pressed("right"):
 						speed.x += WALK_ACCEL
-						temperature += 0.0003
+						health.temperature += 0.0003
 					else:
-						temperature = move_toward(temperature, 30, 0.002)
+						health.temperature = move_toward(health.temperature, 30, 0.002)
 					speed.x *= 0.5
 				else:
 					speed.x *= 0.7
@@ -116,15 +118,15 @@ func _physics_process(delta):
 			STATES.ON_AIR:
 				if Input.is_action_just_released("jump") and speed.y < 0:
 					speed.y *= 0.5
-				if Input.is_action_just_pressed("jump") and (not broken_left_leg or not broken_right_leg):
+				if Input.is_action_just_pressed("jump") and health.broken_moving_appendages < 2:
 					if  coyote_time > 0.0:
 						speed.y = JUMP_ACCEL * gravity_direction.y
 						coyote_time = 0.0
 						
-						if broken_left_leg or broken_right_leg: 
+						if health.broken_moving_appendages == 1: 
 							speed.y *= 0.8
 						state = STATES.ON_AIR
-						temperature += 0.002
+						health.temperature += 0.002
 					else:
 						jump_buffer = 0.2
 				jump_buffer -= delta
@@ -135,17 +137,23 @@ func _physics_process(delta):
 					if speed_before_collision.y > 800:
 						if not Items.player_items.has("ironknees"):
 							var message := "Broken Leg"
-							if randi()%2 == 0:
-								message = "Broken Both Legs"
-								broken_left_leg = true
-							broken_right_leg = true
-							get_tree().get_nodes_in_group("HUD")[0].add_message(message)
+							var brkn_lgs := 0
+							if health.broken_moving_appendages == 0:
+								brkn_lgs = 1+randi()%2
+								health.broken_moving_appendages += brkn_lgs
+							elif health.broken_moving_appendages == 1:
+								brkn_lgs = 1
+								health.broken_moving_appendages += 1
+							if brkn_lgs > 0:
+								if brkn_lgs == 2:
+									message = "Broken Both Legs"
+								get_tree().get_nodes_in_group("HUD")[0].add_message(message)
 					
 					if speed_before_collision.y > 900:
-						poked_holes += 1+randi()%3
+						health.poked_holes += 1+randi()%3
 						get_tree().get_nodes_in_group("HUD")[0].add_message("Bleeding")
 				else:
-					temperature -= 0.0003
+					health.temperature -= 0.0003
 					speed_before_collision = speed
 				
 				if is_on_wall():
@@ -155,13 +163,13 @@ func _physics_process(delta):
 				if Input.is_action_pressed("left"):
 					speed.x -= WALK_ACCEL
 					haxis = -1.0
-					temperature += 0.001
+					health.temperature += 0.001
 				elif Input.is_action_pressed("right"):
 					speed.x += WALK_ACCEL
 					haxis = 1.0
-					temperature += 0.001
+					health.temperature += 0.001
 				else:
-					temperature = move_toward(temperature, 30, 0.002)
+					health.temperature = move_toward(health.temperature, 30, 0.002)
 				if abs(haxis)<0.5:
 					speed.x *= pow(0.8, delta*60)
 				elif sign(haxis)!=sign(speed.x):
@@ -173,10 +181,10 @@ func _physics_process(delta):
 				rwjump_buffer -= delta
 				if Input.is_action_just_pressed("jump") and (lwjump_buffer > 0.0 or rwjump_buffer > 0.0):
 					speed.y = JUMP_ACCEL * gravity_direction.y
-					if broken_left_leg and broken_right_leg:
+					if health.broken_moving_appendages == 2:
 						speed.y*=0.5
 					state = STATES.ON_AIR
-					temperature += 0.002
+					health.temperature += 0.002
 					if lwjump_buffer > 0.0:
 						speed.x += 300
 					elif rwjump_buffer > 0.0:
@@ -189,10 +197,10 @@ func _physics_process(delta):
 				
 				if Input.is_action_just_pressed("jump"):
 					speed.y = JUMP_ACCEL * gravity_direction.y
-					if broken_left_leg and broken_right_leg:
+					if health.broken_moving_appendages == 2:
 						speed.y*=0.5
 					state = STATES.ON_AIR
-					temperature += 0.002
+					health.temperature += 0.002
 					if $Left.is_colliding():
 						speed.x += 300
 					elif $Right.is_colliding():
@@ -227,25 +235,25 @@ func _physics_process(delta):
 		if Input.is_action_pressed("left"):
 			speed.x -= WALK_ACCEL
 			haxis = -1.0
-			temperature -= 0.001
+			health.temperature -= 0.001
 		elif Input.is_action_pressed("right"):
 			speed.x += WALK_ACCEL
 			haxis = 1.0
-			temperature -= 0.001
+			health.temperature -= 0.001
 		else:
-			temperature = move_toward(temperature, 30, 0.002)
+			health.temperature = move_toward(health.temperature, 30, 0.002)
 		
 		var vaxis := 0.0
 		if Input.is_action_pressed("up"):
 			speed.y -= WALK_ACCEL
 			vaxis = -1.0
-			temperature -= 0.001
+			health.temperature -= 0.001
 		elif Input.is_action_pressed("down"):
 			speed.y += WALK_ACCEL
 			vaxis = 1.0
-			temperature -= 0.001
+			health.temperature -= 0.001
 		else:
-			temperature = move_toward(temperature, 30, 0.002)
+			health.temperature = move_toward(health.temperature, 30, 0.002)
 		if abs(vaxis)<0.5:
 			speed.y *= pow(0.8, delta*60)
 		elif sign(vaxis)!=sign(speed.y):
@@ -272,3 +280,6 @@ func _physics_process(delta):
 		get_parent().add_child(n)
 	
 	$"../Camera2D".position = lerp($"../Camera2D".position, spos, 0.1)
+
+func health_object():
+	return health

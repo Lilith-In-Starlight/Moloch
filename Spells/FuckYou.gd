@@ -18,10 +18,10 @@ func _physics_process(delta):
 	position = Player.position
 	rotate = get_local_mouse_position().angle()
 	cast_to = Vector2(cos(rotate), sin(rotate))*30000
-	Player.temperature += 1/60.0
+	Player.health.temperature += 1/60.0
 	if is_colliding():
+		var pos := get_collision_point()
 		if get_collider().is_in_group("World"):
-			var pos := get_collision_point()
 			Player.speed -= (pos-position).normalized()*30
 			$Line2D.points = [Vector2(0, 0), pos-position]
 			pos.x = int(pos.x/8)
@@ -31,7 +31,12 @@ func _physics_process(delta):
 					var v := Vector2(x, y)
 					if v.length() < 3:
 						WorldMap.set_cellv(v+pos,-1)
-						Player.temperature += 1/60.0
+						Player.health.temperature += 1/60.0
+		elif get_collider().has_method("health_object"):
+			get_collider().health_object().temp_change(5.0)
+			Player.health.temperature += 1/60.0
+			Player.speed -= (pos-position).normalized()*20
+			$Line2D.points = [Vector2(0, 0), pos-position]
 	else:
 		$Line2D.points = [Vector2(0, 0), Vector2(cos(rotate), sin(rotate))*1000]
 			
