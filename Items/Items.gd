@@ -34,6 +34,7 @@ func _ready():
 	Player = get_tree().get_nodes_in_group("Player")[0]
 	Cam = get_tree().get_nodes_in_group("Camera")[0]
 	var selected_wand := 0
+	player_health = Flesh.new()
 
 	player_wands[0] = Wand.new()
 	player_wands[1] = Wand.new()

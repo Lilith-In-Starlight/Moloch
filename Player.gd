@@ -24,15 +24,18 @@ var coyote_time := 0.2
 var lwjump_buffer := 0.2
 var rwjump_buffer := 0.2
 
-var health := Items.player_health
+var health :Flesh = Items.player_health
 
 func _ready():
+	health.connect("hole_poked", self, "message_send", ["Bleeding"])
+	health.connect("full_healed", self, "message_send", ["Your flesh is renewed"])
+	health.is_players = true
 	Cam = get_tree().get_nodes_in_group("Camera")[0]
 
 func _process(delta):
 	var coffset := get_local_mouse_position()/4.0
 	Cam.offset += (coffset-Cam.offset)/10.0
-	if health.temperature > 145 or health.soul <= 0.0 or health.blood <= 0.0:
+	if health.temperature > 145 or health.soul <= 0.0 or health.blood <= 0.0 or Input.is_key_pressed(KEY_G):
 		get_tree().reload_current_scene()
 	if Items.player_items.has("thickblood"):
 		Items.player_items.erase("thickblood")
@@ -41,11 +44,7 @@ func _process(delta):
 		
 	if Items.player_items.has("heal"):
 		Items.player_items.erase("heal")
-		health.soul = 1.0
-		health.blood = health.max_blood
-		health.temperature = 30.0
-		health.poked_holes = 0
-		health.broken_moving_appendages = 0
+		health.full_heal()
 	
 	if Items.player_wands[Items.selected_wand] is Wand and Input.is_action_just_pressed("Interact1") and not Items.player_wands[Items.selected_wand].running:
 		Items.player_wands[Items.selected_wand].running = true
@@ -272,14 +271,11 @@ func _physics_process(delta):
 	var spos := position
 	speed = move_and_slide(speed, -gravity_direction)
 	
-	if Input.is_action_just_pressed("Interact2"):
-		var dir := get_local_mouse_position().normalized()
-		var n:RigidBody2D = preload("res://Bomb.tscn").instance()
-		n.linear_velocity = dir*150
-		n.position = position
-		get_parent().add_child(n)
 	
 	$"../Camera2D".position = lerp($"../Camera2D".position, spos, 0.1)
 
 func health_object():
 	return health
+
+func message_send(msg):
+	get_tree().get_nodes_in_group("HUD")[0].add_message(msg)

@@ -115,6 +115,57 @@ margin_bottom = 16.0
 rect_min_size = Vector2( 16, 16 )
 custom_styles/panel = SubResource( 3 )
 
+[node name="Spells" type="HBoxContainer" parent="HUD/HUD"]
+margin_left = 4.0
+margin_top = 25.0
+margin_right = 120.0
+margin_bottom = 41.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Slot1" type="Panel" parent="HUD/HUD/Spells"]
+modulate = Color( 0.47451, 0.345098, 0.529412, 1 )
+margin_right = 16.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 16, 16 )
+custom_styles/panel = SubResource( 3 )
+
+[node name="Slot2" type="Panel" parent="HUD/HUD/Spells"]
+margin_left = 20.0
+margin_right = 36.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 16, 16 )
+custom_styles/panel = SubResource( 3 )
+
+[node name="Slot3" type="Panel" parent="HUD/HUD/Spells"]
+margin_left = 40.0
+margin_right = 56.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 16, 16 )
+custom_styles/panel = SubResource( 3 )
+
+[node name="Slot4" type="Panel" parent="HUD/HUD/Spells"]
+margin_left = 60.0
+margin_right = 76.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 16, 16 )
+custom_styles/panel = SubResource( 3 )
+
+[node name="Slot5" type="Panel" parent="HUD/HUD/Spells"]
+margin_left = 80.0
+margin_right = 96.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 16, 16 )
+custom_styles/panel = SubResource( 3 )
+
+[node name="Slot6" type="Panel" parent="HUD/HUD/Spells"]
+margin_left = 100.0
+margin_right = 116.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 16, 16 )
+custom_styles/panel = SubResource( 3 )
+
 [node name="Player" parent="." groups=[
 "Player",
 ] instance=ExtResource( 1 )]

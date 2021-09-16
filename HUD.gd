@@ -24,6 +24,29 @@ func _process(delta):
 			$HUD/Wands.get_child(i).modulate = "2a2a2a"
 			if Items.selected_wand == i:
 				$HUD/Wands.get_child(i).modulate = "#795887"
+	
+	for i in $HUD/Spells.get_child_count():
+		if Items.player_wands[Items.selected_wand] != null:
+			$HUD/Spells.visible = true
+			var wand :Wand = Items.player_wands[Items.selected_wand]
+			if i < wand.spell_capacity:
+				$HUD/Spells.get_child(i).visible = true
+				if i < wand.spells.size():
+					match wand.spells[i]:
+						"fuck you":
+							$HUD/Spells.get_child(i).modulate = "#ffe2ff"
+						"evilsight":
+							$HUD/Spells.get_child(i).modulate = "#45ff80"
+						"shatter":
+							$HUD/Spells.get_child(i).modulate = "#0faa68"
+						"ray":
+							$HUD/Spells.get_child(i).modulate = "#00f3ff"
+				else:
+					$HUD/Spells.get_child(i).modulate = "2a2a2a"
+			else:
+				$HUD/Spells.get_child(i).visible = false
+		else:
+			$HUD/Spells.visible = false
 
 func add_message(message:String):
 	messages.append(message)

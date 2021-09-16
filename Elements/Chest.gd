@@ -26,6 +26,7 @@ func _process(delta):
 		if Player.position.distance_to(position) < 16:
 			if Input.is_action_just_pressed("down"):
 				open = true
+				$Polygon.color = "#2a2a2a"
 				match type:
 					TYPES.ITEM:
 						var new := preload("res://Items/ItemEntity.tscn").instance()

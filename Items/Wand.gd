@@ -1,4 +1,4 @@
-extends Object
+extends Reference
 
 class_name Wand
 
@@ -12,10 +12,17 @@ var current_spell := 0
 var recharge := 0.0
 var running := false
 
+
 func _init():
-	spells.append(Items.spells[randi()%Items.spells.size()])
+	var randspell = Items.spells[randi()%Items.spells.size()]
+	while randspell == "fuck you" and randf()<0.98:
+		randspell = Items.spells[randi()%Items.spells.size()]
+	spells.append(randspell)
 	if randi()%100 > 85 and spell_capacity > 1:
-		spells.append(Items.spells[randi()%Items.spells.size()])
+		randspell = Items.spells[randi()%Items.spells.size()]
+		while randspell == "fuck you" and randf()<0.98:
+			randspell = Items.spells[randi()%Items.spells.size()]
+		spells.append(randspell)
 
 
 func string():

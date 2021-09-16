@@ -1,5 +1,9 @@
 extends Reference
 
+signal hole_poked
+signal full_healed
+
+
 class_name Flesh
 
 var moving_appendages := 2
@@ -21,11 +25,14 @@ var death_hypotemperature := -20.0
 var has_soul := true
 var soul := 1.0
 
+var is_players := false
+
 func shatter_soul(freq :float) -> void:
 	soul -= freq
 	
 func poke_hole(holes := 1) -> void:
 	poked_holes += holes
+	emit_signal("hole_poked")
 
 func temp_change(deg :float) -> void:
 	temperature += deg
@@ -36,3 +43,4 @@ func full_heal():
 	blood = max_blood
 	temperature = normal_temperature
 	soul = 1.0
+	emit_signal("full_healed")
