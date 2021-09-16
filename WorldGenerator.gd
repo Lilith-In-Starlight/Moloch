@@ -1,22 +1,14 @@
 extends TileMap
-signal generated_world
 
 var areas := []
-
-
-var max_point :Vector2
-var min_point :Vector2
-
-var fill_x := 0
-var fill_y := 0
 
 
 func _ready():
 	areas.append($Room.get_used_rect())
 	areas[0].position *= 8.0
 	areas[0].size *= 8.0
-	max_point = areas[0].position + areas[0].size
-	min_point = Vector2.ZERO
+	var max_point :Vector2 = areas[0].position + areas[0].size
+	var min_point :Vector2 = Vector2.ZERO
 	print("Generating dungeon")
 	print("Step 1: Generating layout of the world")
 	var rooms := 0
@@ -167,35 +159,34 @@ func _ready():
 				set_cellv(room_in_map + cell, room.get_cellv(cell))
 			room.queue_free()
 	
-	print("Step 5: Filling empty space from", min_point, " to ", max_point)
-	print("Area: ", (max_point.x - min_point.x) * (max_point.y - min_point.y))
 	max_point /= 8.0
 	max_point += Vector2(64, 32)
 	min_point /= 8.0
 	min_point -= Vector2(64, 32)
-	fill_x = min_point.x
-	fill_y = min_point.y
-	fill_empty_space()
-
-func _process(delta):
-	if fill_x >= max_point.x:
-		print("Step 5: Adding enemies")
-		var added := 0
-		for a in areas:
-			for i in randi()%3:
-				if randf()<0.5:
-					var pos :Vector2 = (a.position + Vector2(randf(), randf())*a.size)
-					var n := preload("res://Enemies/MagicDrone.tscn").instance()
-					add_child(n)
-					n.position = pos
-					added += 1
-		print("Added ", added, " enemies")
-		emit_signal("generated_world")
-		print("Finished generation!")
-		set_process(false)
-	else:
-		fill_empty_space()
-		
+	print("Step 5: Filling empty space from", min_point, " to ", max_point)
+	print("Area: ", (max_point.x - min_point.x) * (max_point.y - min_point.y))
+	for x in range(min_point.x, max_point.x):
+		for y in range(min_point.y, max_point.y):
+			var set := true
+			for a in areas:
+				if a.has_point(Vector2(x, y+1)*8.0):
+					set = false
+					break
+			if set:
+				set_cell(x, y, 0)
+	print("Step 6: Adding enemies")
+	var added := 0
+	for a in areas:
+		for i in randi()%3:
+			if randf()<0.5:
+				var pos :Vector2 = (a.position + Vector2(randf(), randf())*a.size)
+				var n := preload("res://Enemies/MagicDrone.tscn").instance()
+				add_child(n)
+				n.position = pos
+				added += 1
+	print("Added ", added, " enemies")
+	print("Generation finished!")
+	
 
 func search_for(group:String, new_room, room, element)-> Array:
 	var connected_door
@@ -216,22 +207,3 @@ func search_for(group:String, new_room, room, element)-> Array:
 			if not dont_break:
 				break
 	return [not_found, connected_door, new_rect]
-
-func fill_empty_space():
-	var i := 0
-	while fill_x < max_point.x:
-		while fill_y < max_point.y:
-			var set := true
-			for a in areas:
-				if a.has_point(Vector2(fill_x, fill_y+1)*8.0):
-					set = false
-					break
-			if set:
-				set_cell(fill_x, fill_y, 0)
-			fill_y += 1
-		if fill_y >= max_point.y:
-			fill_y = min_point.y
-			fill_x += 1
-			i += 1
-		if i > 5:
-			break

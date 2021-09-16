@@ -20,7 +20,8 @@ var normal_temperature := 30.0
 var hypertemperature := 45.0
 var hypotemperature := 5.0
 var death_hypertemperature := 140.0
-var death_hypotemperature := -20.0
+var death_hypotemperature := -40.0
+
 
 var has_soul := true
 var soul := 1.0

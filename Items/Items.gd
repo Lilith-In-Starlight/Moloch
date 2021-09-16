@@ -43,6 +43,7 @@ func _ready():
 	register_item("ironknees", "Iron Knees", "Fear the ground no more", preload("res://Sprites/Items/IronKnees.png"))
 	register_item("thickblood", "Thick Blood", "Pressurized Veins", preload("res://Sprites/Items/ThickBlood.png"))
 	register_item("wings", "Butterfly Wings", "Metamorphosis", preload("res://Sprites/Items/Wings.png"))
+	register_item("gasolineblood", "Blood To Gasoline", "Your insides become volatile", preload("res://Sprites/Items/BloodToGasoline.png"))
 	
 
 

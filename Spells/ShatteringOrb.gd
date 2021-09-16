@@ -39,3 +39,5 @@ func _on_body_entered(body):
 		if body.has_method("health_object"):
 			body.health_object().shatter_soul(0.3)
 		queue_free()
+	if body.is_in_group("World"):
+		queue_free()

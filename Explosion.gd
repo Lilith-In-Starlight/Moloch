@@ -18,7 +18,6 @@ func _ready():
 
 func _process(delta):
 	radius = clamp(lerp(radius, 0, -1.5), 0, 70)
-	print(radius)
 	timer += delta
 	if timer > 0.5:
 		queue_free()

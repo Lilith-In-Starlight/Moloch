@@ -6,7 +6,7 @@ enum STATES {
 	ON_WALL,
 }
 
-const WALK_ACCEL := 90.0
+const WALK_ACCEL := 70.0
 const JUMP_ACCEL := -370.0
 
 var Cam :Camera2D
@@ -26,16 +26,57 @@ var rwjump_buffer := 0.2
 
 var health :Flesh = Items.player_health
 
+var Map :TileMap
+
+var temp_stage := 0
+
+var blood_is_gasoline := false
+
+
 func _ready():
+	Map = get_tree().get_nodes_in_group("World")[0]
 	health.connect("hole_poked", self, "message_send", ["Bleeding"])
 	health.connect("full_healed", self, "message_send", ["Your flesh is renewed"])
 	health.is_players = true
 	Cam = get_tree().get_nodes_in_group("Camera")[0]
+	set_process(false)
+	set_physics_process(false)
+	$"../Camera2D".position = lerp($"../Camera2D".position, position, 0.1)
 
 func _process(delta):
+	if Items.player_items.has("gasolineblood") and not blood_is_gasoline:
+		blood_is_gasoline = true
+		message_send("Your insides become volatile")
+	if health.temperature >= -20 and health.temperature < 10 and temp_stage != -2:
+		temp_stage = -2
+		message_send("You feel like you're freezing")
+	elif health.temperature >= 10 and health.temperature < 20 and temp_stage != -1:
+		temp_stage = -1
+		message_send("You feel a bit cold")
+	elif health.temperature >= 20 and health.temperature < 45 and temp_stage != 0:
+		temp_stage = 0
+		message_send("The temperature is right")
+	elif health.temperature >= 45 and health.temperature < 60 and temp_stage != 1:
+		temp_stage = 1
+		message_send("You feel a bit overheated")
+	elif health.temperature >= 60 and health.temperature < 100 and temp_stage != 2:
+		temp_stage = 2
+		if Items.player_items.has("gasolineblood"):
+			var n := preload("res://Explosion.tscn").instance()
+			n.position = position
+			get_parent().add_child(n)
+		message_send("You should slow down to cool off")
+	elif health.temperature >= 100 and temp_stage != 3:
+		temp_stage = 3
+		if Items.player_items.has("gasolineblood"):
+			var n := preload("res://Explosion.tscn").instance()
+			n.position = position
+			get_parent().add_child(n)
+		message_send("Your insides feel like they're melting")
 	var coffset := get_local_mouse_position()/4.0
-	Cam.offset += (coffset-Cam.offset)/10.0
+	Cam.offset += (coffset-Cam.offset)/5.0
 	if health.temperature > 145 or health.soul <= 0.0 or health.blood <= 0.0 or Input.is_key_pressed(KEY_G):
+		Items.player_health = Flesh.new()
 		get_tree().reload_current_scene()
 	if Items.player_items.has("thickblood"):
 		Items.player_items.erase("thickblood")
@@ -56,7 +97,9 @@ func _process(delta):
 		
 	elif Input.is_action_just_released("scrolldown"):
 		Items.selected_wand = (Items.selected_wand + 1) % 6
-		
+	
+
+
 func _physics_process(delta):
 	health.blood -= health.poked_holes * (0.5+randf())*0.0005
 	set_collision_mask_bit(2, not Input.is_key_pressed(KEY_S))
@@ -89,8 +132,7 @@ func _physics_process(delta):
 						speed.x += WALK_ACCEL
 						haxis = 1.0
 						health.temperature += 0.001
-					else:
-						health.temperature = move_toward(health.temperature, 30, 0.002)
+					health.temperature = move_toward(health.temperature, 30, 0.002)
 					if abs(haxis)<0.5:
 						speed.x *= pow(0.8, delta*60)
 					elif sign(haxis)!=sign(speed.x):
@@ -134,6 +176,10 @@ func _physics_process(delta):
 				if is_on_floor():
 					state = STATES.ON_GROUND
 					if speed_before_collision.y > 800:
+						if Items.player_items.has("gasolineblood"):
+							var n := preload("res://Explosion.tscn").instance()
+							n.position = position
+							get_parent().add_child(n)
 						if not Items.player_items.has("ironknees"):
 							var message := "Broken Leg"
 							var brkn_lgs := 0
@@ -147,6 +193,7 @@ func _physics_process(delta):
 								if brkn_lgs == 2:
 									message = "Broken Both Legs"
 								get_tree().get_nodes_in_group("HUD")[0].add_message(message)
+						
 					
 					if speed_before_collision.y > 900:
 						health.poked_holes += 1+randi()%3
@@ -188,7 +235,7 @@ func _physics_process(delta):
 						speed.x += 300
 					elif rwjump_buffer > 0.0:
 						speed.x -= 300
-					lwjump_buffer = 0.2
+					lwjump_buffer = 0.1
 			
 			STATES.ON_WALL:
 				if speed.y > 0:
@@ -204,13 +251,13 @@ func _physics_process(delta):
 						speed.x += 300
 					elif $Right.is_colliding():
 						speed.x -= 300
-					lwjump_buffer = 0.2
+					lwjump_buffer = 0.1
 						
 				if not $Left.is_colliding() and not $Right.is_colliding():
 					state = STATES.ON_AIR
 					
 				if $Left.is_colliding():
-					lwjump_buffer = 0.2
+					lwjump_buffer = 0.1
 				else:
 					lwjump_buffer -= delta
 					
@@ -268,14 +315,19 @@ func _physics_process(delta):
 			speed.x *= pow(0.75, delta*60)
 		speed = speed.normalized()*speed.length()
 	
-	var spos := position
 	speed = move_and_slide(speed, -gravity_direction)
 	
 	
-	$"../Camera2D".position = lerp($"../Camera2D".position, spos, 0.1)
+	$"../Camera2D".position = lerp($"../Camera2D".position, position, 0.1)
 
 func health_object():
 	return health
 
 func message_send(msg):
 	get_tree().get_nodes_in_group("HUD")[0].add_message(msg)
+
+
+
+func _on_generated_world():
+	set_process(true)
+	set_physics_process(true)

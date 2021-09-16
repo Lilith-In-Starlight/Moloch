@@ -3,8 +3,25 @@ extends CanvasLayer
 
 var messages := []
 var message_timer := 0.0
+var generated := false
+var advice := [
+	"Avoid breaking your knees by not falling long distances",
+	"The best way for your runs to last longer is to reduce the amount of times you're hit",
+	"Finish the levels to progress through the game",
+	"If you're getting bad items, try having better luck",
+	"Get power ups to become able to finish the game",
+	"You need at least one leg to be able to jump, make sure not to break both",
+	"Kill the last boss to finish the game",
+	"Blood is useful! Try and keep as much of it as possible inside your body",
+	"In order to stay alive, survive a long as possible",
+]
+
+func _ready():
+	$HUD/Generating/UsefulAdvice.text = advice[randi()%advice.size()]
 
 func _process(delta):
+	if generated:
+		$HUD/Generating.modulate.a = move_toward($HUD/Generating.modulate.a, 0.0, 0.2)
 	if not messages.empty():
 		$HUD/Messages.visible = true
 		message_timer += delta
@@ -50,3 +67,7 @@ func _process(delta):
 
 func add_message(message:String):
 	messages.append(message)
+
+
+func _on_generated_world():
+	generated = true
