@@ -98,8 +98,8 @@ func _process(delta):
 					if Input.is_key_pressed(KEY_SHIFT):
 						$HUD/Description.visible = true
 						$HUD/Description/Name.text = "Wand"
-						$HUD/Description/Description.text = "Cast Cooldown: " + str(Items.player_wands[i].spell_recharge).pad_decimals(5)
-						$HUD/Description/Description.text += "\nCooldown: " + str(Items.player_wands[i].full_recharge).pad_decimals(5)
+						$HUD/Description/Description.text = "Cast Cooldown: " + str(Items.player_wands[i].spell_recharge).pad_decimals(3)
+						$HUD/Description/Description.text += "\nCooldown: " + str(Items.player_wands[i].full_recharge).pad_decimals(3)
 					else:
 						$HUD/ShortDesc.visible = true
 						var a :=  0.25
