@@ -12,6 +12,7 @@ var fill_y := 0
 
 
 func _ready():
+	position = Vector2(0, 0)
 	areas.append($Room.get_used_rect())
 	areas[0].position *= 8.0
 	areas[0].size *= 8.0
@@ -167,14 +168,14 @@ func _ready():
 				set_cellv(room_in_map + cell, room.get_cellv(cell))
 			room.queue_free()
 	
-	print("Step 5: Filling empty space from", min_point, " to ", max_point)
-	print("Area: ", (max_point.x - min_point.x) * (max_point.y - min_point.y))
 	max_point /= 8.0
 	max_point += Vector2(64, 32)
 	min_point /= 8.0
 	min_point -= Vector2(64, 32)
 	fill_x = min_point.x
 	fill_y = min_point.y
+	print("Step 5: Filling empty space from", min_point, " to ", max_point)
+	print("Area: ", (max_point.x - min_point.x) * (max_point.y - min_point.y))
 	fill_empty_space()
 
 func _process(delta):
@@ -186,8 +187,8 @@ func _process(delta):
 				if randf()<0.5:
 					var pos :Vector2 = (a.position + Vector2(randf(), randf())*a.size)
 					var n := preload("res://Enemies/MagicDrone.tscn").instance()
-					add_child(n)
 					n.position = pos
+					add_child(n)
 					added += 1
 		print("Added ", added, " enemies")
 		emit_signal("generated_world")
@@ -224,7 +225,7 @@ func fill_empty_space():
 		while fill_y < max_point.y:
 			var set := true
 			for a in areas:
-				if a.has_point(Vector2(fill_x, fill_y+1)*8.0):
+				if a.has_point(Vector2(fill_x, fill_y)*8.0):
 					set = false
 					break
 			if set:
