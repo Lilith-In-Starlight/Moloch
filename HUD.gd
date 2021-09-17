@@ -3,7 +3,10 @@ extends CanvasLayer
 
 var messages := []
 var message_timer := 0.0
+var mouse_spell = null
+var mouse_wand = null
 var generated := false
+var block_cast := false
 var advice := [
 	"Avoid breaking your knees by not falling long distances",
 	"The best way for your runs to last longer is to reduce the amount of times you're hit",
@@ -54,6 +57,12 @@ func _process(delta):
 			$HUD/Wands.get_child(i).modulate = "2a2a2a"
 			if Items.selected_wand == i:
 				$HUD/Wands.get_child(i).modulate = "#795887"
+				
+	for i in $HUD/SpellBag.get_child_count():
+		if Items.player_spells[i] != null:
+			$HUD/SpellBag.get_child(i).modulate = Items.player_spells[i].color
+		else:
+			$HUD/SpellBag.get_child(i).modulate = "2a2a2a"
 	
 	for i in $HUD/Spells.get_child_count():
 		if Items.player_wands[Items.selected_wand] != null:
@@ -61,7 +70,7 @@ func _process(delta):
 			var wand :Wand = Items.player_wands[Items.selected_wand]
 			if i < wand.spell_capacity:
 				$HUD/Spells.get_child(i).visible = true
-				if i < wand.spells.size():
+				if wand.spells[i] != null:
 					$HUD/Spells.get_child(i).modulate = wand.spells[i].color
 				else:
 					$HUD/Spells.get_child(i).modulate = "2a2a2a"
@@ -69,6 +78,95 @@ func _process(delta):
 				$HUD/Spells.get_child(i).visible = false
 		else:
 			$HUD/Spells.visible = false
+	
+	var mouse := get_viewport().get_mouse_position()
+	
+	$HUD/Description.visible = false
+	$HUD/ShortDesc.visible = false
+	$HUD/ShortDesc.rect_size.x = 0
+	var clicked := -1
+	var slot := -1
+	block_cast = false
+	# Wands
+	if mouse.x < 116 and mouse.y > 4 and mouse.y < 20:
+		for i in 6:
+			if mouse.x >= 4+i*(16+4) and mouse.x < 4+(i+1)*(16+4):
+				clicked = 2
+				slot = i
+				block_cast = true
+				if Items.player_wands[i] != null:
+					if Input.is_key_pressed(KEY_SHIFT):
+						$HUD/Description.visible = true
+						$HUD/Description/Name.text = "Wand"
+						$HUD/Description/Description.text = "Cast Cooldown: " + str(Items.player_wands[i].spell_recharge).pad_decimals(5)
+						$HUD/Description/Description.text += "\nCooldown: " + str(Items.player_wands[i].full_recharge).pad_decimals(5)
+					else:
+						$HUD/ShortDesc.visible = true
+						var a :=  0.25
+						$HUD/ShortDesc.text =  str(Items.player_wands[i].spell_recharge).pad_decimals(2) + "/" + str(Items.player_wands[i].full_recharge).pad_decimals(2)
+	
+	# Spells
+	if mouse.x < 116 and mouse.y > 25 and mouse.y < 25+16 and Items.player_wands[Items.selected_wand] != null:
+		var wand :Wand = Items.player_wands[Items.selected_wand]
+		for i in 6:
+			if mouse.x >= 4+i*(16+4) and mouse.x < 4+(i+1)*(16+4):
+				block_cast = true
+				clicked = 1
+				if i < wand.spell_capacity:
+					slot = i
+					if wand.spells[i] != null:
+						if Input.is_key_pressed(KEY_SHIFT):
+							$HUD/Description.visible = true
+							$HUD/Description/Name.text = wand.spells[i].name
+							$HUD/Description/Description.text = wand.spells[i].description
+						else:
+							$HUD/ShortDesc.visible = true
+							$HUD/ShortDesc.text =  wand.spells[i].name
+	
+	if mouse.x < 16 and mouse.y > 62 and mouse.y < 178 and mouse.x > 4:
+		for i in 6:
+			if mouse.y >= 62+i*(16+4) and mouse.y < 62+(i+1)*(16+4):
+				block_cast = true
+				clicked = 0
+				slot = i
+				if Items.player_spells[i] != null:
+					if Input.is_key_pressed(KEY_SHIFT):
+						$HUD/Description.visible = true
+						$HUD/Description/Name.text = Items.player_spells[i].name
+						$HUD/Description/Description.text = Items.player_spells[i].description
+					else:
+						$HUD/ShortDesc.visible = true
+						$HUD/ShortDesc.text =  Items.player_spells[i].name
+	
+	if Input.is_action_just_pressed("Interact1") and clicked != -1:
+		match clicked:
+			1:
+				if slot != -1:
+					var wand :Wand = Items.player_wands[Items.selected_wand]
+					var k :Spell = wand.spells[slot]
+					Items.player_wands[Items.selected_wand].spells[slot] = mouse_spell
+					mouse_spell = k
+			0:
+				if slot != -1:
+					var k :Spell = Items.player_spells[slot]
+					Items.player_spells[slot] = mouse_spell
+					mouse_spell = k
+			2:
+				if slot != -1:
+					var k :Wand = Items.player_wands[slot]
+					Items.player_wands[slot] = mouse_wand
+					mouse_wand = k
+	
+	$HUD/MouseSlot.visible = mouse_spell != null
+	$HUD/MouseSlot.rect_position = mouse + Vector2(-16,0)
+	if mouse_spell != null:
+		$HUD/MouseSlot.modulate = mouse_spell.color
+		
+	
+	$HUD/Description.rect_size = Vector2(144, 18+$HUD/Description/Description.rect_size.y+4)
+	$HUD/Description.rect_position = mouse
+	$HUD/ShortDesc.rect_position = mouse
+
 
 func add_message(message:String):
 	messages.append(message)

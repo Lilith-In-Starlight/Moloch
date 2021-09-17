@@ -8,7 +8,7 @@ var spells := {}
 
 var player_items := []
 
-var player_spells := []
+var player_spells := [null,null,null,null,null,null]
 var player_wands := [null,null,null,null,null,null]
 var selected_wand := 0
 
@@ -63,7 +63,7 @@ func _process(delta):
 		Player = get_tree().get_nodes_in_group("Player")[0]
 		Cam = get_tree().get_nodes_in_group("Camera")[0]
 		player_items = []
-		player_spells = []
+		player_spells = [null,null,null,null,null,null]
 		player_wands = [null,null,null,null,null,null]
 		player_wands[0] = Wand.new()
 		player_wands[1] = Wand.new()
@@ -72,33 +72,36 @@ func _process(delta):
 			if wand.running:
 				if can_cast:
 					can_cast = false
-					match wand.spells[wand.current_spell].id:
-						"fuck you":
-							var spell := preload("res://Spells/FuckYou.tscn").instance()
-							spell.position = Player.position
-							Player.get_parent().add_child(spell)
-						"evilsight":
-							var spell := preload("res://Spells/EvilSight.tscn").instance()
-							spell.position = Player.position
-							Player.get_parent().add_child(spell)
-						"shatter":
-							var spell := preload("res://Spells/ShatteringOrb.tscn").instance()
-							spell.position = Player.position
-							Player.get_parent().add_child(spell)
-						"ray":
-							var spell := preload("res://Spells/Ray.tscn").instance()
-							spell.position = Player.position
-							Player.get_parent().add_child(spell)
-				if wand.current_spell >= wand.spells.size()-1 and wand.recharge >= wand.full_recharge:
+					if wand.current_spell < wand.spell_capacity and wand.spells[wand.current_spell] != null:
+						match wand.spells[wand.current_spell].id:
+							"fuck you":
+								var spell := preload("res://Spells/FuckYou.tscn").instance()
+								spell.position = Player.position
+								Player.get_parent().add_child(spell)
+							"evilsight":
+								var spell := preload("res://Spells/EvilSight.tscn").instance()
+								spell.position = Player.position
+								Player.get_parent().add_child(spell)
+							"shatter":
+								var spell := preload("res://Spells/ShatteringOrb.tscn").instance()
+								spell.position = Player.position
+								Player.get_parent().add_child(spell)
+							"ray":
+								var spell := preload("res://Spells/Ray.tscn").instance()
+								spell.position = Player.position
+								Player.get_parent().add_child(spell)
+				if (wand.current_spell >= wand.spell_capacity-1 or wand.spells[wand.current_spell] == null) and wand.recharge >= wand.full_recharge:
 					wand.recharge = 0.0
 					wand.running = false
 					can_cast = true
 					wand.current_spell = 0
-				elif wand.recharge >= wand.full_recharge:
+				elif wand.recharge >= wand.spell_recharge and (wand.current_spell < wand.spell_capacity and wand.spells[wand.current_spell] != null):
 					wand.recharge = 0.0
 					wand.current_spell += 1
 					can_cast = true
 				else:
 					wand.recharge += delta
+			else:
+				wand.current_spell = 0
 
 

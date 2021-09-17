@@ -102,7 +102,7 @@ func _process(delta):
 		health.full_heal()
 	
 	# Control wand HUD
-	if Items.player_wands[Items.selected_wand] is Wand and Input.is_action_just_pressed("Interact1") and not Items.player_wands[Items.selected_wand].running:
+	if Items.player_wands[Items.selected_wand] is Wand and Input.is_action_just_pressed("Interact1") and not Items.player_wands[Items.selected_wand].running and not get_tree().get_nodes_in_group("HUD")[0].block_cast:
 		Items.player_wands[Items.selected_wand].running = true
 	
 	if Input.is_action_just_released("scrollup"):

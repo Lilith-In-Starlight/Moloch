@@ -23,7 +23,18 @@ func _init():
 		while randspell.id == "fuck you" and randf()<0.98:
 			randspell = Items.spells.values()[randi()%Items.spells.values().size()]
 		spells.append(randspell)
+	
+	while spells.size() < spell_capacity:
+		spells.append(null)
 
 
 func string():
 	return "SC: " + str(spell_capacity) + " SR: " + str(spell_recharge) + " FR: " + str(full_recharge) + " S: " + str(spells) + " RC: " + str(recharge) + " R: " + str(running) + " CS: " + str(current_spell)
+
+func duplicate():
+	var w = get_script().new()
+	w.spell_capacity = spell_capacity
+	w.spell_recharge = spell_recharge
+	w.full_recharge = full_recharge
+	w.spells = spells.duplicate()
+	return w
