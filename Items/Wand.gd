@@ -14,14 +14,14 @@ var running := false
 
 
 func _init():
-	var randspell = Items.spells[randi()%Items.spells.size()]
-	while randspell == "fuck you" and randf()<0.98:
-		randspell = Items.spells[randi()%Items.spells.size()]
+	var randspell = Items.spells.values()[randi()%Items.spells.values().size()]
+	while randspell.id == "fuck you" and randf()<0.98:
+		randspell = Items.spells.values()[randi()%Items.spells.values().size()]
 	spells.append(randspell)
 	if randi()%100 > 85 and spell_capacity > 1:
-		randspell = Items.spells[randi()%Items.spells.size()]
-		while randspell == "fuck you" and randf()<0.98:
-			randspell = Items.spells[randi()%Items.spells.size()]
+		randspell = Items.spells.values()[randi()%Items.spells.values().size()]
+		while randspell.id == "fuck you" and randf()<0.98:
+			randspell = Items.spells.values()[randi()%Items.spells.values().size()]
 		spells.append(randspell)
 
 

@@ -62,15 +62,7 @@ func _process(delta):
 			if i < wand.spell_capacity:
 				$HUD/Spells.get_child(i).visible = true
 				if i < wand.spells.size():
-					match wand.spells[i]:
-						"fuck you":
-							$HUD/Spells.get_child(i).modulate = "#ffe2ff"
-						"evilsight":
-							$HUD/Spells.get_child(i).modulate = "#45ff80"
-						"shatter":
-							$HUD/Spells.get_child(i).modulate = "#0faa68"
-						"ray":
-							$HUD/Spells.get_child(i).modulate = "#00f3ff"
+					$HUD/Spells.get_child(i).modulate = wand.spells[i].color
 				else:
 					$HUD/Spells.get_child(i).modulate = "2a2a2a"
 			else:

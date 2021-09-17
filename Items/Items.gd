@@ -2,22 +2,9 @@ extends Node
 
 var items := {}
 
-var spell_names := {
-	"fuck you" : "Fuck You",
-	"evilsight" : "Sight Of Evil",
-	"shatter" : "Shattering Orbs",
-	"ray" : "Generic Gun",
-}
-var spell_descriptions := {
-	"fuck you" : "Fuck everything in that particular direction",
-	"evilsight" : "Casts a ray of decay",
-	"shatter" : "Induces vibrations that shatter the soul",
-	"ray" : "Summons a generic ray",
-}
-
 var rooms := []
 
-var spells := ["fuck you", "evilsight", "shatter", "ray"]
+var spells := {}
 
 var player_items := []
 
@@ -33,6 +20,16 @@ var can_cast := true
 var run_start_time :int
 
 func _ready():
+	register_item("heal", "Heal", "Return the flesh to a state previous", preload("res://Sprites/Items/Heal.png"))
+	register_item("ironknees", "Iron Knees", "Fear the ground no more", preload("res://Sprites/Items/IronKnees.png"))
+	register_item("thickblood", "Thick Blood", "Pressurized Veins", preload("res://Sprites/Items/ThickBlood.png"))
+	register_item("wings", "Butterfly Wings", "Metamorphosis", preload("res://Sprites/Items/Wings.png"))
+	register_item("gasolineblood", "Blood To Gasoline", "Your insides become volatile", preload("res://Sprites/Items/BloodToGasoline.png"))
+	register_spell("fuck you", "Fuck You", "Fuck everything in that particular direction", "#ffe2ff")
+	register_spell("evilsight", "Evil Eye", "Look at things so fiercely you tear them apart", "#45ff80")
+	register_spell("shatter", "Unstable Shattering", "Summon orbs that vibrate in frequencies to disturb souls", "#0faa68")
+	register_spell("ray", "Generic Ray", "Pew pew!", "#00f3ff")
+	
 	Player = get_tree().get_nodes_in_group("Player")[0]
 	Cam = get_tree().get_nodes_in_group("Camera")[0]
 	var selected_wand := 0
@@ -40,12 +37,6 @@ func _ready():
 
 	player_wands[0] = Wand.new()
 	player_wands[1] = Wand.new()
-	
-	register_item("heal", "Heal", "Return the flesh to a state previous", preload("res://Sprites/Items/Heal.png"))
-	register_item("ironknees", "Iron Knees", "Fear the ground no more", preload("res://Sprites/Items/IronKnees.png"))
-	register_item("thickblood", "Thick Blood", "Pressurized Veins", preload("res://Sprites/Items/ThickBlood.png"))
-	register_item("wings", "Butterfly Wings", "Metamorphosis", preload("res://Sprites/Items/Wings.png"))
-	register_item("gasolineblood", "Blood To Gasoline", "Your insides become volatile", preload("res://Sprites/Items/BloodToGasoline.png"))
 	
 
 
@@ -56,6 +47,14 @@ func register_item(name_id:String, name:String, desc:String, texture:Texture):
 	new.texture = texture
 	new.id = name_id
 	items[name_id] = new
+	
+func register_spell(name_id:String, name:String, desc:String, color :Color):
+	var new := Spell.new()
+	new.name = name
+	new.description = desc
+	new.id = name_id
+	new.color = color
+	spells[name_id] = new
 
 
 func _process(delta):
@@ -73,7 +72,7 @@ func _process(delta):
 			if wand.running:
 				if can_cast:
 					can_cast = false
-					match wand.spells[wand.current_spell]:
+					match wand.spells[wand.current_spell].id:
 						"fuck you":
 							var spell := preload("res://Spells/FuckYou.tscn").instance()
 							spell.position = Player.position
@@ -101,5 +100,5 @@ func _process(delta):
 					can_cast = true
 				else:
 					wand.recharge += delta
-			
-			
+
+

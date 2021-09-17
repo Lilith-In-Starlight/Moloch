@@ -1,8 +1,8 @@
 extends Reference
 
-class_name Item
+class_name Spell
 
 var name :String
-var id : String
+var id :String
 var description :String
-var texture :Texture
+var color :Color

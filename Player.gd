@@ -24,8 +24,8 @@ var state :int = STATES.ON_AIR
 var speed_before_collision := Vector2(0, 0)
 var jump_buffer := 0.2
 var coyote_time := 0.2
-var lwjump_buffer := 0.2
-var rwjump_buffer := 0.2
+var lwcoyote_time := 0.2
+var rwcoyote_time := 0.2
 
 var health :Flesh = Items.player_health
 
@@ -49,9 +49,7 @@ func _ready():
 	$"../Camera2D".position = lerp($"../Camera2D".position, position, 0.1)
 
 func _process(delta):
-	if Items.player_items.has("gasolineblood") and not blood_is_gasoline:
-		blood_is_gasoline = true
-		message_send("Your insides become volatile")
+	# Hypo and hypertermia
 	if health.temperature >= -20 and health.temperature < 10 and temp_stage != -2:
 		temp_stage = -2
 		message_send("You feel like you're freezing")
@@ -78,12 +76,22 @@ func _process(delta):
 			n.position = position
 			get_parent().add_child(n)
 		message_send("Your insides feel like they're melting")
+	
+	# Control the camera with the mouse
 	var coffset := get_local_mouse_position()/4.0
 	Cam.offset += (coffset-Cam.offset)/5.0
+	
+	# Death
 	if (health.temperature > 145 or health.soul <= 0.0 or health.blood <= 0.0 or Input.is_key_pressed(KEY_G)) and not dead:
 		emit_signal("player_died")
 		state = STATES.DEAD
 		dead = true
+	
+	# Apply items
+	if Items.player_items.has("gasolineblood") and not blood_is_gasoline:
+		blood_is_gasoline = true
+		message_send("Your insides become volatile")
+	
 	if Items.player_items.has("thickblood"):
 		Items.player_items.erase("thickblood")
 		health.max_blood *= 2.0
@@ -93,6 +101,7 @@ func _process(delta):
 		Items.player_items.erase("heal")
 		health.full_heal()
 	
+	# Control wand HUD
 	if Items.player_wands[Items.selected_wand] is Wand and Input.is_action_just_pressed("Interact1") and not Items.player_wands[Items.selected_wand].running:
 		Items.player_wands[Items.selected_wand].running = true
 	
@@ -107,80 +116,50 @@ func _process(delta):
 
 
 func _physics_process(delta):
+	# Bleed
 	health.blood -= health.poked_holes * (0.5+randf())*0.0005
+	# Platforms
 	set_collision_mask_bit(2, not Input.is_key_pressed(KEY_S))
 	
+	# Player is alive
 	if not dead:
+		# Player can't fly
 		if not Items.player_items.has("wings"):
+			# Gravity
 			speed.y += gravity_accel * gravity_direction.y
 			match state:
 				STATES.ON_GROUND:
-					coyote_time = 0.2
+					coyote_time = 0.1
 					if not is_on_floor():
 						state = STATES.ON_AIR
-					
-					if (Input.is_action_just_pressed("jump") or jump_buffer > 0.0) and health.broken_moving_appendages < 2:
-						speed.y += JUMP_ACCEL * gravity_direction.y
-						coyote_time = 0.0
-						if health.broken_moving_appendages == 1: 
-							speed.y *= 0.6+randf()*0.4
-						state = STATES.ON_AIR
-						health.temperature += 0.002
+					jump()
 					jump_buffer = 0.0
 					
 					if health.broken_moving_appendages == 0:
-						var haxis := 0.0
-						if Input.is_action_pressed("left"):
-							speed.x -= WALK_ACCEL
-							haxis = -1.0
-							health.temperature += 0.001
-						elif Input.is_action_pressed("right"):
-							speed.x += WALK_ACCEL
-							haxis = 1.0
-							health.temperature += 0.001
-						health.temperature = move_toward(health.temperature, 30, 0.002)
-						if abs(haxis)<0.5:
-							speed.x *= pow(0.8, delta*60)
-						elif sign(haxis)!=sign(speed.x):
-							speed.x *= pow(0.9, delta*60)
-						else:
-							speed.x *= pow(0.75, delta*60)
+						move_damp(delta)
 					elif health.broken_moving_appendages == 2:
-						if Input.is_action_pressed("left"):
-							speed.x -= WALK_ACCEL
-							health.temperature += 0.0003
-						elif Input.is_action_pressed("right"):
-							speed.x += WALK_ACCEL
-							health.temperature += 0.0003
-						else:
-							health.temperature = move_toward(health.temperature, 30, 0.002)
-						speed.x *= 0.5
+						move_nondamp()
 					else:
 						speed.x *= 0.7
 						
-					lwjump_buffer = 0.0
-					rwjump_buffer = 0.0
+					lwcoyote_time = 0.0
+					rwcoyote_time = 0.0
 				
 				
 				STATES.ON_AIR:
+					# Control jump height
 					if Input.is_action_just_released("jump") and speed.y < 0:
 						speed.y *= 0.5
-					if Input.is_action_just_pressed("jump") and health.broken_moving_appendages < 2:
-						if  coyote_time > 0.0:
-							speed.y = JUMP_ACCEL * gravity_direction.y
-							coyote_time = 0.0
-							
-							if health.broken_moving_appendages == 1: 
-								speed.y *= 0.8
-							state = STATES.ON_AIR
-							health.temperature += 0.002
-						else:
-							jump_buffer = 0.2
+					if  coyote_time > 0.0:
+						jump()
+					elif Input.is_action_just_pressed("jump") and health.broken_moving_appendages < 2:
+						jump_buffer = 0.1
 					jump_buffer -= delta
 					coyote_time -= delta
 					
 					if is_on_floor():
 						state = STATES.ON_GROUND
+						# Break legs
 						if speed_before_collision.y > 800:
 							if Items.player_items.has("gasolineblood"):
 								var n := preload("res://Explosion.tscn").instance()
@@ -200,7 +179,7 @@ func _physics_process(delta):
 										message = "Broken Both Legs"
 									get_tree().get_nodes_in_group("HUD")[0].add_message(message)
 							
-						
+						# Bleed
 						if speed_before_collision.y > 900:
 							health.poked_holes += 1+randi()%3
 							get_tree().get_nodes_in_group("HUD")[0].add_message("Bleeding")
@@ -211,66 +190,29 @@ func _physics_process(delta):
 					if is_on_wall():
 						state = STATES.ON_WALL
 					
-					var haxis := 0.0
-					if Input.is_action_pressed("left"):
-						speed.x -= WALK_ACCEL
-						haxis = -1.0
-						health.temperature += 0.001
-					elif Input.is_action_pressed("right"):
-						speed.x += WALK_ACCEL
-						haxis = 1.0
-						health.temperature += 0.001
-					else:
-						health.temperature = move_toward(health.temperature, 30, 0.002)
-					if abs(haxis)<0.5:
-						speed.x *= pow(0.8, delta*60)
-					elif sign(haxis)!=sign(speed.x):
-						speed.x *= pow(0.9, delta*60)
-					else:
-						speed.x *= pow(0.75, delta*60)
+					move_damp(delta)
 					
-					lwjump_buffer -= delta
-					rwjump_buffer -= delta
-					if Input.is_action_just_pressed("jump") and (lwjump_buffer > 0.0 or rwjump_buffer > 0.0):
-						speed.y = JUMP_ACCEL * gravity_direction.y
-						if health.broken_moving_appendages == 2:
-							speed.y*=0.5
-						state = STATES.ON_AIR
-						health.temperature += 0.002
-						if lwjump_buffer > 0.0:
-							speed.x += 300
-						elif rwjump_buffer > 0.0:
-							speed.x -= 300
-						lwjump_buffer = 0.1
+					lwcoyote_time -= delta
+					rwcoyote_time -= delta
+					wall_jump()
 				
 				STATES.ON_WALL:
 					if speed.y > 0:
 						speed.y = 20
-					
-					if Input.is_action_just_pressed("jump"):
-						speed.y = JUMP_ACCEL * gravity_direction.y
-						if health.broken_moving_appendages == 2:
-							speed.y*=0.5
-						state = STATES.ON_AIR
-						health.temperature += 0.002
-						if $Left.is_colliding():
-							speed.x += 300
-						elif $Right.is_colliding():
-							speed.x -= 300
-						lwjump_buffer = 0.1
-							
+					jump_buffer -= delta
+					wall_jump()
 					if not $Left.is_colliding() and not $Right.is_colliding():
 						state = STATES.ON_AIR
 						
 					if $Left.is_colliding():
-						lwjump_buffer = 0.1
+						lwcoyote_time = 0.1
 					else:
-						lwjump_buffer -= delta
+						lwcoyote_time -= delta
 						
 					if $Right.is_colliding():
-						rwjump_buffer = 0.2
+						rwcoyote_time = 0.1
 					else:
-						rwjump_buffer -= delta
+						rwcoyote_time -= delta
 						
 					if $Left.is_colliding() and Input.is_action_just_pressed("right"):
 						state = STATES.ON_AIR
@@ -282,7 +224,7 @@ func _physics_process(delta):
 					
 					if is_on_floor():
 						state = STATES.ON_GROUND
-		else:
+		else: # Player is flying
 			speed.y += gravity_accel * gravity_direction.y
 			var haxis := 0.0
 			if Input.is_action_pressed("left"):
@@ -307,6 +249,7 @@ func _physics_process(delta):
 				health.temperature -= 0.001
 			else:
 				health.temperature = move_toward(health.temperature, 30, 0.002)
+			
 			if abs(vaxis)<0.5:
 				speed.y *= pow(0.8, delta*60)
 			elif sign(vaxis)!=sign(speed.y):
@@ -321,7 +264,7 @@ func _physics_process(delta):
 			else:
 				speed.x *= pow(0.75, delta*60)
 			speed = speed.normalized()*speed.length()
-	else:
+	else: # Player is dead
 		speed.x *= 0.75
 	
 	speed = move_and_slide(speed, -gravity_direction)
@@ -329,14 +272,69 @@ func _physics_process(delta):
 	
 	$"../Camera2D".position = lerp($"../Camera2D".position, position, 0.1)
 
+
 func health_object():
 	return health
+
 
 func message_send(msg):
 	get_tree().get_nodes_in_group("HUD")[0].add_message(msg)
 
 
-
 func _on_generated_world():
 	set_process(true)
 	set_physics_process(true)
+
+
+func jump():
+	if (Input.is_action_just_pressed("jump") or jump_buffer > 0.0) and health.broken_moving_appendages < 2:
+		speed.y += JUMP_ACCEL * gravity_direction.y
+		coyote_time = 0.0
+		if health.broken_moving_appendages == 1: 
+			speed.y *= 0.6+randf()*0.4
+		state = STATES.ON_AIR
+		health.temperature += 0.002
+
+func move_damp(delta):
+	var haxis := 0.0
+	if Input.is_action_pressed("left"):
+		speed.x -= WALK_ACCEL
+		haxis = -1.0
+		health.temperature += 0.001
+	elif Input.is_action_pressed("right"):
+		speed.x += WALK_ACCEL
+		haxis = 1.0
+		health.temperature += 0.001
+	health.temperature = move_toward(health.temperature, 30, 0.002)
+	if abs(haxis)<0.5:
+		speed.x *= pow(0.8, delta*60)
+	elif sign(haxis)!=sign(speed.x):
+		speed.x *= pow(0.9, delta*60)
+	else:
+		speed.x *= pow(0.75, delta*60)
+
+func move_nondamp():
+	if Input.is_action_pressed("left"):
+		speed.x -= WALK_ACCEL
+		health.temperature += 0.0003
+	elif Input.is_action_pressed("right"):
+		speed.x += WALK_ACCEL
+		health.temperature += 0.0003
+	else:
+		health.temperature = move_toward(health.temperature, 30, 0.002)
+	speed.x *= 0.5
+
+func wall_jump():
+	if Input.is_action_just_pressed("jump") or jump_buffer > 0.0 and (lwcoyote_time > 0.0 or rwcoyote_time > 0.0):
+		speed.y = JUMP_ACCEL * gravity_direction.y
+		jump_buffer = 0.0
+		if health.broken_moving_appendages == 2:
+			speed.y*=0.5
+		state = STATES.ON_AIR
+		health.temperature += 0.002
+		if lwcoyote_time > 0.0:
+			speed.x += 300
+			lwcoyote_time = 0.0
+		elif rwcoyote_time > 0.0:
+			speed.x -= 300
+			rwcoyote_time = 0.0
