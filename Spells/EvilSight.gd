@@ -31,7 +31,7 @@ func _physics_process(delta):
 					var v := Vector2(x, y)
 					if v.length() < 2:
 						WorldMap.set_cellv(v+pos,-1)
-						Player.health.temperature += 1/240.0
+						Player.health.temperature += 1/120.0
 		elif get_collider().has_method("health_object"):
 			get_collider().health_object().temp_change(5.0)
 			Player.health.temperature += 1/60.0
