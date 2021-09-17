@@ -22,10 +22,10 @@ var speed := Vector2()
 var state :int = STATES.ON_AIR
 
 var speed_before_collision := Vector2(0, 0)
-var jump_buffer := 0.2
-var coyote_time := 0.2
-var lwcoyote_time := 0.2
-var rwcoyote_time := 0.2
+var jump_buffer := 0.0
+var coyote_time := 0.0
+var lwcoyote_time := 0.0
+var rwcoyote_time := 0.0
 
 var health :Flesh = Items.player_health
 
@@ -129,7 +129,7 @@ func _physics_process(delta):
 			speed.y += gravity_accel * gravity_direction.y
 			match state:
 				STATES.ON_GROUND:
-					coyote_time = 0.1
+					coyote_time = 0.12
 					if not is_on_floor():
 						state = STATES.ON_AIR
 					jump()
@@ -153,7 +153,7 @@ func _physics_process(delta):
 					if  coyote_time > 0.0:
 						jump()
 					elif Input.is_action_just_pressed("jump") and health.broken_moving_appendages < 2:
-						jump_buffer = 0.1
+						jump_buffer = 0.2
 					jump_buffer -= delta
 					coyote_time -= delta
 					
@@ -198,19 +198,19 @@ func _physics_process(delta):
 				
 				STATES.ON_WALL:
 					if speed.y > 0:
-						speed.y = 20
+						speed.y = lerp(speed.y, 60, 0.3)
 					jump_buffer -= delta
 					wall_jump()
 					if not $Left.is_colliding() and not $Right.is_colliding():
 						state = STATES.ON_AIR
 						
 					if $Left.is_colliding():
-						lwcoyote_time = 0.1
+						lwcoyote_time = 0.2
 					else:
 						lwcoyote_time -= delta
 						
 					if $Right.is_colliding():
-						rwcoyote_time = 0.1
+						rwcoyote_time = 0.2
 					else:
 						rwcoyote_time -= delta
 						
@@ -325,7 +325,7 @@ func move_nondamp():
 	speed.x *= 0.5
 
 func wall_jump():
-	if Input.is_action_just_pressed("jump") or jump_buffer > 0.0 and (lwcoyote_time > 0.0 or rwcoyote_time > 0.0):
+	if (Input.is_action_just_pressed("jump") or jump_buffer > 0.0) and (lwcoyote_time > 0.0 or rwcoyote_time > 0.0):
 		speed.y = JUMP_ACCEL * gravity_direction.y
 		jump_buffer = 0.0
 		if health.broken_moving_appendages == 2:
