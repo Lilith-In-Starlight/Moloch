@@ -30,6 +30,8 @@ var player_health := Flesh.new()
 var Cam :Camera2D
 var can_cast := true
 
+var run_start_time :int
+
 func _ready():
 	Player = get_tree().get_nodes_in_group("Player")[0]
 	Cam = get_tree().get_nodes_in_group("Camera")[0]
