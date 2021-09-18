@@ -1,6 +1,6 @@
 extends Area2D
 
-var done := false
+var done := 0
 var radius := 70
 var timer := 0.0
 
@@ -27,20 +27,26 @@ func _process(delta):
 	update()
 
 func _physics_process(delta):
-	if !done:
+	if done < 3:
 		for body in get_overlapping_bodies():
+			print(body.name)
 			if body.has_method("health_object"):
 				var flesh : Flesh = body.health_object()
-				flesh.temp_change(200/body.position.distance_to(position))
+				flesh.temp_change(500/body.position.distance_to(position))
+				print(500/body.position.distance_to(position))
 				if body.position.distance_to(position) < 24:
-					flesh.poke_hole(1+randi()%1)
+					flesh.poke_hole(2+randi()%1)
 				if body.position.distance_to(position) < 12:
-					flesh.poke_hole(1+randi()%3)
+					flesh.poke_hole(5+randi()%10)
+				if body.position.distance_to(position) < 8:
+					flesh.poke_hole(10+randi()%20)
 				if body.get("speed"):
 					body.speed += (body.position - position)*100
 				elif body.get("linear_velocity"):
 					body.linear_velocity += (position - body.position).normalized()*200/(position.distance_squared_to(body.position))
-		done = true
+		done += 1
+	else:
+		queue_free()
 	
 
 func _draw():

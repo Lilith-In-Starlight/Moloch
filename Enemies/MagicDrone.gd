@@ -51,7 +51,7 @@ func _physics_process(delta):
 		queue_free()
 	match state:
 		STATES.IDLE:
-			speed += (primordial_termor*10.0-speed)/10.0
+			speed += (primordial_termor*10.0-speed)/3.0
 			if $RayCast2D.is_colliding():
 				if $RayCast2D.get_collider() == Player:
 					last_seen = Player.position
@@ -66,9 +66,9 @@ func _physics_process(delta):
 			else:
 				state = STATES.SEARCHING
 			if position.distance_to(Player.position) > 75:
-				speed += (((last_seen-position).normalized()*30+primordial_termor)-speed)/10.0
+				speed += (((last_seen-position).normalized()*30+primordial_termor)-speed)/3.0
 			elif position.distance_to(Player.position) < 60:
-				speed += ((-(last_seen-position).normalized()*30+primordial_termor)-speed)/10.0
+				speed += ((-(last_seen-position).normalized()*30+primordial_termor)-speed)/3.0
 			else:
 				speed += (primordial_termor-speed)/10.0
 			
@@ -103,9 +103,9 @@ func _physics_process(delta):
 		STATES.SEARCHING:
 			position_timer += delta
 			if position.distance_to(last_seen) > 75:
-				speed += (((last_seen-position).normalized()*30+primordial_termor)-speed)/10.0
+				speed += (((last_seen-position).normalized()*30+primordial_termor)-speed)/3.0
 			elif position.distance_to(last_seen) < 60:
-				speed += ((-(last_seen-position).normalized()*30+primordial_termor)-speed)/10.0
+				speed += ((-(last_seen-position).normalized()*30+primordial_termor)-speed)/3.0
 			if position_timer >= 2.5:
 				state = STATES.IDLE
 			if $RayCast2D.is_colliding():

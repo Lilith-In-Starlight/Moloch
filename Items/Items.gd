@@ -29,6 +29,8 @@ func _ready():
 	register_spell("evilsight", "Evil Eye", "Look at things so fiercely you tear them apart", "#45ff80")
 	register_spell("shatter", "Unstable Shattering", "Summon orbs that vibrate in frequencies to disturb souls", "#0faa68")
 	register_spell("ray", "Generic Ray", "Pew pew!", "#00f3ff")
+	register_spell("push", "Push", "Away, away...", "#ffffff")
+	register_spell("pull", "Pull", "Together, together...", "#000055")
 	
 	if not get_tree().get_nodes_in_group("Player").empty():
 		Player = get_tree().get_nodes_in_group("Player")[0]
@@ -91,6 +93,14 @@ func _process(delta):
 								var spell := preload("res://Spells/Ray.tscn").instance()
 								spell.position = Player.position
 								Player.get_parent().add_child(spell)
+							"push":
+								var spell := preload("res://Spells/Push.tscn").instance()
+								spell.position = Player.position + Player.get_local_mouse_position()
+								Player.get_parent().add_child(spell)
+							"pull":
+								var spell := preload("res://Spells/Pull.tscn").instance()
+								spell.position = Player.position + Player.get_local_mouse_position()
+								Player.get_parent().add_child(spell)
 				if (wand.current_spell >= wand.spell_capacity-1 or wand.spells[wand.current_spell] == null) and wand.recharge >= wand.full_recharge:
 					wand.recharge = 0.0
 					wand.running = false
@@ -104,5 +114,6 @@ func _process(delta):
 					wand.recharge += delta
 			else:
 				wand.current_spell = 0
+
 
 

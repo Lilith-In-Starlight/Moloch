@@ -3,6 +3,7 @@ extends RigidBody2D
 enum TYPES {
 	ITEM,
 	WAND,
+	SPELL,
 }
 
 var type :int = TYPES.ITEM
@@ -20,6 +21,8 @@ func _ready():
 			$Polygon.color = "#96ff9a"
 		TYPES.WAND:
 			$Polygon.color = "#ff4da9"
+		TYPES.SPELL:
+			$Polygon.color = "#188add"
 
 func _process(delta):
 	if not open:
@@ -39,4 +42,16 @@ func _process(delta):
 						for i in Items.player_wands.size():
 							if Items.player_wands[i] == null:
 								Items.player_wands[i] = Wand.new()
+								break
+					TYPES.SPELL:
+						var giv :Spell = Items.spells.values()[randi()%Items.spells.values().size()]
+						if giv.id == "fuck you" and randf() < 0.95:
+							giv = Items.spells.values()[randi()%Items.spells.values().size()]
+						elif giv.id == "push" and randf() < 0.7:
+							giv = Items.spells.values()[randi()%Items.spells.values().size()]
+						elif giv.id == "pull" and randf() < 0.7:
+							giv = Items.spells.values()[randi()%Items.spells.values().size()]
+						for i in Items.player_spells.size():
+							if Items.player_spells[i] == null:
+								Items.player_spells[i] = Items.spells.values()[randi()%Items.spells.values().size()]
 								break

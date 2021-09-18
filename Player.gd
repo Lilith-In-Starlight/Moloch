@@ -202,6 +202,13 @@ func _physics_process(delta):
 					
 					if is_on_wall():
 						state = STATES.ON_WALL
+						if abs(speed_before_collision.x) > 1000:
+							dead = true
+							emit_signal("player_died")
+					
+					if is_on_ceiling() and speed_before_collision.y < -800:
+						dead = true
+						emit_signal("player_died")
 					
 					move_damp(delta)
 					
@@ -281,6 +288,8 @@ func _physics_process(delta):
 		speed.x *= 0.75
 	
 	speed = move_and_slide(speed, -gravity_direction)
+	if randf() < (1.0-health.soul)/15.0:
+		move_and_collide(Vector2(-1+randf()*2, -1+randf()*2)*((1.0-health.soul/10.0))*5.0)
 	
 	
 	$"../Camera2D".position = lerp($"../Camera2D".position, position, 0.1)
