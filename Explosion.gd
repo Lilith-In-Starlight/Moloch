@@ -15,6 +15,8 @@ func _ready():
 				0:
 					if Vector2(x,y).length()<=7+randi()%4:
 						Map.set_cellv(vec, -1)
+	var point := Vector2(int(position.x/8), int(position.y/8))
+	Map.update_bitmask_region(point-Vector2(10,10), point+Vector2(10,10))
 
 func _process(delta):
 	radius = clamp(lerp(radius, 0, -1.5), 0, 70)

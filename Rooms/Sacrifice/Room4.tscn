@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://EditorTileset.tres" type="TileSet" id=1]
 [ext_resource path="res://Room.gd" type="Script" id=2]
+[ext_resource path="res://Elements/Platform.tscn" type="PackedScene" id=3]
 
 [node name="Room" type="TileMap"]
 tile_set = ExtResource( 1 )
@@ -26,3 +27,36 @@ position = Vector2( 176, 0 )
 "LeftDoor",
 ]]
 position = Vector2( 0, 240 )
+
+[node name="Platform" parent="." instance=ExtResource( 3 )]
+position = Vector2( 136, 184 )
+size = 12
+random = 3
+right = true
+
+[node name="Platform2" parent="." instance=ExtResource( 3 )]
+position = Vector2( 136, 72 )
+size = 12
+random = 3
+right = true
+
+[node name="Platform3" parent="." instance=ExtResource( 3 )]
+position = Vector2( 24, 128 )
+size = 12
+random = 2
+
+[node name="Platform4" parent="." instance=ExtResource( 3 )]
+position = Vector2( 296, 72 )
+size = 12
+random = 2
+
+[node name="Platform5" parent="." instance=ExtResource( 3 )]
+position = Vector2( 296, 184 )
+size = 12
+random = 3
+
+[node name="Platform6" parent="." instance=ExtResource( 3 )]
+position = Vector2( 408, 128 )
+size = 12
+random = 2
+right = true

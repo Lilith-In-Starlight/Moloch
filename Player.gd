@@ -126,7 +126,7 @@ func _process(delta):
 	elif Input.is_action_just_pressed("hotbar6"):
 		Items.selected_wand = 5
 	
-
+	
 
 func _physics_process(delta):
 	# Bleed
@@ -136,6 +136,36 @@ func _physics_process(delta):
 	
 	# Player is alive
 	if not dead:
+		match state:
+			STATES.ON_GROUND:
+				$Player.texture = preload("res://Sprites/Player/Player.png")
+				if get_local_mouse_position().x > 0:
+					$Player.scale.x = 1
+				else:
+					$Player.scale.x = -1
+			STATES.ON_AIR:
+				if sign(speed.y) > 0:
+					$Player.texture = preload("res://Sprites/Player/Fall.png")
+				else:
+					$Player.texture = preload("res://Sprites/Player/Jump.png")
+				if get_local_mouse_position().x > 0:
+					$Player.scale.x = 1
+				else:
+					$Player.scale.x = -1
+			STATES.ON_WALL:
+				var kin := move_and_collide(Vector2(2, 0), true, true, true)
+				if kin != null:
+					$Player.scale.x = 1
+					if get_local_mouse_position().x < 0:
+						$Player.texture = preload("res://Sprites/Player/wallCling.png")
+					else:
+						$Player.texture = preload("res://Sprites/Player/wallCling2.png")
+				else:
+					$Player.scale.x = -1
+					if get_local_mouse_position().x > 0:
+						$Player.texture = preload("res://Sprites/Player/wallCling.png")
+					else:
+						$Player.texture = preload("res://Sprites/Player/wallCling2.png")
 		# Player can't fly
 		if not Items.player_items.has("wings"):
 			# Gravity

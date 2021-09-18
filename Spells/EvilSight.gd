@@ -32,6 +32,8 @@ func _physics_process(delta):
 					if v.length() < 2:
 						WorldMap.set_cellv(v+pos,-1)
 						Player.health.temperature += 1/30.0
+			
+			WorldMap.update_bitmask_region(pos-Vector2(2,2), pos+Vector2(2,2))
 		elif get_collider().has_method("health_object"):
 			get_collider().health_object().temp_change(5.0)
 			Player.health.temperature += 1/60.0

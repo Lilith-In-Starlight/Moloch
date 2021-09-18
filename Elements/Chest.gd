@@ -18,18 +18,18 @@ func _ready():
 	match type:
 		TYPES.ITEM:
 			contents = Items.items.values()[randi()%Items.items.values().size()]
-			$Polygon.color = "#96ff9a"
+			$Sprite.modulate = "#96ff9a"
 		TYPES.WAND:
-			$Polygon.color = "#ff4da9"
+			$Sprite.modulate = "#ff4da9"
 		TYPES.SPELL:
-			$Polygon.color = "#188add"
+			$Sprite.modulate = "#188add"
 
 func _process(delta):
 	if not open:
 		if Player.position.distance_to(position) < 16:
 			if Input.is_action_just_pressed("down"):
 				open = true
-				$Polygon.color = "#2a2a2a"
+				$Sprite.play("open")
 				match type:
 					TYPES.ITEM:
 						var new := preload("res://Items/ItemEntity.tscn").instance()
@@ -47,11 +47,15 @@ func _process(delta):
 						var giv :Spell = Items.spells.values()[randi()%Items.spells.values().size()]
 						if giv.id == "fuck you" and randf() < 0.95:
 							giv = Items.spells.values()[randi()%Items.spells.values().size()]
-						elif giv.id == "push" and randf() < 0.7:
+						if giv.id == "push" and randf() < 0.7:
 							giv = Items.spells.values()[randi()%Items.spells.values().size()]
-						elif giv.id == "pull" and randf() < 0.7:
+							while giv.id in ["fuck you"]:
+								giv = Items.spells.values()[randi()%Items.spells.values().size()]
+						if giv.id == "pull" and randf() < 0.7:
 							giv = Items.spells.values()[randi()%Items.spells.values().size()]
+							while giv.id in ["fuck you", "push"]:
+								giv = Items.spells.values()[randi()%Items.spells.values().size()]
 						for i in Items.player_spells.size():
 							if Items.player_spells[i] == null:
-								Items.player_spells[i] = Items.spells.values()[randi()%Items.spells.values().size()]
+								Items.player_spells[i] = giv
 								break

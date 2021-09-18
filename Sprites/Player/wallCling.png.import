@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/RedRoomBlock.png-26f2fdcfddbd161f6acc496620378e18.stex"
+path="res://.import/wallCling.png-761152953f2388069319225fe7dec2a5.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/Blocks/RedRoomBlock.png"
-dest_files=[ "res://.import/RedRoomBlock.png-26f2fdcfddbd161f6acc496620378e18.stex" ]
+source_file="res://Sprites/Player/wallCling.png"
+dest_files=[ "res://.import/wallCling.png-761152953f2388069319225fe7dec2a5.stex" ]
 
 [params]
 

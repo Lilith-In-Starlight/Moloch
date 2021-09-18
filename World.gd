@@ -164,6 +164,13 @@ func _ready():
 		add_child(new_chest)
 		new_chest.position = chest.global_position
 		chest.queue_free()
+	print("    - Platforms")
+	for plat in get_tree().get_nodes_in_group("Platform"):
+		var new_plat:Node2D = preload("res://Elements/Platform.tscn").instance()
+		new_plat.position = plat.global_position
+		new_plat.size = plat.size
+		add_child(new_plat)
+		plat.queue_free()
 	
 	print("Step 4: Passing all the room data to the world TileMap")
 	for room in get_children():
@@ -185,11 +192,12 @@ func _ready():
 
 func _process(delta):
 	if fill_x >= max_point.x:
+		update_bitmask_region(min_point, max_point)
 		print("Step 5: Adding enemies")
 		var added := 0
 		for a in areas:
-			for i in randi()%3:
-				if randf()<0.5:
+			for i in randi()%4:
+				if randf()<0.6:
 					var pos :Vector2 = (a.position + Vector2(randf(), randf())*a.size)
 					var n := preload("res://Enemies/MagicDrone.tscn").instance()
 					n.position = pos
