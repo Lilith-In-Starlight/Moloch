@@ -9,7 +9,8 @@ var min_point :Vector2
 
 var fill_x := 0
 var fill_y := 0
-
+var last_frame_msecs :int
+var iterations := 3
 
 func _ready():
 	position = Vector2(0, 0)
@@ -24,8 +25,12 @@ func _ready():
 	var generated_end_room := false
 	var treasure_rooms := 0
 	while not generated_end_room or rooms <= 25 or treasure_rooms < 1:
-		for room in get_children():
-			for element in room.get_children():
+		var children := get_children()
+		children.shuffle()
+		for room in children:
+			var el_children = room.get_children()
+			el_children.shuffle()
+			for element in el_children:
 				var new_room = null
 				var search_new_room := true
 				var connected_door
@@ -220,6 +225,7 @@ func search_for(group:String, new_room, room, element)-> Array:
 	return [not_found, connected_door, new_rect]
 
 func fill_empty_space():
+	var start := OS.get_ticks_msec()
 	var i := 0
 	while fill_x < max_point.x:
 		while fill_y < max_point.y:
@@ -235,5 +241,12 @@ func fill_empty_space():
 			fill_y = min_point.y
 			fill_x += 1
 			i += 1
-		if i > 5:
+		if i > iterations:
+			var msec :int = OS.get_ticks_msec() - start
+			if msec > 200:
+				iterations -= 1
+				if iterations <= 0:
+					iterations = 1
+			elif msec < 200:
+				iterations += 1
 			break
