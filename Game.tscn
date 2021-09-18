@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://EditorTileset.tres" type="TileSet" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://Rooms/Sacrifice/Begin.tscn" type="PackedScene" id=4]
 [ext_resource path="res://dpcomic.ttf" type="DynamicFontData" id=5]
 [ext_resource path="res://HUD.gd" type="Script" id=6]
+[ext_resource path="res://Minimap.gd" type="Script" id=7]
 
 [sub_resource type="StyleBoxFlat" id=1]
 content_margin_top = 3.0
@@ -89,6 +90,18 @@ script = ExtResource( 6 )
 [node name="HUD" type="Control" parent="HUD"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Minimap" type="Control" parent="HUD/HUD"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -53.0
+margin_top = -53.0
+script = ExtResource( 7 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
