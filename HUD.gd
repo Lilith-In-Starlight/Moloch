@@ -157,6 +157,10 @@ func _process(delta):
 					Items.player_wands[slot] = mouse_wand
 					mouse_wand = k
 	
+	if Input.is_action_just_pressed("Interact2") and clicked == -1:
+		mouse_spell = null
+		mouse_wand = null
+	
 	$HUD/MouseSlot.visible = mouse_spell != null
 	$HUD/MouseSlot.rect_position = mouse + Vector2(-16,0)
 	if mouse_spell != null:
@@ -185,3 +189,4 @@ func _on_player_died():
 	var mins = (isecs / 60) % 60
 	end_times = str(mins) + "m" + str(csecs) + "s"
 	player_died = true
+
