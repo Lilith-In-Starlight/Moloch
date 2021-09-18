@@ -36,6 +36,10 @@ func _physics_process(delta):
 					flesh.poke_hole(1+randi()%1)
 				if body.position.distance_to(position) < 12:
 					flesh.poke_hole(1+randi()%3)
+				if body.get("speed"):
+					body.speed += (body.position - position)*100
+				elif body.get("linear_velocity"):
+					body.linear_velocity += (position - body.position).normalized()*200/(position.distance_squared_to(body.position))
 		done = true
 	
 
