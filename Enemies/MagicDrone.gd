@@ -39,7 +39,7 @@ func _physics_process(delta):
 			if tcol.collider != self:
 				queue_free()
 		first_check = true
-	$RayCast2D.cast_to = (Player.position - position).normalized()*200
+	$RayCast2D.cast_to = (Player.position - position).normalized()*500
 	var primordial_termor := Vector2(noise.get_noise_2d(position.x, OS.get_ticks_msec()/300.0), noise.get_noise_2d(position.y, OS.get_ticks_msec()/300.0))*30
 	if (health.temperature > 45.0 and health.temperature <= 60.0) or health.soul < 0.5:
 		primordial_termor = Vector2(noise.get_noise_2d(position.x, OS.get_ticks_msec()/3.0), noise.get_noise_2d(position.y, OS.get_ticks_msec()/3.0))*30

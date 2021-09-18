@@ -27,7 +27,7 @@ func _ready():
 	register_item("gasolineblood", "Blood To Gasoline", "Your insides become volatile", preload("res://Sprites/Items/BloodToGasoline.png"))
 	register_spell("fuck you", "Fuck You", "Fuck everything in that particular direction", "#ffe2ff")
 	register_spell("evilsight", "Evil Eye", "Look at things so fiercely you tear them apart", "#45ff80")
-	register_spell("shatter", "Unstable Shattering", "Summon orbs that vibrate in frequencies to disturb souls", "#0faa68")
+	register_spell("shatter", "Unstable Shattering", "Summon orbs that vibrate in frequencies that disturb souls", "#0faa68")
 	register_spell("ray", "Generic Ray", "Pew pew!", "#00f3ff")
 	register_spell("push", "Push", "Away, away...", "#ffffff")
 	register_spell("pull", "Pull", "Together, together...", "#000055")
@@ -61,6 +61,8 @@ func register_spell(name_id:String, name:String, desc:String, color :Color):
 
 
 func _process(delta):
+	if Input.is_action_just_pressed("ui_end"):
+		OS.window_fullscreen = !OS.window_fullscreen
 	if not is_instance_valid(Player) and not get_tree().get_nodes_in_group("Player").empty():
 		player_health = Flesh.new()
 		Player = get_tree().get_nodes_in_group("Player")[0]

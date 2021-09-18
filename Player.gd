@@ -48,6 +48,7 @@ func _ready():
 	set_physics_process(false)
 	$"../Camera2D".position = lerp($"../Camera2D".position, position, 0.1)
 
+
 func _process(delta):
 	# Hypo and hypertermia
 	if health.temperature >= -20 and health.temperature < 10 and temp_stage != -2:
@@ -125,8 +126,7 @@ func _process(delta):
 		Items.selected_wand = 4
 	elif Input.is_action_just_pressed("hotbar6"):
 		Items.selected_wand = 5
-	
-	
+
 
 func _physics_process(delta):
 	# Bleed
@@ -136,36 +136,86 @@ func _physics_process(delta):
 	
 	# Player is alive
 	if not dead:
-		match state:
-			STATES.ON_GROUND:
-				$Player.texture = preload("res://Sprites/Player/Player.png")
-				if get_local_mouse_position().x > 0:
-					$Player.scale.x = 1
-				else:
-					$Player.scale.x = -1
-			STATES.ON_AIR:
-				if sign(speed.y) > 0:
-					$Player.texture = preload("res://Sprites/Player/Fall.png")
-				else:
-					$Player.texture = preload("res://Sprites/Player/Jump.png")
-				if get_local_mouse_position().x > 0:
-					$Player.scale.x = 1
-				else:
-					$Player.scale.x = -1
-			STATES.ON_WALL:
-				var kin := move_and_collide(Vector2(2, 0), true, true, true)
-				if kin != null:
-					$Player.scale.x = 1
-					if get_local_mouse_position().x < 0:
-						$Player.texture = preload("res://Sprites/Player/wallCling.png")
+		if not Items.player_items.has("wings"):
+			match state:
+				STATES.ON_GROUND:
+					if abs(speed.x) < 10.0 or randf()<0.002:
+						if health.broken_moving_appendages != 2:
+							if health.temperature > 40.0:
+								$Player.play("panting")
+							else:
+								$Player.play("default")
+						else:
+							$Player.play("crawl")
+					elif speed.x > 0.0:
+						if health.broken_moving_appendages != 2:
+							if get_local_mouse_position().x > 0:
+								$Player.play("run")
+							else:
+								$Player.play("run", true)
+						else:
+							if get_local_mouse_position().x > 0:
+								$Player.play("crawling")
+							else:
+								$Player.play("crawling", true)
 					else:
-						$Player.texture = preload("res://Sprites/Player/wallCling2.png")
-				else:
-					$Player.scale.x = -1
+						if health.broken_moving_appendages != 2:
+							if get_local_mouse_position().x < 0:
+								$Player.play("run")
+							else:
+								$Player.play("run", true)
+						else:
+							if get_local_mouse_position().x > 0:
+								$Player.play("crawling")
+							else:
+								$Player.play("crawling", true)
+						
 					if get_local_mouse_position().x > 0:
-						$Player.texture = preload("res://Sprites/Player/wallCling.png")
+						$Player.scale.x = 1
 					else:
-						$Player.texture = preload("res://Sprites/Player/wallCling2.png")
+						$Player.scale.x = -1
+				STATES.ON_AIR:
+					if health.broken_moving_appendages != 2:
+						if sign(speed.y) > 0:
+							$Player.play("down")
+						else:
+							$Player.play("up")
+						if get_local_mouse_position().x > 0:
+							$Player.scale.x = 1
+						else:
+							$Player.scale.x = -1
+				STATES.ON_WALL:
+					var kin := move_and_collide(Vector2(2, 0), true, true, true)
+					if kin != null:
+						$Player.scale.x = 1
+						if get_local_mouse_position().x < 0:
+							if health.broken_moving_appendages == 0:
+								$Player.play("slide")
+							else:
+								$Player.play("oneleg_slide")
+						else:
+							if health.broken_moving_appendages == 0:
+								$Player.play("slide2")
+							else:
+								$Player.play("oneleg_slide2")
+					else:
+						$Player.scale.x = -1
+						if get_local_mouse_position().x > 0:
+							if health.broken_moving_appendages == 0:
+								$Player.play("slide")
+							else:
+								$Player.play("oneleg_slide")
+						else:
+							if health.broken_moving_appendages == 0:
+								$Player.play("slide2")
+							else:
+								$Player.play("oneleg_slide2")
+		else:
+			if get_local_mouse_position().x > 0:
+				$Player.scale.x = 1
+			else:
+				$Player.scale.x = -1
+			$Player.play("default")
 		# Player can't fly
 		if not Items.player_items.has("wings"):
 			# Gravity

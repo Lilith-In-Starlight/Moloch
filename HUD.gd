@@ -123,7 +123,7 @@ func _process(delta):
 							$HUD/ShortDesc.visible = true
 							$HUD/ShortDesc.text =  wand.spells[i].name
 	
-	if mouse.x < 16 and mouse.y > 62 and mouse.y < 178 and mouse.x > 4:
+	if mouse.x < 16 + 4 and mouse.y > 62 and mouse.y < 178 and mouse.x > 4:
 		for i in 6:
 			if mouse.y >= 62+i*(16+4) and mouse.y < 62+(i+1)*(16+4):
 				block_cast = true
