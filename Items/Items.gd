@@ -30,8 +30,9 @@ func _ready():
 	register_spell("shatter", "Unstable Shattering", "Summon orbs that vibrate in frequencies to disturb souls", "#0faa68")
 	register_spell("ray", "Generic Ray", "Pew pew!", "#00f3ff")
 	
-	Player = get_tree().get_nodes_in_group("Player")[0]
-	Cam = get_tree().get_nodes_in_group("Camera")[0]
+	if not get_tree().get_nodes_in_group("Player").empty():
+		Player = get_tree().get_nodes_in_group("Player")[0]
+		Cam = get_tree().get_nodes_in_group("Camera")[0]
 	var selected_wand := 0
 	player_health = Flesh.new()
 
@@ -58,7 +59,7 @@ func register_spell(name_id:String, name:String, desc:String, color :Color):
 
 
 func _process(delta):
-	if not is_instance_valid(Player):
+	if not is_instance_valid(Player) and not get_tree().get_nodes_in_group("Player").empty():
 		player_health = Flesh.new()
 		Player = get_tree().get_nodes_in_group("Player")[0]
 		Cam = get_tree().get_nodes_in_group("Camera")[0]
