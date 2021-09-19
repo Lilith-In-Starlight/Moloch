@@ -19,18 +19,22 @@ var can_cast := true
 
 var run_start_time :int
 
+var cloth_scraps := 2
+
 func _ready():
 	register_item("heal", "Heal", "Return the flesh to a state previous", preload("res://Sprites/Items/Heal.png"))
 	register_item("ironknees", "Iron Knees", "Fear the ground no more", preload("res://Sprites/Items/IronKnees.png"))
 	register_item("thickblood", "Thick Blood", "Pressurized Veins", preload("res://Sprites/Items/ThickBlood.png"))
 	register_item("wings", "Butterfly Wings", "Metamorphosis", preload("res://Sprites/Items/Wings.png"))
 	register_item("gasolineblood", "Blood To Gasoline", "Your insides become volatile", preload("res://Sprites/Items/BloodToGasoline.png"))
+	register_item("scraps", "Cloth Scraps", "Seal your wounds, somewhat", preload("res://Sprites/Items/Scraps.png"))
 	register_spell("fuck you", "Fuck You", "Fuck everything in that particular direction", "#ffe2ff")
 	register_spell("evilsight", "Evil Eye", "Look at things so fiercely you tear them apart", "#45ff80")
 	register_spell("shatter", "Unstable Shattering", "Summon orbs that vibrate in frequencies that disturb souls", "#0faa68")
 	register_spell("ray", "Generic Ray", "Pew pew!", "#00f3ff")
 	register_spell("push", "Push", "Away, away...", "#ffffff")
 	register_spell("pull", "Pull", "Together, together...", "#000055")
+	register_spell("r", "Alveolar Trill", "RRRRRRRRRRRRRRRR", "#0025ab")
 	
 	if not get_tree().get_nodes_in_group("Player").empty():
 		Player = get_tree().get_nodes_in_group("Player")[0]
@@ -40,7 +44,6 @@ func _ready():
 
 	player_wands[0] = Wand.new()
 	player_wands[1] = Wand.new()
-	
 
 
 func register_item(name_id:String, name:String, desc:String, texture:Texture):
@@ -65,6 +68,7 @@ func _process(delta):
 		OS.window_fullscreen = !OS.window_fullscreen
 	if not is_instance_valid(Player) and not get_tree().get_nodes_in_group("Player").empty():
 		player_health = Flesh.new()
+		cloth_scraps = 2
 		Player = get_tree().get_nodes_in_group("Player")[0]
 		Cam = get_tree().get_nodes_in_group("Camera")[0]
 		player_items = []
@@ -102,6 +106,10 @@ func _process(delta):
 							"pull":
 								var spell := preload("res://Spells/Pull.tscn").instance()
 								spell.position = Player.position + Player.get_local_mouse_position()
+								Player.get_parent().add_child(spell)
+							"r":
+								var spell := preload("res://Spells/AlveolarTrill.tscn").instance()
+								spell.position = Player.position
 								Player.get_parent().add_child(spell)
 				if (wand.current_spell >= wand.spell_capacity-1 or wand.spells[wand.current_spell] == null) and wand.recharge >= wand.full_recharge:
 					wand.recharge = 0.0
