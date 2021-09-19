@@ -38,42 +38,56 @@ func _ready():
 				var new_area :Rect2
 				var is_treasure := false
 				if element.is_in_group("LeftDoor") and not element.is_in_group("DontTry"):
+					var try_to_end := false
 					while search_new_room and tries < 10:
 						tries += 1
 						if new_room != null:
 							new_room.queue_free()
-						if treasure_rooms < 4 and randf()<0.05 and rooms > 12:
-							is_treasure = true
-							new_room = preload("res://Rooms/Sacrifice/TreasureRoom1.tscn").instance()
+						if (rooms < 25 or generated_end_room):
+							if treasure_rooms < 4 and randf()<0.05 and rooms > 12:
+								is_treasure = true
+								new_room = preload("res://Rooms/Sacrifice/TreasureRoom1.tscn").instance()
+							else:
+								new_room = Rooms.rooms[randi()%Rooms.rooms.size()].instance()
 						else:
-							new_room = Rooms.rooms[randi()%Rooms.rooms.size()].instance()
+							try_to_end =  true
+							new_room = preload("res://Rooms/Sacrifice/End2.tscn").instance()
 						var results := search_for("RightDoor", new_room, room, element)
 						search_new_room = results[0]
 						connected_door = results[1]
 						new_area = results[2]
 					element.add_to_group("DontTry")
 					if tries < 10:
+						if try_to_end:
+							generated_end_room = true
 						if is_treasure:
 							treasure_rooms += 1
 						connected_door.remove_from_group("RightDoor")
 						element.remove_from_group("LeftDoor")
 				
 				elif element.is_in_group("RightDoor") and not element.is_in_group("DontTry"):
+					var try_to_end := false
 					while search_new_room and tries < 10:
 						tries += 1
 						if new_room != null:
 							new_room.queue_free()
-						if treasure_rooms < 4 and randf()<0.05 and rooms > 12:
-							is_treasure = true
-							new_room = preload("res://Rooms/Sacrifice/TreasureRoom1.tscn").instance()
+						if (rooms < 25 or generated_end_room):
+							if treasure_rooms < 4 and randf()<0.05 and rooms > 12:
+								is_treasure = true
+								new_room = preload("res://Rooms/Sacrifice/TreasureRoom1.tscn").instance()
+							else:
+								new_room = Rooms.rooms[randi()%Rooms.rooms.size()].instance()
 						else:
-							new_room = Rooms.rooms[randi()%Rooms.rooms.size()].instance()
+							try_to_end =  true
+							new_room = preload("res://Rooms/Sacrifice/End2.tscn").instance()
 						var results := search_for("LeftDoor", new_room, room, element)
 						search_new_room = results[0]
 						connected_door = results[1]
 						new_area = results[2]
 					element.add_to_group("DontTry")
 					if tries < 10:
+						if try_to_end:
+							generated_end_room = true
 						if is_treasure:
 							treasure_rooms += 1
 						connected_door.remove_from_group("LeftDoor")
@@ -171,6 +185,14 @@ func _ready():
 		new_plat.size = plat.size
 		add_child(new_plat)
 		plat.queue_free()
+	print("    - Decorations")
+	for sprite in get_tree().get_nodes_in_group("DecoSprite"):
+		var new_sprite := Sprite.new()
+		new_sprite.position = sprite.global_position
+		new_sprite.texture = sprite.texture
+		new_sprite.z_index = sprite.z_index
+		add_child(new_sprite)
+		sprite.queue_free()
 	
 	print("Step 4: Passing all the room data to the world TileMap")
 	for room in get_children():
@@ -196,7 +218,7 @@ func _process(delta):
 		print("Step 5: Adding enemies")
 		var added := 0
 		for a in areas:
-			for i in randi()%4:
+			for i in randi()%5:
 				if randf()<0.6:
 					var pos :Vector2 = (a.position + Vector2(randf(), randf())*a.size)
 					var n := preload("res://Enemies/MagicDrone.tscn").instance()
