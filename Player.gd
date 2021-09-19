@@ -50,6 +50,23 @@ func _ready():
 
 
 func _process(delta):
+	if health.poked_holes > 0:
+		if Input.is_action_just_pressed("seal_blood"):
+			if randf()<0.92:
+				health.poked_holes -= 1
+			if health.poked_holes < 0:
+				health.poked_holes = 0
+			if health.poked_holes == 0:
+				message_send("Wound has been covered, bleeding has stopped")
+	
+		if randf() < 0.002:
+			health.poked_holes -= 1
+			if health.poked_holes < 0:
+				health.poked_holes = 0
+			if health.poked_holes == 0:
+				message_send("Bleeding has ceased")
+	
+	
 	# Hypo and hypertermia
 	if health.temperature >= -20 and health.temperature < 10 and temp_stage != -2:
 		temp_stage = -2
@@ -101,6 +118,10 @@ func _process(delta):
 	if Items.player_items.has("heal"):
 		Items.player_items.erase("heal")
 		health.full_heal()
+		
+	if Items.player_items.has("scraps"):
+		Items.player_items.erase("scraps")
+		Items.cloth_scraps += 1
 	
 	# Control wand HUD
 	if Items.player_wands[Items.selected_wand] is Wand and Input.is_action_just_pressed("Interact1") and not Items.player_wands[Items.selected_wand].running and not get_tree().get_nodes_in_group("HUD")[0].block_cast:
@@ -141,7 +162,7 @@ func _physics_process(delta):
 				STATES.ON_GROUND:
 					if abs(speed.x) < 10.0 or randf()<0.002:
 						if health.broken_moving_appendages != 2:
-							if health.temperature > 40.0:
+							if health.temperature > 30.02:
 								$Player.play("panting")
 							else:
 								$Player.play("default")
@@ -402,12 +423,12 @@ func move_damp(delta):
 	if Input.is_action_pressed("left"):
 		speed.x -= WALK_ACCEL
 		haxis = -1.0
-		health.temperature += 0.001
+		health.temperature += 0.002
 	elif Input.is_action_pressed("right"):
 		speed.x += WALK_ACCEL
 		haxis = 1.0
-		health.temperature += 0.001
-	health.temperature = move_toward(health.temperature, 30, 0.002)
+		health.temperature += 0.002
+	health.temperature = move_toward(health.temperature, 30, 0.001)
 	if abs(haxis)<0.5:
 		speed.x *= pow(0.8, delta*60)
 	elif sign(haxis)!=sign(speed.x):
@@ -440,3 +461,6 @@ func wall_jump():
 		elif rwcoyote_time > 0.0:
 			speed.x -= 300
 			rwcoyote_time = 0.0
+
+func looking_at() -> Vector2:
+	return get_local_mouse_position() + position

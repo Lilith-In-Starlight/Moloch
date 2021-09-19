@@ -16,71 +16,71 @@
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 3.03508, 10.5291 )
 
-[sub_resource type="AtlasTexture" id=13]
+[sub_resource type="AtlasTexture" id=2]
 atlas = ExtResource( 11 )
 region = Rect2( 0, 0, 22, 24 )
 
-[sub_resource type="AtlasTexture" id=14]
+[sub_resource type="AtlasTexture" id=3]
 atlas = ExtResource( 11 )
 region = Rect2( 22, 0, 22, 24 )
 
-[sub_resource type="AtlasTexture" id=15]
+[sub_resource type="AtlasTexture" id=4]
 atlas = ExtResource( 11 )
 region = Rect2( 44, 0, 22, 24 )
 
-[sub_resource type="AtlasTexture" id=16]
+[sub_resource type="AtlasTexture" id=5]
 atlas = ExtResource( 11 )
 region = Rect2( 66, 0, 22, 24 )
 
-[sub_resource type="AtlasTexture" id=17]
+[sub_resource type="AtlasTexture" id=6]
 atlas = ExtResource( 11 )
 region = Rect2( 88, 0, 22, 24 )
 
-[sub_resource type="AtlasTexture" id=18]
+[sub_resource type="AtlasTexture" id=7]
 atlas = ExtResource( 11 )
 region = Rect2( 110, 0, 22, 24 )
 
-[sub_resource type="AtlasTexture" id=9]
-atlas = ExtResource( 8 )
-region = Rect2( 0, 0, 7, 24 )
-
-[sub_resource type="AtlasTexture" id=10]
-atlas = ExtResource( 8 )
-region = Rect2( 7, 0, 7, 24 )
-
-[sub_resource type="AtlasTexture" id=11]
-atlas = ExtResource( 8 )
-region = Rect2( 14, 0, 7, 24 )
-
-[sub_resource type="AtlasTexture" id=12]
-atlas = ExtResource( 8 )
-region = Rect2( 21, 0, 7, 24 )
-
-[sub_resource type="AtlasTexture" id=2]
+[sub_resource type="AtlasTexture" id=8]
 atlas = ExtResource( 3 )
 region = Rect2( 0, 0, 18, 22 )
 
-[sub_resource type="AtlasTexture" id=3]
+[sub_resource type="AtlasTexture" id=9]
 atlas = ExtResource( 3 )
 region = Rect2( 18, 0, 18, 22 )
 
-[sub_resource type="AtlasTexture" id=4]
+[sub_resource type="AtlasTexture" id=10]
 atlas = ExtResource( 3 )
 region = Rect2( 36, 0, 18, 22 )
 
-[sub_resource type="AtlasTexture" id=5]
+[sub_resource type="AtlasTexture" id=11]
 atlas = ExtResource( 3 )
 region = Rect2( 54, 0, 18, 22 )
 
-[sub_resource type="AtlasTexture" id=6]
+[sub_resource type="AtlasTexture" id=12]
 atlas = ExtResource( 3 )
 region = Rect2( 72, 0, 18, 22 )
 
-[sub_resource type="AtlasTexture" id=7]
+[sub_resource type="AtlasTexture" id=13]
 atlas = ExtResource( 3 )
 region = Rect2( 90, 0, 18, 22 )
 
-[sub_resource type="SpriteFrames" id=8]
+[sub_resource type="AtlasTexture" id=14]
+atlas = ExtResource( 8 )
+region = Rect2( 0, 0, 7, 24 )
+
+[sub_resource type="AtlasTexture" id=15]
+atlas = ExtResource( 8 )
+region = Rect2( 7, 0, 7, 24 )
+
+[sub_resource type="AtlasTexture" id=16]
+atlas = ExtResource( 8 )
+region = Rect2( 14, 0, 7, 24 )
+
+[sub_resource type="AtlasTexture" id=17]
+atlas = ExtResource( 8 )
+region = Rect2( 21, 0, 7, 24 )
+
+[sub_resource type="SpriteFrames" id=18]
 animations = [ {
 "frames": [ ExtResource( 4 ) ],
 "loop": true,
@@ -107,7 +107,7 @@ animations = [ {
 "name": "oneleg_slide",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 13 ), SubResource( 14 ), SubResource( 15 ), SubResource( 16 ), SubResource( 17 ), SubResource( 18 ) ],
+"frames": [ SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 6 ), SubResource( 7 ) ],
 "loop": true,
 "name": "crawling",
 "speed": 5.0
@@ -117,24 +117,24 @@ animations = [ {
 "name": "crawl",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 9 ), SubResource( 10 ), SubResource( 11 ), SubResource( 12 ) ],
-"loop": true,
-"name": "panting",
-"speed": 5.0
-}, {
-"frames": [ SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 6 ), SubResource( 7 ) ],
+"frames": [ SubResource( 8 ), SubResource( 9 ), SubResource( 10 ), SubResource( 11 ), SubResource( 12 ), SubResource( 13 ) ],
 "loop": true,
 "name": "run",
 "speed": 10.0
 }, {
-"frames": [ ExtResource( 6 ) ],
+"frames": [ SubResource( 14 ), SubResource( 15 ), SubResource( 16 ), SubResource( 17 ) ],
 "loop": true,
-"name": "down",
+"name": "panting",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 5 ) ],
 "loop": true,
 "name": "slide2",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 6 ) ],
+"loop": true,
+"name": "down",
 "speed": 5.0
 } ]
 
@@ -156,6 +156,7 @@ cast_to = Vector2( 4, 0 )
 collision_mask = 2
 
 [node name="Player" type="AnimatedSprite" parent="."]
-frames = SubResource( 8 )
+frames = SubResource( 18 )
 animation = "crawling"
+frame = 3
 playing = true
