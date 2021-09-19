@@ -28,13 +28,13 @@ func _ready():
 	register_item("wings", "Butterfly Wings", "Metamorphosis", preload("res://Sprites/Items/Wings.png"))
 	register_item("gasolineblood", "Blood To Gasoline", "Your insides become volatile", preload("res://Sprites/Items/BloodToGasoline.png"))
 	register_item("scraps", "Cloth Scraps", "Seal your wounds, somewhat", preload("res://Sprites/Items/Scraps.png"))
-	register_spell("fuck you", "Fuck You", "Fuck everything in that particular direction", "#ffe2ff")
-	register_spell("evilsight", "Evil Eye", "Look at things so fiercely you tear them apart", "#45ff80")
-	register_spell("shatter", "Unstable Shattering", "Summon orbs that vibrate in frequencies that disturb souls", "#0faa68")
-	register_spell("ray", "Generic Ray", "Pew pew!", "#00f3ff")
-	register_spell("push", "Push", "Away, away...", "#ffffff")
-	register_spell("pull", "Pull", "Together, together...", "#000055")
-	register_spell("r", "Alveolar Trill", "RRRRRRRRRRRRRRRR", "#0025ab")
+	register_spell("fuck you", "Fuck You", "Fuck everything in that particular direction", preload("res://Sprites/Spells/FuckYou.png"))
+	register_spell("evilsight", "Evil Eye", "Look at things so fiercely you tear them apart", preload("res://Sprites/Spells/EvilEye.png"))
+	register_spell("shatter", "Unstable Shattering", "Summon orbs that vibrate in frequencies that disturb souls", preload("res://Sprites/Spells/Unstable.png"))
+	register_spell("ray", "Generic Ray", "Pew pew!", preload("res://Sprites/Spells/Ray.png"))
+	register_spell("push", "Push", "Away, away...", preload("res://Sprites/Spells/Push.png"))
+	register_spell("pull", "Pull", "Together, together...", preload("res://Sprites/Spells/Pull.png"))
+	register_spell("r", "Alveolar Trill", "RRRRRRRRRRRRRRRR", preload("res://Sprites/Spells/R.png"))
 	
 	if not get_tree().get_nodes_in_group("Player").empty():
 		Player = get_tree().get_nodes_in_group("Player")[0]
@@ -54,12 +54,12 @@ func register_item(name_id:String, name:String, desc:String, texture:Texture):
 	new.id = name_id
 	items[name_id] = new
 	
-func register_spell(name_id:String, name:String, desc:String, color :Color):
+func register_spell(name_id:String, name:String, desc:String, texture :Texture):
 	var new := Spell.new()
 	new.name = name
 	new.description = desc
 	new.id = name_id
-	new.color = color
+	new.texture = texture
 	spells[name_id] = new
 
 

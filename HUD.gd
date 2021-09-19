@@ -60,9 +60,9 @@ func _process(delta):
 				
 	for i in $HUD/SpellBag.get_child_count():
 		if Items.player_spells[i] != null:
-			$HUD/SpellBag.get_child(i).modulate = Items.player_spells[i].color
+			$HUD/SpellBag.get_child(i).texture = Items.player_spells[i].texture
 		else:
-			$HUD/SpellBag.get_child(i).modulate = "2a2a2a"
+			$HUD/SpellBag.get_child(i).texture = preload("res://Sprites/Spells/Empty.png")
 	
 	for i in $HUD/Spells.get_child_count():
 		if Items.player_wands[Items.selected_wand] != null:
@@ -71,9 +71,9 @@ func _process(delta):
 			if i < wand.spell_capacity:
 				$HUD/Spells.get_child(i).visible = true
 				if wand.spells[i] != null:
-					$HUD/Spells.get_child(i).modulate = wand.spells[i].color
+					$HUD/Spells.get_child(i).texture = wand.spells[i].texture
 				else:
-					$HUD/Spells.get_child(i).modulate = "2a2a2a"
+					$HUD/Spells.get_child(i).texture = preload("res://Sprites/Spells/Empty.png")
 			else:
 				$HUD/Spells.get_child(i).visible = false
 		else:
@@ -164,7 +164,7 @@ func _process(delta):
 	$HUD/MouseSlot.visible = mouse_spell != null
 	$HUD/MouseSlot.rect_position = mouse + Vector2(-16,0)
 	if mouse_spell != null:
-		$HUD/MouseSlot.modulate = mouse_spell.color
+		$HUD/MouseSlot.texture = mouse_spell.texture
 		
 	
 	$HUD/Description.rect_size = Vector2(144, 18+$HUD/Description/Description.rect_size.y+4)

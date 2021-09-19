@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://EditorTileset.tres" type="TileSet" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://dpcomic.ttf" type="DynamicFontData" id=5]
 [ext_resource path="res://HUD.gd" type="Script" id=6]
 [ext_resource path="res://Minimap.gd" type="Script" id=7]
+[ext_resource path="res://Sprites/Spells/Empty.png" type="Texture" id=8]
 
 [sub_resource type="StyleBoxFlat" id=1]
 content_margin_top = 3.0
@@ -190,47 +191,46 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Slot1" type="Panel" parent="HUD/HUD/Spells"]
-modulate = Color( 0.47451, 0.345098, 0.529412, 1 )
+[node name="Slot1" type="TextureRect" parent="HUD/HUD/Spells"]
 margin_right = 16.0
 margin_bottom = 16.0
 rect_min_size = Vector2( 16, 16 )
-custom_styles/panel = SubResource( 3 )
+texture = ExtResource( 8 )
 
-[node name="Slot2" type="Panel" parent="HUD/HUD/Spells"]
+[node name="Slot2" type="TextureRect" parent="HUD/HUD/Spells"]
 margin_left = 20.0
 margin_right = 36.0
 margin_bottom = 16.0
 rect_min_size = Vector2( 16, 16 )
-custom_styles/panel = SubResource( 3 )
+texture = ExtResource( 8 )
 
-[node name="Slot3" type="Panel" parent="HUD/HUD/Spells"]
+[node name="Slot3" type="TextureRect" parent="HUD/HUD/Spells"]
 margin_left = 40.0
 margin_right = 56.0
 margin_bottom = 16.0
 rect_min_size = Vector2( 16, 16 )
-custom_styles/panel = SubResource( 3 )
+texture = ExtResource( 8 )
 
-[node name="Slot4" type="Panel" parent="HUD/HUD/Spells"]
+[node name="Slot4" type="TextureRect" parent="HUD/HUD/Spells"]
 margin_left = 60.0
 margin_right = 76.0
 margin_bottom = 16.0
 rect_min_size = Vector2( 16, 16 )
-custom_styles/panel = SubResource( 3 )
+texture = ExtResource( 8 )
 
-[node name="Slot5" type="Panel" parent="HUD/HUD/Spells"]
+[node name="Slot5" type="TextureRect" parent="HUD/HUD/Spells"]
 margin_left = 80.0
 margin_right = 96.0
 margin_bottom = 16.0
 rect_min_size = Vector2( 16, 16 )
-custom_styles/panel = SubResource( 3 )
+texture = ExtResource( 8 )
 
-[node name="Slot6" type="Panel" parent="HUD/HUD/Spells"]
+[node name="Slot6" type="TextureRect" parent="HUD/HUD/Spells"]
 margin_left = 100.0
 margin_right = 116.0
 margin_bottom = 16.0
 rect_min_size = Vector2( 16, 16 )
-custom_styles/panel = SubResource( 3 )
+texture = ExtResource( 8 )
 
 [node name="SpellBag" type="VBoxContainer" parent="HUD/HUD"]
 margin_left = 4.0
@@ -241,59 +241,55 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Slot1" type="Panel" parent="HUD/HUD/SpellBag"]
-modulate = Color( 0.47451, 0.345098, 0.529412, 1 )
+[node name="Slot1" type="TextureRect" parent="HUD/HUD/SpellBag"]
 margin_right = 16.0
 margin_bottom = 16.0
 rect_min_size = Vector2( 16, 16 )
-custom_styles/panel = SubResource( 3 )
+texture = ExtResource( 8 )
 
-[node name="Slot2" type="Panel" parent="HUD/HUD/SpellBag"]
+[node name="Slot2" type="TextureRect" parent="HUD/HUD/SpellBag"]
 margin_top = 20.0
 margin_right = 16.0
 margin_bottom = 36.0
 rect_min_size = Vector2( 16, 16 )
-custom_styles/panel = SubResource( 3 )
+texture = ExtResource( 8 )
 
-[node name="Slot3" type="Panel" parent="HUD/HUD/SpellBag"]
+[node name="Slot3" type="TextureRect" parent="HUD/HUD/SpellBag"]
 margin_top = 40.0
 margin_right = 16.0
 margin_bottom = 56.0
 rect_min_size = Vector2( 16, 16 )
-custom_styles/panel = SubResource( 3 )
+texture = ExtResource( 8 )
 
-[node name="Slot4" type="Panel" parent="HUD/HUD/SpellBag"]
+[node name="Slot4" type="TextureRect" parent="HUD/HUD/SpellBag"]
 margin_top = 60.0
 margin_right = 16.0
 margin_bottom = 76.0
 rect_min_size = Vector2( 16, 16 )
-custom_styles/panel = SubResource( 3 )
+texture = ExtResource( 8 )
 
-[node name="Slot5" type="Panel" parent="HUD/HUD/SpellBag"]
+[node name="Slot5" type="TextureRect" parent="HUD/HUD/SpellBag"]
 margin_top = 80.0
 margin_right = 16.0
 margin_bottom = 96.0
 rect_min_size = Vector2( 16, 16 )
-custom_styles/panel = SubResource( 3 )
+texture = ExtResource( 8 )
 
-[node name="Slot6" type="Panel" parent="HUD/HUD/SpellBag"]
+[node name="Slot6" type="TextureRect" parent="HUD/HUD/SpellBag"]
 margin_top = 100.0
 margin_right = 16.0
 margin_bottom = 116.0
 rect_min_size = Vector2( 16, 16 )
-custom_styles/panel = SubResource( 3 )
+texture = ExtResource( 8 )
 
-[node name="MouseSlot" type="Panel" parent="HUD/HUD"]
+[node name="MouseSlot" type="TextureRect" parent="HUD/HUD"]
 visible = false
 margin_left = 4.0
 margin_top = 182.0
 margin_right = 20.0
 margin_bottom = 198.0
 rect_min_size = Vector2( 16, 16 )
-custom_styles/panel = SubResource( 3 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+texture = ExtResource( 8 )
 
 [node name="Description" type="Panel" parent="HUD/HUD"]
 margin_left = 40.0
@@ -457,5 +453,5 @@ drag_margin_top = 0.4
 drag_margin_bottom = 0.4
 
 [connection signal="player_died" from="Player" to="HUD" method="_on_player_died"]
-[connection signal="generated_world" from="World" to="Player" method="_on_generated_world"]
 [connection signal="generated_world" from="World" to="HUD" method="_on_generated_world"]
+[connection signal="generated_world" from="World" to="Player" method="_on_generated_world"]
