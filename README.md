@@ -1,4 +1,6 @@
 # Moloch
+![logo](https://user-images.githubusercontent.com/56773311/133911301-11890dbc-70ca-4ebd-bc92-5d5ac83ebf82.png)
+
 *In any system optimizing for X, the opportunity arises to throw any value under the bus for optimized X.*
 
 Moloch is the roguelike of all the horrible futures. Instead of health points, the player's human (or otherwise applicable) conditions are (somewhat) simulated to make for a fleshly experience. Fell from too high? I sure hope you don't need those knees.
