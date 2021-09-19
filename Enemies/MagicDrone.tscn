@@ -22,3 +22,5 @@ collision_mask = 11
 [node name="VisibilityEnabler2D" type="VisibilityEnabler2D" parent="."]
 position = Vector2( -350, -200 )
 rect = Rect2( 0, 0, 700, 400 )
+process_parent = true
+physics_process_parent = true
