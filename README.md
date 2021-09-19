@@ -8,11 +8,11 @@ Moloch is the roguelike of all the horrible futures. Instead of health points, t
 You are a child who was sacrificed by your parents to the god at the top of The Ancient Tower. The tradeoff is simple: Throw away what you love most, and I can give you power. You refuse to let yourself be murdered by the people and the creatures inhabiting the tower, and in a desperate attempt to survive, you begin your ascent.
 
 ## Controls
-**WASD:** Moving, jumping and opening chests
-**Left Click:** Cast the spells in your wand, select items from your inventory to move spells around
-**Right Click, with an item selected:** Delete the spell or wand
-**G:** Instantly die
-**Shift:** Display extra information when hovering on an item in the inventory
+- **WASD:** Moving, jumping and opening chests
+- **Left Click:** Cast the spells in your wand, select items from your inventory to move spells around
+- **Right Click, with an item selected:** Delete the spell or wand
+- **G:** Instantly die
+- **Shift:** Display extra information when hovering on an item in the inventory
 
 
 ## Features
