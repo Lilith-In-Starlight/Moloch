@@ -193,6 +193,13 @@ func _ready():
 		new_sprite.z_index = sprite.z_index
 		add_child(new_sprite)
 		sprite.queue_free()
+	print("    - Elevator Door")
+	for sprite in get_tree().get_nodes_in_group("Elevator"):
+		var new_sprite := preload("res://Elements/ElevatorDoor.tscn").instance()
+		new_sprite.position = sprite.global_position
+		new_sprite.z_index = -1
+		add_child(new_sprite)
+		sprite.queue_free()
 	
 	print("Step 4: Passing all the room data to the world TileMap")
 	for room in get_children():
