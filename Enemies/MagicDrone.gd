@@ -127,3 +127,6 @@ func _draw():
 
 func health_object():
 	return health
+
+func looking_at():
+	return Player.position
