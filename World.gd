@@ -218,7 +218,7 @@ func _process(delta):
 		print("Step 5: Adding enemies")
 		var added := 0
 		for a in areas:
-			for i in randi()%5:
+			for i in randi()%3:
 				if randf()<0.6:
 					var pos :Vector2 = (a.position + Vector2(randf(), randf())*a.size)
 					var n := preload("res://Enemies/MagicDrone.tscn").instance()
