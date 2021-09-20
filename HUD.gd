@@ -20,6 +20,7 @@ var advice := [
 	"If you get lost, try to remember where you are",
 	"If an enemy attacks you, dodge",
 	"Use the controls to maneuver your character",
+	"If you find yourself surrounded by enemies, get out of there",
 ]
 var player_died := false
 func _ready():
@@ -48,6 +49,7 @@ func _process(delta):
 	else:
 		$HUD/Messages.visible = false
 	
+	$HUD/Scraps/Amount.text = str(Items.cloth_scraps)
 	for i in $HUD/Wands.get_child_count():
 		$HUD/Wands.get_child(i).render_wand(Items.player_wands[i], i == Items.selected_wand)
 				

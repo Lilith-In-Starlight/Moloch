@@ -51,7 +51,18 @@ func _ready():
 
 func _process(delta):
 	if health.poked_holes > 0:
-		if Input.is_action_just_pressed("seal_blood"):
+		for i in health.poked_holes:
+			if randf()>0.9:
+				var n :RigidBody2D = preload("res://Particles/Blood.tscn").instance()
+				n.position = position + Vector2(0, 6)
+				n.linear_velocity = Vector2(-200 + randf()*400, -80 + randf()*120)
+				if not blood_is_gasoline:
+					n.modulate = ColorN("red")
+				else:
+					n.modulate = ColorN("green")
+				get_parent().add_child(n)
+		if Input.is_action_just_pressed("seal_blood") and Items.cloth_scraps > 0:
+			Items.cloth_scraps -= 1
 			if randf()<0.92:
 				health.poked_holes -= 1
 			if health.poked_holes < 0:
@@ -59,7 +70,7 @@ func _process(delta):
 			if health.poked_holes == 0:
 				message_send("Wound has been covered, bleeding has stopped")
 	
-		if randf() < 0.002:
+		if randf() < 0.0005:
 			health.poked_holes -= 1
 			if health.poked_holes < 0:
 				health.poked_holes = 0
@@ -428,6 +439,8 @@ func move_damp(delta):
 		speed.x += WALK_ACCEL
 		haxis = 1.0
 		health.temperature += 0.002
+	else:
+		health.temperature = move_toward(health.temperature, 30, 0.01)
 	health.temperature = move_toward(health.temperature, 30, 0.001)
 	if abs(haxis)<0.5:
 		speed.x *= pow(0.8, delta*60)
