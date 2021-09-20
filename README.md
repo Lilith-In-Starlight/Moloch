@@ -13,6 +13,7 @@ You are a child who was sacrificed by your parents to the god at the top of The 
 - **Right Click, with an item selected:** Delete the spell or wand
 - **G:** Instantly die
 - **Shift:** Display extra information when hovering on an item in the inventory
+- **R:** Cover your wounds with cloth to stop the bleeding
 
 
 ## Features
