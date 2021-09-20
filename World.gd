@@ -239,6 +239,12 @@ func _process(delta):
 					n.position = pos
 					add_child(n)
 					added += 1
+				if randf()<0.3:
+					var pos :Vector2 = (a.position + Vector2(randf(), randf())*a.size)
+					var n := preload("res://Enemies/SpellMachine.tscn").instance()
+					n.position = pos
+					add_child(n)
+					added += 1
 		print("Added ", added, " enemies")
 		emit_signal("generated_world")
 		Items.run_start_time = OS.get_ticks_msec()

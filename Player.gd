@@ -107,8 +107,8 @@ func _process(delta):
 		message_send("Your insides feel like they're melting")
 	
 	# Control the camera with the mouse
-	var coffset := get_local_mouse_position()/4.0
-	Cam.offset += (coffset-Cam.offset)/5.0
+	var coffset := get_local_mouse_position()/2.5
+	Cam.offset += (coffset-Cam.offset)/10.0
 	
 	# Death
 	if (health.temperature > 145 or health.soul <= 0.0 or health.blood <= 0.0 or Input.is_key_pressed(KEY_G)) and not dead:

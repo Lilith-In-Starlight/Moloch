@@ -3,20 +3,16 @@ extends KinematicBody2D
 
 var rotate := 0.0
 var WorldMap :TileMap
-var Player
+var Caster
 
 var timer := 0.0
 
 
-var goal :Node2D = null
+var goal :Vector2
 
 
 func _ready():
 	WorldMap = get_tree().get_nodes_in_group("World")[0]
-	Player = get_tree().get_nodes_in_group("Player")[0]
-	rotate = get_local_mouse_position().angle()
-	if goal != null:
-		rotate =  goal.position.angle_to_point(position)
 	
 	position += Vector2(cos(rotate), sin(rotate))*12.0
 	

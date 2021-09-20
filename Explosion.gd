@@ -31,11 +31,9 @@ func _process(delta):
 func _physics_process(delta):
 	if done < 3:
 		for body in get_overlapping_bodies():
-			print(body.name)
 			if body.has_method("health_object"):
 				var flesh : Flesh = body.health_object()
 				flesh.temp_change(500/body.position.distance_to(position))
-				print(500/body.position.distance_to(position))
 				if body.position.distance_to(position) < 24:
 					flesh.poke_hole(2+randi()%1)
 				if body.position.distance_to(position) < 12:

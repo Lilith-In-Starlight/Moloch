@@ -3,22 +3,22 @@ extends Area2D
 
 var rotate := 0.0
 var WorldMap :TileMap
-var Player
+var Caster :Node2D
 
 var timer := 0.0
 
 var noise := OpenSimplexNoise.new()
 
-var goal :Node2D = null
+var goal :Vector2 = Vector2(0, 0)
 
 
 func _ready():
 	noise.seed = randi()
+	position = Caster.position
 	WorldMap = get_tree().get_nodes_in_group("World")[0]
-	Player = get_tree().get_nodes_in_group("Player")[0]
-	rotate = get_local_mouse_position().angle()
-	if goal != null:
-		rotate =  goal.position.angle_to_point(position)
+	rotate = goal.angle_to_point(position)
+	if Caster.name != "Player":
+		set_collision_mask_bit(0, true)
 	
 
 

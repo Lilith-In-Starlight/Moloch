@@ -9,7 +9,6 @@ func _ready():
 	Player = get_tree().get_nodes_in_group("Player")[0]
 
 func _process(delta):
-	print("a")
 	$Sprite.rotation = -rotation
 	$Sprite.texture = spell.texture
 	if Player.position.distance_to(position) < 50:

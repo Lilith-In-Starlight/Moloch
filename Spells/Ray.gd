@@ -1,20 +1,19 @@
 extends RayCast2D
 
 var rotate := 0.0
-var Player
+var Caster :Node2D
 
 var timer := 0.0
 
 
-var goal :Node2D = null
-
+var goal :Vector2
+var did := false
 
 func _ready():
 	enabled = true
-	Player = get_tree().get_nodes_in_group("Player")[0]
-	rotate = get_local_mouse_position().angle()
-	if goal != null:
-		rotate =  goal.position.angle_to_point(position)
+	position = Caster.position
+	rotate = goal.angle_to_point(position)
+	if Caster.name != "Player":
 		set_collision_mask_bit(0, true)
 	cast_to = Vector2(cos(rotate), sin(rotate))*1000
 
@@ -23,8 +22,9 @@ func _physics_process(delta):
 	if is_colliding():
 		cast_to = get_collision_point() - position
 		var col := get_collider()
-		if col.has_method("health_object"):
+		if col.has_method("health_object") and not did:
 			col.health_object().poke_hole()
+			did = true
 		$Line2D.points = [Vector2(0, 0), get_collision_point()-position]
 	else:
 		$Line2D.points = [Vector2(0, 0), cast_to]

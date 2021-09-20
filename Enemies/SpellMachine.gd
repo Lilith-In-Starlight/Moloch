@@ -22,6 +22,8 @@ var health := Flesh.new()
 
 var first_check := false
 
+var spell := Items.pick_random_spell()
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	noise.seed = randi()
@@ -43,8 +45,8 @@ func _physics_process(delta):
 	var primordial_termor := Vector2(noise.get_noise_2d(position.x, OS.get_ticks_msec()/300.0), noise.get_noise_2d(position.y, OS.get_ticks_msec()/300.0))*30
 	if (health.temperature > 45.0 and health.temperature <= 60.0) or health.soul < 0.5:
 		primordial_termor = Vector2(noise.get_noise_2d(position.x, OS.get_ticks_msec()/3.0), noise.get_noise_2d(position.y, OS.get_ticks_msec()/3.0))*30
-	if health.temperature > 60.0 or health.soul <= 0.0 or health.poked_holes > 0:
-		if health.poked_holes > 0 or health.temperature > 60.0:
+	if health.temperature > 60.0 or health.soul <= 0.0 or health.poked_holes > 3:
+		if health.poked_holes > 3 or health.temperature > 60.0:
 			var n:Area2D = preload("res://Explosion.tscn").instance()
 			n.position = position
 			get_parent().add_child(n)
@@ -65,9 +67,9 @@ func _physics_process(delta):
 					last_seen = Player.position
 			else:
 				state = STATES.SEARCHING
-			if position.distance_to(Player.position) > 120:
+			if position.distance_to(Player.position) > 75:
 				speed += (((last_seen-position).normalized()*30+primordial_termor)-speed)/3.0
-			elif position.distance_to(Player.position) < 110:
+			elif position.distance_to(Player.position) < 60:
 				speed += ((-(last_seen-position).normalized()*30+primordial_termor)-speed)/3.0
 			else:
 				speed += (primordial_termor-speed)/10.0
@@ -77,7 +79,8 @@ func _physics_process(delta):
 				state = STATES.RECOIL
 				position_timer = 0.0
 				speed = -(last_seen-position).normalized()*30
-				var orb := preload("res://Spells/ShatteringOrb.tscn").instance()
+				var orb := spell.entity.instance()
+				print(orb.name)
 				orb.goal = Player.position
 				orb.Caster = self
 				get_parent().add_child(orb)
@@ -120,9 +123,9 @@ func _physics_process(delta):
 func _draw():
 	match state:
 		STATES.POSITIONING:
-			draw_circle(Vector2(0, 0), 8, "#0ac58a")
+			draw_circle(Vector2(0, 0), 8, "#5b0122")
 		_:
-			draw_circle(Vector2(0, 0), 8, "#3fb58a")
+			draw_circle(Vector2(0, 0), 8, "#6b125a")
 
 
 func health_object():

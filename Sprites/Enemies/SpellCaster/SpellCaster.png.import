@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Shufflel1.png-5c63a7fa76cf2dedbfbe9da32ec9f5cf.stex"
+path="res://.import/SpellCaster.png-3902eb0977da9b8aec3274beabff8fc9.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/Wands/Shufflel1.png"
-dest_files=[ "res://.import/Shufflel1.png-5c63a7fa76cf2dedbfbe9da32ec9f5cf.stex" ]
+source_file="res://Sprites/Enemies/SpellCaster/SpellCaster.png"
+dest_files=[ "res://.import/SpellCaster.png-3902eb0977da9b8aec3274beabff8fc9.stex" ]
 
 [params]
 

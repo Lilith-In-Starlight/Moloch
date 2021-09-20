@@ -22,16 +22,11 @@ var running := false
 func _init():
 	if randf() < 0.1:
 		shuffle = true
-	var randspell = Items.spells.values()[randi()%Items.spells.values().size()]
-	while randspell.id in ["fuck you", "push", "pull"] and randf()<0.98:
-		randspell = Items.spells.values()[randi()%Items.spells.values().size()]
+	var randspell = Items.pick_random_spell()
 	spells.append(randspell)
 	
-	
 	if randi()%100 > 85 and spell_capacity > 1:
-		randspell = Items.spells.values()[randi()%Items.spells.values().size()]
-		while randspell.id in ["fuck you", "push", "pull"] and randf()<0.98:
-			randspell = Items.spells.values()[randi()%Items.spells.values().size()]
+		randspell = Items.pick_random_spell()
 		spells.append(randspell)
 	
 	while spells.size() < spell_capacity:

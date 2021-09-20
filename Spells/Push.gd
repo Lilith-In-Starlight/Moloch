@@ -1,7 +1,12 @@
 extends Area2D
 
+var Caster :Node2D
+var goal :Vector2
 var strength := 10.0
 var particles := []
+
+func _ready():
+	position = Caster.position
 
 func _physics_process(delta):
 	strength -= delta

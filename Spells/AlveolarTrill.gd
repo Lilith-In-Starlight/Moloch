@@ -2,24 +2,28 @@ extends Node2D
 
 var rotate := 0.0
 var WorldMap :TileMap
-var Player
+var Caster :Node2D
+var goal :Vector2
 
 var timer := 0.0
 var times := 0
 
 
-var goal :Node2D = null
 
 
 func _ready():
+	position = Caster.position
 	WorldMap = get_tree().get_nodes_in_group("World")[0]
-	Player = get_tree().get_nodes_in_group("Player")[0]
-	rotate = get_local_mouse_position().angle()
-	if goal != null:
-		rotate =  goal.position.angle_to_point(position)
+	rotate = goal.angle_to_point(position)
 
 func _process(delta):
 	timer += delta
+	if is_instance_valid(Caster):
+		position = Caster.position
+		if Caster.name == "Player":
+			goal = Caster.get_local_mouse_position() + Caster.position
+	rotate = goal.angle_to_point(position)
+	
 	if timer > 0.1:
 		var r := preload("res://Spells/AlveolarProjectile.tscn").instance()
 		r.position = global_position
