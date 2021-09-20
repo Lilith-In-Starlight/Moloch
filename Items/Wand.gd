@@ -7,6 +7,12 @@ var spell_recharge := randf()*0.3
 var full_recharge := randf()*1.7
 var spells := []
 
+var color1 := Color(randf(), randf(), randf())
+var color2 := Color(randf(), randf(), randf())
+var color3 := Color(randf(), randf(), randf())
+
+var shuffle := false
+
 var current_spell := 0
 
 var recharge := 0.0
@@ -14,6 +20,8 @@ var running := false
 
 
 func _init():
+	if randf() < 0.1:
+		shuffle = true
 	var randspell = Items.spells.values()[randi()%Items.spells.values().size()]
 	while randspell.id in ["fuck you", "push", "pull"] and randf()<0.98:
 		randspell = Items.spells.values()[randi()%Items.spells.values().size()]
@@ -38,5 +46,8 @@ func duplicate():
 	w.spell_capacity = spell_capacity
 	w.spell_recharge = spell_recharge
 	w.full_recharge = full_recharge
+	w.color1 = color1
+	w.color2 = color2
+	w.color3 = color3
 	w.spells = spells.duplicate()
 	return w

@@ -1,0 +1,56 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://Sprites/Wands/Selected.png" type="Texture" id=1]
+[ext_resource path="res://Sprites/Wands/Base.png" type="Texture" id=2]
+[ext_resource path="res://Sprites/Wands/CastSpeed/6.png" type="Texture" id=3]
+[ext_resource path="res://Sprites/Wands/Recharge/6.png" type="Texture" id=4]
+[ext_resource path="res://WandRenderRect.gd" type="Script" id=5]
+
+[sub_resource type="StreamTexture" id=1]
+
+[node name="WandRenderRect" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -384.0
+margin_bottom = -209.0
+rect_min_size = Vector2( 16, 16 )
+script = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Select" type="TextureRect" parent="."]
+visible = false
+margin_right = 16.0
+margin_bottom = 16.0
+texture = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Base" type="TextureRect" parent="."]
+margin_right = 16.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 16, 16 )
+texture = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Slots" type="TextureRect" parent="."]
+margin_right = 16.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 16, 16 )
+texture = SubResource( 1 )
+
+[node name="Cast" type="TextureRect" parent="."]
+margin_right = 16.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 16, 16 )
+texture = ExtResource( 3 )
+
+[node name="Recharge" type="TextureRect" parent="."]
+margin_right = 16.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 16, 16 )
+texture = ExtResource( 4 )

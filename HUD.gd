@@ -42,21 +42,14 @@ func _process(delta):
 		$HUD/Messages.visible = true
 		message_timer += delta
 		$HUD/Messages.bbcode_text = "[center]" + messages[0] + "[/center]"
-		if message_timer > messages[0].length()*0.4:
+		if message_timer > messages[0].length()*0.2:
 			message_timer = 0.0
 			messages.pop_front()
 	else:
 		$HUD/Messages.visible = false
 	
 	for i in $HUD/Wands.get_child_count():
-		if Items.player_wands[i] != null:
-			$HUD/Wands.get_child(i).modulate = "#ffc741"
-			if Items.selected_wand == i:
-				$HUD/Wands.get_child(i).modulate = "#ffbdeb"
-		else:
-			$HUD/Wands.get_child(i).modulate = "2a2a2a"
-			if Items.selected_wand == i:
-				$HUD/Wands.get_child(i).modulate = "#795887"
+		$HUD/Wands.get_child(i).render_wand(Items.player_wands[i], i == Items.selected_wand)
 				
 	for i in $HUD/SpellBag.get_child_count():
 		if Items.player_spells[i] != null:
@@ -158,13 +151,29 @@ func _process(delta):
 					mouse_wand = k
 	
 	if Input.is_action_just_pressed("Interact2") and clicked == -1:
+		if mouse_spell != null:
+			var new := preload("res://Items/SpellEntity.tscn").instance()
+			new.spell = mouse_spell
+			get_parent().add_child(new)
+			new.position = get_tree().get_nodes_in_group("Player")[0].position
+			new.linear_velocity.x = -120 + randf()*240
 		mouse_spell = null
+		if mouse_wand != null:
+			var new := preload("res://Items/WandEntity.tscn").instance()
+			new.wand = mouse_wand
+			get_parent().add_child(new)
+			new.position = get_tree().get_nodes_in_group("Player")[0].position
+			new.linear_velocity.x = -120 + randf()*240
 		mouse_wand = null
 	
 	$HUD/MouseSlot.visible = mouse_spell != null
+	$HUD/MouseWand.visible = mouse_wand != null
 	$HUD/MouseSlot.rect_position = mouse + Vector2(-16,0)
+	$HUD/MouseWand.rect_position = mouse + Vector2(0,-16)
 	if mouse_spell != null:
 		$HUD/MouseSlot.texture = mouse_spell.texture
+	if mouse_wand != null:
+		$HUD/MouseWand.render_wand(mouse_wand, true)
 		
 	
 	$HUD/Description.rect_size = Vector2(144, 18+$HUD/Description/Description.rect_size.y+4)

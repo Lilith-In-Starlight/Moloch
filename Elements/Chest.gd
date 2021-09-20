@@ -33,16 +33,16 @@ func _process(delta):
 				match type:
 					TYPES.ITEM:
 						var new := preload("res://Items/ItemEntity.tscn").instance()
-						print(contents.name)
 						new.item = contents
 						get_parent().add_child(new)
 						new.position = position
 						new.linear_velocity.x = -120 + randf()*240
 					TYPES.WAND:
-						for i in Items.player_wands.size():
-							if Items.player_wands[i] == null:
-								Items.player_wands[i] = Wand.new()
-								break
+						var new := preload("res://Items/WandEntity.tscn").instance()
+						new.wand = Wand.new()
+						get_parent().add_child(new)
+						new.position = position
+						new.linear_velocity.x = -120 + randf()*240
 					TYPES.SPELL:
 						var giv :Spell = Items.spells.values()[randi()%Items.spells.values().size()]
 						if giv.id == "fuck you" and randf() < 0.95:
@@ -55,7 +55,9 @@ func _process(delta):
 							giv = Items.spells.values()[randi()%Items.spells.values().size()]
 							while giv.id in ["fuck you", "push"]:
 								giv = Items.spells.values()[randi()%Items.spells.values().size()]
-						for i in Items.player_spells.size():
-							if Items.player_spells[i] == null:
-								Items.player_spells[i] = giv
-								break
+						
+						var new := preload("res://Items/SpellEntity.tscn").instance()
+						new.spell = giv
+						get_parent().add_child(new)
+						new.position = position
+						new.linear_velocity.x = -120 + randf()*240

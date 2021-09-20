@@ -8,6 +8,7 @@
 [ext_resource path="res://HUD.gd" type="Script" id=6]
 [ext_resource path="res://Minimap.gd" type="Script" id=7]
 [ext_resource path="res://Sprites/Spells/Empty.png" type="Texture" id=8]
+[ext_resource path="res://WandRenderRect.tscn" type="PackedScene" id=9]
 
 [sub_resource type="StyleBoxFlat" id=1]
 content_margin_top = 3.0
@@ -26,14 +27,6 @@ size = 12
 font_data = ExtResource( 5 )
 
 [sub_resource type="StyleBoxFlat" id=3]
-bg_color = Color( 1, 1, 1, 1 )
-corner_radius_top_left = 5
-corner_radius_top_right = 2
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 2
-anti_aliasing = false
-
-[sub_resource type="StyleBoxFlat" id=4]
 content_margin_left = 5.0
 content_margin_right = 5.0
 content_margin_top = 5.0
@@ -48,17 +41,17 @@ corner_radius_bottom_right = 10
 corner_radius_bottom_left = 5
 anti_aliasing = false
 
-[sub_resource type="DynamicFont" id=5]
+[sub_resource type="DynamicFont" id=4]
 size = 12
 use_mipmaps = true
 font_data = ExtResource( 5 )
 
-[sub_resource type="DynamicFont" id=6]
+[sub_resource type="DynamicFont" id=5]
 size = 10
 use_mipmaps = true
 font_data = ExtResource( 5 )
 
-[sub_resource type="StyleBoxFlat" id=7]
+[sub_resource type="StyleBoxFlat" id=6]
 content_margin_left = 5.0
 content_margin_right = 5.0
 content_margin_top = 5.0
@@ -73,14 +66,14 @@ corner_radius_bottom_right = 5
 corner_radius_bottom_left = 2
 anti_aliasing = false
 
-[sub_resource type="StyleBoxFlat" id=8]
+[sub_resource type="StyleBoxFlat" id=7]
 bg_color = Color( 0, 0, 0, 1 )
 
-[sub_resource type="DynamicFont" id=9]
+[sub_resource type="DynamicFont" id=8]
 use_mipmaps = true
 font_data = ExtResource( 5 )
 
-[sub_resource type="DynamicFont" id=10]
+[sub_resource type="DynamicFont" id=9]
 size = 11
 use_mipmaps = true
 font_data = ExtResource( 5 )
@@ -140,47 +133,46 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Slot1" type="Panel" parent="HUD/HUD/Wands"]
-modulate = Color( 0.47451, 0.345098, 0.529412, 1 )
+[node name="Slot1" parent="HUD/HUD/Wands" instance=ExtResource( 9 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
 margin_right = 16.0
 margin_bottom = 16.0
-rect_min_size = Vector2( 16, 16 )
-custom_styles/panel = SubResource( 3 )
 
-[node name="Slot2" type="Panel" parent="HUD/HUD/Wands"]
+[node name="Slot2" parent="HUD/HUD/Wands" instance=ExtResource( 9 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
 margin_left = 20.0
 margin_right = 36.0
 margin_bottom = 16.0
-rect_min_size = Vector2( 16, 16 )
-custom_styles/panel = SubResource( 3 )
 
-[node name="Slot3" type="Panel" parent="HUD/HUD/Wands"]
+[node name="Slot3" parent="HUD/HUD/Wands" instance=ExtResource( 9 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
 margin_left = 40.0
 margin_right = 56.0
 margin_bottom = 16.0
-rect_min_size = Vector2( 16, 16 )
-custom_styles/panel = SubResource( 3 )
 
-[node name="Slot4" type="Panel" parent="HUD/HUD/Wands"]
+[node name="Slot4" parent="HUD/HUD/Wands" instance=ExtResource( 9 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
 margin_left = 60.0
 margin_right = 76.0
 margin_bottom = 16.0
-rect_min_size = Vector2( 16, 16 )
-custom_styles/panel = SubResource( 3 )
 
-[node name="Slot5" type="Panel" parent="HUD/HUD/Wands"]
+[node name="Slot5" parent="HUD/HUD/Wands" instance=ExtResource( 9 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
 margin_left = 80.0
 margin_right = 96.0
 margin_bottom = 16.0
-rect_min_size = Vector2( 16, 16 )
-custom_styles/panel = SubResource( 3 )
 
-[node name="Slot6" type="Panel" parent="HUD/HUD/Wands"]
+[node name="Slot6" parent="HUD/HUD/Wands" instance=ExtResource( 9 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
 margin_left = 100.0
 margin_right = 116.0
 margin_bottom = 16.0
-rect_min_size = Vector2( 16, 16 )
-custom_styles/panel = SubResource( 3 )
 
 [node name="Spells" type="HBoxContainer" parent="HUD/HUD"]
 margin_left = 4.0
@@ -291,13 +283,18 @@ margin_bottom = 198.0
 rect_min_size = Vector2( 16, 16 )
 texture = ExtResource( 8 )
 
+[node name="MouseWand" parent="HUD/HUD" instance=ExtResource( 9 )]
+visible = false
+margin_top = -16.0
+margin_bottom = -225.0
+
 [node name="Description" type="Panel" parent="HUD/HUD"]
 margin_left = 40.0
 margin_top = 40.0
 margin_right = 184.0
 margin_bottom = 104.0
 size_flags_horizontal = 5
-custom_styles/panel = SubResource( 4 )
+custom_styles/panel = SubResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -308,7 +305,7 @@ margin_top = 8.0
 margin_right = 136.0
 margin_bottom = 20.0
 size_flags_horizontal = 5
-custom_fonts/font = SubResource( 5 )
+custom_fonts/font = SubResource( 4 )
 text = "Name"
 autowrap = true
 
@@ -318,7 +315,7 @@ margin_top = 18.0
 margin_right = 136.0
 margin_bottom = 30.0
 size_flags_horizontal = 5
-custom_fonts/font = SubResource( 6 )
+custom_fonts/font = SubResource( 5 )
 text = "Information"
 autowrap = true
 __meta__ = {
@@ -331,8 +328,8 @@ margin_top = 40.0
 margin_right = 71.0
 margin_bottom = 59.0
 size_flags_horizontal = 5
-custom_styles/normal = SubResource( 7 )
-custom_fonts/font = SubResource( 5 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 4 )
 text = "Name"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -342,7 +339,7 @@ __meta__ = {
 modulate = Color( 1, 1, 1, 0 )
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_styles/panel = SubResource( 8 )
+custom_styles/panel = SubResource( 7 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -356,7 +353,7 @@ margin_left = -56.0
 margin_top = -158.0
 margin_right = 56.0
 margin_bottom = -142.0
-custom_fonts/font = SubResource( 9 )
+custom_fonts/font = SubResource( 8 )
 text = "You Are Dead"
 align = 1
 __meta__ = {
@@ -372,7 +369,7 @@ margin_left = -132.0
 margin_top = -48.0
 margin_right = 132.0
 margin_bottom = 48.0
-custom_fonts/font = SubResource( 10 )
+custom_fonts/font = SubResource( 9 )
 text = "Cause of Death:
 Run Length:
 
@@ -387,7 +384,7 @@ __meta__ = {
 [node name="Generating" type="Panel" parent="HUD/HUD"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_styles/panel = SubResource( 8 )
+custom_styles/panel = SubResource( 7 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -401,7 +398,7 @@ margin_left = -56.0
 margin_top = -30.0
 margin_right = 56.0
 margin_bottom = -14.0
-custom_fonts/font = SubResource( 9 )
+custom_fonts/font = SubResource( 8 )
 text = "Generating World"
 align = 1
 __meta__ = {
@@ -417,7 +414,7 @@ margin_left = -132.0
 margin_top = -48.0
 margin_right = 132.0
 margin_bottom = 48.0
-custom_fonts/font = SubResource( 10 )
+custom_fonts/font = SubResource( 9 )
 text = "Avoid breaking your knees by not falling long distances"
 align = 1
 valign = 1
@@ -453,5 +450,5 @@ drag_margin_top = 0.4
 drag_margin_bottom = 0.4
 
 [connection signal="player_died" from="Player" to="HUD" method="_on_player_died"]
-[connection signal="generated_world" from="World" to="HUD" method="_on_generated_world"]
 [connection signal="generated_world" from="World" to="Player" method="_on_generated_world"]
+[connection signal="generated_world" from="World" to="HUD" method="_on_generated_world"]

@@ -1,8 +1,5 @@
 extends Control
 
-
-
-
 func _ready():
 	$Animations.play("License")
 

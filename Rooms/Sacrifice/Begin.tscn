@@ -3,7 +3,7 @@
 [ext_resource path="res://EditorTileset.tres" type="TileSet" id=1]
 [ext_resource path="res://Room.gd" type="Script" id=2]
 [ext_resource path="res://Elements/Platform.tscn" type="PackedScene" id=3]
-[ext_resource path="res://Sprites/Elements/Decoration/MolochStatue.png" type="Texture" id=4]
+[ext_resource path="res://Elements/MolochStatue.tscn" type="PackedScene" id=4]
 
 [node name="Room" type="TileMap"]
 tile_set = ExtResource( 1 )
@@ -47,9 +47,5 @@ size = 12
 position = Vector2( 408, 176 )
 size = 12
 
-[node name="MolochStatue" type="Sprite" parent="." groups=[
-"DecoSprite",
-]]
-position = Vector2( 264, 160 )
-z_index = -1
-texture = ExtResource( 4 )
+[node name="MolochStatue" parent="." instance=ExtResource( 4 )]
+position = Vector2( 256, 159 )
