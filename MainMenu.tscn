@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://Sprites/Menus/logo.png" type="Texture" id=1]
 [ext_resource path="res://dpcomic.ttf" type="DynamicFontData" id=2]
@@ -52,6 +52,7 @@ font_data = ExtResource( 2 )
 
 [sub_resource type="Animation" id=7]
 resource_name = "Fadein"
+length = 1.1
 tracks/0/type = "value"
 tracks/0/path = NodePath("Thing:modulate")
 tracks/0/interp = 1
@@ -156,6 +157,27 @@ tracks/4/keys = {
 "values": [ true, false ]
 }
 
+[sub_resource type="StyleBoxFlat" id=14]
+content_margin_left = 5.0
+content_margin_right = 5.0
+content_margin_top = 5.0
+content_margin_bottom = 5.0
+bg_color = Color( 1, 0.627451, 0, 1 )
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color( 0, 0, 0, 1 )
+corner_radius_top_left = 5
+corner_radius_top_right = 2
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 2
+anti_aliasing = false
+
+[sub_resource type="DynamicFont" id=13]
+size = 12
+font_data = ExtResource( 2 )
+
 [sub_resource type="StyleBoxFlat" id=10]
 bg_color = Color( 0, 0, 0, 1 )
 
@@ -235,9 +257,25 @@ anims/Fadein = SubResource( 7 )
 anims/Fadeout = SubResource( 8 )
 anims/License = SubResource( 9 )
 
+[node name="LineEdit" type="LineEdit" parent="."]
+anchor_left = 0.32
+anchor_top = 0.867
+anchor_right = 0.682
+anchor_bottom = 0.964
+margin_left = -1.52588e-05
+margin_top = -0.0750122
+margin_right = 0.199982
+margin_bottom = 0.0999908
+custom_styles/normal = SubResource( 14 )
+custom_fonts/font = SubResource( 13 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+align = 1
+placeholder_text = "Leave empty for random seed"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="Thing" type="Panel" parent="."]
-visible = false
-modulate = Color( 1, 1, 1, 0 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 custom_styles/panel = SubResource( 10 )
@@ -246,7 +284,6 @@ __meta__ = {
 }
 
 [node name="Image" type="Control" parent="."]
-visible = false
 modulate = Color( 1, 1, 1, 0 )
 anchor_right = 1.0
 anchor_bottom = 1.0

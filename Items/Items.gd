@@ -26,20 +26,30 @@ var selected_wand := 0
 
 var Player :KinematicBody2D
 var player_health := Flesh.new()
-var Cam :Camera2D
 var can_cast := true
 
 var run_start_time :int
 
-var cloth_scraps := 2
+var cloth_scraps := 3
+
+var WorldRNG := RandomNumberGenerator.new()
+var LootRNG := RandomNumberGenerator.new()
+var custom_seed := 0
 
 func _ready():
-	register_item(1, "heal", "Heal", "Return the flesh to a state previous", preload("res://Sprites/Items/Heal.png"))
+	var generator_seed := hash(OS.get_time())
+	print("Generator seed: ", generator_seed)
+	seed(generator_seed)
+	WorldRNG.seed = generator_seed
+	register_item(2, "heal", "Growth", "Return the flesh to a state previous", preload("res://Sprites/Items/Heal.png"))
 	register_item(1, "ironknees", "Iron Knees", "Fear the ground no more", preload("res://Sprites/Items/IronKnees.png"))
 	register_item(1, "thickblood", "Thick Blood", "Pressurized Veins", preload("res://Sprites/Items/ThickBlood.png"))
-	register_item(2, "wings", "Butterfly Wings", "Metamorphosis", preload("res://Sprites/Items/Wings.png"))
-	register_item(1, "gasolineblood", "Blood To Gasoline", "Your insides become volatile", preload("res://Sprites/Items/BloodToGasoline.png"))
+	register_item(3, "wings", "Butterfly Wings", "Metamorphosis", preload("res://Sprites/Items/Wings.png"))
+	register_item(1, "gasolineblood", "Blood To Nitroglycerine", "Your insides become volatile", preload("res://Sprites/Items/BloodToGasoline.png"))
 	register_item(1, "scraps", "Cloth Scraps", "Seal your wounds, somewhat", preload("res://Sprites/Items/Scraps.png"))
+	register_item(1, "soulfulpill", "Soulful Pill", "Heals the mind", preload("res://Sprites/Items/SoulfulPill.png"))
+	register_item(2, "monocle", "Pig's Monocle", "See all the shinies", preload("res://Sprites/Items/PigsMonocle.png"))
+	register_item(2, "bandaid", "Band-aid", "Makes it more likely for bleeding to stop on its own", preload("res://Sprites/Items/Bandaid.png"))
 	
 	register_spell(4, "fuck you", "Fuck You", "Fuck everything in that particular direction", preload("res://Sprites/Spells/FuckYou.png"), preload("res://Spells/FuckYou.tscn"))
 	register_spell(2, "evilsight", "Evil Eye", "Look at things so fiercely you tear them apart", preload("res://Sprites/Spells/EvilEye.png"), preload("res://Spells/EvilSight.tscn"))
@@ -47,11 +57,10 @@ func _ready():
 	register_spell(1, "ray", "Generic Ray", "Pew pew!", preload("res://Sprites/Spells/Ray.png"), preload("res://Spells/Ray.tscn"))
 	register_spell(4, "push", "Push", "Away, away...", preload("res://Sprites/Spells/Push.png"), preload("res://Spells/Push.tscn"))
 	register_spell(4, "pull", "Pull", "Together, together...", preload("res://Sprites/Spells/Pull.png"), preload("res://Spells/Pull.tscn"))
-	register_spell(2, "r", "Alveolar Trill", "RRRRRRRRRRRRRRRR", preload("res://Sprites/Spells/R.png"), preload("res://Spells/AlveolarTrill.tscn"))
+	register_spell(3, "r", "Alveolar Trill", "RRRRRRRRRRRRRRRR", preload("res://Sprites/Spells/R.png"), preload("res://Spells/AlveolarTrill.tscn"))
 	
 	if not get_tree().get_nodes_in_group("Player").empty():
 		Player = get_tree().get_nodes_in_group("Player")[0]
-		Cam = get_tree().get_nodes_in_group("Camera")[0]
 	var selected_wand := 0
 	player_health = Flesh.new()
 
@@ -82,16 +91,6 @@ func _process(delta):
 		OS.window_fullscreen = !OS.window_fullscreen
 		OS.window_borderless = OS.window_fullscreen
 	
-	if not is_instance_valid(Player) and not get_tree().get_nodes_in_group("Player").empty():
-		player_health = Flesh.new()
-		cloth_scraps = 2
-		Player = get_tree().get_nodes_in_group("Player")[0]
-		Cam = get_tree().get_nodes_in_group("Camera")[0]
-		player_items = []
-		player_spells = [null,null,null,null,null,null]
-		player_wands = [null,null,null,null,null,null]
-		player_wands[0] = Wand.new()
-		player_wands[1] = Wand.new()
 	
 	for wand in player_wands:
 		if wand is Wand:
@@ -118,32 +117,62 @@ func _process(delta):
 				wand.current_spell = 0
 
 
-func pick_random_spell() -> Spell:
-	var random := randf()
+func pick_random_spell(rng:RandomNumberGenerator = LootRNG) -> Spell:
+	var random := rng.randf()
 	var tier := 1
-	if random < 0.5:
+	if random < 0.68:
 		tier = 1
-	elif random < 0.87:
+	elif random < 0.9:
 		tier = 2
 	elif random < 0.998:
 		tier = 3
 	elif random < 1.0:
 		tier = 4
 	if spells[tier].empty():
-		return pick_random_spell()
-	return spells[tier].values()[randi()%spells[tier].values().size()]
+		return pick_random_spell(rng)
+	return spells[tier].values()[rng.randi()%spells[tier].values().size()]
 
-func pick_random_item() -> Item:
-	var random := randf()
+func pick_random_item(rng:RandomNumberGenerator = LootRNG) -> Item:
+	var random := rng.randf()
 	var tier := 1
-	if random < 0.6:
+	if random < 0.68:
 		tier = 1
-	elif random < 0.87:
+	elif random < 0.9:
 		tier = 2
 	elif random < 0.998:
 		tier = 3
 	elif random < 1.0:
 		tier = 4
 	if items[tier].empty():
-		return pick_random_item()
-	return items[tier].values()[randi()%items[tier].values().size()]
+		return pick_random_item(rng)
+	return items[tier].values()[rng.randi()%items[tier].values().size()]
+
+func reset_player():
+	var generator_seed := hash(OS.get_time())
+	print(Items.custom_seed)
+	if Items.custom_seed != 0:
+		generator_seed = custom_seed
+	else:
+		generator_seed = randi()
+	print("Generator seed: ", generator_seed)
+	WorldRNG = RandomNumberGenerator.new()
+	WorldRNG.seed = generator_seed
+	LootRNG = RandomNumberGenerator.new()
+	LootRNG.seed = generator_seed*2
+	player_health = Flesh.new()
+	cloth_scraps = 3
+	player_items = []
+	player_spells = [null,null,null,null,null,null]
+	player_wands = [null,null,null,null,null,null]
+	player_wands[0] = Wand.new()
+	player_wands[1] = Wand.new()
+
+func shuffle_array(array: Array) -> Array:
+	var r := []
+	var n := []
+	while r.size() != array.size():
+		var i := WorldRNG.randi()%array.size()
+		if not i in n:
+			n.append(i)
+			r.append(array[i])
+	return r

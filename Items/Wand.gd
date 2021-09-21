@@ -2,14 +2,14 @@ extends Reference
 
 class_name Wand
 
-var spell_capacity := 1 + randi()%5
-var spell_recharge := randf()*0.3
-var full_recharge := randf()*1.7
+var spell_capacity :int = 1 + Items.LootRNG.randi()%5
+var spell_recharge :float = Items.LootRNG.randf()*0.3
+var full_recharge :float = Items.LootRNG.randf()*1.7
 var spells := []
 
-var color1 := Color(randf(), randf(), randf())
-var color2 := Color(randf(), randf(), randf())
-var color3 := Color(randf(), randf(), randf())
+var color1 := Color(Items.LootRNG.randf(), Items.LootRNG.randf(), Items.LootRNG.randf())
+var color2 := Color(Items.LootRNG.randf(), Items.LootRNG.randf(), Items.LootRNG.randf())
+var color3 := Color(Items.LootRNG.randf(), Items.LootRNG.randf(), Items.LootRNG.randf())
 
 var shuffle := false
 
@@ -20,12 +20,12 @@ var running := false
 
 
 func _init():
-	if randf() < 0.1:
+	if Items.LootRNG.randf() < 0.1:
 		shuffle = true
 	var randspell = Items.pick_random_spell()
 	spells.append(randspell)
 	
-	if randi()%100 > 85 and spell_capacity > 1:
+	if Items.LootRNG.randi()%100 > 85 and spell_capacity > 1:
 		randspell = Items.pick_random_spell()
 		spells.append(randspell)
 	

@@ -22,7 +22,7 @@ var health := Flesh.new()
 
 var first_check := false
 
-var spell := Items.pick_random_spell()
+var spell := Items.pick_random_spell(Items.WorldRNG)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

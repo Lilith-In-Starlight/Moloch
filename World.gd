@@ -25,11 +25,9 @@ func _ready():
 	var generated_end_room := false
 	var treasure_rooms := 0
 	while not generated_end_room or rooms <= 25 or treasure_rooms < 1:
-		var children := get_children()
-		children.shuffle()
+		var children := Items.shuffle_array(get_children())
 		for room in children:
-			var el_children = room.get_children()
-			el_children.shuffle()
+			var el_children = Items.shuffle_array(room.get_children())
 			for element in el_children:
 				var new_room = null
 				var search_new_room := true
@@ -44,11 +42,11 @@ func _ready():
 						if new_room != null:
 							new_room.queue_free()
 						if (rooms < 25 or generated_end_room):
-							if treasure_rooms < 4 and randf()<0.05 and rooms > 12:
+							if treasure_rooms < 4 and Items.WorldRNG.randf()<0.05 and rooms > 12:
 								is_treasure = true
 								new_room = preload("res://Rooms/Sacrifice/TreasureRoom1.tscn").instance()
 							else:
-								new_room = Rooms.rooms[randi()%Rooms.rooms.size()].instance()
+								new_room = Rooms.rooms[Items.WorldRNG.randi()%Rooms.rooms.size()].instance()
 						else:
 							try_to_end =  true
 							new_room = preload("res://Rooms/Sacrifice/End2.tscn").instance()
@@ -72,11 +70,11 @@ func _ready():
 						if new_room != null:
 							new_room.queue_free()
 						if (rooms < 25 or generated_end_room):
-							if treasure_rooms < 4 and randf()<0.05 and rooms > 12:
+							if treasure_rooms < 4 and Items.WorldRNG.randf()<0.05 and rooms > 12:
 								is_treasure = true
 								new_room = preload("res://Rooms/Sacrifice/TreasureRoom1.tscn").instance()
 							else:
-								new_room = Rooms.rooms[randi()%Rooms.rooms.size()].instance()
+								new_room = Rooms.rooms[Items.WorldRNG.randi()%Rooms.rooms.size()].instance()
 						else:
 							try_to_end =  true
 							new_room = preload("res://Rooms/Sacrifice/End2.tscn").instance()
@@ -100,7 +98,7 @@ func _ready():
 						if new_room != null:
 							new_room.queue_free()
 						if (rooms < 25 or generated_end_room):
-							new_room = Rooms.rooms[randi()%Rooms.rooms.size()].instance()
+							new_room = Rooms.rooms[Items.WorldRNG.randi()%Rooms.rooms.size()].instance()
 						else:
 							try_to_end =  true
 							new_room = preload("res://Rooms/Sacrifice/End.tscn").instance()
@@ -120,7 +118,7 @@ func _ready():
 						tries += 1
 						if new_room != null:
 							new_room.queue_free()
-						new_room = Rooms.rooms[randi()%Rooms.rooms.size()].instance()
+						new_room = Rooms.rooms[Items.WorldRNG.randi()%Rooms.rooms.size()].instance()
 						var results := search_for("UpDoor", new_room, room, element)
 						search_new_room = results[0]
 						connected_door = results[1]
@@ -207,6 +205,13 @@ func _ready():
 		new_sprite.z_index = -1
 		add_child(new_sprite)
 		sprite.queue_free()
+	print("    - Air Conditioning Units")
+	for sprite in get_tree().get_nodes_in_group("AC"):
+		var new_sprite := preload("res://Elements/AC.tscn").instance()
+		new_sprite.position = sprite.global_position
+		new_sprite.z_index = -1
+		add_child(new_sprite)
+		sprite.queue_free()
 	
 	print("Step 4: Passing all the room data to the world TileMap")
 	for room in get_children():
@@ -232,15 +237,15 @@ func _process(delta):
 		print("Step 5: Adding enemies")
 		var added := 0
 		for a in areas:
-			for i in randi()%3:
-				if randf()<0.6:
-					var pos :Vector2 = (a.position + Vector2(randf(), randf())*a.size)
+			for i in Items.WorldRNG.randi()%3:
+				if Items.WorldRNG.randf()<0.6:
+					var pos :Vector2 = (a.position + Vector2(Items.WorldRNG.randf(), Items.WorldRNG.randf())*a.size)
 					var n := preload("res://Enemies/MagicDrone.tscn").instance()
 					n.position = pos
 					add_child(n)
 					added += 1
-				if randf()<0.3:
-					var pos :Vector2 = (a.position + Vector2(randf(), randf())*a.size)
+				if Items.WorldRNG.randf()<0.3:
+					var pos :Vector2 = (a.position + Vector2(Items.WorldRNG.randf(), Items.WorldRNG.randf())*a.size)
 					var n := preload("res://Enemies/SpellMachine.tscn").instance()
 					n.position = pos
 					add_child(n)

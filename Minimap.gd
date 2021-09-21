@@ -16,4 +16,7 @@ func _draw():
 				been_to.append(i)
 		else:
 			draw_rect(r, ColorN("white"), false)
+	if Items.player_items.has("monocle"):
+		for i in get_tree().get_nodes_in_group("Chest"):
+			draw_circle(Vector2(0, 0), 1.0, ColorN("green"))
 	draw_circle(Vector2(0, 0), 1.0, ColorN("black"))

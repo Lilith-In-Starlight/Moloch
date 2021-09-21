@@ -19,6 +19,3 @@ func _ready():
 		else:
 			break
 	
-	var generator_seed := hash(OS.get_time())
-	print("Generator seed: ", generator_seed)
-	seed(generator_seed)

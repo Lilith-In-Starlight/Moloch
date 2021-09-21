@@ -39,6 +39,7 @@ var dead := false
 
 
 func _ready():
+	Items.Player = get_tree().get_nodes_in_group("Player")[0]
 	Map = get_tree().get_nodes_in_group("World")[0]
 	health.connect("hole_poked", self, "message_send", ["Bleeding"])
 	health.connect("full_healed", self, "message_send", ["Your flesh is renewed"])
@@ -69,8 +70,9 @@ func _process(delta):
 				health.poked_holes = 0
 			if health.poked_holes == 0:
 				message_send("Wound has been covered, bleeding has stopped")
-	
-		if randf() < 0.0005:
+		
+		var plus := 0.0008 * 0.0008*Items.player_items.count("bandaid")
+		if randf() < 0.0005 + plus:
 			health.poked_holes -= 1
 			if health.poked_holes < 0:
 				health.poked_holes = 0
@@ -133,6 +135,10 @@ func _process(delta):
 	if Items.player_items.has("scraps"):
 		Items.player_items.erase("scraps")
 		Items.cloth_scraps += 1
+		
+	if Items.player_items.has("soulfullpill"):
+		Items.player_items.erase("soulfullpill")
+		Items.soul += 0.1+randf()*0.2
 	
 	# Control wand HUD
 	if Items.player_wands[Items.selected_wand] is Wand and Input.is_action_just_pressed("Interact1") and not Items.player_wands[Items.selected_wand].running and not get_tree().get_nodes_in_group("HUD")[0].block_cast:

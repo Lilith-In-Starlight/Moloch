@@ -13,7 +13,7 @@ func _ready():
 	if random == 0:
 		rand = 0
 	else:
-		rand = -3 + randi()%(random*2)
+		rand = -3 + Items.WorldRNG.randi()%(random*2)
 	size += rand
 	if right:
 		position.x -= rand*8.0

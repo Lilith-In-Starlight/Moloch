@@ -23,10 +23,19 @@ var advice := [
 	"If you find yourself surrounded by enemies, get out of there",
 ]
 var player_died := false
+var last_pickup :Item = null
 func _ready():
 	$HUD/Generating/UsefulAdvice.text = advice[randi()%advice.size()]
 var end_times : String
 func _process(delta):
+	if last_pickup == null:
+		$HUD/LastItem.texture = null
+	else:
+		$HUD/LastItem.texture = last_pickup.texture
+	if get_tree().get_nodes_in_group("Player")[0].health.temperature > 30:
+		$HUD/Hot.modulate.a = lerp($HUD/Hot.modulate.a, (get_tree().get_nodes_in_group("Player")[0].health.temperature-30)/110.0, 0.2)
+	else:
+		$HUD/Cold.modulate.a = lerp($HUD/Cold.modulate.a, (get_tree().get_nodes_in_group("Player")[0].health.temperature-30)/-60.0, 0.2)
 	if generated and not player_died:
 		$HUD/Generating.modulate.a = move_toward($HUD/Generating.modulate.a, 0.0, 0.2)
 		
@@ -35,6 +44,7 @@ func _process(delta):
 		$HUD/Death/Info.text = "Run Time: " + end_times + "\n\n"
 		$HUD/Death/Info.text += "Right click to start a new run"
 		if $HUD/Generating.modulate.a > 0.9:
+			Items.reset_player()
 			get_tree().reload_current_scene()
 		if Input.is_action_just_released("Interact2"):
 			Items.player_health = Flesh.new()
@@ -133,6 +143,15 @@ func _process(delta):
 						$HUD/ShortDesc.visible = true
 						$HUD/ShortDesc.text =  Items.player_spells[i].name
 	
+	if last_pickup != null and mouse.x > 4 and mouse.y > 184 and mouse.x < 20 and mouse.y < 200:
+		if Input.is_key_pressed(KEY_SHIFT):
+			$HUD/Description.visible = true
+			$HUD/Description/Name.text = last_pickup.name
+			$HUD/Description/Description.text = last_pickup.description
+		else:
+			$HUD/ShortDesc.visible = true
+			$HUD/ShortDesc.text = last_pickup.name
+	
 	if Input.is_action_just_pressed("Interact1") and clicked != -1:
 		match clicked:
 			1:
@@ -179,7 +198,10 @@ func _process(delta):
 		
 	
 	$HUD/Description.rect_size = Vector2(144, 18+$HUD/Description/Description.rect_size.y+4)
-	$HUD/Description.rect_position = mouse
+	if mouse.y + $HUD/Description.rect_size.y > 225:
+		$HUD/Description.rect_position = mouse - Vector2(0, $HUD/Description.rect_size.y)
+	else:
+		$HUD/Description.rect_position = mouse
 	$HUD/ShortDesc.rect_position = mouse
 
 
