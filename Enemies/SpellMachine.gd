@@ -53,6 +53,9 @@ func _physics_process(delta):
 		queue_free()
 	match state:
 		STATES.IDLE:
+			$Aim.visible = false
+			$AimLine.visible = false
+			$Eye.position += (speed.normalized()*10 - $Eye.position)/3.0
 			speed += (primordial_termor*10.0-speed)/3.0
 			if $RayCast2D.is_colliding():
 				if $RayCast2D.get_collider() == Player:
@@ -60,14 +63,25 @@ func _physics_process(delta):
 					state = STATES.POSITIONING
 			position_timer = 0.0
 		STATES.POSITIONING:
+			$Eye.position += ((last_seen-position).normalized()*10 - $Eye.position)/3.0
 			if $RayCast2D.is_colliding():
 				if not $RayCast2D.get_collider() == Player:
 					state = STATES.SEARCHING
-				else:
+					$Aim.visible = false
+					$AimLine.visible = false
+				elif position_timer < 0.65:
 					last_seen = Player.position
+					$Aim.visible = false
+					$AimLine.visible = false
+				else:
+					$Aim.position = last_seen - position
+					$Aim.visible = true
+					$AimLine.visible = true
+					$AimLine.points[0] = $Eye.position
+					$AimLine.points[1] = last_seen - position
 			else:
 				state = STATES.SEARCHING
-			if position.distance_to(Player.position) > 75:
+			if position.distance_to(Player.position) > 45:
 				speed += (((last_seen-position).normalized()*30+primordial_termor)-speed)/3.0
 			elif position.distance_to(Player.position) < 60:
 				speed += ((-(last_seen-position).normalized()*30+primordial_termor)-speed)/3.0
@@ -76,16 +90,21 @@ func _physics_process(delta):
 			
 			position_timer += delta
 			if position_timer >= 1.0:
+				$Aim.visible = false
+				$AimLine.visible = false
 				state = STATES.RECOIL
 				position_timer = 0.0
 				speed = -(last_seen-position).normalized()*30
 				var orb := spell.entity.instance()
 				print(orb.name)
-				orb.goal = Player.position
+				orb.goal = last_seen
 				orb.Caster = self
 				get_parent().add_child(orb)
 
 		STATES.RECOIL:
+			$Aim.visible = false
+			$AimLine.visible = false
+			$Eye.position += ((last_seen-position).normalized()*10 - $Eye.position)/3.0
 			speed *= 0.75
 			position_timer += delta
 			if $RayCast2D.is_colliding():
@@ -104,6 +123,9 @@ func _physics_process(delta):
 					position_timer = 0.0
 
 		STATES.SEARCHING:
+			$Aim.visible = false
+			$AimLine.visible = false
+			$Eye.position += ((last_seen-position).normalized()*10 - $Eye.position)/3.0
 			position_timer += delta
 			if position.distance_to(last_seen) > 75:
 				speed += (((last_seen-position).normalized()*30+primordial_termor)-speed)/3.0
@@ -119,13 +141,6 @@ func _physics_process(delta):
 
 	speed = move_and_slide(speed)
 	update()
-
-func _draw():
-	match state:
-		STATES.POSITIONING:
-			draw_circle(Vector2(0, 0), 8, "#5b0122")
-		_:
-			draw_circle(Vector2(0, 0), 8, "#6b125a")
 
 
 func health_object():

@@ -1,6 +1,9 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Enemies/SpellMachine.gd" type="Script" id=1]
+[ext_resource path="res://Sprites/Enemies/SpellMachine/eye.png" type="Texture" id=2]
+[ext_resource path="res://Sprites/Enemies/SpellMachine/body.png" type="Texture" id=3]
+[ext_resource path="res://Sprites/Enemies/SpellMachine/aim.png" type="Texture" id=4]
 
 [sub_resource type="CircleShape2D" id=1]
 
@@ -21,3 +24,19 @@ position = Vector2( -350, -200 )
 rect = Rect2( 0, 0, 700, 400 )
 process_parent = true
 physics_process_parent = true
+
+[node name="Body" type="Sprite" parent="."]
+texture = ExtResource( 3 )
+
+[node name="Eye" type="Sprite" parent="."]
+position = Vector2( 8, 0 )
+texture = ExtResource( 2 )
+
+[node name="Aim" type="Sprite" parent="."]
+visible = false
+texture = ExtResource( 4 )
+
+[node name="AimLine" type="Line2D" parent="."]
+points = PoolVector2Array( 0, 0, 0, 0 )
+width = 2.0
+default_color = Color( 0, 1, 0.670588, 1 )
