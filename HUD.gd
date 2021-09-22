@@ -19,6 +19,8 @@ onready var DescriptionBoxInfo := $HUD/Description/Description
 onready var MouseSpellSlot := $HUD/MouseSlot
 onready var MouseWandSlot := $HUD/MouseWand
 
+var Player :KinematicBody2D
+
 
 var messages := []
 var message_timer := 0.0
@@ -44,6 +46,7 @@ var advice := [
 ]
 var player_died := false
 func _ready():
+	Player = Player
 	if Items.level == 1:
 		Items.using_seed = Items.WorldRNG.seed
 	UsefulAdvice.text = advice[randi()%advice.size()] + "\n"
@@ -54,10 +57,10 @@ func _process(delta):
 		LastItem.texture = null
 	else:
 		LastItem.texture = Items.last_pickup.texture
-	if get_tree().get_nodes_in_group("Player")[0].health.temperature > 30:
-		HotHUD.modulate.a = lerp(HotHUD.modulate.a, (get_tree().get_nodes_in_group("Player")[0].health.temperature-30)/110.0, 0.2)
+	if Player.health.temperature > 30:
+		HotHUD.modulate.a = lerp(HotHUD.modulate.a, (Player.health.temperature-30)/110.0, 0.2)
 	else:
-		ColdHUD.modulate.a = lerp(ColdHUD.modulate.a, (get_tree().get_nodes_in_group("Player")[0].health.temperature-30)/-60.0, 0.2)
+		ColdHUD.modulate.a = lerp(ColdHUD.modulate.a, (Player.health.temperature-30)/-60.0, 0.2)
 	if generated and not player_died and not level_ended:
 		GeneratingScreen.modulate.a = move_toward(GeneratingScreen.modulate.a, 0.0, 0.2)
 		
@@ -204,14 +207,14 @@ func _process(delta):
 			var new := preload("res://Items/SpellEntity.tscn").instance()
 			new.spell = mouse_spell
 			get_parent().add_child(new)
-			new.position = get_tree().get_nodes_in_group("Player")[0].position
+			new.position = Player.position
 			new.linear_velocity.x = -120 + randf()*240
 		mouse_spell = null
 		if mouse_wand != null:
 			var new := preload("res://Items/WandEntity.tscn").instance()
 			new.wand = mouse_wand
 			get_parent().add_child(new)
-			new.position = get_tree().get_nodes_in_group("Player")[0].position
+			new.position = Player.position
 			new.linear_velocity.x = -120 + randf()*240
 		mouse_wand = null
 	
