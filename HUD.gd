@@ -1,5 +1,24 @@
 extends CanvasLayer
 
+onready var UsefulAdvice := $HUD/Generating/UsefulAdvice
+onready var LastItem := $HUD/LastItem
+onready var HotHUD := $HUD/Hot
+onready var ColdHUD := $HUD/Cold
+onready var DeathScreen := $HUD/Death
+onready var GeneratingScreen := $HUD/Generating
+onready var DeathScreenInfo := $HUD/Death/Info
+onready var MessageHUD := $HUD/Messages
+onready var ScrapsAmount := $HUD/Scraps/Amount
+onready var WandHUD := $HUD/Wands
+onready var SpellBagHUD := $HUD/SpellBag
+onready var WandSpellHUD := $HUD/Spells
+onready var DescriptionBox := $HUD/Description
+onready var ShortDescriptionBox := $HUD/ShortDesc
+onready var DescriptionBoxName := $HUD/Description/Name
+onready var DescriptionBoxInfo := $HUD/Description/Description
+onready var MouseSpellSlot := $HUD/MouseSlot
+onready var MouseWandSlot := $HUD/MouseWand
+
 
 var messages := []
 var message_timer := 0.0
@@ -27,77 +46,77 @@ var player_died := false
 func _ready():
 	if Items.level == 1:
 		Items.using_seed = Items.WorldRNG.seed
-	$HUD/Generating/UsefulAdvice.text = advice[randi()%advice.size()] + "\n"
-	$HUD/Generating/UsefulAdvice.text += "Seed: " + str(Items.using_seed)
+	UsefulAdvice.text = advice[randi()%advice.size()] + "\n"
+	UsefulAdvice.text += "Seed: " + str(Items.using_seed)
 var end_times : String
 func _process(delta):
 	if Items.last_pickup == null:
-		$HUD/LastItem.texture = null
+		LastItem.texture = null
 	else:
-		$HUD/LastItem.texture = Items.last_pickup.texture
+		LastItem.texture = Items.last_pickup.texture
 	if get_tree().get_nodes_in_group("Player")[0].health.temperature > 30:
-		$HUD/Hot.modulate.a = lerp($HUD/Hot.modulate.a, (get_tree().get_nodes_in_group("Player")[0].health.temperature-30)/110.0, 0.2)
+		HotHUD.modulate.a = lerp(HotHUD.modulate.a, (get_tree().get_nodes_in_group("Player")[0].health.temperature-30)/110.0, 0.2)
 	else:
-		$HUD/Cold.modulate.a = lerp($HUD/Cold.modulate.a, (get_tree().get_nodes_in_group("Player")[0].health.temperature-30)/-60.0, 0.2)
+		ColdHUD.modulate.a = lerp(ColdHUD.modulate.a, (get_tree().get_nodes_in_group("Player")[0].health.temperature-30)/-60.0, 0.2)
 	if generated and not player_died and not level_ended:
-		$HUD/Generating.modulate.a = move_toward($HUD/Generating.modulate.a, 0.0, 0.2)
+		GeneratingScreen.modulate.a = move_toward(GeneratingScreen.modulate.a, 0.0, 0.2)
 		
 	if player_died:
-		$HUD/Death.modulate.a = move_toward($HUD/Death.modulate.a, 1.0, 0.2)
-		$HUD/Death/Info.text = "Run Time: " + end_times + "\n"
-		$HUD/Death/Info.text += "Levels: " + str(Items.level) + "\n"
-		$HUD/Death/Info.text += "Seed: " + str(Items.using_seed) + "\n\n"
-		$HUD/Death/Info.text += "Right click to start a new run"
-		if $HUD/Generating.modulate.a > 0.9:
+		DeathScreen.modulate.a = move_toward(DeathScreen.modulate.a, 1.0, 0.2)
+		DeathScreenInfo.text = "Run Time: " + end_times + "\n"
+		DeathScreenInfo.text += "Levels: " + str(Items.level) + "\n"
+		DeathScreenInfo.text += "Seed: " + str(Items.using_seed) + "\n\n"
+		DeathScreenInfo.text += "Right click to start a new run"
+		if GeneratingScreen.modulate.a > 0.9:
 			Items.reset_player()
 			get_tree().change_scene("res://Game.tscn")
 		if Input.is_action_just_released("Interact2"):
 			Items.player_health = Flesh.new()
-			$HUD/Generating.modulate.a = 1.0
+			GeneratingScreen.modulate.a = 1.0
 	elif level_ended:
-		if $HUD/Generating.modulate.a > 0.9:
+		if GeneratingScreen.modulate.a > 0.9:
 			get_tree().change_scene("res://Game.tscn")
-		$HUD/Generating.modulate.a = move_toward($HUD/Generating.modulate.a, 1.0, 0.2)
+		GeneratingScreen.modulate.a = move_toward(GeneratingScreen.modulate.a, 1.0, 0.2)
 	if not messages.empty():
-		$HUD/Messages.visible = true
+		MessageHUD.visible = true
 		message_timer += delta
-		$HUD/Messages.bbcode_text = "[center]" + messages[0] + "[/center]"
+		MessageHUD.bbcode_text = "[center]" + messages[0] + "[/center]"
 		if message_timer > messages[0].length()*0.2:
 			message_timer = 0.0
 			messages.pop_front()
 	else:
-		$HUD/Messages.visible = false
+		MessageHUD.visible = false
 	
-	$HUD/Scraps/Amount.text = str(Items.cloth_scraps)
-	for i in $HUD/Wands.get_child_count():
-		$HUD/Wands.get_child(i).render_wand(Items.player_wands[i], i == Items.selected_wand)
+	ScrapsAmount.text = str(Items.cloth_scraps)
+	for i in WandHUD.get_child_count():
+		WandHUD.get_child(i).render_wand(Items.player_wands[i], i == Items.selected_wand)
 				
-	for i in $HUD/SpellBag.get_child_count():
+	for i in SpellBagHUD.get_child_count():
 		if Items.player_spells[i] != null:
-			$HUD/SpellBag.get_child(i).texture = Items.player_spells[i].texture
+			SpellBagHUD.get_child(i).texture = Items.player_spells[i].texture
 		else:
-			$HUD/SpellBag.get_child(i).texture = preload("res://Sprites/Spells/Empty.png")
+			SpellBagHUD.get_child(i).texture = preload("res://Sprites/Spells/Empty.png")
 	
-	for i in $HUD/Spells.get_child_count():
+	for i in WandSpellHUD.get_child_count():
 		if Items.player_wands[Items.selected_wand] != null:
-			$HUD/Spells.visible = true
+			WandSpellHUD.visible = true
 			var wand :Wand = Items.player_wands[Items.selected_wand]
 			if i < wand.spell_capacity:
-				$HUD/Spells.get_child(i).visible = true
+				WandSpellHUD.get_child(i).visible = true
 				if wand.spells[i] != null:
-					$HUD/Spells.get_child(i).texture = wand.spells[i].texture
+					WandSpellHUD.get_child(i).texture = wand.spells[i].texture
 				else:
-					$HUD/Spells.get_child(i).texture = preload("res://Sprites/Spells/Empty.png")
+					WandSpellHUD.get_child(i).texture = preload("res://Sprites/Spells/Empty.png")
 			else:
-				$HUD/Spells.get_child(i).visible = false
+				WandSpellHUD.get_child(i).visible = false
 		else:
-			$HUD/Spells.visible = false
+			WandSpellHUD.visible = false
 	
 	var mouse := get_viewport().get_mouse_position()
 	
-	$HUD/Description.visible = false
-	$HUD/ShortDesc.visible = false
-	$HUD/ShortDesc.rect_size.x = 0
+	DescriptionBox.visible = false
+	ShortDescriptionBox.visible = false
+	ShortDescriptionBox.rect_size.x = 0
 	var clicked := -1
 	var slot := -1
 	block_cast = false
@@ -110,14 +129,14 @@ func _process(delta):
 				block_cast = true
 				if Items.player_wands[i] != null:
 					if Input.is_key_pressed(KEY_SHIFT):
-						$HUD/Description.visible = true
-						$HUD/Description/Name.text = "Wand"
-						$HUD/Description/Description.text = "Cast Cooldown: " + str(Items.player_wands[i].spell_recharge).pad_decimals(3)
-						$HUD/Description/Description.text += "\nCooldown: " + str(Items.player_wands[i].full_recharge).pad_decimals(3)
+						DescriptionBox.visible = true
+						DescriptionBoxName.text = "Wand"
+						DescriptionBoxInfo.text = "Cast Cooldown: " + str(Items.player_wands[i].spell_recharge).pad_decimals(3)
+						DescriptionBoxInfo.text += "\nCooldown: " + str(Items.player_wands[i].full_recharge).pad_decimals(3)
 					else:
-						$HUD/ShortDesc.visible = true
+						ShortDescriptionBox.visible = true
 						var a :=  0.25
-						$HUD/ShortDesc.text =  str(Items.player_wands[i].spell_recharge).pad_decimals(2) + "/" + str(Items.player_wands[i].full_recharge).pad_decimals(2)
+						ShortDescriptionBox.text =  str(Items.player_wands[i].spell_recharge).pad_decimals(2) + "/" + str(Items.player_wands[i].full_recharge).pad_decimals(2)
 	
 	# Spells
 	if mouse.x < 116 and mouse.y > 25 and mouse.y < 25+16 and Items.player_wands[Items.selected_wand] != null:
@@ -130,12 +149,12 @@ func _process(delta):
 					slot = i
 					if wand.spells[i] != null:
 						if Input.is_key_pressed(KEY_SHIFT):
-							$HUD/Description.visible = true
-							$HUD/Description/Name.text = wand.spells[i].name
-							$HUD/Description/Description.text = wand.spells[i].description
+							DescriptionBox.visible = true
+							DescriptionBoxName.text = wand.spells[i].name
+							DescriptionBoxInfo.text = wand.spells[i].description
 						else:
-							$HUD/ShortDesc.visible = true
-							$HUD/ShortDesc.text =  wand.spells[i].name
+							ShortDescriptionBox.visible = true
+							ShortDescriptionBox.text =  wand.spells[i].name
 	
 	if mouse.x < 16 + 4 and mouse.y > 62 and mouse.y < 178 and mouse.x > 4:
 		for i in 6:
@@ -145,21 +164,21 @@ func _process(delta):
 				slot = i
 				if Items.player_spells[i] != null:
 					if Input.is_key_pressed(KEY_SHIFT):
-						$HUD/Description.visible = true
-						$HUD/Description/Name.text = Items.player_spells[i].name
-						$HUD/Description/Description.text = Items.player_spells[i].description
+						DescriptionBox.visible = true
+						DescriptionBoxName.text = Items.player_spells[i].name
+						DescriptionBoxInfo.text = Items.player_spells[i].description
 					else:
-						$HUD/ShortDesc.visible = true
-						$HUD/ShortDesc.text =  Items.player_spells[i].name
+						ShortDescriptionBox.visible = true
+						ShortDescriptionBox.text =  Items.player_spells[i].name
 	
 	if Items.last_pickup != null and mouse.x > 4 and mouse.y > 184 and mouse.x < 20 and mouse.y < 200:
 		if Input.is_key_pressed(KEY_SHIFT):
-			$HUD/Description.visible = true
-			$HUD/Description/Name.text = Items.last_pickup.name
-			$HUD/Description/Description.text = Items.last_pickup.description
+			DescriptionBox.visible = true
+			DescriptionBoxName.text = Items.last_pickup.name
+			DescriptionBoxInfo.text = Items.last_pickup.description
 		else:
-			$HUD/ShortDesc.visible = true
-			$HUD/ShortDesc.text = Items.last_pickup.name
+			ShortDescriptionBox.visible = true
+			ShortDescriptionBox.text = Items.last_pickup.name
 	
 	if Input.is_action_just_pressed("Interact1") and clicked != -1:
 		match clicked:
@@ -196,22 +215,22 @@ func _process(delta):
 			new.linear_velocity.x = -120 + randf()*240
 		mouse_wand = null
 	
-	$HUD/MouseSlot.visible = mouse_spell != null
-	$HUD/MouseWand.visible = mouse_wand != null
-	$HUD/MouseSlot.rect_position = mouse + Vector2(-16,0)
-	$HUD/MouseWand.rect_position = mouse + Vector2(0,-16)
+	MouseSpellSlot.visible = mouse_spell != null
+	MouseWandSlot.visible = mouse_wand != null
+	MouseSpellSlot.rect_position = mouse + Vector2(-16,0)
+	MouseWandSlot.rect_position = mouse + Vector2(0,-16)
 	if mouse_spell != null:
-		$HUD/MouseSlot.texture = mouse_spell.texture
+		MouseSpellSlot.texture = mouse_spell.texture
 	if mouse_wand != null:
-		$HUD/MouseWand.render_wand(mouse_wand, true)
+		MouseWandSlot.render_wand(mouse_wand, true)
 		
 	
-	$HUD/Description.rect_size = Vector2(144, 18+$HUD/Description/Description.rect_size.y+4)
-	if mouse.y + $HUD/Description.rect_size.y > 225:
-		$HUD/Description.rect_position = mouse - Vector2(0, $HUD/Description.rect_size.y)
+	DescriptionBox.rect_size = Vector2(144, 18+DescriptionBoxInfo.rect_size.y+4)
+	if mouse.y + DescriptionBox.rect_size.y > 225:
+		DescriptionBox.rect_position = mouse - Vector2(0, DescriptionBox.rect_size.y)
 	else:
-		$HUD/Description.rect_position = mouse
-	$HUD/ShortDesc.rect_position = mouse
+		DescriptionBox.rect_position = mouse
+	ShortDescriptionBox.rect_position = mouse
 
 
 func add_message(message:String):
