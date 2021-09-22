@@ -13,20 +13,21 @@ var last_frame_msecs :int
 var iterations := 3
 
 func _ready():
+	print("Generating dungeon")
 	position = Vector2(0, 0)
-	areas.append($Room.get_used_rect())
+	print("Step 0: Generating first room")
+	var first_room :TileMap
+	if Items.level == 1:
+		first_room = preload("res://Rooms/Sacrifice/Begin.tscn").instance()
+		add_child(first_room)
+	else:
+		first_room = preload("res://Rooms/Sacrifice/BeginL2.tscn").instance()
+		add_child(first_room)
+	areas.append(first_room.get_used_rect())
 	areas[0].position *= 8.0
 	areas[0].size *= 8.0
 	max_point = areas[0].position + areas[0].size
 	min_point = Vector2.ZERO
-	print("Generating dungeon")
-	print("Step 0: Generating first room")
-	if Items.level == 1:
-		var n := preload("res://Rooms/Sacrifice/Begin.tscn").instance()
-		add_child(n)
-	else:
-		var n := preload("res://Rooms/Sacrifice/BeginL2.tscn").instance()
-		add_child(n)
 	print("Step 1: Generating layout of the world")
 	var rooms := 0
 	var generated_end_room := false

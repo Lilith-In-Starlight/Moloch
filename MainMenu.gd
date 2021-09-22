@@ -6,7 +6,10 @@ func _ready():
 
 func _on_NewRun_pressed():
 	if not $LineEdit.text == "":
-		Items.custom_seed = hash($LineEdit.text)
+		if $LineEdit.text.is_valid_integer():
+			Items.custom_seed = $LineEdit.text as int
+		else:
+			Items.custom_seed = hash($LineEdit.text)
 		if Items.custom_seed == 0:
 			Items.custom_seed = 1
 		Items.WorldRNG.seed = Items.custom_seed

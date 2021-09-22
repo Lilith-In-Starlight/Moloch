@@ -26,7 +26,10 @@ var advice := [
 var player_died := false
 var last_pickup :Item = null
 func _ready():
-	$HUD/Generating/UsefulAdvice.text = advice[randi()%advice.size()]
+	if Items.level == 1:
+		Items.using_seed = Items.WorldRNG.seed
+	$HUD/Generating/UsefulAdvice.text = advice[randi()%advice.size()] + "\n"
+	$HUD/Generating/UsefulAdvice.text += "Seed: " + str(Items.using_seed)
 var end_times : String
 func _process(delta):
 	if last_pickup == null:
@@ -43,7 +46,8 @@ func _process(delta):
 	if player_died:
 		$HUD/Death.modulate.a = move_toward($HUD/Death.modulate.a, 1.0, 0.2)
 		$HUD/Death/Info.text = "Run Time: " + end_times + "\n"
-		$HUD/Death/Info.text += "Levels: " + str(Items.level) + "\n\n"
+		$HUD/Death/Info.text += "Levels: " + str(Items.level) + "\n"
+		$HUD/Death/Info.text += "Seed: " + str(Items.using_seed) + "\n\n"
 		$HUD/Death/Info.text += "Right click to start a new run"
 		if $HUD/Generating.modulate.a > 0.9:
 			Items.reset_player()

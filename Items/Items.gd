@@ -38,6 +38,8 @@ var custom_seed := 0
 
 var level := 1
 
+var using_seed := 0
+
 func _ready():
 	var generator_seed := hash(OS.get_time())
 	print("Generator seed: ", generator_seed)

@@ -47,6 +47,8 @@ size = 12
 position = Vector2( 408, 176 )
 size = 12
 
-[node name="ElevatorDoor" parent="." instance=ExtResource( 4 )]
+[node name="ElevatorDoor" parent="." groups=[
+"Elevator",
+] instance=ExtResource( 4 )]
 position = Vector2( 264, 240 )
 came_from = true
