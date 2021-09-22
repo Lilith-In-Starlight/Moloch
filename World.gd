@@ -20,6 +20,13 @@ func _ready():
 	max_point = areas[0].position + areas[0].size
 	min_point = Vector2.ZERO
 	print("Generating dungeon")
+	print("Step 0: Generating first room")
+	if Items.level == 1:
+		var n := preload("res://Rooms/Sacrifice/Begin.tscn").instance()
+		add_child(n)
+	else:
+		var n := preload("res://Rooms/Sacrifice/BeginL2.tscn").instance()
+		add_child(n)
 	print("Step 1: Generating layout of the world")
 	var rooms := 0
 	var generated_end_room := false
@@ -203,6 +210,7 @@ func _ready():
 		var new_sprite := preload("res://Elements/ElevatorDoor.tscn").instance()
 		new_sprite.position = sprite.global_position
 		new_sprite.z_index = -1
+		new_sprite.came_from = sprite.came_from
 		add_child(new_sprite)
 		sprite.queue_free()
 	print("    - Air Conditioning Units")
