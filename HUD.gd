@@ -46,12 +46,13 @@ var advice := [
 ]
 var player_died := false
 func _ready():
-	Player = Player
+	Player = get_tree().get_nodes_in_group("Player")[0]
 	if Items.level == 1:
 		Items.using_seed = Items.WorldRNG.seed
 	UsefulAdvice.text = advice[randi()%advice.size()] + "\n"
 	UsefulAdvice.text += "Seed: " + str(Items.using_seed)
 var end_times : String
+
 func _process(delta):
 	if Items.last_pickup == null:
 		LastItem.texture = null
