@@ -14,5 +14,5 @@ func _process(delta):
 	if Player.position.distance_to(position) < 50:
 		if Input.is_action_just_pressed("down"):
 			Items.player_items.append(item.id)
-			get_tree().get_nodes_in_group("HUD")[0].last_pickup = item
+			Items.last_pickup = item
 			queue_free()

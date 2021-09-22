@@ -40,6 +40,8 @@ var level := 1
 
 var using_seed := 0
 
+var last_pickup :Item = null
+
 func _ready():
 	var generator_seed := hash(OS.get_time())
 	print("Generator seed: ", generator_seed)
@@ -155,6 +157,7 @@ func pick_random_item(rng:RandomNumberGenerator = LootRNG) -> Item:
 	return items[tier].values()[rng.randi()%items[tier].values().size()]
 
 func reset_player():
+	last_pickup = null
 	level = 1
 	var generator_seed := hash(OS.get_time())
 	print(Items.custom_seed)

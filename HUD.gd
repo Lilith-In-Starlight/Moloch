@@ -24,7 +24,6 @@ var advice := [
 	"If you find yourself surrounded by enemies, get out of there",
 ]
 var player_died := false
-var last_pickup :Item = null
 func _ready():
 	if Items.level == 1:
 		Items.using_seed = Items.WorldRNG.seed
@@ -32,10 +31,10 @@ func _ready():
 	$HUD/Generating/UsefulAdvice.text += "Seed: " + str(Items.using_seed)
 var end_times : String
 func _process(delta):
-	if last_pickup == null:
+	if Items.last_pickup == null:
 		$HUD/LastItem.texture = null
 	else:
-		$HUD/LastItem.texture = last_pickup.texture
+		$HUD/LastItem.texture = Items.last_pickup.texture
 	if get_tree().get_nodes_in_group("Player")[0].health.temperature > 30:
 		$HUD/Hot.modulate.a = lerp($HUD/Hot.modulate.a, (get_tree().get_nodes_in_group("Player")[0].health.temperature-30)/110.0, 0.2)
 	else:
@@ -153,14 +152,14 @@ func _process(delta):
 						$HUD/ShortDesc.visible = true
 						$HUD/ShortDesc.text =  Items.player_spells[i].name
 	
-	if last_pickup != null and mouse.x > 4 and mouse.y > 184 and mouse.x < 20 and mouse.y < 200:
+	if Items.last_pickup != null and mouse.x > 4 and mouse.y > 184 and mouse.x < 20 and mouse.y < 200:
 		if Input.is_key_pressed(KEY_SHIFT):
 			$HUD/Description.visible = true
-			$HUD/Description/Name.text = last_pickup.name
-			$HUD/Description/Description.text = last_pickup.description
+			$HUD/Description/Name.text = Items.last_pickup.name
+			$HUD/Description/Description.text = Items.last_pickup.description
 		else:
 			$HUD/ShortDesc.visible = true
-			$HUD/ShortDesc.text = last_pickup.name
+			$HUD/ShortDesc.text = Items.last_pickup.name
 	
 	if Input.is_action_just_pressed("Interact1") and clicked != -1:
 		match clicked:
