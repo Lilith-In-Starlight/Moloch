@@ -27,13 +27,13 @@ func _physics_process(delta):
 		$Sprite.rotation += delta
 		if speed.length() > 5:
 			speed = speed.normalized()*5
-		position += speed
+		position += speed*(60*delta)
 		speed = speed.move_toward(move_to-position, 0.3)
 		move_to = lerp(move_to, Caster.position, 0.3)
 	else:
 		timer += delta
 		speed.y += delta*10
-		position += speed
+		position += speed*(60*delta)
 	if timer > 8.0:
 		queue_free()
 	

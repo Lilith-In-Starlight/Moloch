@@ -21,7 +21,7 @@ func _ready():
 func _physics_process(delta):
 	timer += 0.1
 		
-	move_and_collide(Vector2(cos(rotate), sin(rotate))*12.0)
+	move_and_collide(Vector2(cos(rotate), sin(rotate))*12.0*(60*delta))
 	if timer < 0.3:
 		for body in $Area.get_overlapping_bodies():
 			_on_body_entered(body)

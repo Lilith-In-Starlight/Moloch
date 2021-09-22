@@ -24,7 +24,7 @@ func _ready():
 
 func _physics_process(delta):
 	timer += 0.1
-	position += Vector2(cos(rotate), sin(rotate))*7.0
+	position += Vector2(cos(rotate), sin(rotate))*7.0*(60*delta)
 	rotate += noise.get_noise_3d(position.x, position.y, timer)*(timer/60.0)
 	if timer < 0.3:
 		for body in get_overlapping_bodies():
