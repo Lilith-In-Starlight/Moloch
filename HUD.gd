@@ -43,44 +43,61 @@ var advice := [
 	"If an enemy attacks you, dodge",
 	"Use the controls to maneuver your character",
 	"If you find yourself surrounded by enemies, get out of there",
+	"If you find yourself surrounded by enemies, get out of there",
 ]
 var player_died := false
+var end_times : String # How long did the run last
+
+
 func _ready():
 	Player = get_tree().get_nodes_in_group("Player")[0]
 	if Items.level == 1:
 		Items.using_seed = Items.WorldRNG.seed
 	UsefulAdvice.text = advice[randi()%advice.size()] + "\n"
 	UsefulAdvice.text += "Seed: " + str(Items.using_seed)
-var end_times : String
 
-func _process(delta):
-	if Items.last_pickup == null:
-		LastItem.texture = null
-	else:
-		LastItem.texture = Items.last_pickup.texture
+
+func _process(delta):	
+	# Control the temperature vignettes
 	if Player.health.temperature > 30:
 		HotHUD.modulate.a = lerp(HotHUD.modulate.a, (Player.health.temperature-30)/110.0, 0.2)
 	else:
 		ColdHUD.modulate.a = lerp(ColdHUD.modulate.a, (Player.health.temperature-30)/-60.0, 0.2)
 	if generated and not player_died and not level_ended:
 		GeneratingScreen.modulate.a = move_toward(GeneratingScreen.modulate.a, 0.0, 0.2)
-		
+	
+	# If the player is dead, show the death screen
 	if player_died:
 		DeathScreen.modulate.a = move_toward(DeathScreen.modulate.a, 1.0, 0.2)
 		DeathScreenInfo.text = "Run Time: " + end_times + "\n"
 		DeathScreenInfo.text += "Levels: " + str(Items.level) + "\n"
 		DeathScreenInfo.text += "Seed: " + str(Items.using_seed) + "\n\n"
 		DeathScreenInfo.text += "Right click to start a new run"
+		# If the Generating World screen is visible on screen
+		# the player's data is reset and the scene is reloaded
 		if GeneratingScreen.modulate.a > 0.9:
 			Items.reset_player()
 			get_tree().change_scene("res://Game.tscn")
+		
+		# If the player right clicks, generate a new world
 		if Input.is_action_just_released("Interact2"):
 			Items.player_health = Flesh.new()
 			GeneratingScreen.modulate.a = 1.0
+	
+	# If the player didn't die, and instead the level ended
 	elif level_ended:
+		# If the generating world screen is fully visible,
+		# reload the scene without resetting the player's progress
 		if GeneratingScreen.modulate.a > 0.9:
 			get_tree().change_scene("res://Game.tscn")
+			
+		# Generating World screen fadein
 		GeneratingScreen.modulate.a = move_toward(GeneratingScreen.modulate.a, 1.0, 0.2)
+		
+		# The fadein must go after the check to make sure it's fully faded in
+		# when the scene change begins
+	
+	# If there are messages to read, show them
 	if not messages.empty():
 		MessageHUD.visible = true
 		message_timer += delta
@@ -91,47 +108,73 @@ func _process(delta):
 	else:
 		MessageHUD.visible = false
 	
+	# Inventory and items in HUD
+	# Control the thing that displays the last picked up item
+	if Items.last_pickup == null:
+		LastItem.texture = null
+	else:
+		LastItem.texture = Items.last_pickup.texture
+	
+	# Shows the amount of clothes scraps the player has
 	ScrapsAmount.text = str(Items.cloth_scraps)
+	
+	# Show the wands the player is carrying
 	for i in WandHUD.get_child_count():
 		WandHUD.get_child(i).render_wand(Items.player_wands[i], i == Items.selected_wand)
-				
+	
+	# Show the spells the player is carrying
 	for i in SpellBagHUD.get_child_count():
 		if Items.player_spells[i] != null:
 			SpellBagHUD.get_child(i).texture = Items.player_spells[i].texture
 		else:
 			SpellBagHUD.get_child(i).texture = preload("res://Sprites/Spells/Empty.png")
 	
+	# Show the spells the wand the player is using has
 	for i in WandSpellHUD.get_child_count():
+		# If a non-empty wand slot is selected
 		if Items.player_wands[Items.selected_wand] != null:
+			# Make the spell hud visible
 			WandSpellHUD.visible = true
 			var wand :Wand = Items.player_wands[Items.selected_wand]
+			# If the wand has this slot
 			if i < wand.spell_capacity:
+				# Make it visible
 				WandSpellHUD.get_child(i).visible = true
+				# If the isn't empty, show the spell's texture
 				if wand.spells[i] != null:
 					WandSpellHUD.get_child(i).texture = wand.spells[i].texture
-				else:
+				else: # if it is empty, show the empty slot texture
 					WandSpellHUD.get_child(i).texture = preload("res://Sprites/Spells/Empty.png")
-			else:
+			else: # If the wand doesn't have this slot
 				WandSpellHUD.get_child(i).visible = false
-		else:
+		else: # If an empty wand slot is selected
 			WandSpellHUD.visible = false
 	
 	var mouse := get_viewport().get_mouse_position()
 	
+	# Reset the description boxes' visibility
 	DescriptionBox.visible = false
 	ShortDescriptionBox.visible = false
 	ShortDescriptionBox.rect_size.x = 0
+	# Variables for which inventory the player click and what slot
 	var clicked := -1
 	var slot := -1
-	block_cast = false
-	# Wands
+	block_cast = false # Also stop blocking the player's ability to
+	# cast spells
+	
+	# If the mouse is in the wands' area
 	if mouse.x < 116 and mouse.y > 4 and mouse.y < 20:
 		for i in 6:
+			# If a slot is selected
 			if mouse.x >= 4+i*(16+4) and mouse.x < 4+(i+1)*(16+4):
+				# Set the inventory and slot clicked, and don't let the
+				# player cast spells
 				clicked = 2
 				slot = i
-				block_cast = true
+				block_cast = true 
+				# If the slot isn't empty
 				if Items.player_wands[i] != null:
+					# Which information to set
 					if Input.is_key_pressed(KEY_SHIFT):
 						DescriptionBox.visible = true
 						DescriptionBoxName.text = "Wand"
@@ -139,18 +182,23 @@ func _process(delta):
 						DescriptionBoxInfo.text += "\nCooldown: " + str(Items.player_wands[i].full_recharge).pad_decimals(3)
 					else:
 						ShortDescriptionBox.visible = true
-						var a :=  0.25
 						ShortDescriptionBox.text =  str(Items.player_wands[i].spell_recharge).pad_decimals(2) + "/" + str(Items.player_wands[i].full_recharge).pad_decimals(2)
+				break # Stop checking for if it's in a slot, we already did all this stuff
 	
-	# Spells
+	# If the mouse is in the wands' spells area and is holding a wand
 	if mouse.x < 116 and mouse.y > 25 and mouse.y < 25+16 and Items.player_wands[Items.selected_wand] != null:
 		var wand :Wand = Items.player_wands[Items.selected_wand]
 		for i in 6:
+			# If it's in a slot
 			if mouse.x >= 4+i*(16+4) and mouse.x < 4+(i+1)*(16+4):
+				# Don't let the player cast spells
 				block_cast = true
 				clicked = 1
+				# If this slot is had by the wand
 				if i < wand.spell_capacity:
+					# Then this is the slot that was clicked (aka I didn't click an empty area)
 					slot = i
+					# Set the description accordingly
 					if wand.spells[i] != null:
 						if Input.is_key_pressed(KEY_SHIFT):
 							DescriptionBox.visible = true
@@ -160,12 +208,16 @@ func _process(delta):
 							ShortDescriptionBox.visible = true
 							ShortDescriptionBox.text =  wand.spells[i].name
 	
-	if mouse.x < 16 + 4 and mouse.y > 62 and mouse.y < 178 and mouse.x > 4:
+	# If the mouse is in the spells bag's area and is holding a wand
+	elif mouse.x < 16 + 4 and mouse.y > 62 and mouse.y < 178 and mouse.x > 4:
 		for i in 6:
+			# If it's in a slot
 			if mouse.y >= 62+i*(16+4) and mouse.y < 62+(i+1)*(16+4):
+				# Set what inventory and slot was clicked, block spell casts
 				block_cast = true
 				clicked = 0
 				slot = i
+				# Descriptions
 				if Items.player_spells[i] != null:
 					if Input.is_key_pressed(KEY_SHIFT):
 						DescriptionBox.visible = true
@@ -175,7 +227,8 @@ func _process(delta):
 						ShortDescriptionBox.visible = true
 						ShortDescriptionBox.text =  Items.player_spells[i].name
 	
-	if Items.last_pickup != null and mouse.x > 4 and mouse.y > 184 and mouse.x < 20 and mouse.y < 200:
+	# If the player is hovering over the last picked_up item, handle descriptions
+	elif Items.last_pickup != null and mouse.x > 4 and mouse.y > 184 and mouse.x < 20 and mouse.y < 200:
 		if Input.is_key_pressed(KEY_SHIFT):
 			DescriptionBox.visible = true
 			DescriptionBoxName.text = Items.last_pickup.name
@@ -184,6 +237,8 @@ func _process(delta):
 			ShortDescriptionBox.visible = true
 			ShortDescriptionBox.text = Items.last_pickup.name
 	
+	# If the player clicks a part of the inventory, swap that slot's content
+	# with the mouse slot's content
 	if Input.is_action_just_pressed("Interact1") and clicked != -1:
 		match clicked:
 			1:
@@ -203,6 +258,8 @@ func _process(delta):
 					Items.player_wands[slot] = mouse_wand
 					mouse_wand = k
 	
+	# If the player right clicks and is not in an inventory space
+	# drop the  item
 	if Input.is_action_just_pressed("Interact2") and clicked == -1:
 		if mouse_spell != null:
 			var new := preload("res://Items/SpellEntity.tscn").instance()
@@ -219,17 +276,21 @@ func _process(delta):
 			new.linear_velocity.x = -120 + randf()*240
 		mouse_wand = null
 	
+	# Hide the mouse slots if they have nothing
 	MouseSpellSlot.visible = mouse_spell != null
 	MouseWandSlot.visible = mouse_wand != null
-	MouseSpellSlot.rect_position = mouse + Vector2(-16,0)
-	MouseWandSlot.rect_position = mouse + Vector2(0,-16)
 	if mouse_spell != null:
 		MouseSpellSlot.texture = mouse_spell.texture
 	if mouse_wand != null:
 		MouseWandSlot.render_wand(mouse_wand, true)
-		
+	# Position them
+	MouseSpellSlot.rect_position = mouse + Vector2(-16,0)
+	MouseWandSlot.rect_position = mouse + Vector2(0,-16)
 	
+	# Set the size of the description box
 	DescriptionBox.rect_size = Vector2(144, 18+DescriptionBoxInfo.rect_size.y+4)
+	
+	# Move the description box up if it's offscreen
 	if mouse.y + DescriptionBox.rect_size.y > 225:
 		DescriptionBox.rect_position = mouse - Vector2(0, DescriptionBox.rect_size.y)
 	else:
@@ -245,6 +306,7 @@ func _on_generated_world():
 	generated = true
 
 
+# Calculate time in minutes and seconds
 func _on_player_died():
 	var msecs :int = OS.get_ticks_msec() - Items.run_start_time
 	var secs = float(msecs) / 1000.0
