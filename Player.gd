@@ -1,5 +1,6 @@
 extends KinematicBody2D
 
+# Sent when the player dies
 signal player_died
 
 enum STATES {
@@ -9,28 +10,35 @@ enum STATES {
 	DEAD
 }
 
+# Speed constants
 const WALK_ACCEL := 70.0
 const JUMP_ACCEL := -370.0
 
+# Camera node
 var Cam :Camera2D
 
+# Gravity vars
 var gravity_accel := 15.0
 var gravity_direction := Vector2(0, 1)
 
 var speed := Vector2()
 
+# State machine
 var state :int = STATES.ON_AIR
 
+# Input improvements
 var speed_before_collision := Vector2(0, 0)
 var jump_buffer := 0.0
 var coyote_time := 0.0
 var lwcoyote_time := 0.0
 var rwcoyote_time := 0.0
 
+# Flesh
 var health :Flesh = Items.player_health
 
 var Map :TileMap
 
+# The stage of temperature, for temperature messages
 var temp_stage := 0
 
 var blood_is_gasoline := false
@@ -39,19 +47,24 @@ var dead := false
 
 
 func _ready():
+	# Setup
 	Items.Player = get_tree().get_nodes_in_group("Player")[0]
 	Map = get_tree().get_nodes_in_group("World")[0]
 	health.connect("hole_poked", self, "message_send", ["Bleeding"])
 	health.connect("full_healed", self, "message_send", ["Your flesh is renewed"])
 	health.is_players = true
 	Cam = get_tree().get_nodes_in_group("Camera")[0]
+	# The processes are off until the game starts
 	set_process(false)
 	set_physics_process(false)
+	# Move the Camera position to the player
 	$"../Camera2D".position = lerp($"../Camera2D".position, position, 0.1)
 
 
 func _process(delta):
+	# If the player is bleeding
 	if health.poked_holes > 0:
+		# Emit blood particles 
 		for i in min(health.poked_holes, 12):
 			if randf()>0.9:
 				var n :RigidBody2D = preload("res://Particles/Blood.tscn").instance()
@@ -62,6 +75,8 @@ func _process(delta):
 				else:
 					n.modulate = ColorN("green")
 				get_parent().add_child(n)
+		
+		# Heal the player with cloth scraps
 		if Input.is_action_just_pressed("seal_blood") and Items.cloth_scraps > 0:
 			Items.cloth_scraps -= 1
 			if randf()<0.92:
@@ -71,6 +86,8 @@ func _process(delta):
 			if health.poked_holes == 0:
 				message_send("Wound has been covered, bleeding has stopped")
 		
+		# The wounds can cicatrize on their own
+		# Bandaids help
 		var plus := 0.0008 * 0.0008*Items.player_items.count("bandaid")
 		if randf() < 0.0005 + plus:
 			health.poked_holes -= 1
@@ -95,6 +112,7 @@ func _process(delta):
 		message_send("You feel a bit overheated")
 	elif health.temperature >= 60 and health.temperature < 100 and temp_stage != 2:
 		temp_stage = 2
+		# Player explodes on high temperatures if their blood is nitro
 		if Items.player_items.has("gasolineblood"):
 			var n := preload("res://Explosion.tscn").instance()
 			n.position = position
@@ -102,6 +120,7 @@ func _process(delta):
 		message_send("You should slow down to cool off")
 	elif health.temperature >= 100 and temp_stage != 3:
 		temp_stage = 3
+		# Player explodes on high temperatures if their blood is nitro
 		if Items.player_items.has("gasolineblood"):
 			var n := preload("res://Explosion.tscn").instance()
 			n.position = position
@@ -174,40 +193,49 @@ func _physics_process(delta):
 	
 	# Player is alive
 	if not dead:
+		# Not flying
 		if not Items.player_items.has("wings"):
+			# Animations
 			match state:
+				# Touching the ground
 				STATES.ON_GROUND:
+					# Idle animation
 					if abs(speed.x) < 10.0 or randf()<0.002:
+						# Player has one or two legs
 						if health.broken_moving_appendages != 2:
 							if health.temperature > 30.02:
 								$Player.play("panting")
 							else:
 								$Player.play("default")
 						else:
+							# Playyer has no legs
 							$Player.play("crawl")
-					elif speed.x > 0.0:
+					elif speed.x > 0.0: # Moving
+						# Has both legs or one leg
 						if health.broken_moving_appendages != 2:
 							if get_local_mouse_position().x > 0:
 								$Player.play("run")
 							else:
 								$Player.play("run", true)
-						else:
+						else: # Has no legs
 							if get_local_mouse_position().x > 0:
 								$Player.play("crawling")
 							else:
 								$Player.play("crawling", true)
 					else:
+						# Has both legs
 						if health.broken_moving_appendages != 2:
 							if get_local_mouse_position().x < 0:
 								$Player.play("run")
 							else:
 								$Player.play("run", true)
-						else:
+						else: # Has no legs
 							if get_local_mouse_position().x > 0:
 								$Player.play("crawling")
 							else:
 								$Player.play("crawling", true)
 						
+					# Where is the player looking at
 					if get_local_mouse_position().x > 0:
 						$Player.scale.x = 1
 					else:
@@ -223,6 +251,8 @@ func _physics_process(delta):
 						else:
 							$Player.scale.x = -1
 				STATES.ON_WALL:
+					# Detect what wall is being collided with
+					# Check for left
 					var kin := move_and_collide(Vector2(2, 0), true, true, true)
 					if kin != null:
 						$Player.scale.x = 1
@@ -236,7 +266,7 @@ func _physics_process(delta):
 								$Player.play("slide2")
 							else:
 								$Player.play("oneleg_slide2")
-					else:
+					else: # Isn't left, must be right
 						$Player.scale.x = -1
 						if get_local_mouse_position().x > 0:
 							if health.broken_moving_appendages == 0:
@@ -248,12 +278,14 @@ func _physics_process(delta):
 								$Player.play("slide2")
 							else:
 								$Player.play("oneleg_slide2")
-		else:
+		else: # Is flying
 			if get_local_mouse_position().x > 0:
 				$Player.scale.x = 1
 			else:
 				$Player.scale.x = -1
 			$Player.play("default")
+		
+		# Physics
 		# Player can't fly
 		if not Items.player_items.has("wings"):
 			# Gravity
@@ -272,7 +304,8 @@ func _physics_process(delta):
 						move_nondamp()
 					else:
 						speed.x *= 0.7
-						
+					
+					# If the player touches the ground, no walljump
 					lwcoyote_time = 0.0
 					rwcoyote_time = 0.0
 				
@@ -285,6 +318,7 @@ func _physics_process(delta):
 						jump()
 					elif Input.is_action_just_pressed("jump") and health.broken_moving_appendages < 2:
 						jump_buffer = 0.2
+					
 					jump_buffer -= delta
 					coyote_time -= delta
 					
@@ -296,14 +330,18 @@ func _physics_process(delta):
 								var n := preload("res://Explosion.tscn").instance()
 								n.position = position
 								get_parent().add_child(n)
+							
+							# If the player's knees aren't iron
 							if not Items.player_items.has("ironknees"):
 								var message := "Broken Leg"
 								var brkn_lgs := 0
+								# If the player has broken no legs
 								if health.broken_moving_appendages == 0:
-									brkn_lgs = 1+randi()%2
+									brkn_lgs = 1+randi()%2 # Might break both
 									health.broken_moving_appendages += brkn_lgs
+								# If the player has only one broken leg
 								elif health.broken_moving_appendages == 1:
-									brkn_lgs = 1
+									brkn_lgs = 1 # Can only break one
 									health.broken_moving_appendages += 1
 								if brkn_lgs > 0:
 									if brkn_lgs == 2:
@@ -320,10 +358,12 @@ func _physics_process(delta):
 					
 					if is_on_wall():
 						state = STATES.ON_WALL
+						# Break ribs
 						if abs(speed_before_collision.x) > 1000:
 							dead = true
 							emit_signal("player_died")
 					
+					# Break skull
 					if is_on_ceiling() and speed_before_collision.y < -800:
 						dead = true
 						emit_signal("player_died")
@@ -335,10 +375,14 @@ func _physics_process(delta):
 					wall_jump()
 				
 				STATES.ON_WALL:
+					# Slide on wall
 					if speed.y > 0:
 						speed.y = lerp(speed.y, 60, 0.3)
+					
 					jump_buffer -= delta
 					wall_jump()
+					
+					# Check for wall direction
 					if not $Left.is_colliding() and not $Right.is_colliding():
 						state = STATES.ON_AIR
 						
@@ -364,6 +408,7 @@ func _physics_process(delta):
 						state = STATES.ON_GROUND
 		else: # Player is flying
 			speed.y += gravity_accel * gravity_direction.y
+			# Horizontal movement
 			var haxis := 0.0
 			if Input.is_action_pressed("left"):
 				speed.x -= WALK_ACCEL
@@ -376,6 +421,7 @@ func _physics_process(delta):
 			else:
 				health.temperature = move_toward(health.temperature, 30, 0.002)
 			
+			# Vertical movement
 			var vaxis := 0.0
 			if Input.is_action_pressed("up"):
 				speed.y -= WALK_ACCEL
@@ -388,6 +434,7 @@ func _physics_process(delta):
 			else:
 				health.temperature = move_toward(health.temperature, 30, 0.002)
 			
+			# Damping
 			if abs(vaxis)<0.5:
 				speed.y *= pow(0.8, delta*60)
 			elif sign(vaxis)!=sign(speed.y):
@@ -402,14 +449,17 @@ func _physics_process(delta):
 			else:
 				speed.x *= pow(0.75, delta*60)
 			speed = speed.normalized()*speed.length()
+	
 	else: # Player is dead
 		speed.x *= 0.75
 	
 	speed = move_and_slide(speed, -gravity_direction)
+	
+	# If the soul is unstable, the player jitters
 	if randf() < (1.0-health.soul)/15.0:
 		move_and_collide(Vector2(-1+randf()*2, -1+randf()*2)*((1.0-health.soul/10.0))*5.0)
 	
-	
+	# Move the camera
 	$"../Camera2D".position = lerp($"../Camera2D".position, position, 0.1)
 
 
@@ -421,6 +471,7 @@ func message_send(msg):
 	get_tree().get_nodes_in_group("HUD")[0].add_message(msg)
 
 
+# The world is done generating
 func _on_generated_world():
 	set_process(true)
 	set_physics_process(true)
@@ -434,6 +485,7 @@ func jump():
 			speed.y *= 0.6+randf()*0.4
 		state = STATES.ON_AIR
 		health.temperature += 0.002
+
 
 func move_damp(delta):
 	var haxis := 0.0
@@ -455,6 +507,7 @@ func move_damp(delta):
 	else:
 		speed.x *= pow(0.75, delta*60)
 
+
 func move_nondamp():
 	if Input.is_action_pressed("left"):
 		speed.x -= WALK_ACCEL
@@ -465,6 +518,7 @@ func move_nondamp():
 	else:
 		health.temperature = move_toward(health.temperature, 30, 0.002)
 	speed.x *= 0.5
+
 
 func wall_jump():
 	if (Input.is_action_just_pressed("jump") or jump_buffer > 0.0) and (lwcoyote_time > 0.0 or rwcoyote_time > 0.0):
@@ -480,6 +534,7 @@ func wall_jump():
 		elif rwcoyote_time > 0.0:
 			speed.x -= 300
 			rwcoyote_time = 0.0
+
 
 func looking_at() -> Vector2:
 	return get_local_mouse_position() + position
