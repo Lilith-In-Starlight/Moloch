@@ -252,7 +252,8 @@ func _process(delta):
 					added += 1
 		print("Added ", added, " enemies")
 		emit_signal("generated_world")
-		Items.run_start_time = OS.get_ticks_msec()
+		if Items.level == 1:
+			Items.run_start_time = OS.get_ticks_msec()
 		print("Finished generation!")
 		set_process(false)
 	else:

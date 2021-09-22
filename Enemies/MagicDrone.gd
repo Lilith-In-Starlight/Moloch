@@ -39,7 +39,7 @@ func _physics_process(delta):
 			if tcol.collider != self:
 				queue_free()
 		first_check = true
-	$RayCast2D.cast_to = (Player.position - position).normalized()*500
+	$RayCast2D.cast_to = (Player.position - position).normalized()*300
 	var primordial_termor := Vector2(noise.get_noise_2d(position.x, OS.get_ticks_msec()/300.0), noise.get_noise_2d(position.y, OS.get_ticks_msec()/300.0))*30
 	if (health.temperature > 45.0 and health.temperature <= 60.0) or health.soul < 0.5:
 		primordial_termor = Vector2(noise.get_noise_2d(position.x, OS.get_ticks_msec()/3.0), noise.get_noise_2d(position.y, OS.get_ticks_msec()/3.0))*30
@@ -51,6 +51,7 @@ func _physics_process(delta):
 		queue_free()
 	match state:
 		STATES.IDLE:
+			$Eye.position += (speed.normalized()*8 - $Eye.position)/3.0
 			speed += (primordial_termor*10.0-speed)/3.0
 			if $RayCast2D.is_colliding():
 				if $RayCast2D.get_collider() == Player:
@@ -58,6 +59,7 @@ func _physics_process(delta):
 					state = STATES.POSITIONING
 			position_timer = 0.0
 		STATES.POSITIONING:
+			$Eye.position += ((last_seen-position).normalized()*8 - $Eye.position)/3.0
 			if $RayCast2D.is_colliding():
 				if not $RayCast2D.get_collider() == Player:
 					state = STATES.SEARCHING
@@ -83,6 +85,7 @@ func _physics_process(delta):
 				get_parent().add_child(orb)
 
 		STATES.RECOIL:
+			$Eye.position += ((last_seen-position).normalized()*8 - $Eye.position)/3.0
 			speed *= 0.75
 			position_timer += delta
 			if $RayCast2D.is_colliding():
@@ -101,6 +104,7 @@ func _physics_process(delta):
 					position_timer = 0.0
 
 		STATES.SEARCHING:
+			$Eye.position += ((last_seen-position).normalized()*8 - $Eye.position)/3.0
 			position_timer += delta
 			if position.distance_to(last_seen) > 75:
 				speed += (((last_seen-position).normalized()*30+primordial_termor)-speed)/3.0
@@ -115,14 +119,6 @@ func _physics_process(delta):
 					position_timer = 0.0
 
 	speed = move_and_slide(speed)
-	update()
-
-func _draw():
-	match state:
-		STATES.POSITIONING:
-			draw_circle(Vector2(0, 0), 8, "#0ac58a")
-		_:
-			draw_circle(Vector2(0, 0), 8, "#3fb58a")
 
 
 func health_object():

@@ -7,6 +7,7 @@ var mouse_spell = null
 var mouse_wand = null
 var generated := false
 var block_cast := false
+var level_ended := false
 var advice := [
 	"Avoid breaking your knees by not falling long distances",
 	"The best way for your runs to last longer is to reduce the amount of times you're hit",
@@ -36,19 +37,24 @@ func _process(delta):
 		$HUD/Hot.modulate.a = lerp($HUD/Hot.modulate.a, (get_tree().get_nodes_in_group("Player")[0].health.temperature-30)/110.0, 0.2)
 	else:
 		$HUD/Cold.modulate.a = lerp($HUD/Cold.modulate.a, (get_tree().get_nodes_in_group("Player")[0].health.temperature-30)/-60.0, 0.2)
-	if generated and not player_died:
+	if generated and not player_died and not level_ended:
 		$HUD/Generating.modulate.a = move_toward($HUD/Generating.modulate.a, 0.0, 0.2)
 		
 	if player_died:
 		$HUD/Death.modulate.a = move_toward($HUD/Death.modulate.a, 1.0, 0.2)
-		$HUD/Death/Info.text = "Run Time: " + end_times + "\n\n"
+		$HUD/Death/Info.text = "Run Time: " + end_times + "\n"
+		$HUD/Death/Info.text += "Levels: " + str(Items.level) + "\n\n"
 		$HUD/Death/Info.text += "Right click to start a new run"
 		if $HUD/Generating.modulate.a > 0.9:
 			Items.reset_player()
-			get_tree().reload_current_scene()
+			get_tree().change_scene("res://Game.tscn")
 		if Input.is_action_just_released("Interact2"):
 			Items.player_health = Flesh.new()
 			$HUD/Generating.modulate.a = 1.0
+	elif level_ended:
+		if $HUD/Generating.modulate.a > 0.9:
+			get_tree().change_scene("res://Game.tscn")
+		$HUD/Generating.modulate.a = move_toward($HUD/Generating.modulate.a, 1.0, 0.2)
 	if not messages.empty():
 		$HUD/Messages.visible = true
 		message_timer += delta
@@ -222,4 +228,8 @@ func _on_player_died():
 	var mins = (isecs / 60) % 60
 	end_times = str(mins) + "m" + str(csecs) + "s"
 	player_died = true
+
+func _on_level_ended():
+	level_ended = true
+	Items.level += 1
 

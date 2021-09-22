@@ -36,6 +36,8 @@ var WorldRNG := RandomNumberGenerator.new()
 var LootRNG := RandomNumberGenerator.new()
 var custom_seed := 0
 
+var level := 1
+
 func _ready():
 	var generator_seed := hash(OS.get_time())
 	print("Generator seed: ", generator_seed)
@@ -58,6 +60,8 @@ func _ready():
 	register_spell(4, "push", "Push", "Away, away...", preload("res://Sprites/Spells/Push.png"), preload("res://Spells/Push.tscn"))
 	register_spell(4, "pull", "Pull", "Together, together...", preload("res://Sprites/Spells/Pull.png"), preload("res://Spells/Pull.tscn"))
 	register_spell(3, "r", "Alveolar Trill", "RRRRRRRRRRRRRRRR", preload("res://Sprites/Spells/R.png"), preload("res://Spells/AlveolarTrill.tscn"))
+	register_spell(1, "fireball", "Fireball", "Like an ice ball, but made of fire", preload("res://Sprites/Spells/Fireball.png"), preload("res://Spells/AlveolarTrill.tscn"))
+	register_spell(1, "iceball", "Iceball", "Like a fire ball, but made of ice", preload("res://Sprites/Spells/Fireball.png"), preload("res://Spells/AlveolarTrill.tscn"))
 	
 	if not get_tree().get_nodes_in_group("Player").empty():
 		Player = get_tree().get_nodes_in_group("Player")[0]
@@ -148,6 +152,7 @@ func pick_random_item(rng:RandomNumberGenerator = LootRNG) -> Item:
 	return items[tier].values()[rng.randi()%items[tier].values().size()]
 
 func reset_player():
+	level = 1
 	var generator_seed := hash(OS.get_time())
 	print(Items.custom_seed)
 	if Items.custom_seed != 0:

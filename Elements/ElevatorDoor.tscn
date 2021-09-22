@@ -114,3 +114,5 @@ rotation = 3.14159
 scale = Vector2( 1, -1 )
 texture = ExtResource( 1 )
 offset = Vector2( -7, 14 )
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_finished"]

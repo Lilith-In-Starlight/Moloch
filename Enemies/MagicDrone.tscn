@@ -1,6 +1,8 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Enemies/MagicDrone.gd" type="Script" id=1]
+[ext_resource path="res://Sprites/Enemies/SoulDrone/body.png" type="Texture" id=2]
+[ext_resource path="res://Sprites/Enemies/SoulDrone/eye.png" type="Texture" id=3]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 8.0
@@ -24,3 +26,9 @@ position = Vector2( -350, -200 )
 rect = Rect2( 0, 0, 700, 400 )
 process_parent = true
 physics_process_parent = true
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 2 )
+
+[node name="Eye" type="Sprite" parent="."]
+texture = ExtResource( 3 )

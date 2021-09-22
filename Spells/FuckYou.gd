@@ -31,7 +31,8 @@ func _physics_process(delta):
 		var pos := get_collision_point()
 		var pos2 := get_collision_point()
 		if get_collider().is_in_group("World"):
-			Caster.speed -= (pos-position).normalized()*30
+			if is_instance_valid(Caster):
+				Caster.speed -= (pos-position).normalized()*30
 			pos.x = int(pos.x/8)
 			pos.y = int(pos.y/8)
 			for x in range(-3, 4):
