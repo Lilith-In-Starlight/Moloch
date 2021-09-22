@@ -52,7 +52,7 @@ func _ready():
 
 func _process(delta):
 	if health.poked_holes > 0:
-		for i in health.poked_holes:
+		for i in min(health.poked_holes, 12):
 			if randf()>0.9:
 				var n :RigidBody2D = preload("res://Particles/Blood.tscn").instance()
 				n.position = position + Vector2(0, 6)
