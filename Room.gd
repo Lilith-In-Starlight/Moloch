@@ -2,15 +2,6 @@ tool
 extends TileMap
 
 export var occupies := [Vector2(0, 0)]
-
-func _ready():
-	if not Engine.editor_hint:
-		Items.simplex_noise.seed = Items.using_seed
-		var lawfulness := ((Items.simplex_noise.get_noise_3d(position.x, position.y, 0))+1.0)/2.0
-		var knowledge := ((Items.simplex_noise.get_noise_3d(position.x, position.y, 100))+1.0)/2.0
-		var mushroomness := ((Items.simplex_noise.get_noise_3d(position.x, position.y, 200))+1.0)/2.0
-		
-		
 		
 
 func _process(delta):
