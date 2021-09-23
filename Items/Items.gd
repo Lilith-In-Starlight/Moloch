@@ -78,6 +78,7 @@ func _ready():
 	player_wands[0] = Wand.new()
 	player_wands[1] = Wand.new()
 
+var simplex_noise := OpenSimplexNoise.new()
 
 func _process(delta):
 	# Fullscreen
