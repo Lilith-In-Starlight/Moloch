@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://RoomDecorations/Poster.gd" type="Script" id=1]
+[ext_resource path="res://Sprites/Elements/Decoration/Posters/Poster1.png" type="Texture" id=2]
+
+[node name="Poster" type="Sprite" groups=[
+"Painting",
+]]
+texture = ExtResource( 2 )
+script = ExtResource( 1 )

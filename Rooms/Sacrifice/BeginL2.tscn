@@ -1,9 +1,13 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://EditorTileset.tres" type="TileSet" id=1]
 [ext_resource path="res://Room.gd" type="Script" id=2]
 [ext_resource path="res://Elements/Platform.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Elements/ElevatorDoor.tscn" type="PackedScene" id=4]
+[ext_resource path="res://RoomDecorations/PosterGroup.tscn" type="PackedScene" id=5]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 10, 8 )
 
 [node name="Room" type="TileMap"]
 tile_set = ExtResource( 1 )
@@ -52,3 +56,11 @@ size = 12
 ] instance=ExtResource( 4 )]
 position = Vector2( 264, 240 )
 came_from = true
+
+[node name="PosterGroup" parent="." instance=ExtResource( 5 )]
+position = Vector2( 184, 192 )
+shape = SubResource( 1 )
+
+[node name="PosterGroup2" parent="." instance=ExtResource( 5 )]
+position = Vector2( 352, 192 )
+shape = SubResource( 1 )

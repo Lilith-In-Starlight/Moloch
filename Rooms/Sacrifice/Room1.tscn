@@ -1,8 +1,7 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://EditorTileset.tres" type="TileSet" id=1]
 [ext_resource path="res://Room.gd" type="Script" id=2]
-[ext_resource path="res://RoomDecorations/Painting.tscn" type="PackedScene" id=3]
 
 [node name="Room" type="TileMap"]
 tile_set = ExtResource( 1 )
@@ -20,6 +19,3 @@ position = Vector2( 528, 240 )
 "LeftDoor",
 ]]
 position = Vector2( 0, 240 )
-
-[node name="Paintings" parent="." instance=ExtResource( 3 )]
-position = Vector2( 256, 128 )
