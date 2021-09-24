@@ -39,3 +39,23 @@ size = 9
 [node name="Platform3" parent="." instance=ExtResource( 3 )]
 position = Vector2( 160, 104 )
 size = 26
+
+[node name="VaseRow" type="Position2D" parent="." groups=[
+"Vases",
+]]
+position = Vector2( 208, 104 )
+
+[node name="End" type="Position2D" parent="VaseRow" groups=[
+"Vases",
+]]
+position = Vector2( 112, 0 )
+
+[node name="VaseRow2" type="Position2D" parent="." groups=[
+"Vases",
+]]
+position = Vector2( 224, 240 )
+
+[node name="End" type="Position2D" parent="VaseRow2" groups=[
+"Vases",
+]]
+position = Vector2( 64, 0 )

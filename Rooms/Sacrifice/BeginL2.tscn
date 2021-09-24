@@ -64,3 +64,43 @@ shape = SubResource( 1 )
 [node name="PosterGroup2" parent="." instance=ExtResource( 5 )]
 position = Vector2( 352, 192 )
 shape = SubResource( 1 )
+
+[node name="VaseRow" type="Position2D" parent="." groups=[
+"Vases",
+]]
+position = Vector2( 136, 240 )
+
+[node name="End" type="Position2D" parent="VaseRow" groups=[
+"Vases",
+]]
+position = Vector2( 56, 0 )
+
+[node name="VaseRow2" type="Position2D" parent="." groups=[
+"Vases",
+]]
+position = Vector2( 336, 240 )
+
+[node name="End" type="Position2D" parent="VaseRow2" groups=[
+"Vases",
+]]
+position = Vector2( 56, 0 )
+
+[node name="VaseRow3" type="Position2D" parent="." groups=[
+"Vases",
+]]
+position = Vector2( 40, 176 )
+
+[node name="End" type="Position2D" parent="VaseRow3" groups=[
+"Vases",
+]]
+position = Vector2( 56, 0 )
+
+[node name="VaseRow4" type="Position2D" parent="." groups=[
+"Vases",
+]]
+position = Vector2( 432, 176 )
+
+[node name="End" type="Position2D" parent="VaseRow4" groups=[
+"Vases",
+]]
+position = Vector2( 56, 0 )
