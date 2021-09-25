@@ -3,10 +3,10 @@
 [ext_resource path="res://Spells/AlveolarProjectile.gd" type="Script" id=1]
 [ext_resource path="res://Sprites/Projectiles/R.png" type="Texture" id=2]
 
-[sub_resource type="CircleShape2D" id=2]
+[sub_resource type="CircleShape2D" id=1]
 radius = 6.0
 
-[sub_resource type="CircleShape2D" id=1]
+[sub_resource type="CircleShape2D" id=2]
 radius = 8.0
 
 [node name="R" type="KinematicBody2D"]
@@ -15,12 +15,13 @@ collision_mask = 0
 script = ExtResource( 1 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource( 2 )
+shape = SubResource( 1 )
+disabled = true
 
 [node name="Area" type="Area2D" parent="."]
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="Area"]
-shape = SubResource( 1 )
+shape = SubResource( 2 )
 
 [node name="R" type="Sprite" parent="."]
 texture = ExtResource( 2 )

@@ -17,8 +17,7 @@ func _ready():
 	position = Caster.position
 	WorldMap = get_tree().get_nodes_in_group("World")[0]
 	rotate = goal.angle_to_point(position)
-	if Caster.name != "Player":
-		set_collision_mask_bit(0, true)
+	position = Caster.position + Vector2(cos(rotate), sin(rotate))*7.0
 	
 
 
@@ -26,9 +25,8 @@ func _physics_process(delta):
 	timer += 0.1
 	position += Vector2(cos(rotate), sin(rotate))*7.0*(60*delta)
 	rotate += noise.get_noise_3d(position.x, position.y, timer)*(timer/60.0)
-	if timer < 0.3:
-		for body in get_overlapping_bodies():
-			_on_body_entered(body)
+	for body in get_overlapping_bodies():
+		_on_body_entered(body)
 	if timer > 10.0:
 		queue_free()
 
@@ -38,7 +36,7 @@ func _draw():
 
 
 func _on_body_entered(body):
-	if timer > 0.22:
+	if timer > 0.32:
 		if body.has_method("health_object"):
 			body.health_object().shatter_soul(0.3)
 		queue_free()

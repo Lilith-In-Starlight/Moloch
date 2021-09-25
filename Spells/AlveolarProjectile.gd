@@ -20,17 +20,11 @@ func _ready():
 
 func _physics_process(delta):
 	timer += 0.1
-		
-	move_and_collide(Vector2(cos(rotate), sin(rotate))*12.0*(60*delta))
-	if timer < 0.3:
-		for body in $Area.get_overlapping_bodies():
-			_on_body_entered(body)
+	for body in $Area.get_overlapping_bodies():
+		_on_body_entered(body)
 	if timer > 10.0:
 		queue_free()
-	if timer > 0.1:
-		set_collision_mask_bit(0, true)
-		set_collision_mask_bit(1, true)
-		set_collision_mask_bit(3, true)
+	move_and_collide(Vector2(cos(rotate), sin(rotate))*12.0*(60*delta))
 
 
 func _on_body_entered(body):
