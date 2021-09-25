@@ -4,6 +4,7 @@ extends TileMap
 export var occupies := [Vector2(0, 0)]
 var decos := []
 
+
 func _ready():
 	if not Engine.editor_hint:
 		for i in get_children():
@@ -18,11 +19,13 @@ func _ready():
 							add_child(n)
 						pos.x += 17 + Items.WorldRNG.randf()*8
 
+
 func _process(delta):
 	if Engine.editor_hint:
 		update()
 	else:
 		set_process(false)
+
 
 func _draw():
 	for i in get_tree().get_nodes_in_group("Vases"):
