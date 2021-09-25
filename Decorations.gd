@@ -12,6 +12,8 @@ func _ready():
 	register_sign(preload("res://Sprites/Elements/Decoration/Posters/Poster1_rotten.png"), "lawful", true)
 	
 	register_painting(preload("res://Sprites/Elements/Decoration/Paintings/painting1.png"), "lawful")
+	register_painting(preload("res://Sprites/Elements/Decoration/Paintings/leader2.png"), "lawful")
+	register_painting(preload("res://Sprites/Elements/Decoration/Paintings/leader2_vandalized.png"), "rebel")
 	register_painting(preload("res://Sprites/Elements/Decoration/Paintings/leader_vandalized4.png"), "rebel")
 	register_painting(preload("res://Sprites/Elements/Decoration/Paintings/leader_vandalized.png"), "rebel")
 	register_painting(preload("res://Sprites/Elements/Decoration/Paintings/leader_vandalized3.png"), "rebel")
