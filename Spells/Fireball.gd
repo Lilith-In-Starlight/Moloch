@@ -7,7 +7,7 @@ var frames := 0
 var rotate := 0.0
 
 func _ready():
-	position = Caster.position
+	position = Caster.position + Vector2(cos(rotate), sin(rotate))*12
 	rotate = (goal).angle_to_point(position)
 	if Caster.name == "Player":
 		set_collision_mask_bit(0, false)
