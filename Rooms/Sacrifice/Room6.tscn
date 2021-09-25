@@ -28,3 +28,23 @@ position = Vector2( 128, 128 )
 
 [node name="Paintings2" parent="." instance=ExtResource( 4 )]
 position = Vector2( 392, 128 )
+
+[node name="VaseRow" type="Position2D" parent="." groups=[
+"Vases",
+]]
+position = Vector2( 72, 240 )
+
+[node name="End" type="Position2D" parent="VaseRow" groups=[
+"Vases",
+]]
+position = Vector2( 112, 0 )
+
+[node name="VaseRow2" type="Position2D" parent="." groups=[
+"Vases",
+]]
+position = Vector2( 336, 240 )
+
+[node name="End" type="Position2D" parent="VaseRow2" groups=[
+"Vases",
+]]
+position = Vector2( 112, 0 )

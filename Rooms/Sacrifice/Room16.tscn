@@ -30,3 +30,63 @@ size = 17
 [node name="Platform2" parent="." instance=ExtResource( 3 )]
 position = Vector2( 368, 72 )
 size = 17
+
+[node name="VaseRow" type="Position2D" parent="." groups=[
+"Vases",
+]]
+position = Vector2( 48, 72 )
+
+[node name="End" type="Position2D" parent="VaseRow" groups=[
+"Vases",
+]]
+position = Vector2( 168, 0 )
+
+[node name="VaseRow2" type="Position2D" parent="." groups=[
+"Vases",
+]]
+position = Vector2( 336, 72 )
+
+[node name="End" type="Position2D" parent="VaseRow2" groups=[
+"Vases",
+]]
+position = Vector2( 128, 0 )
+
+[node name="VaseRow3" type="Position2D" parent="." groups=[
+"Vases",
+]]
+position = Vector2( 56, 152 )
+
+[node name="End" type="Position2D" parent="VaseRow3" groups=[
+"Vases",
+]]
+position = Vector2( 176, 0 )
+
+[node name="VaseRow4" type="Position2D" parent="." groups=[
+"Vases",
+]]
+position = Vector2( 304, 152 )
+
+[node name="End" type="Position2D" parent="VaseRow4" groups=[
+"Vases",
+]]
+position = Vector2( 176, 0 )
+
+[node name="VaseRow5" type="Position2D" parent="." groups=[
+"Vases",
+]]
+position = Vector2( 48, 240 )
+
+[node name="End" type="Position2D" parent="VaseRow5" groups=[
+"Vases",
+]]
+position = Vector2( 176, 0 )
+
+[node name="VaseRow6" type="Position2D" parent="." groups=[
+"Vases",
+]]
+position = Vector2( 288, 240 )
+
+[node name="End" type="Position2D" parent="VaseRow6" groups=[
+"Vases",
+]]
+position = Vector2( 200, 0 )
