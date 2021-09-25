@@ -20,11 +20,6 @@ func _physics_process(delta):
 		sleeping = false
 
 
-func _on_body_entered(body):
-	if frames > 0.2:
-		queue_free()
-
-
 func _on_screen_entered():
 	sleeping = false
 	force_process = true
