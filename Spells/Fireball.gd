@@ -7,19 +7,13 @@ var frames := 0
 var rotate := 0.0
 
 func _ready():
-	position = Caster.position
-	rotate = (goal).angle_to_point(position)
-	if Caster.name == "Player":
-		set_collision_mask_bit(0, false)
+	rotate = (goal).angle_to_point(Caster.position)
+	position = Caster.position + Vector2(cos(rotate), sin(rotate))*12
 
 func _physics_process(delta):
-	if frames < 3:
-		for body in $Area.get_overlapping_bodies():
-			if not body == self:
-				_on_body_entered(body)
-	else:
-		set_collision_mask_bit(0, true)
-	
+	for body in $Area.get_overlapping_bodies():
+		if not body == self:
+			_on_body_entered(body)
 	
 	move_and_slide(Vector2(cos(rotate), sin(rotate))*200)
 	frames += 1
