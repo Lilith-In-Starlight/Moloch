@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/RedRoomBlock-export.png-c58aaf6fac75ffaefa28ffc3066b8507.stex"
+path="res://.import/RunLookback.png-507acc9b60cbadacf5b8ba0a86168e8b.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/Blocks/RedRoomBlock-export.png"
-dest_files=[ "res://.import/RedRoomBlock-export.png-c58aaf6fac75ffaefa28ffc3066b8507.stex" ]
+source_file="res://Sprites/Player/RunLookback.png"
+dest_files=[ "res://.import/RunLookback.png-507acc9b60cbadacf5b8ba0a86168e8b.stex" ]
 
 [params]
 
