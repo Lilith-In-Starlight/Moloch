@@ -11,6 +11,8 @@ func _ready():
 	position = Caster.position + Vector2(cos(rotate), sin(rotate))*12
 	if Caster.has_method("cast_from"):
 		position = Caster.cast_from()
+	if Caster.has_method("health_object"):
+		Caster.health_object().temp_change(-12.0 - randf() * 6.0)
 
 func _physics_process(delta):
 	for body in $Area.get_overlapping_bodies():
