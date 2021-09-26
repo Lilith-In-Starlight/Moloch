@@ -4,13 +4,20 @@ var frames := 0.0
 var force_process := false
 
 func _ready():
-	match Items.WorldRNG.randi()%3:
+	match Items.WorldRNG.randi()%6:
 		1:
 			$Sprite.texture = preload("res://Sprites/Elements/Vase2.png")
 			$Sprite.offset.y = -4
 		2:
 			$Sprite.texture = preload("res://Sprites/Elements/Vase3.png")
 			$Sprite.offset.y = -4
+		3:
+			$Sprite.texture = preload("res://Sprites/Elements/Vase4.png")
+			$Sprite.offset.y = -4
+		4:
+			$Sprite.texture = preload("res://Sprites/Elements/Vase5.png")
+		5:
+			$Sprite.texture = preload("res://Sprites/Elements/Vase6.png")
 
 func _physics_process(delta):
 	frames += delta
