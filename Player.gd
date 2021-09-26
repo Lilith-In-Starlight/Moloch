@@ -323,7 +323,8 @@ func _physics_process(delta):
 		# Player can't fly
 		if not Items.player_items.has("wings"):
 			# Gravity
-			speed.y += gravity_accel * gravity_direction.y
+			if not state == STATES.ON_POLE:
+				speed.y += gravity_accel * gravity_direction.y
 			match state:
 				STATES.ON_GROUND:
 					coyote_time = 0.12
@@ -353,7 +354,7 @@ func _physics_process(delta):
 					elif Input.is_action_just_pressed("jump"):
 						jump_buffer = 0.2
 					
-					if Input.is_action_pressed("up") and can_climb_pole:
+					if (Input.is_action_pressed("up") or Input.is_action_pressed("down")) and can_climb_pole:
 						if pole_pos > position.x:
 							position.x = pole_pos + 2
 						else:
@@ -452,27 +453,20 @@ func _physics_process(delta):
 				STATES.ON_POLE:
 					coyote_time -= delta
 					if Input.is_action_pressed("up"):
-						speed.y = lerp(speed.y, -90, 0.6)
+						speed.y = lerp(speed.y, -90, 0.3)
 					elif Input.is_action_pressed("down"):
-						speed.y = lerp(speed.y, 90, 0.6)
+						speed.y = lerp(speed.y, 90, 0.3)
 					else:
-						speed.y = lerp(speed.y, 2, 0.6)
+						speed.y = lerp(speed.y, 0, 0.3)
 					
 					if Input.is_action_just_pressed("jump") or jump_buffer > 0.0:
 						jump_buffer = 0.2
+						coyote_time = 0.22
 						can_climb_pole = false
-					elif Input.is_action_just_pressed("right"):
-						if Input.is_action_pressed("jump"):
-							jump_buffer = 0.2
-						speed.x = lerp(speed.x, 50, 0.6)
-						can_climb_pole = false
-						coyote_time = 0.2
-					elif Input.is_action_just_pressed("left"):
-						if Input.is_action_pressed("jump"):
-							jump_buffer = 0.2
-						speed.x = lerp(speed.x, -50, 0.6)
-						can_climb_pole = false
-						coyote_time = 0.2
+						if Input.is_action_just_pressed("right"):
+							speed.x = lerp(speed.x, 50, 0.6)
+						if Input.is_action_just_pressed("left"):
+							speed.x = lerp(speed.x, -50, 0.6)
 					else:
 						speed.x = 0
 					if is_on_floor() or not can_climb_pole:
