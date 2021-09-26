@@ -7,6 +7,7 @@ enum STATES {
 	ON_GROUND,
 	ON_AIR,
 	ON_WALL,
+	ON_POLE,
 	DEAD
 }
 
@@ -48,6 +49,10 @@ var blood_is_gasoline := false
 var dead := false
 
 var spell_cast_pos := Vector2(0, 0)
+
+var can_climb_pole := false
+var pole_pos := 0.0
+var pole_side := false
 
 
 func _ready():
@@ -301,6 +306,12 @@ func _physics_process(delta):
 								$Player.play("slide2")
 							else:
 								$Player.play("oneleg_slide2")
+				STATES.ON_POLE:
+					$Player.play("slide")
+					if pole_pos < position.x:
+						$Player.scale.x = -1
+					else:
+						$Player.scale.x = 1
 		else: # Is flying
 			if get_local_mouse_position().x > 0:
 				$Player.scale.x = 1
@@ -339,11 +350,19 @@ func _physics_process(delta):
 						speed.y *= 0.5
 					if  coyote_time > 0.0:
 						jump()
-					elif Input.is_action_just_pressed("jump") and health.broken_moving_appendages < 2:
+					elif Input.is_action_just_pressed("jump"):
 						jump_buffer = 0.2
+					
+					if Input.is_action_pressed("up") and can_climb_pole:
+						if pole_pos > position.x:
+							position.x = pole_pos + 2
+						else:
+							position.x = pole_pos - 2
+						state = STATES.ON_POLE
 					
 					jump_buffer -= delta
 					coyote_time -= delta
+					
 					
 					if is_on_floor():
 						state = STATES.ON_GROUND
@@ -428,6 +447,35 @@ func _physics_process(delta):
 					
 					
 					if is_on_floor():
+						state = STATES.ON_GROUND
+				
+				STATES.ON_POLE:
+					coyote_time -= delta
+					if Input.is_action_pressed("up"):
+						speed.y = lerp(speed.y, -90, 0.6)
+					elif Input.is_action_pressed("down"):
+						speed.y = lerp(speed.y, 90, 0.6)
+					else:
+						speed.y = lerp(speed.y, 2, 0.6)
+					
+					if Input.is_action_just_pressed("jump") or jump_buffer > 0.0:
+						jump_buffer = 0.2
+						can_climb_pole = false
+					elif Input.is_action_just_pressed("right"):
+						if Input.is_action_pressed("jump"):
+							jump_buffer = 0.2
+						speed.x = lerp(speed.x, 50, 0.6)
+						can_climb_pole = false
+						coyote_time = 0.2
+					elif Input.is_action_just_pressed("left"):
+						if Input.is_action_pressed("jump"):
+							jump_buffer = 0.2
+						speed.x = lerp(speed.x, -50, 0.6)
+						can_climb_pole = false
+						coyote_time = 0.2
+					else:
+						speed.x = 0
+					if is_on_floor() or not can_climb_pole:
 						state = STATES.ON_GROUND
 		else: # Player is flying
 			speed.y += gravity_accel * gravity_direction.y
@@ -565,3 +613,12 @@ func looking_at() -> Vector2:
 
 func cast_from() -> Vector2:
 	return spell_cast_pos + position
+
+
+func enable_pole(pos):
+	can_climb_pole = true
+	pole_pos = pos
+
+
+func disable_pole():
+	can_climb_pole = false

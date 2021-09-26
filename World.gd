@@ -229,6 +229,14 @@ func _ready():
 		new_sprite.came_from = sprite.came_from
 		add_child(new_sprite)
 		sprite.queue_free()
+	print("    - Poles")
+	for sprite in get_tree().get_nodes_in_group("Pole"):
+		var new_sprite := preload("res://Elements/Pole.tscn").instance()
+		new_sprite.position = sprite.global_position
+		new_sprite.z_index = -1
+		new_sprite.size = sprite.size
+		add_child(new_sprite)
+		sprite.queue_free()
 	print("    - Air Conditioning Units")
 	for sprite in get_tree().get_nodes_in_group("AC"):
 		var new_sprite := preload("res://Elements/AC.tscn").instance()

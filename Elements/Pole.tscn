@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Sprites/Elements/Poles.png" type="Texture" id=1]
+[ext_resource path="res://Elements/Pole.gd" type="Script" id=2]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 3, 22 )
+
+[node name="Pole" type="Node2D" groups=[
+"Pole",
+]]
+script = ExtResource( 2 )
+
+[node name="Poles" type="Sprite" parent="."]
+scale = Vector2( 1, 2.5 )
+texture = ExtResource( 1 )
+offset = Vector2( 0, 8 )
+
+[node name="Area" type="Area2D" parent="."]
+visible = false
+collision_layer = 0
+
+[node name="KinematicBody2D" type="CollisionShape2D" parent="Area"]
+position = Vector2( 0, 20 )
+shape = SubResource( 1 )
+
+[connection signal="body_entered" from="Area" to="." method="_on_body_entered"]
+[connection signal="body_exited" from="Area" to="." method="_on_body_exited"]
