@@ -13,7 +13,7 @@ func _ready():
 				if no != null:
 					var pos = i.position
 					while pos.x < no.position.x + i.position.x:
-						if Items.WorldRNG.randf() < 0.25:
+						if Items.WorldRNG.randf() < 0.2:
 							var n := preload("res://Elements/Vase.tscn").instance()
 							n.position = pos - Vector2(0, 3)
 							add_child(n)
