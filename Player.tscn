@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=2]
+[gd_scene load_steps=39 format=2]
 
 [ext_resource path="res://Player.gd" type="Script" id=1]
 [ext_resource path="res://Sprites/Player/Player.png" type="Texture" id=2]
@@ -13,6 +13,7 @@
 [ext_resource path="res://Sprites/Player/Crawling.png" type="Texture" id=11]
 [ext_resource path="res://Sprites/Player/Crawl.png" type="Texture" id=12]
 [ext_resource path="res://WandRenderSprite.tscn" type="PackedScene" id=13]
+[ext_resource path="res://Sprites/Player/RunLookback.png" type="Texture" id=14]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 3.03508, 10.5291 )
@@ -81,6 +82,30 @@ region = Rect2( 72, 0, 18, 22 )
 atlas = ExtResource( 3 )
 region = Rect2( 90, 0, 18, 22 )
 
+[sub_resource type="AtlasTexture" id=19]
+atlas = ExtResource( 14 )
+region = Rect2( 0, 0, 18, 22 )
+
+[sub_resource type="AtlasTexture" id=20]
+atlas = ExtResource( 14 )
+region = Rect2( 18, 0, 18, 22 )
+
+[sub_resource type="AtlasTexture" id=21]
+atlas = ExtResource( 14 )
+region = Rect2( 36, 0, 18, 22 )
+
+[sub_resource type="AtlasTexture" id=22]
+atlas = ExtResource( 14 )
+region = Rect2( 54, 0, 18, 22 )
+
+[sub_resource type="AtlasTexture" id=23]
+atlas = ExtResource( 14 )
+region = Rect2( 72, 0, 18, 22 )
+
+[sub_resource type="AtlasTexture" id=24]
+atlas = ExtResource( 14 )
+region = Rect2( 90, 0, 18, 22 )
+
 [sub_resource type="SpriteFrames" id=18]
 animations = [ {
 "frames": [ ExtResource( 4 ) ],
@@ -137,6 +162,11 @@ animations = [ {
 "loop": true,
 "name": "run",
 "speed": 10.0
+}, {
+"frames": [ SubResource( 19 ), SubResource( 20 ), SubResource( 21 ), SubResource( 22 ), SubResource( 23 ), SubResource( 24 ) ],
+"loop": true,
+"name": "run_lookback",
+"speed": 10.0
 } ]
 
 [node name="Player" type="KinematicBody2D"]
@@ -158,6 +188,7 @@ collision_mask = 2
 
 [node name="Player" type="AnimatedSprite" parent="."]
 frames = SubResource( 18 )
+animation = "run_lookback"
 playing = true
 
 [node name="WandRender" parent="." instance=ExtResource( 13 )]

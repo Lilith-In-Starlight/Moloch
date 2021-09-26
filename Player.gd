@@ -228,33 +228,41 @@ func _physics_process(delta):
 					elif speed.x > 0.0: # Moving
 						# Has both legs or one leg
 						if health.broken_moving_appendages != 2:
+							$Player.scale.x = 1
 							if get_local_mouse_position().x > 0:
 								$Player.play("run")
 							else:
-								$Player.play("run", true)
+								$Player.play("run_lookback")
 						else: # Has no legs
 							if get_local_mouse_position().x > 0:
 								$Player.play("crawling")
 							else:
 								$Player.play("crawling", true)
+								
+							# Where is the player looking at
+							if get_local_mouse_position().x > 0:
+								$Player.scale.x = 1
+							else:
+								$Player.scale.x = -1
 					else:
 						# Has both legs
 						if health.broken_moving_appendages != 2:
-							if get_local_mouse_position().x < 0:
-								$Player.play("run")
+							$Player.scale.x = -1
+							if get_local_mouse_position().x > 0:
+								$Player.play("run_lookback")
 							else:
-								$Player.play("run", true)
+								$Player.play("run")
 						else: # Has no legs
 							if get_local_mouse_position().x > 0:
 								$Player.play("crawling")
 							else:
 								$Player.play("crawling", true)
 						
-					# Where is the player looking at
-					if get_local_mouse_position().x > 0:
-						$Player.scale.x = 1
-					else:
-						$Player.scale.x = -1
+							# Where is the player looking at
+							if get_local_mouse_position().x > 0:
+								$Player.scale.x = 1
+							else:
+								$Player.scale.x = -1
 				STATES.ON_AIR:
 					if health.broken_moving_appendages != 2:
 						if sign(speed.y) > 0:
