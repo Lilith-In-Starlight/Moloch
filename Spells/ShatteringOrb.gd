@@ -18,6 +18,8 @@ func _ready():
 	WorldMap = get_tree().get_nodes_in_group("World")[0]
 	rotate = goal.angle_to_point(position)
 	position = Caster.position + Vector2(cos(rotate), sin(rotate))*7.0
+	if Caster.has_method("cast_from"):
+		position = Caster.cast_from()
 	
 
 

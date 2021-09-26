@@ -21,6 +21,8 @@ var Cam :Camera2D
 var gravity_accel := 15.0
 var gravity_direction := Vector2(0, 1)
 
+onready var WandRender := $WandRender
+
 var speed := Vector2()
 
 # State machine
@@ -44,6 +46,8 @@ var temp_stage := 0
 var blood_is_gasoline := false
 
 var dead := false
+
+var spell_cast_pos := Vector2(0, 0)
 
 
 func _ready():
@@ -183,9 +187,20 @@ func _process(delta):
 		Items.selected_wand = 4
 	elif Input.is_action_just_pressed("hotbar6"):
 		Items.selected_wand = 5
-
+	
+	# Render the wand the player has
+	WandRender.visible = Items.player_wands[Items.selected_wand] != null
+	WandRender.render_wand(Items.player_wands[Items.selected_wand], false)
+	WandRender.position += (get_local_mouse_position().normalized()*22 - WandRender.position)/3.0
+	WandRender.rotation = lerp_angle(WandRender.rotation, get_local_mouse_position().angle() + PI/4.0, 1/3.0)
 
 func _physics_process(delta):
+	$CastDirection.enabled = Items.player_wands[Items.selected_wand] != null
+	$CastDirection.cast_to = get_local_mouse_position().normalized()*26
+	if $CastDirection.is_colliding():
+		spell_cast_pos = $CastDirection.get_collision_point() - position
+	else:
+		spell_cast_pos = $CastDirection.cast_to
 	# Bleed
 	health.blood -= health.poked_holes * (0.5+randf())*0.0005
 	# Platforms
@@ -538,3 +553,7 @@ func wall_jump():
 
 func looking_at() -> Vector2:
 	return get_local_mouse_position() + position
+
+
+func cast_from() -> Vector2:
+	return spell_cast_pos + position

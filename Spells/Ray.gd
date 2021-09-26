@@ -12,6 +12,8 @@ var did := false
 func _ready():
 	enabled = true
 	position = Caster.position
+	if Caster.has_method("cast_from"):
+		position = Caster.cast_from()
 	rotate = goal.angle_to_point(position)
 	if Caster.name != "Player":
 		set_collision_mask_bit(0, true)

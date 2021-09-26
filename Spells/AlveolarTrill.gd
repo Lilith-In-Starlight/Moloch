@@ -13,6 +13,8 @@ var times := 0
 
 func _ready():
 	position = Caster.position
+	if Caster.has_method("cast_from"):
+		position = Caster.cast_from()
 	WorldMap = get_tree().get_nodes_in_group("World")[0]
 	rotate = goal.angle_to_point(position)
 
@@ -20,6 +22,8 @@ func _process(delta):
 	timer += delta
 	if is_instance_valid(Caster):
 		position = Caster.position
+		if Caster.has_method("cast_from"):
+			position = Caster.cast_from()
 		if Caster.name == "Player":
 			goal = Caster.get_local_mouse_position() + Caster.position
 	rotate = goal.angle_to_point(position)

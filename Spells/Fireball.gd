@@ -9,6 +9,8 @@ var rotate := 0.0
 func _ready():
 	rotate = (goal).angle_to_point(Caster.position)
 	position = Caster.position + Vector2(cos(rotate), sin(rotate))*12
+	if Caster.has_method("cast_from"):
+		position = Caster.cast_from()
 
 func _physics_process(delta):
 	for body in $Area.get_overlapping_bodies():
