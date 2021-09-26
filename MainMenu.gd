@@ -1,15 +1,19 @@
 extends Control
 
+onready var Animations := $Animations
+onready var SeedLineEdit := $LineEdit
+
+
 func _ready():
-	$Animations.play("License")
+	Animations.play("License")
 
 
 func _on_NewRun_pressed():
-	if not $LineEdit.text == "":
-		if $LineEdit.text.is_valid_integer():
-			Items.custom_seed = $LineEdit.text as int
+	if not SeedLineEdit.text == "":
+		if SeedLineEdit.text.is_valid_integer():
+			Items.custom_seed = SeedLineEdit.text as int
 		else:
-			Items.custom_seed = hash($LineEdit.text)
+			Items.custom_seed = hash(SeedLineEdit.text)
 		if Items.custom_seed == 0:
 			Items.custom_seed = 1
 		Items.WorldRNG.seed = Items.custom_seed
@@ -19,7 +23,7 @@ func _on_NewRun_pressed():
 		Items.WorldRNG.randomize()
 		Items.LootRNG.seed = Items.WorldRNG.seed*2
 	Items.reset_player()
-	$Animations.play("Fadein")
+	Animations.play("Fadein")
 
 
 func _on_Exit_pressed():

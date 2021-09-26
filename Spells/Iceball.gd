@@ -9,8 +9,14 @@ var gravity := 0.0
 
 func _ready():
 	rotate = goal.angle_to_point(Caster.position)
+<<<<<<< HEAD
 	position = Caster.position + Vector2(cos(rotate), sin(rotate)+gravity)*12
 
+=======
+	position = Caster.position + Vector2(cos(rotate), sin(rotate))*16
+	if Caster.has_method("cast_from"):
+		position = Caster.cast_from()
+>>>>>>> 0.7
 
 func _physics_process(delta):
 	gravity += delta

@@ -21,3 +21,13 @@ position = Vector2( 176, 264 )
 "UpDoor",
 ]]
 position = Vector2( 176, 0 )
+
+[node name="VaseRow" type="Position2D" parent="." groups=[
+"Vases",
+]]
+position = Vector2( 240, 120 )
+
+[node name="End" type="Position2D" parent="VaseRow" groups=[
+"Vases",
+]]
+position = Vector2( 88, -8 )

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/RedRoomBlock-export.png-c58aaf6fac75ffaefa28ffc3066b8507.stex"
+path="res://.import/Vase.png-bbaa0f4e31f2da9386d3a9e334d74cf1.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/Blocks/RedRoomBlock-export.png"
-dest_files=[ "res://.import/RedRoomBlock-export.png-c58aaf6fac75ffaefa28ffc3066b8507.stex" ]
+source_file="res://Sprites/Elements/Vase.png"
+dest_files=[ "res://.import/Vase.png-bbaa0f4e31f2da9386d3a9e334d74cf1.stex" ]
 
 [params]
 

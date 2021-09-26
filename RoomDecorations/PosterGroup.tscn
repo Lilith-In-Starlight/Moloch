@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://RoomDecorations/PosterGroup.gd" type="Script" id=1]
+
+[node name="PosterGroup" type="Position2D"]
+script = ExtResource( 1 )

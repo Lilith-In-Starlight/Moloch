@@ -1,5 +1,6 @@
 extends Node
 
+# Tiered items
 var items := {
 	1: {},
 	2: {},
@@ -8,8 +9,7 @@ var items := {
 	5: {},
 }
 
-var rooms := []
-
+# Tiered spells
 var spells := {
 	1: {},
 	2: {},
@@ -38,7 +38,7 @@ var custom_seed := 0
 
 var level := 1
 
-var using_seed := 0
+var using_seed := 0 # WorldRNG's seed changes, this one doesn't
 
 var last_pickup :Item = null
 
@@ -47,6 +47,7 @@ func _ready():
 	print("Generator seed: ", generator_seed)
 	seed(generator_seed)
 	WorldRNG.seed = generator_seed
+	# Register items and spells
 	register_item(2, "heal", "Growth", "Return the flesh to a state previous", preload("res://Sprites/Items/Heal.png"))
 	register_item(1, "ironknees", "Iron Knees", "Fear the ground no more", preload("res://Sprites/Items/IronKnees.png"))
 	register_item(1, "thickblood", "Thick Blood", "Pressurized Veins", preload("res://Sprites/Items/ThickBlood.png"))
@@ -68,6 +69,7 @@ func _ready():
 	register_spell(1, "iceball", "Iceball", "Like a fire ball, but made of ice", preload("res://Sprites/Spells/Iceball.png"), preload("res://Spells/Iceball.tscn"))
 	register_spell(3, "palejoy", "Pale Joy", "I assure you, it's essential", preload("res://Sprites/Spells/PaleJoy.png"), preload("res://Spells/PaleJoy.tscn"))
 	
+	# If the player is in the tree, set the Player variable of this node to it
 	if not get_tree().get_nodes_in_group("Player").empty():
 		Player = get_tree().get_nodes_in_group("Player")[0]
 	var selected_wand := 0
@@ -75,6 +77,43 @@ func _ready():
 
 	player_wands[0] = Wand.new()
 	player_wands[1] = Wand.new()
+
+var simplex_noise := OpenSimplexNoise.new()
+
+func _process(delta):
+	# Fullscreen
+	if Input.is_action_just_pressed("ui_end"):
+		OS.window_fullscreen = !OS.window_fullscreen
+		OS.window_borderless = OS.window_fullscreen
+	
+	# Manage spell casts
+	for wand in player_wands:
+		if wand is Wand:
+			# If the wand is being used
+			if wand.running:
+				# It can't cast if it's on cooldown
+				if can_cast:
+					can_cast = false
+					if wand.current_spell < wand.spell_capacity and wand.spells[wand.current_spell] != null:
+						var spell :Node2D = wand.spells[wand.current_spell].entity.instance()
+						spell.Caster = Player
+						spell.goal = Player.get_local_mouse_position() + Player.position
+						Player.get_parent().add_child(spell)
+				# Cast cooldown
+				if (wand.current_spell >= wand.spell_capacity-1 or wand.spells[wand.current_spell] == null) and wand.recharge >= wand.full_recharge:
+					wand.recharge = 0.0
+					wand.running = false
+					can_cast = true
+					wand.current_spell = 0
+				# Recharge
+				elif wand.recharge >= wand.spell_recharge and (wand.current_spell < wand.spell_capacity and wand.spells[wand.current_spell] != null):
+					wand.recharge = 0.0
+					wand.current_spell += 1
+					can_cast = true
+				else:
+					wand.recharge += delta
+			else: # If the wand isn't being cast
+				wand.current_spell = 0
 
 
 func register_item(tier:int, name_id:String, name:String, desc:String, texture:Texture):
@@ -85,6 +124,7 @@ func register_item(tier:int, name_id:String, name:String, desc:String, texture:T
 	new.id = name_id
 	items[tier][name_id] = new
 	
+	
 func register_spell(tier:int, name_id:String, name:String, desc:String, texture :Texture, entity :PackedScene):
 	var new := Spell.new()
 	new.name = name
@@ -93,37 +133,6 @@ func register_spell(tier:int, name_id:String, name:String, desc:String, texture 
 	new.texture = texture
 	new.entity = entity
 	spells[tier][name_id] = new
-
-
-func _process(delta):
-	if Input.is_action_just_pressed("ui_end"):
-		OS.window_fullscreen = !OS.window_fullscreen
-		OS.window_borderless = OS.window_fullscreen
-	
-	
-	for wand in player_wands:
-		if wand is Wand:
-			if wand.running:
-				if can_cast:
-					can_cast = false
-					if wand.current_spell < wand.spell_capacity and wand.spells[wand.current_spell] != null:
-						var spell :Node2D = wand.spells[wand.current_spell].entity.instance()
-						spell.Caster = Player
-						spell.goal = Player.get_local_mouse_position() + Player.position
-						Player.get_parent().add_child(spell)
-				if (wand.current_spell >= wand.spell_capacity-1 or wand.spells[wand.current_spell] == null) and wand.recharge >= wand.full_recharge:
-					wand.recharge = 0.0
-					wand.running = false
-					can_cast = true
-					wand.current_spell = 0
-				elif wand.recharge >= wand.spell_recharge and (wand.current_spell < wand.spell_capacity and wand.spells[wand.current_spell] != null):
-					wand.recharge = 0.0
-					wand.current_spell += 1
-					can_cast = true
-				else:
-					wand.recharge += delta
-			else:
-				wand.current_spell = 0
 
 
 func pick_random_spell(rng:RandomNumberGenerator = LootRNG) -> Spell:
@@ -141,6 +150,7 @@ func pick_random_spell(rng:RandomNumberGenerator = LootRNG) -> Spell:
 		return pick_random_spell(rng)
 	return spells[tier].values()[rng.randi()%spells[tier].values().size()]
 
+
 func pick_random_item(rng:RandomNumberGenerator = LootRNG) -> Item:
 	var random := rng.randf()
 	var tier := 1
@@ -155,6 +165,7 @@ func pick_random_item(rng:RandomNumberGenerator = LootRNG) -> Item:
 	if items[tier].empty():
 		return pick_random_item(rng)
 	return items[tier].values()[rng.randi()%items[tier].values().size()]
+
 
 func reset_player():
 	last_pickup = null
@@ -177,6 +188,7 @@ func reset_player():
 	player_wands = [null,null,null,null,null,null]
 	player_wands[0] = Wand.new()
 	player_wands[1] = Wand.new()
+
 
 func shuffle_array(array: Array) -> Array:
 	var r := []

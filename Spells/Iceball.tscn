@@ -4,7 +4,7 @@
 [ext_resource path="res://Sprites/Spells/Entities/Iceball.png" type="Texture" id=2]
 
 [sub_resource type="CircleShape2D" id=1]
-radius = 5.0
+radius = 4.0
 
 [sub_resource type="CircleShape2D" id=2]
 radius = 7.0

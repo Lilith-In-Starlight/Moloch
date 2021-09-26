@@ -11,6 +11,8 @@ var timer := 0.0
 
 func _ready():
 	position = Caster.position
+	if Caster.has_method("cast_from"):
+		position = Caster.cast_from()
 	WorldMap = get_tree().get_nodes_in_group("World")[0]
 	rotate = goal.angle_to_point(position)
 	cast_to = Vector2(cos(rotate), sin(rotate))*124
@@ -23,6 +25,8 @@ func _physics_process(delta):
 		set_collision_mask_bit(0, true)
 	if is_instance_valid(Caster):
 		position = Caster.position
+		if Caster.has_method("cast_from"):
+			position = Caster.cast_from()
 	rotate = goal.angle_to_point(position)
 	cast_to = Vector2(cos(rotate), sin(rotate))*124
 	if is_instance_valid(Caster):

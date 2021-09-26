@@ -144,5 +144,10 @@ func _physics_process(delta):
 func health_object():
 	return health
 
+
 func looking_at():
 	return Player.position
+
+
+func cast_from():
+	return $Eye.position + position

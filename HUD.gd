@@ -1,5 +1,26 @@
 extends CanvasLayer
 
+onready var UsefulAdvice := $HUD/Generating/UsefulAdvice
+onready var LastItem := $HUD/LastItem
+onready var HotHUD := $HUD/Hot
+onready var ColdHUD := $HUD/Cold
+onready var DeathScreen := $HUD/Death
+onready var GeneratingScreen := $HUD/Generating
+onready var DeathScreenInfo := $HUD/Death/Info
+onready var MessageHUD := $HUD/Messages
+onready var ScrapsAmount := $HUD/Scraps/Amount
+onready var WandHUD := $HUD/Wands
+onready var SpellBagHUD := $HUD/SpellBag
+onready var WandSpellHUD := $HUD/Spells
+onready var DescriptionBox := $HUD/Description
+onready var ShortDescriptionBox := $HUD/ShortDesc
+onready var DescriptionBoxName := $HUD/Description/Name
+onready var DescriptionBoxInfo := $HUD/Description/Description
+onready var MouseSpellSlot := $HUD/MouseSlot
+onready var MouseWandSlot := $HUD/MouseWand
+
+var Player :KinematicBody2D
+
 
 var messages := []
 var message_timer := 0.0
@@ -22,145 +43,202 @@ var advice := [
 	"If an enemy attacks you, dodge",
 	"Use the controls to maneuver your character",
 	"If you find yourself surrounded by enemies, get out of there",
+	"If you find yourself surrounded by enemies, get out of there",
 ]
 var player_died := false
+var end_times : String # How long did the run last
+
+
 func _ready():
+	Player = get_tree().get_nodes_in_group("Player")[0]
 	if Items.level == 1:
 		Items.using_seed = Items.WorldRNG.seed
-	$HUD/Generating/UsefulAdvice.text = advice[randi()%advice.size()] + "\n"
-	$HUD/Generating/UsefulAdvice.text += "Seed: " + str(Items.using_seed)
-var end_times : String
-func _process(delta):
-	if Items.last_pickup == null:
-		$HUD/LastItem.texture = null
+	UsefulAdvice.text = advice[randi()%advice.size()] + "\n"
+	UsefulAdvice.text += "Seed: " + str(Items.using_seed)
+
+
+func _process(delta):	
+	# Control the temperature vignettes
+	if Player.health.temperature > 30:
+		HotHUD.modulate.a = lerp(HotHUD.modulate.a, (Player.health.temperature-30)/110.0, 0.2)
 	else:
-		$HUD/LastItem.texture = Items.last_pickup.texture
-	if get_tree().get_nodes_in_group("Player")[0].health.temperature > 30:
-		$HUD/Hot.modulate.a = lerp($HUD/Hot.modulate.a, (get_tree().get_nodes_in_group("Player")[0].health.temperature-30)/110.0, 0.2)
-	else:
-		$HUD/Cold.modulate.a = lerp($HUD/Cold.modulate.a, (get_tree().get_nodes_in_group("Player")[0].health.temperature-30)/-60.0, 0.2)
+		ColdHUD.modulate.a = lerp(ColdHUD.modulate.a, (Player.health.temperature-30)/-60.0, 0.2)
 	if generated and not player_died and not level_ended:
-		$HUD/Generating.modulate.a = move_toward($HUD/Generating.modulate.a, 0.0, 0.2)
-		
+		GeneratingScreen.modulate.a = move_toward(GeneratingScreen.modulate.a, 0.0, 0.2)
+	
+	# If the player is dead, show the death screen
 	if player_died:
-		$HUD/Death.modulate.a = move_toward($HUD/Death.modulate.a, 1.0, 0.2)
-		$HUD/Death/Info.text = "Run Time: " + end_times + "\n"
-		$HUD/Death/Info.text += "Levels: " + str(Items.level) + "\n"
-		$HUD/Death/Info.text += "Seed: " + str(Items.using_seed) + "\n\n"
-		$HUD/Death/Info.text += "Right click to start a new run"
-		if $HUD/Generating.modulate.a > 0.9:
+		DeathScreen.modulate.a = move_toward(DeathScreen.modulate.a, 1.0, 0.2)
+		DeathScreenInfo.text = "Run Time: " + end_times + "\n"
+		DeathScreenInfo.text += "Levels: " + str(Items.level) + "\n"
+		DeathScreenInfo.text += "Seed: " + str(Items.using_seed) + "\n\n"
+		DeathScreenInfo.text += "Right click to start a new run"
+		# If the Generating World screen is visible on screen
+		# the player's data is reset and the scene is reloaded
+		if GeneratingScreen.modulate.a > 0.9:
 			Items.reset_player()
 			get_tree().change_scene("res://Game.tscn")
+		
+		# If the player right clicks, generate a new world
 		if Input.is_action_just_released("Interact2"):
 			Items.player_health = Flesh.new()
-			$HUD/Generating.modulate.a = 1.0
+			GeneratingScreen.modulate.a = 1.0
+	
+	# If the player didn't die, and instead the level ended
 	elif level_ended:
-		if $HUD/Generating.modulate.a > 0.9:
+		# If the generating world screen is fully visible,
+		# reload the scene without resetting the player's progress
+		if GeneratingScreen.modulate.a > 0.9:
 			get_tree().change_scene("res://Game.tscn")
-		$HUD/Generating.modulate.a = move_toward($HUD/Generating.modulate.a, 1.0, 0.2)
+			
+		# Generating World screen fadein
+		GeneratingScreen.modulate.a = move_toward(GeneratingScreen.modulate.a, 1.0, 0.2)
+		
+		# The fadein must go after the check to make sure it's fully faded in
+		# when the scene change begins
+	
+	# If there are messages to read, show them
 	if not messages.empty():
-		$HUD/Messages.visible = true
+		MessageHUD.visible = true
 		message_timer += delta
-		$HUD/Messages.bbcode_text = "[center]" + messages[0] + "[/center]"
+		MessageHUD.bbcode_text = "[center]" + messages[0] + "[/center]"
 		if message_timer > messages[0].length()*0.2:
 			message_timer = 0.0
 			messages.pop_front()
 	else:
-		$HUD/Messages.visible = false
+		MessageHUD.visible = false
 	
-	$HUD/Scraps/Amount.text = str(Items.cloth_scraps)
-	for i in $HUD/Wands.get_child_count():
-		$HUD/Wands.get_child(i).render_wand(Items.player_wands[i], i == Items.selected_wand)
-				
-	for i in $HUD/SpellBag.get_child_count():
+	# Inventory and items in HUD
+	# Control the thing that displays the last picked up item
+	if Items.last_pickup == null:
+		LastItem.texture = null
+	else:
+		LastItem.texture = Items.last_pickup.texture
+	
+	# Shows the amount of clothes scraps the player has
+	ScrapsAmount.text = str(Items.cloth_scraps)
+	
+	# Show the wands the player is carrying
+	for i in WandHUD.get_child_count():
+		WandHUD.get_child(i).render_wand(Items.player_wands[i], i == Items.selected_wand)
+	
+	# Show the spells the player is carrying
+	for i in SpellBagHUD.get_child_count():
 		if Items.player_spells[i] != null:
-			$HUD/SpellBag.get_child(i).texture = Items.player_spells[i].texture
+			SpellBagHUD.get_child(i).texture = Items.player_spells[i].texture
 		else:
-			$HUD/SpellBag.get_child(i).texture = preload("res://Sprites/Spells/Empty.png")
+			SpellBagHUD.get_child(i).texture = preload("res://Sprites/Spells/Empty.png")
 	
-	for i in $HUD/Spells.get_child_count():
+	# Show the spells the wand the player is using has
+	for i in WandSpellHUD.get_child_count():
+		# If a non-empty wand slot is selected
 		if Items.player_wands[Items.selected_wand] != null:
-			$HUD/Spells.visible = true
+			# Make the spell hud visible
+			WandSpellHUD.visible = true
 			var wand :Wand = Items.player_wands[Items.selected_wand]
+			# If the wand has this slot
 			if i < wand.spell_capacity:
-				$HUD/Spells.get_child(i).visible = true
+				# Make it visible
+				WandSpellHUD.get_child(i).visible = true
+				# If the isn't empty, show the spell's texture
 				if wand.spells[i] != null:
-					$HUD/Spells.get_child(i).texture = wand.spells[i].texture
-				else:
-					$HUD/Spells.get_child(i).texture = preload("res://Sprites/Spells/Empty.png")
-			else:
-				$HUD/Spells.get_child(i).visible = false
-		else:
-			$HUD/Spells.visible = false
+					WandSpellHUD.get_child(i).texture = wand.spells[i].texture
+				else: # if it is empty, show the empty slot texture
+					WandSpellHUD.get_child(i).texture = preload("res://Sprites/Spells/Empty.png")
+			else: # If the wand doesn't have this slot
+				WandSpellHUD.get_child(i).visible = false
+		else: # If an empty wand slot is selected
+			WandSpellHUD.visible = false
 	
 	var mouse := get_viewport().get_mouse_position()
 	
-	$HUD/Description.visible = false
-	$HUD/ShortDesc.visible = false
-	$HUD/ShortDesc.rect_size.x = 0
+	# Reset the description boxes' visibility
+	DescriptionBox.visible = false
+	ShortDescriptionBox.visible = false
+	ShortDescriptionBox.rect_size.x = 0
+	# Variables for which inventory the player click and what slot
 	var clicked := -1
 	var slot := -1
-	block_cast = false
-	# Wands
+	block_cast = false # Also stop blocking the player's ability to
+	# cast spells
+	
+	# If the mouse is in the wands' area
 	if mouse.x < 116 and mouse.y > 4 and mouse.y < 20:
 		for i in 6:
+			# If a slot is selected
 			if mouse.x >= 4+i*(16+4) and mouse.x < 4+(i+1)*(16+4):
+				# Set the inventory and slot clicked, and don't let the
+				# player cast spells
 				clicked = 2
 				slot = i
-				block_cast = true
+				block_cast = true 
+				# If the slot isn't empty
 				if Items.player_wands[i] != null:
+					# Which information to set
 					if Input.is_key_pressed(KEY_SHIFT):
-						$HUD/Description.visible = true
-						$HUD/Description/Name.text = "Wand"
-						$HUD/Description/Description.text = "Cast Cooldown: " + str(Items.player_wands[i].spell_recharge).pad_decimals(3)
-						$HUD/Description/Description.text += "\nCooldown: " + str(Items.player_wands[i].full_recharge).pad_decimals(3)
+						DescriptionBox.visible = true
+						DescriptionBoxName.text = "Wand"
+						DescriptionBoxInfo.text = "Cast Cooldown: " + str(Items.player_wands[i].spell_recharge).pad_decimals(3)
+						DescriptionBoxInfo.text += "\nCooldown: " + str(Items.player_wands[i].full_recharge).pad_decimals(3)
 					else:
-						$HUD/ShortDesc.visible = true
-						var a :=  0.25
-						$HUD/ShortDesc.text =  str(Items.player_wands[i].spell_recharge).pad_decimals(2) + "/" + str(Items.player_wands[i].full_recharge).pad_decimals(2)
+						ShortDescriptionBox.visible = true
+						ShortDescriptionBox.text =  str(Items.player_wands[i].spell_recharge).pad_decimals(2) + "/" + str(Items.player_wands[i].full_recharge).pad_decimals(2)
+				break # Stop checking for if it's in a slot, we already did all this stuff
 	
-	# Spells
+	# If the mouse is in the wands' spells area and is holding a wand
 	if mouse.x < 116 and mouse.y > 25 and mouse.y < 25+16 and Items.player_wands[Items.selected_wand] != null:
 		var wand :Wand = Items.player_wands[Items.selected_wand]
 		for i in 6:
+			# If it's in a slot
 			if mouse.x >= 4+i*(16+4) and mouse.x < 4+(i+1)*(16+4):
+				# Don't let the player cast spells
 				block_cast = true
 				clicked = 1
+				# If this slot is had by the wand
 				if i < wand.spell_capacity:
+					# Then this is the slot that was clicked (aka I didn't click an empty area)
 					slot = i
+					# Set the description accordingly
 					if wand.spells[i] != null:
 						if Input.is_key_pressed(KEY_SHIFT):
-							$HUD/Description.visible = true
-							$HUD/Description/Name.text = wand.spells[i].name
-							$HUD/Description/Description.text = wand.spells[i].description
+							DescriptionBox.visible = true
+							DescriptionBoxName.text = wand.spells[i].name
+							DescriptionBoxInfo.text = wand.spells[i].description
 						else:
-							$HUD/ShortDesc.visible = true
-							$HUD/ShortDesc.text =  wand.spells[i].name
+							ShortDescriptionBox.visible = true
+							ShortDescriptionBox.text =  wand.spells[i].name
 	
-	if mouse.x < 16 + 4 and mouse.y > 62 and mouse.y < 178 and mouse.x > 4:
+	# If the mouse is in the spells bag's area and is holding a wand
+	elif mouse.x < 16 + 4 and mouse.y > 62 and mouse.y < 178 and mouse.x > 4:
 		for i in 6:
+			# If it's in a slot
 			if mouse.y >= 62+i*(16+4) and mouse.y < 62+(i+1)*(16+4):
+				# Set what inventory and slot was clicked, block spell casts
 				block_cast = true
 				clicked = 0
 				slot = i
+				# Descriptions
 				if Items.player_spells[i] != null:
 					if Input.is_key_pressed(KEY_SHIFT):
-						$HUD/Description.visible = true
-						$HUD/Description/Name.text = Items.player_spells[i].name
-						$HUD/Description/Description.text = Items.player_spells[i].description
+						DescriptionBox.visible = true
+						DescriptionBoxName.text = Items.player_spells[i].name
+						DescriptionBoxInfo.text = Items.player_spells[i].description
 					else:
-						$HUD/ShortDesc.visible = true
-						$HUD/ShortDesc.text =  Items.player_spells[i].name
+						ShortDescriptionBox.visible = true
+						ShortDescriptionBox.text =  Items.player_spells[i].name
 	
-	if Items.last_pickup != null and mouse.x > 4 and mouse.y > 184 and mouse.x < 20 and mouse.y < 200:
+	# If the player is hovering over the last picked_up item, handle descriptions
+	elif Items.last_pickup != null and mouse.x > 4 and mouse.y > 184 and mouse.x < 20 and mouse.y < 200:
 		if Input.is_key_pressed(KEY_SHIFT):
-			$HUD/Description.visible = true
-			$HUD/Description/Name.text = Items.last_pickup.name
-			$HUD/Description/Description.text = Items.last_pickup.description
+			DescriptionBox.visible = true
+			DescriptionBoxName.text = Items.last_pickup.name
+			DescriptionBoxInfo.text = Items.last_pickup.description
 		else:
-			$HUD/ShortDesc.visible = true
-			$HUD/ShortDesc.text = Items.last_pickup.name
+			ShortDescriptionBox.visible = true
+			ShortDescriptionBox.text = Items.last_pickup.name
 	
+	# If the player clicks a part of the inventory, swap that slot's content
+	# with the mouse slot's content
 	if Input.is_action_just_pressed("Interact1") and clicked != -1:
 		match clicked:
 			1:
@@ -180,38 +258,44 @@ func _process(delta):
 					Items.player_wands[slot] = mouse_wand
 					mouse_wand = k
 	
+	# If the player right clicks and is not in an inventory space
+	# drop the  item
 	if Input.is_action_just_pressed("Interact2") and clicked == -1:
 		if mouse_spell != null:
 			var new := preload("res://Items/SpellEntity.tscn").instance()
 			new.spell = mouse_spell
 			get_parent().add_child(new)
-			new.position = get_tree().get_nodes_in_group("Player")[0].position
+			new.position = Player.position
 			new.linear_velocity.x = -120 + randf()*240
 		mouse_spell = null
 		if mouse_wand != null:
 			var new := preload("res://Items/WandEntity.tscn").instance()
 			new.wand = mouse_wand
 			get_parent().add_child(new)
-			new.position = get_tree().get_nodes_in_group("Player")[0].position
+			new.position = Player.position
 			new.linear_velocity.x = -120 + randf()*240
 		mouse_wand = null
 	
-	$HUD/MouseSlot.visible = mouse_spell != null
-	$HUD/MouseWand.visible = mouse_wand != null
-	$HUD/MouseSlot.rect_position = mouse + Vector2(-16,0)
-	$HUD/MouseWand.rect_position = mouse + Vector2(0,-16)
+	# Hide the mouse slots if they have nothing
+	MouseSpellSlot.visible = mouse_spell != null
+	MouseWandSlot.visible = mouse_wand != null
 	if mouse_spell != null:
-		$HUD/MouseSlot.texture = mouse_spell.texture
+		MouseSpellSlot.texture = mouse_spell.texture
 	if mouse_wand != null:
-		$HUD/MouseWand.render_wand(mouse_wand, true)
-		
+		MouseWandSlot.render_wand(mouse_wand, true)
+	# Position them
+	MouseSpellSlot.rect_position = mouse + Vector2(-16,0)
+	MouseWandSlot.rect_position = mouse + Vector2(0,-16)
 	
-	$HUD/Description.rect_size = Vector2(144, 18+$HUD/Description/Description.rect_size.y+4)
-	if mouse.y + $HUD/Description.rect_size.y > 225:
-		$HUD/Description.rect_position = mouse - Vector2(0, $HUD/Description.rect_size.y)
+	# Set the size of the description box
+	DescriptionBox.rect_size = Vector2(144, 18+DescriptionBoxInfo.rect_size.y+4)
+	
+	# Move the description box up if it's offscreen
+	if mouse.y + DescriptionBox.rect_size.y > 225:
+		DescriptionBox.rect_position = mouse - Vector2(0, DescriptionBox.rect_size.y)
 	else:
-		$HUD/Description.rect_position = mouse
-	$HUD/ShortDesc.rect_position = mouse
+		DescriptionBox.rect_position = mouse
+	ShortDescriptionBox.rect_position = mouse
 
 
 func add_message(message:String):
@@ -222,6 +306,7 @@ func _on_generated_world():
 	generated = true
 
 
+# Calculate time in minutes and seconds
 func _on_player_died():
 	var msecs :int = OS.get_ticks_msec() - Items.run_start_time
 	var secs = float(msecs) / 1000.0

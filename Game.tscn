@@ -1,14 +1,16 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://EditorTileset.tres" type="TileSet" id=2]
 [ext_resource path="res://World.gd" type="Script" id=3]
+[ext_resource path="res://Sprites/Blocks/RedBackgrounTile.png" type="Texture" id=4]
 [ext_resource path="res://dpcomic.ttf" type="DynamicFontData" id=5]
 [ext_resource path="res://HUD.gd" type="Script" id=6]
 [ext_resource path="res://Minimap.gd" type="Script" id=7]
 [ext_resource path="res://Sprites/Spells/Empty.png" type="Texture" id=8]
 [ext_resource path="res://WandRenderRect.tscn" type="PackedScene" id=9]
 [ext_resource path="res://Sprites/Items/Scraps.png" type="Texture" id=10]
+[ext_resource path="res://Background.gd" type="Script" id=11]
 
 [sub_resource type="CanvasItemMaterial" id=1]
 blend_mode = 1
@@ -92,6 +94,117 @@ use_mipmaps = true
 font_data = ExtResource( 5 )
 
 [node name="Game" type="Node2D"]
+
+[node name="Background" type="CanvasLayer" parent="."]
+layer = -24
+follow_viewport_enable = true
+script = ExtResource( 11 )
+
+[node name="Following" type="Control" parent="Background"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bg1" type="TextureRect" parent="Background/Following"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 400.0
+margin_bottom = 225.0
+texture = ExtResource( 4 )
+stretch_mode = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bg2" type="TextureRect" parent="Background/Following"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 400.0
+margin_bottom = 225.0
+texture = ExtResource( 4 )
+stretch_mode = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bg3" type="TextureRect" parent="Background/Following"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 400.0
+margin_bottom = 225.0
+texture = ExtResource( 4 )
+stretch_mode = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bg4" type="TextureRect" parent="Background/Following"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 400.0
+margin_bottom = 225.0
+texture = ExtResource( 4 )
+stretch_mode = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bg5" type="TextureRect" parent="Background/Following"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 400.0
+margin_bottom = 225.0
+texture = ExtResource( 4 )
+stretch_mode = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bg6" type="TextureRect" parent="Background/Following"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 400.0
+margin_bottom = 225.0
+texture = ExtResource( 4 )
+stretch_mode = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bg7" type="TextureRect" parent="Background/Following"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 400.0
+margin_bottom = 225.0
+texture = ExtResource( 4 )
+stretch_mode = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bg8" type="TextureRect" parent="Background/Following"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 400.0
+margin_bottom = 225.0
+texture = ExtResource( 4 )
+stretch_mode = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bg9" type="TextureRect" parent="Background/Following"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = 400.0
+margin_bottom = 225.0
+texture = ExtResource( 4 )
+stretch_mode = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="HUD" type="CanvasLayer" parent="." groups=[
 "HUD",
