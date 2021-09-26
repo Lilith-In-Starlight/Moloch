@@ -141,7 +141,7 @@ func _process(delta):
 	Cam.offset += (coffset-Cam.offset)/5.0
 	
 	# Death
-	if (health.temperature > 145 or health.soul <= 0.0 or health.blood <= 0.0 or Input.is_key_pressed(KEY_G)) and not dead:
+	if (health.temperature > 145 or health.temperature < -35 or health.soul <= 0.0 or health.blood <= 0.0 or Input.is_key_pressed(KEY_G)) and not dead:
 		emit_signal("player_died")
 		state = STATES.DEAD
 		dead = true
@@ -457,7 +457,7 @@ func _physics_process(delta):
 					elif Input.is_action_pressed("down"):
 						speed.y = lerp(speed.y, 90, 0.3)
 					else:
-						speed.y = lerp(speed.y, 0, 0.3)
+						speed.y = lerp(speed.y, 10, 0.3)
 					
 					if Input.is_action_just_pressed("jump") or jump_buffer > 0.0:
 						jump_buffer = 0.2
