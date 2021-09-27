@@ -166,7 +166,7 @@ func _process(delta):
 		
 	if Items.player_items.has("soulfulpill"):
 		Items.player_items.erase("soulfulpill")
-		health.soul += 0.1+randf()*0.2
+		health.soul += 0.3+randf()*0.2
 	
 	# Control wand HUD
 	if Items.player_wands[Items.selected_wand] is Wand and Input.is_action_just_pressed("Interact1") and not Items.player_wands[Items.selected_wand].running and not get_tree().get_nodes_in_group("HUD")[0].block_cast:
