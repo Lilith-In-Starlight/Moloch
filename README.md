@@ -25,9 +25,12 @@ You are a child who was sacrificed by your parents to the god at the top of The 
 Instead of health points, Moloch's health system is based on different kinds of conditions, some of which might not even kill you, but can make the game impossible to play. The clearest example is fall damage: In Moloch, when you fall from dangerous heights, you can lose your legs, rendering you unable to walk or jump for the rest of the run, and depending on how the run was going, this might mean you have to restart.
 
 This is done for every entity, not only the player.
+
+### Fuck Around And Find Out
+In Moloch, the only permanent upgrade you have between runs is knowledge about the consequences of your actions. Also the consequences of actions that are unrelated to you. One way to learn is by having other people help you understand things. The other is messing with things and seeing what your brand new kind of death looks like.
  
 ### Custom wands
-Moloch allows you to collect spells, letting you move them from wands and create your ultimate weapon of mass destruction. Careful, though! Migth get a heat stroke!
+Moloch allows you to collect spells, letting you move them from wands and create your ultimate weapon of mass destruction. Careful, though! Some spells generate heat, which might give you a heat stroke. 
 
 ### Destructible levels
-Mostly everything can be destroyed if you have the right spells for it. Mostly.
+Mostly everything can be destroyed if you have the right spells for it. Mostly. This means that, with the right equipment, nothing stops you from skipping rooms entirely or digging out of the worlds. Who knows what lies out there.
