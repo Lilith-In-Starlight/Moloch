@@ -24,6 +24,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Spell.gd"
 }, {
+"base": "Resource",
+"class": "SpellCastInfo",
+"language": "GDScript",
+"path": "res://SpellCastInfo.gd"
+}, {
+"base": "Spell",
+"class": "SpellMod",
+"language": "GDScript",
+"path": "res://SpellModifier.gd"
+}, {
 "base": "Reference",
 "class": "Wand",
 "language": "GDScript",
@@ -33,6 +43,8 @@ _global_script_class_icons={
 "Flesh": "",
 "Item": "",
 "Spell": "",
+"SpellCastInfo": "",
+"SpellMod": "",
 "Wand": ""
 }
 

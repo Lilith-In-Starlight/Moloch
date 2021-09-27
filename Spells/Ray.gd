@@ -1,22 +1,18 @@
 extends RayCast2D
 
 var rotate := 0.0
-var Caster :Node2D
 
 var timer := 0.0
 
+var CastInfo := SpellCastInfo.new()
 
-var goal :Vector2
 var did := false
 
 func _ready():
 	enabled = true
-	position = Caster.position
-	if Caster.has_method("cast_from"):
-		position = Caster.cast_from()
-	rotate = goal.angle_to_point(position)
-	if Caster.name != "Player":
-		set_collision_mask_bit(0, true)
+	CastInfo.set_position(self)
+	CastInfo.set_goal()
+	rotate = CastInfo.goal.angle_to_point(position)
 	cast_to = Vector2(cos(rotate), sin(rotate))*1000
 
 func _physics_process(delta):

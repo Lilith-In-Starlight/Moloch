@@ -96,8 +96,8 @@ func _process(delta):
 					can_cast = false
 					if wand.current_spell < wand.spell_capacity and wand.spells[wand.current_spell] != null:
 						var spell :Node2D = wand.spells[wand.current_spell].entity.instance()
-						spell.Caster = Player
-						spell.goal = Player.get_local_mouse_position() + Player.position
+						spell.CastInfo.Caster = Player
+						spell.CastInfo.goal = Player.looking_at()
 						Player.get_parent().add_child(spell)
 				# Cast cooldown
 				if (wand.current_spell >= wand.spell_capacity-1 or wand.spells[wand.current_spell] == null) and wand.recharge >= wand.full_recharge:

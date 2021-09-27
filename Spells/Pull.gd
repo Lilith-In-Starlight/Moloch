@@ -1,12 +1,12 @@
 extends Area2D
 
-var Caster :Node2D
-var goal :Vector2
+var CastInfo := SpellCastInfo.new()
+
 var strength := 10.0
 var particles := []
 
 func _ready():
-	position = Caster.position
+	CastInfo.set_position(self)
 
 func _physics_process(delta):
 	strength -= delta
