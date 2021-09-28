@@ -19,3 +19,7 @@ func set_goal():
 	if is_instance_valid(Caster):
 		if Caster.has_method("looking_at"):
 			goal = Caster.looking_at() + goal_offset
+
+
+func get_angle(CastEntity:Node2D) -> float:
+	return goal.angle_to_point(CastEntity.position)
