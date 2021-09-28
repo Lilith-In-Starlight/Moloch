@@ -1,16 +1,17 @@
 extends KinematicBody2D
 
 
-var Caster :Node2D
-var goal :Vector2
+var CastInfo := SpellCastInfo.new()
+
 var frames := 0
 var rotate := 0.0
 
 func _ready():
-	rotate = (goal).angle_to_point(Caster.position)
-	position = Caster.position + Vector2(cos(rotate), sin(rotate))*12
-	if Caster.has_method("cast_from"):
-		position = Caster.cast_from()
+	CastInfo.set_position(self)
+	CastInfo.set_goal()
+	rotate = CastInfo.goal.angle_to_point(position)
+	if CastInfo.Caster.has_method("health_object"):
+		CastInfo.Caster.health_object().temp_change((-12.0 - randf() * 6.0) * 0.2)
 
 func _physics_process(delta):
 	for body in $Area.get_overlapping_bodies():
@@ -23,7 +24,7 @@ func _physics_process(delta):
 
 func _on_body_entered(body):
 	if body.has_method("health_object"):
-		if (is_instance_valid(Caster) and (body != Caster or frames >= 3)) or not is_instance_valid(Caster):
+		if (is_instance_valid(CastInfo.Caster) and (body != CastInfo.Caster or frames >= 3)) or not is_instance_valid(CastInfo.Caster):
 			body.health_object().temp_change(12.0 + randf() * 6.0)
 			queue_free()
 	elif body.is_in_group("World"):

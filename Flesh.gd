@@ -21,6 +21,7 @@ var hypertemperature := 45.0
 var hypotemperature := 5.0
 var death_hypertemperature := 140.0
 var death_hypotemperature := -40.0
+var temp_regulation := 0.002
 
 
 var has_soul := true

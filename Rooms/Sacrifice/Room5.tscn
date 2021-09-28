@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://EditorTileset.tres" type="TileSet" id=1]
 [ext_resource path="res://Room.gd" type="Script" id=2]
+[ext_resource path="res://Elements/Pole.tscn" type="PackedScene" id=3]
 
 [node name="Room" type="TileMap"]
 tile_set = ExtResource( 1 )
@@ -46,3 +47,7 @@ position = Vector2( 336, 240 )
 "Vases",
 ]]
 position = Vector2( 104, 0 )
+
+[node name="Pole" parent="." instance=ExtResource( 3 )]
+position = Vector2( 64, 24 )
+size = 24

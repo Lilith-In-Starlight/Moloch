@@ -229,6 +229,14 @@ func _ready():
 		new_sprite.came_from = sprite.came_from
 		add_child(new_sprite)
 		sprite.queue_free()
+	print("    - Poles")
+	for sprite in get_tree().get_nodes_in_group("Pole"):
+		var new_sprite := preload("res://Elements/Pole.tscn").instance()
+		new_sprite.position = sprite.global_position
+		new_sprite.z_index = -1
+		new_sprite.size = sprite.size
+		add_child(new_sprite)
+		sprite.queue_free()
 	print("    - Air Conditioning Units")
 	for sprite in get_tree().get_nodes_in_group("AC"):
 		var new_sprite := preload("res://Elements/AC.tscn").instance()
@@ -257,7 +265,6 @@ func _ready():
 
 func _process(delta):
 	if fill_x >= max_point.x:
-		update_bitmask_region(min_point, max_point)
 		print("Step 5: Adding enemies")
 		var added := 0
 		for a in areas:
@@ -321,7 +328,9 @@ func fill_empty_space():
 			fill_y = min_point.y
 			fill_x += 1
 			i += 1
+		
 		if i > iterations:
+			update_bitmask_region(Vector2(fill_x-i, min_point.y), Vector2(fill_x, max_point.y))
 			var msec :int = OS.get_ticks_msec() - start
 			if msec > 200:
 				iterations -= 1

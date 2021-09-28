@@ -20,7 +20,7 @@ var running := false
 
 
 func _init():
-	if Items.LootRNG.randf() < 0.1:
+	if Items.LootRNG.randf() < 0.15:
 		shuffle = true
 	var randspell = Items.pick_random_spell()
 	spells.append(randspell)
@@ -36,6 +36,7 @@ func _init():
 func string():
 	return "SC: " + str(spell_capacity) + " SR: " + str(spell_recharge) + " FR: " + str(full_recharge) + " S: " + str(spells) + " RC: " + str(recharge) + " R: " + str(running) + " CS: " + str(current_spell)
 
+
 func duplicate():
 	var w = get_script().new()
 	w.spell_capacity = spell_capacity
@@ -46,3 +47,15 @@ func duplicate():
 	w.color3 = color3
 	w.spells = spells.duplicate()
 	return w
+
+
+func shuffle():
+	if shuffle:
+		spells.shuffle()
+		for s in spells.size():
+			if spells[s] == null:
+				for s2 in range(s, spells.size()):
+					if spells[s2] != null:
+						spells[s] = spells[s2]
+						spells[s2] = null
+						break

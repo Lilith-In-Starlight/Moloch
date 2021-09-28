@@ -179,7 +179,9 @@ func _process(delta):
 						DescriptionBox.visible = true
 						DescriptionBoxName.text = "Wand"
 						DescriptionBoxInfo.text = "Cast Cooldown: " + str(Items.player_wands[i].spell_recharge).pad_decimals(3)
-						DescriptionBoxInfo.text += "\nCooldown: " + str(Items.player_wands[i].full_recharge).pad_decimals(3)
+						DescriptionBoxInfo.text += "\nRecharge Time: " + str(Items.player_wands[i].full_recharge).pad_decimals(3)
+						if Items.player_wands[i].shuffle:
+							DescriptionBoxInfo.text += "\nShuffle"
 					else:
 						ShortDescriptionBox.visible = true
 						ShortDescriptionBox.text =  str(Items.player_wands[i].spell_recharge).pad_decimals(2) + "/" + str(Items.player_wands[i].full_recharge).pad_decimals(2)

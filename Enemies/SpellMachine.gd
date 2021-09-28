@@ -96,8 +96,8 @@ func _physics_process(delta):
 				position_timer = 0.0
 				speed = -(last_seen-position).normalized()*30
 				var orb := spell.entity.instance()
-				orb.goal = last_seen
-				orb.Caster = self
+				orb.CastInfo.goal = last_seen
+				orb.CastInfo.Caster = self
 				get_parent().add_child(orb)
 
 		STATES.RECOIL:
@@ -108,7 +108,7 @@ func _physics_process(delta):
 			position_timer += delta
 			if $RayCast2D.is_colliding():
 				if $RayCast2D.get_collider() == Player:
-					last_seen = Player.position
+					last_seen = last_seen.move_toward(Player.position, 3*delta*60)
 			if position_timer >= 0.5:
 				if $RayCast2D.is_colliding():
 					if $RayCast2D.get_collider() == Player:
@@ -146,7 +146,7 @@ func health_object():
 
 
 func looking_at():
-	return Player.position
+	return last_seen
 
 
 func cast_from():

@@ -3,23 +3,20 @@ extends Area2D
 
 var rotate := 0.0
 var WorldMap :TileMap
-var Caster :Node2D
 
 var timer := 0.0
 
 var noise := OpenSimplexNoise.new()
 
-var goal :Vector2 = Vector2(0, 0)
+var CastInfo := SpellCastInfo.new()
 
 
 func _ready():
-	noise.seed = randi()
-	position = Caster.position
 	WorldMap = get_tree().get_nodes_in_group("World")[0]
-	rotate = goal.angle_to_point(position)
-	position = Caster.position + Vector2(cos(rotate), sin(rotate))*7.0
-	if Caster.has_method("cast_from"):
-		position = Caster.cast_from()
+	noise.seed = randi()
+	CastInfo.set_position(self)
+	CastInfo.set_goal()
+	rotate = CastInfo.goal.angle_to_point(position)
 	
 
 
@@ -40,7 +37,7 @@ func _draw():
 func _on_body_entered(body):
 	if timer > 0.32:
 		if body.has_method("health_object"):
-			body.health_object().shatter_soul(0.3)
+			body.health_object().shatter_soul(0.2)
 		queue_free()
 	if body.is_in_group("World"):
 		queue_free()

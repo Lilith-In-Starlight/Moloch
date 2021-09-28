@@ -44,6 +44,8 @@ func _process(delta):
 					TYPES.SPELL:
 						var new := preload("res://Items/SpellEntity.tscn").instance()
 						new.spell = Items.pick_random_spell()
+						if Items.LootRNG.randf() < 0.18:
+							new.spell = Items.pick_random_modifier()
 						get_parent().add_child(new)
 						new.position = position
 						new.linear_velocity.x = -120 + randf()*240

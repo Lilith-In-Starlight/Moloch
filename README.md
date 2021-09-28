@@ -8,12 +8,16 @@ Moloch is the roguelike of all the horrible futures. Instead of health points, t
 You are a child who was sacrificed by your parents to the god at the top of The Ancient Tower. The tradeoff is simple: Throw away what you love most, and I can give you power. You refuse to let yourself be murdered by the people and the creatures inhabiting the tower, and in a desperate attempt to survive, you begin your ascent.
 
 ## Controls
-- **WASD:** Moving, jumping and opening chests
-- **Left Click:** Cast the spells in your wand, select items from your inventory to move spells around
-- **Right Click, with an item selected:** Delete the spell or wand
-- **G:** Instantly die
-- **Shift:** Display extra information when hovering on an item in the inventory
-- **R:** Cover your wounds with cloth to stop the bleeding
+
+- **Movement:** WASD
+- **Jump:** Space
+- **Hold onto poles:** W, S
+- **Use wand:** Left click
+- **Organize inventory:** Left click; right click to throw away
+- **Change selected wand:** Numbers from 1 to 6; Scroll wheel
+- **Display extra item information:** Shift
+- **Instantly die:** G
+- **Cover bleeding wounds:** R
 
 
 ## Features
@@ -21,9 +25,12 @@ You are a child who was sacrificed by your parents to the god at the top of The 
 Instead of health points, Moloch's health system is based on different kinds of conditions, some of which might not even kill you, but can make the game impossible to play. The clearest example is fall damage: In Moloch, when you fall from dangerous heights, you can lose your legs, rendering you unable to walk or jump for the rest of the run, and depending on how the run was going, this might mean you have to restart.
 
 This is done for every entity, not only the player.
+
+### Fuck Around And Find Out
+In Moloch, the only permanent upgrade you have between runs is knowledge about the consequences of your actions. Also the consequences of actions that are unrelated to you. One way to learn is by having other people help you understand things. The other is messing with things and seeing what your brand new kind of death looks like.
  
 ### Custom wands
-Moloch allows you to collect spells, letting you move them from wands and create your ultimate weapon of mass destruction. Careful, though! Migth get a heat stroke!
+Moloch allows you to collect spells, letting you move them from wands and create your ultimate weapon of mass destruction. Careful, though! Some spells generate heat, which might give you a heat stroke. There are also different modifiers that let you make your wands more powerful and more dangerous, just place one before the spells it'll affect and watch chaos unfold.
 
 ### Destructible levels
-Mostly everything can be destroyed if you have the right spells for it. Mostly.
+Mostly everything can be destroyed if you have the right spells for it. Mostly. This means that, with the right equipment, nothing stops you from skipping rooms entirely or digging out of the world and miserably ending your run by falling to the void.

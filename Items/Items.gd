@@ -18,6 +18,11 @@ var spells := {
 	5: {},
 }
 
+const CHANCE_TIER1 := 0.78
+const CHANCE_TIER2 := 0.18
+const CHANCE_TIER3 := 0.038
+const CHANCE_TIER4 := 0.002
+
 var player_items := []
 
 var player_spells := [null,null,null,null,null,null]
@@ -57,6 +62,9 @@ func _ready():
 	register_item(1, "soulfulpill", "Soulful Pill", "Heals the mind", preload("res://Sprites/Items/SoulfulPill.png"))
 	register_item(2, "monocle", "Pig's Monocle", "See all the shinies", preload("res://Sprites/Items/PigsMonocle.png"))
 	register_item(2, "bandaid", "Band-aid", "Makes it more likely for bleeding to stop on its own", preload("res://Sprites/Items/Bandaid.png"))
+	register_item(1, "icecube", "Ice Cube", "Lowers your temperature a bit", preload("res://Sprites/Items/IceCube.png"))
+	register_item(3, "dissipator", "Black Body Radiation", "Your body temperature lowers slightly faster", preload("res://Sprites/Items/DissipateHeat.png"))
+	register_item(2, "heatadapt", "Heat Adaptation", "You become able to stand slightly greater temperatures", preload("res://Sprites/Items/SurviveHeat.png"))
 	
 	register_spell(4, "fuck you", "Fuck You", "Fuck everything in that particular direction", preload("res://Sprites/Spells/FuckYou.png"), preload("res://Spells/FuckYou.tscn"))
 	register_spell(2, "evilsight", "Evil Eye", "Look at things so fiercely you tear them apart", preload("res://Sprites/Spells/EvilEye.png"), preload("res://Spells/EvilSight.tscn"))
@@ -68,6 +76,9 @@ func _ready():
 	register_spell(1, "fireball", "Fireball", "Like an ice ball, but made of fire", preload("res://Sprites/Spells/Fireball.png"), preload("res://Spells/Fireball.tscn"))
 	register_spell(1, "iceball", "Iceball", "Like a fire ball, but made of ice", preload("res://Sprites/Spells/Iceball.png"), preload("res://Spells/Iceball.tscn"))
 	register_spell(3, "palejoy", "Pale Joy", "I assure you, it's essential", preload("res://Sprites/Spells/PaleJoy.png"), preload("res://Spells/PaleJoy.tscn"))
+	register_spell(2, "xblast", "Crossblast", "Summons a small X-shaped explosion", preload("res://Sprites/Spells/CrossBlast.png"), preload("res://Spells/CrossBlast.tscn"))
+	register_spell(1, "bouncysoul", "Ball Of Soul", "Creates a ball of soul that bounces on every surface", preload("res://Sprites/Spells/BouncySoul.png"), preload("res://Spells/BouncySoul.tscn"))
+	register_spell(2, "souleater", "Soul Eater", "If it hits something with soul, it steals it for you, hurts you otherwise", preload("res://Sprites/Spells/SoulEater.png"), preload("res://Spells/SoulEater.tscn"))
 	
 	# If the player is in the tree, set the Player variable of this node to it
 	if not get_tree().get_nodes_in_group("Player").empty():
@@ -94,11 +105,7 @@ func _process(delta):
 				# It can't cast if it's on cooldown
 				if can_cast:
 					can_cast = false
-					if wand.current_spell < wand.spell_capacity and wand.spells[wand.current_spell] != null:
-						var spell :Node2D = wand.spells[wand.current_spell].entity.instance()
-						spell.Caster = Player
-						spell.goal = Player.get_local_mouse_position() + Player.position
-						Player.get_parent().add_child(spell)
+					wand.current_spell += cast_spell(wand)
 				# Cast cooldown
 				if (wand.current_spell >= wand.spell_capacity-1 or wand.spells[wand.current_spell] == null) and wand.recharge >= wand.full_recharge:
 					wand.recharge = 0.0
@@ -136,15 +143,15 @@ func register_spell(tier:int, name_id:String, name:String, desc:String, texture 
 
 
 func pick_random_spell(rng:RandomNumberGenerator = LootRNG) -> Spell:
-	var random := rng.randf()
+	var random := rng.randf()*(CHANCE_TIER1 + CHANCE_TIER2 + CHANCE_TIER3 + CHANCE_TIER4)
 	var tier := 1
-	if random < 0.68:
+	if random < CHANCE_TIER1:
 		tier = 1
-	elif random < 0.9:
+	elif random < CHANCE_TIER1 + CHANCE_TIER2:
 		tier = 2
-	elif random < 0.998:
+	elif random < CHANCE_TIER1 + CHANCE_TIER2 + CHANCE_TIER3:
 		tier = 3
-	elif random < 1.0:
+	elif random < CHANCE_TIER1 + CHANCE_TIER2 + CHANCE_TIER3 + CHANCE_TIER4:
 		tier = 4
 	if spells[tier].empty():
 		return pick_random_spell(rng)
@@ -152,19 +159,37 @@ func pick_random_spell(rng:RandomNumberGenerator = LootRNG) -> Spell:
 
 
 func pick_random_item(rng:RandomNumberGenerator = LootRNG) -> Item:
-	var random := rng.randf()
+	var random := rng.randf()*(CHANCE_TIER1 + CHANCE_TIER2 + CHANCE_TIER3 + CHANCE_TIER4)
 	var tier := 1
-	if random < 0.68:
+	if random < CHANCE_TIER1:
 		tier = 1
-	elif random < 0.9:
+	elif random < CHANCE_TIER1 + CHANCE_TIER2:
 		tier = 2
-	elif random < 0.998:
+	elif random < CHANCE_TIER1 + CHANCE_TIER2 + CHANCE_TIER3:
 		tier = 3
-	elif random < 1.0:
+	elif random < CHANCE_TIER1 + CHANCE_TIER2 + CHANCE_TIER3 + CHANCE_TIER4:
 		tier = 4
 	if items[tier].empty():
 		return pick_random_item(rng)
 	return items[tier].values()[rng.randi()%items[tier].values().size()]
+
+
+func pick_random_modifier(rng:RandomNumberGenerator = LootRNG) -> SpellMod:
+	var mod := SpellMod.new()
+	match rng.randi()%2:
+		1:
+			mod.level = 1 + rng.randi() % 5
+			mod.id = "multiplicative"
+			mod.name = "Multiplicative Cast"
+			mod.description = "Many from alterations of one\nIterations: " + str(mod.level)
+			mod.texture = preload("res://Sprites/Spells/Modifiers/Multiplicative.png")
+		2:
+			mod.level = 1 + rng.randi() % 5
+			mod.id = "unifying"
+			mod.name = "Unifying Cast"
+			mod.description = "One from alterations of many\nAmalgamations: " + str(mod.level)
+			mod.texture = preload("res://Sprites/Spells/Modifiers/UnifyingM.png")
+	return mod
 
 
 func reset_player():
@@ -185,6 +210,8 @@ func reset_player():
 	cloth_scraps = 3
 	player_items = []
 	player_spells = [null,null,null,null,null,null]
+	if LootRNG.randf() < 0.25:
+		player_spells[0] = pick_random_modifier()
 	player_wands = [null,null,null,null,null,null]
 	player_wands[0] = Wand.new()
 	player_wands[1] = Wand.new()
@@ -199,3 +226,29 @@ func shuffle_array(array: Array) -> Array:
 			n.append(i)
 			r.append(array[i])
 	return r
+
+
+func cast_spell(wand:Wand, slot_offset := 0, goal_offset := Vector2(0, 0)):
+	var away := 0
+	if wand.current_spell+slot_offset < wand.spell_capacity and wand.spells[wand.current_spell+slot_offset] != null:
+		var c_spell :Spell = wand.spells[wand.current_spell+slot_offset] 
+		if not c_spell is SpellMod:
+			var spell :Node2D = wand.spells[wand.current_spell+slot_offset].entity.instance()
+			spell.CastInfo.Caster = Player
+			spell.CastInfo.goal = Player.looking_at()
+			spell.CastInfo.goal_offset = goal_offset
+			Player.get_parent().add_child(spell)
+		elif wand.current_spell + slot_offset + 1 < wand.spell_capacity and wand.spells[wand.current_spell+slot_offset+1] != null:
+			match c_spell.id:
+				"multiplicative":
+					away += 1
+					for i in c_spell.level:
+						var offset :Vector2 = (Player.looking_at()-Player.position).rotated(-2+randf()*4)
+						if i == 0:
+							offset *= 0
+						away = max(cast_spell(wand, slot_offset + 1, offset), away)
+				"unifying":
+					away += c_spell.level
+					for i in c_spell.level:
+						away = max(cast_spell(wand, slot_offset + i + 1, goal_offset), away)
+	return away + slot_offset

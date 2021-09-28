@@ -7,6 +7,7 @@ enum STATES {
 	ON_GROUND,
 	ON_AIR,
 	ON_WALL,
+	ON_POLE,
 	DEAD
 }
 
@@ -48,6 +49,10 @@ var blood_is_gasoline := false
 var dead := false
 
 var spell_cast_pos := Vector2(0, 0)
+
+var can_climb_pole := false
+var pole_pos := 0.0
+var pole_side := false
 
 
 func _ready():
@@ -136,7 +141,7 @@ func _process(delta):
 	Cam.offset += (coffset-Cam.offset)/5.0
 	
 	# Death
-	if (health.temperature > 145 or health.soul <= 0.0 or health.blood <= 0.0 or Input.is_key_pressed(KEY_G)) and not dead:
+	if (health.temperature > health.death_hypertemperature or health.temperature < health.death_hypotemperature or health.soul <= 0.0 or health.blood <= 0.0 or Input.is_key_pressed(KEY_G)) and not dead:
 		emit_signal("player_died")
 		state = STATES.DEAD
 		dead = true
@@ -161,10 +166,23 @@ func _process(delta):
 		
 	if Items.player_items.has("soulfulpill"):
 		Items.player_items.erase("soulfulpill")
-		health.soul += 0.1+randf()*0.2
+		health.soul += 0.3+randf()*0.2
+		
+	if Items.player_items.has("icecube"):
+		Items.player_items.erase("icecube")
+		health.temp_change(-5.0)
+		
+	if Items.player_items.has("heatadapt"):
+		Items.player_items.erase("heatadapt")
+		health.death_hypertemperature += 20
+		
+	if Items.player_items.has("dissipator"):
+		Items.player_items.erase("dissipator")
+		health.temp_regulation += 0.005
 	
 	# Control wand HUD
 	if Items.player_wands[Items.selected_wand] is Wand and Input.is_action_just_pressed("Interact1") and not Items.player_wands[Items.selected_wand].running and not get_tree().get_nodes_in_group("HUD")[0].block_cast:
+		Items.player_wands[Items.selected_wand].shuffle()
 		Items.player_wands[Items.selected_wand].running = true
 	
 	if Input.is_action_just_released("scrollup"):
@@ -196,7 +214,7 @@ func _process(delta):
 
 func _physics_process(delta):
 	$CastDirection.enabled = Items.player_wands[Items.selected_wand] != null
-	$CastDirection.cast_to = get_local_mouse_position().normalized()*26
+	$CastDirection.cast_to = get_local_mouse_position().normalized()*30
 	if $CastDirection.is_colliding():
 		spell_cast_pos = $CastDirection.get_collision_point() - position
 	else:
@@ -301,6 +319,12 @@ func _physics_process(delta):
 								$Player.play("slide2")
 							else:
 								$Player.play("oneleg_slide2")
+				STATES.ON_POLE:
+					$Player.play("slide")
+					if pole_pos < position.x:
+						$Player.scale.x = -1
+					else:
+						$Player.scale.x = 1
 		else: # Is flying
 			if get_local_mouse_position().x > 0:
 				$Player.scale.x = 1
@@ -312,7 +336,8 @@ func _physics_process(delta):
 		# Player can't fly
 		if not Items.player_items.has("wings"):
 			# Gravity
-			speed.y += gravity_accel * gravity_direction.y
+			if not state == STATES.ON_POLE:
+				speed.y += gravity_accel * gravity_direction.y
 			match state:
 				STATES.ON_GROUND:
 					coyote_time = 0.12
@@ -339,11 +364,19 @@ func _physics_process(delta):
 						speed.y *= 0.5
 					if  coyote_time > 0.0:
 						jump()
-					elif Input.is_action_just_pressed("jump") and health.broken_moving_appendages < 2:
+					elif Input.is_action_just_pressed("jump"):
 						jump_buffer = 0.2
+					
+					if (Input.is_action_pressed("up") or Input.is_action_pressed("down")) and can_climb_pole:
+						if pole_pos > position.x:
+							position.x = pole_pos + 2
+						else:
+							position.x = pole_pos - 2
+						state = STATES.ON_POLE
 					
 					jump_buffer -= delta
 					coyote_time -= delta
+					
 					
 					if is_on_floor():
 						state = STATES.ON_GROUND
@@ -429,6 +462,28 @@ func _physics_process(delta):
 					
 					if is_on_floor():
 						state = STATES.ON_GROUND
+				
+				STATES.ON_POLE:
+					coyote_time -= delta
+					if Input.is_action_pressed("up"):
+						speed.y = lerp(speed.y, -90, 0.3)
+					elif Input.is_action_pressed("down"):
+						speed.y = lerp(speed.y, 90, 0.3)
+					else:
+						speed.y = lerp(speed.y, 10, 0.3)
+					
+					if Input.is_action_just_pressed("jump") or jump_buffer > 0.0:
+						jump_buffer = 0.2
+						coyote_time = 0.22
+						can_climb_pole = false
+						if Input.is_action_just_pressed("right"):
+							speed.x = lerp(speed.x, 50, 0.6)
+						if Input.is_action_just_pressed("left"):
+							speed.x = lerp(speed.x, -50, 0.6)
+					else:
+						speed.x = 0
+					if is_on_floor() or not can_climb_pole:
+						state = STATES.ON_GROUND
 		else: # Player is flying
 			speed.y += gravity_accel * gravity_direction.y
 			# Horizontal movement
@@ -442,7 +497,7 @@ func _physics_process(delta):
 				haxis = 1.0
 				health.temperature -= 0.001
 			else:
-				health.temperature = move_toward(health.temperature, 30, 0.002)
+				health.temperature = move_toward(health.temperature, 30, health.temp_regulation)
 			
 			# Vertical movement
 			var vaxis := 0.0
@@ -455,7 +510,7 @@ func _physics_process(delta):
 				vaxis = 1.0
 				health.temperature -= 0.001
 			else:
-				health.temperature = move_toward(health.temperature, 30, 0.002)
+				health.temperature = move_toward(health.temperature, 30, health.temp_regulation)
 			
 			# Damping
 			if abs(vaxis)<0.5:
@@ -521,8 +576,8 @@ func move_damp(delta):
 		haxis = 1.0
 		health.temperature += 0.002
 	else:
-		health.temperature = move_toward(health.temperature, 30, 0.01)
-	health.temperature = move_toward(health.temperature, 30, 0.001)
+		health.temperature = move_toward(health.temperature, 30, health.temp_regulation)
+	health.temperature = move_toward(health.temperature, 30, health.temp_regulation)
 	if abs(haxis)<0.5:
 		speed.x *= pow(0.8, delta*60)
 	elif sign(haxis)!=sign(speed.x):
@@ -539,7 +594,7 @@ func move_nondamp():
 		speed.x += WALK_ACCEL
 		health.temperature += 0.0003
 	else:
-		health.temperature = move_toward(health.temperature, 30, 0.002)
+		health.temperature = move_toward(health.temperature, 30, health.temp_regulation)
 	speed.x *= 0.5
 
 
@@ -565,3 +620,12 @@ func looking_at() -> Vector2:
 
 func cast_from() -> Vector2:
 	return spell_cast_pos + position
+
+
+func enable_pole(pos):
+	can_climb_pole = true
+	pole_pos = pos
+
+
+func disable_pole():
+	can_climb_pole = false
