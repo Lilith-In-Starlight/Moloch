@@ -4,6 +4,7 @@ class_name SpellCastInfo
 
 var Caster :Node2D
 var goal :Vector2
+var goal_offset := Vector2(0, 0)
 
 
 func set_position(CastEntity:Node2D):
@@ -17,4 +18,4 @@ func set_position(CastEntity:Node2D):
 func set_goal():
 	if is_instance_valid(Caster):
 		if Caster.has_method("looking_at"):
-			goal = Caster.looking_at()
+			goal = Caster.looking_at() + goal_offset

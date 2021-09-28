@@ -94,11 +94,7 @@ func _process(delta):
 				# It can't cast if it's on cooldown
 				if can_cast:
 					can_cast = false
-					if wand.current_spell < wand.spell_capacity and wand.spells[wand.current_spell] != null:
-						var spell :Node2D = wand.spells[wand.current_spell].entity.instance()
-						spell.CastInfo.Caster = Player
-						spell.CastInfo.goal = Player.looking_at()
-						Player.get_parent().add_child(spell)
+					wand.current_spell += cast_spell(wand)
 				# Cast cooldown
 				if (wand.current_spell >= wand.spell_capacity-1 or wand.spells[wand.current_spell] == null) and wand.recharge >= wand.full_recharge:
 					wand.recharge = 0.0
@@ -184,7 +180,19 @@ func reset_player():
 	player_health = Flesh.new()
 	cloth_scraps = 3
 	player_items = []
-	player_spells = [null,null,null,null,null,null]
+	var mod := SpellMod.new()
+	mod.level = 6
+	mod.id = "multiplicative"
+	mod.name = "Multiplicative"
+	mod.description = "Many from alterations of one"
+	mod.texture = preload("res://Sprites/Spells/Modifiers/Multiplicative.png")
+	var mod2 := SpellMod.new()
+	mod2.level = 2
+	mod2.id = "unifying"
+	mod2.name = "Unifying"
+	mod2.description = "One from alterations of many"
+	mod2.texture = preload("res://Sprites/Spells/Modifiers/UnifyingM.png")
+	player_spells = [mod,mod2,mod,mod2,null,null]
 	player_wands = [null,null,null,null,null,null]
 	player_wands[0] = Wand.new()
 	player_wands[1] = Wand.new()
@@ -199,3 +207,29 @@ func shuffle_array(array: Array) -> Array:
 			n.append(i)
 			r.append(array[i])
 	return r
+
+
+func cast_spell(wand:Wand, slot_offset := 0, goal_offset := Vector2(0, 0)):
+	var away := 0
+	if wand.current_spell+slot_offset < wand.spell_capacity and wand.spells[wand.current_spell+slot_offset] != null:
+		var c_spell :Spell = wand.spells[wand.current_spell+slot_offset] 
+		if not c_spell is SpellMod:
+			var spell :Node2D = wand.spells[wand.current_spell+slot_offset].entity.instance()
+			spell.CastInfo.Caster = Player
+			spell.CastInfo.goal = Player.looking_at()
+			spell.CastInfo.goal_offset = goal_offset
+			Player.get_parent().add_child(spell)
+		elif wand.current_spell + slot_offset + 1 < wand.spell_capacity and wand.spells[wand.current_spell+slot_offset+1] != null:
+			match c_spell.id:
+				"multiplicative":
+					away += 1
+					for i in c_spell.level:
+						var offset :Vector2 = (Player.looking_at()-Player.position).rotated(-2+randf()*4)
+						if i == 0:
+							offset *= 0
+						away = max(cast_spell(wand, slot_offset + 1, offset), away)
+				"unifying":
+					away += c_spell.level
+					for i in c_spell.level:
+						away = max(cast_spell(wand, slot_offset + i + 1, goal_offset), away)
+	return away + slot_offset
