@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://SoulEater.gd" type="Script" id=1]
+
+[node name="SoulEater" type="RayCast2D"]
+enabled = true
+collision_mask = 75
+script = ExtResource( 1 )
+
+[node name="Line2D" type="Line2D" parent="."]
+width = 2.0
+default_color = Color( 0.521569, 1, 0.439216, 1 )
