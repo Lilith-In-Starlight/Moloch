@@ -202,7 +202,7 @@ func _process(delta):
 
 func _physics_process(delta):
 	$CastDirection.enabled = Items.player_wands[Items.selected_wand] != null
-	$CastDirection.cast_to = get_local_mouse_position().normalized()*26
+	$CastDirection.cast_to = get_local_mouse_position().normalized()*30
 	if $CastDirection.is_colliding():
 		spell_cast_pos = $CastDirection.get_collision_point() - position
 	else:
