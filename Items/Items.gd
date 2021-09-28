@@ -163,6 +163,24 @@ func pick_random_item(rng:RandomNumberGenerator = LootRNG) -> Item:
 	return items[tier].values()[rng.randi()%items[tier].values().size()]
 
 
+func pick_random_modifier(rng:RandomNumberGenerator = LootRNG) -> SpellMod:
+	var mod := SpellMod.new()
+	match rng.randi()%2:
+		1:
+			mod.level = rng.randi()%6
+			mod.id = "multiplicative"
+			mod.name = "Multiplicative Cast"
+			mod.description = "Many from alterations of one\nIterations: " + str(mod.level)
+			mod.texture = preload("res://Sprites/Spells/Modifiers/Multiplicative.png")
+		2:
+			mod.level = rng.randi()%6
+			mod.id = "unifying"
+			mod.name = "Unifying Cast"
+			mod.description = "One from alterations of many\nAmalgamations: " + str(mod.level)
+			mod.texture = preload("res://Sprites/Spells/Modifiers/UnifyingM.png")
+	return mod
+
+
 func reset_player():
 	last_pickup = null
 	level = 1
@@ -180,19 +198,9 @@ func reset_player():
 	player_health = Flesh.new()
 	cloth_scraps = 3
 	player_items = []
-	var mod := SpellMod.new()
-	mod.level = 6
-	mod.id = "multiplicative"
-	mod.name = "Multiplicative"
-	mod.description = "Many from alterations of one"
-	mod.texture = preload("res://Sprites/Spells/Modifiers/Multiplicative.png")
-	var mod2 := SpellMod.new()
-	mod2.level = 2
-	mod2.id = "unifying"
-	mod2.name = "Unifying"
-	mod2.description = "One from alterations of many"
-	mod2.texture = preload("res://Sprites/Spells/Modifiers/UnifyingM.png")
-	player_spells = [mod,mod2,mod,mod2,null,null]
+	player_spells = [null,null,null,null,null,null]
+	if LootRNG.randf() < 0.2:
+		player_spells[0] = pick_random_modifier()
 	player_wands = [null,null,null,null,null,null]
 	player_wands[0] = Wand.new()
 	player_wands[1] = Wand.new()
