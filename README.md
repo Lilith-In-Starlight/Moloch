@@ -30,7 +30,7 @@ This is done for every entity, not only the player.
 In Moloch, the only permanent upgrade you have between runs is knowledge about the consequences of your actions. Also the consequences of actions that are unrelated to you. One way to learn is by having other people help you understand things. The other is messing with things and seeing what your brand new kind of death looks like.
  
 ### Custom wands
-Moloch allows you to collect spells, letting you move them from wands and create your ultimate weapon of mass destruction. Careful, though! Some spells generate heat, which might give you a heat stroke. 
+Moloch allows you to collect spells, letting you move them from wands and create your ultimate weapon of mass destruction. Careful, though! Some spells generate heat, which might give you a heat stroke. There are also different modifiers that let you make your wands more powerful and more dangerous, just place one before the spells it'll affect and watch chaos unfold.
 
 ### Destructible levels
-Mostly everything can be destroyed if you have the right spells for it. Mostly. This means that, with the right equipment, nothing stops you from skipping rooms entirely or digging out of the worlds. Who knows what lies out there.
+Mostly everything can be destroyed if you have the right spells for it. Mostly. This means that, with the right equipment, nothing stops you from skipping rooms entirely or digging out of the world and miserably ending your run by falling to the void.
