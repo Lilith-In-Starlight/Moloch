@@ -14,7 +14,7 @@ You are a child who was sacrificed by your parents to the god at the top of The 
 - **Hold onto poles:** W, S
 - **Use wand:** Left click
 - **Organize inventory:** Left click; right click to throw away
-- **Change selected wand:** Numbers from 1 to 6; Scrol wheel
+- **Change selected wand:** Numbers from 1 to 6; Scroll wheel
 - **Display extra item information:** Shift
 - **Instantly die:** G
 - **Cover bleeding wounds:** R
