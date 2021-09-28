@@ -141,7 +141,7 @@ func _process(delta):
 	Cam.offset += (coffset-Cam.offset)/5.0
 	
 	# Death
-	if (health.temperature > 145 or health.temperature < -35 or health.soul <= 0.0 or health.blood <= 0.0 or Input.is_key_pressed(KEY_G)) and not dead:
+	if (health.temperature > health.death_hypertemperature or health.temperature < health.death_hypotemperature or health.soul <= 0.0 or health.blood <= 0.0 or Input.is_key_pressed(KEY_G)) and not dead:
 		emit_signal("player_died")
 		state = STATES.DEAD
 		dead = true
@@ -167,6 +167,18 @@ func _process(delta):
 	if Items.player_items.has("soulfulpill"):
 		Items.player_items.erase("soulfulpill")
 		health.soul += 0.3+randf()*0.2
+		
+	if Items.player_items.has("icecube"):
+		Items.player_items.erase("icecube")
+		health.temp_change(-5.0)
+		
+	if Items.player_items.has("heatadapt"):
+		Items.player_items.erase("heatadapt")
+		health.death_hypertemperature += 20
+		
+	if Items.player_items.has("dissipator"):
+		Items.player_items.erase("dissipator")
+		health.temp_regulation += 0.005
 	
 	# Control wand HUD
 	if Items.player_wands[Items.selected_wand] is Wand and Input.is_action_just_pressed("Interact1") and not Items.player_wands[Items.selected_wand].running and not get_tree().get_nodes_in_group("HUD")[0].block_cast:
@@ -485,7 +497,7 @@ func _physics_process(delta):
 				haxis = 1.0
 				health.temperature -= 0.001
 			else:
-				health.temperature = move_toward(health.temperature, 30, 0.002)
+				health.temperature = move_toward(health.temperature, 30, health.temp_regulation)
 			
 			# Vertical movement
 			var vaxis := 0.0
@@ -498,7 +510,7 @@ func _physics_process(delta):
 				vaxis = 1.0
 				health.temperature -= 0.001
 			else:
-				health.temperature = move_toward(health.temperature, 30, 0.002)
+				health.temperature = move_toward(health.temperature, 30, health.temp_regulation)
 			
 			# Damping
 			if abs(vaxis)<0.5:
@@ -564,8 +576,8 @@ func move_damp(delta):
 		haxis = 1.0
 		health.temperature += 0.002
 	else:
-		health.temperature = move_toward(health.temperature, 30, 0.01)
-	health.temperature = move_toward(health.temperature, 30, 0.001)
+		health.temperature = move_toward(health.temperature, 30, health.temp_regulation)
+	health.temperature = move_toward(health.temperature, 30, health.temp_regulation)
 	if abs(haxis)<0.5:
 		speed.x *= pow(0.8, delta*60)
 	elif sign(haxis)!=sign(speed.x):
@@ -582,7 +594,7 @@ func move_nondamp():
 		speed.x += WALK_ACCEL
 		health.temperature += 0.0003
 	else:
-		health.temperature = move_toward(health.temperature, 30, 0.002)
+		health.temperature = move_toward(health.temperature, 30, health.temp_regulation)
 	speed.x *= 0.5
 
 

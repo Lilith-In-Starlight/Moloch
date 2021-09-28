@@ -18,6 +18,11 @@ var spells := {
 	5: {},
 }
 
+const CHANCE_TIER1 := 0.78
+const CHANCE_TIER2 := 0.18
+const CHANCE_TIER3 := 0.038
+const CHANCE_TIER4 := 0.002
+
 var player_items := []
 
 var player_spells := [null,null,null,null,null,null]
@@ -57,6 +62,9 @@ func _ready():
 	register_item(1, "soulfulpill", "Soulful Pill", "Heals the mind", preload("res://Sprites/Items/SoulfulPill.png"))
 	register_item(2, "monocle", "Pig's Monocle", "See all the shinies", preload("res://Sprites/Items/PigsMonocle.png"))
 	register_item(2, "bandaid", "Band-aid", "Makes it more likely for bleeding to stop on its own", preload("res://Sprites/Items/Bandaid.png"))
+	register_item(1, "icecube", "Ice Cube", "Lowers your temperature a bit", preload("res://Sprites/Items/IceCube.png"))
+	register_item(3, "dissipator", "Black Body Radiation", "Your body temperature lowers slightly faster", preload("res://Sprites/Items/DissipateHeat.png"))
+	register_item(2, "heatadapt", "Heat Adaptation", "You become able to stand slightly greater temperatures", preload("res://Sprites/Items/SurviveHeat.png"))
 	
 	register_spell(4, "fuck you", "Fuck You", "Fuck everything in that particular direction", preload("res://Sprites/Spells/FuckYou.png"), preload("res://Spells/FuckYou.tscn"))
 	register_spell(2, "evilsight", "Evil Eye", "Look at things so fiercely you tear them apart", preload("res://Sprites/Spells/EvilEye.png"), preload("res://Spells/EvilSight.tscn"))
@@ -70,6 +78,7 @@ func _ready():
 	register_spell(3, "palejoy", "Pale Joy", "I assure you, it's essential", preload("res://Sprites/Spells/PaleJoy.png"), preload("res://Spells/PaleJoy.tscn"))
 	register_spell(3, "xblast", "Crossblast", "Summons a small X-shaped explosion", preload("res://Sprites/Spells/CrossBlast.png"), preload("res://Spells/CrossBlast.tscn"))
 	register_spell(1, "bouncysoul", "Ball Of Soul", "Creates a ball of soul that bounces on every surface", preload("res://Sprites/Spells/BouncySoul.png"), preload("res://Spells/BouncySoul.tscn"))
+	register_spell(2, "souleater", "Soul Eater", "If it hits something with soul, it steals it for you, hurts you otherwise", preload("res://Sprites/Spells/SoulEater.png"), preload("res://Spells/SoulEater.tscn"))
 	
 	# If the player is in the tree, set the Player variable of this node to it
 	if not get_tree().get_nodes_in_group("Player").empty():
@@ -134,15 +143,15 @@ func register_spell(tier:int, name_id:String, name:String, desc:String, texture 
 
 
 func pick_random_spell(rng:RandomNumberGenerator = LootRNG) -> Spell:
-	var random := rng.randf()
+	var random := rng.randf()*(CHANCE_TIER1 + CHANCE_TIER2 + CHANCE_TIER3 + CHANCE_TIER4)
 	var tier := 1
-	if random < 0.68:
+	if random < CHANCE_TIER1:
 		tier = 1
-	elif random < 0.95:
+	elif random < CHANCE_TIER1 + CHANCE_TIER2:
 		tier = 2
-	elif random < 0.998:
+	elif random < CHANCE_TIER1 + CHANCE_TIER2 + CHANCE_TIER3:
 		tier = 3
-	elif random < 1.0:
+	elif random < CHANCE_TIER1 + CHANCE_TIER2 + CHANCE_TIER3 + CHANCE_TIER4:
 		tier = 4
 	if spells[tier].empty():
 		return pick_random_spell(rng)
@@ -150,15 +159,15 @@ func pick_random_spell(rng:RandomNumberGenerator = LootRNG) -> Spell:
 
 
 func pick_random_item(rng:RandomNumberGenerator = LootRNG) -> Item:
-	var random := rng.randf()
+	var random := rng.randf()*(CHANCE_TIER1 + CHANCE_TIER2 + CHANCE_TIER3 + CHANCE_TIER4)
 	var tier := 1
-	if random < 0.68:
+	if random < CHANCE_TIER1:
 		tier = 1
-	elif random < 0.95:
+	elif random < CHANCE_TIER1 + CHANCE_TIER2:
 		tier = 2
-	elif random < 0.998:
+	elif random < CHANCE_TIER1 + CHANCE_TIER2 + CHANCE_TIER3:
 		tier = 3
-	elif random < 1.0:
+	elif random < CHANCE_TIER1 + CHANCE_TIER2 + CHANCE_TIER3 + CHANCE_TIER4:
 		tier = 4
 	if items[tier].empty():
 		return pick_random_item(rng)
@@ -201,7 +210,7 @@ func reset_player():
 	cloth_scraps = 3
 	player_items = []
 	player_spells = [null,null,null,null,null,null]
-	if LootRNG.randf() < 0.2:
+	if LootRNG.randf() < 0.25:
 		player_spells[0] = pick_random_modifier()
 	player_wands = [null,null,null,null,null,null]
 	player_wands[0] = Wand.new()
