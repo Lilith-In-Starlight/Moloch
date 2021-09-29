@@ -252,3 +252,10 @@ func cast_spell(wand:Wand, slot_offset := 0, goal_offset := Vector2(0, 0)):
 					for i in c_spell.level:
 						away = max(cast_spell(wand, slot_offset + i + 1, goal_offset), away)
 	return away + slot_offset
+
+func break_block(block: int, strength: float) -> int:
+	match block:
+		0:
+			if strength > 0.2:
+				return -1
+	return block

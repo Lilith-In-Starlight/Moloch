@@ -7,14 +7,12 @@ var timer := 0.0
 var Map
 
 func _ready():
-	Map = get_tree().get_nodes_in_group("World")[0]
+	Map = get_tree().get_nodes_in_group("World")[0] 
 	for x in range(-10,11):
 		for y in range(-10,11):
 			var vec := Vector2(x+int(position.x/8), y+int(position.y/8))
-			match Map.get_cellv(vec):
-				0:
-					if Vector2(x,y).length()<=7+randi()%4:
-						Map.set_cellv(vec, -1)
+			if Vector2(x,y).length()<=7+randi()%4:
+				Map.set_cellv(vec, Items.break_block(Map.get_cellv(vec), 0.5))
 	var point := Vector2(int(position.x/8), int(position.y/8))
 	Map.update_bitmask_region(point-Vector2(10,10), point+Vector2(10,10))
 
