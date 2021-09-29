@@ -265,7 +265,7 @@ func _ready():
 
 func _process(delta):
 	if fill_x >= max_point.x:
-		print("Step 5: Adding enemies")
+		print("Step 6: Adding enemies")
 		var added := 0
 		for a in areas:
 			for i in Items.WorldRNG.randi()%3:
