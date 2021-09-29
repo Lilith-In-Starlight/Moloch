@@ -8,8 +8,10 @@ var speed := 4.0
 
 var timer := 0.0
 
+var Map :TileMap
 
 func _ready():
+	Map = get_tree().get_nodes_in_group("World")[0] 
 	CastInfo.set_position(self)
 	CastInfo.set_goal()
 	rotate = CastInfo.goal.angle_to_point(position)
@@ -49,6 +51,21 @@ func _physics_process(delta):
 	
 	if timer > 0.95:
 		queue_free()
+		var map_pos := Map.world_to_map(position)
+		for i in range(8):
+			for x in range(-1,2):
+				for y in range(-1,2):
+					if abs(x)+abs(y) in [0, 1]:
+						var vec1 := map_pos + Vector2(i+x, i+y)
+						var vec2 := map_pos + Vector2(-i+x, i+y)
+						var vec3 := map_pos + Vector2(i+x, -i+y)
+						var vec4 := map_pos + Vector2(-i+x, -i+y)
+						Map.set_cellv(vec1, Items.break_block(Map.get_cellv(vec1), 0.4))
+						Map.set_cellv(vec2, Items.break_block(Map.get_cellv(vec1), 0.4))
+						Map.set_cellv(vec3, Items.break_block(Map.get_cellv(vec1), 0.4))
+						Map.set_cellv(vec4, Items.break_block(Map.get_cellv(vec1), 0.4))
+		
+		Map.update_bitmask_region(map_pos-Vector2(10,10), map_pos+Vector2(10,10))
 
 
 func _draw():
