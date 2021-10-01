@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Sprites/Enemies/Incomplete/Idle.png" type="Texture" id=1]
 [ext_resource path="res://Enemies/Incomplete.gd" type="Script" id=2]
+[ext_resource path="res://WandRenderSprite.tscn" type="PackedScene" id=3]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 12.0
@@ -31,3 +32,6 @@ position = Vector2( -350, -200 )
 rect = Rect2( 0, 0, 700, 400 )
 process_parent = true
 physics_process_parent = true
+
+[node name="WandRenderSprite" parent="." instance=ExtResource( 3 )]
+position = Vector2( 24, -17 )
