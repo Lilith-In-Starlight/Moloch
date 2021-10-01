@@ -18,8 +18,9 @@ func _process(delta):
 	CastInfo.set_goal()
 	angle = CastInfo.get_angle(self)
 	var i := 0
-	if CastInfo.Caster.has_method("health_object"):
-		CastInfo.Caster.health_object().temp_change(-0.08)
+	if is_instance_valid(CastInfo.Caster):
+		if CastInfo.Caster.has_method("health_object"):
+			CastInfo.Caster.health_object().temp_change(-0.1)
 	for rc in get_children():
 		rc.force_raycast_update()
 		if randf()<0.3:
