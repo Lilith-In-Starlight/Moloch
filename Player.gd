@@ -183,7 +183,7 @@ func _process(delta):
 	# Control wand HUD
 	if Items.player_wands[Items.selected_wand] is Wand and Input.is_action_just_pressed("Interact1") and not Items.player_wands[Items.selected_wand].running and not get_tree().get_nodes_in_group("HUD")[0].block_cast:
 		Items.player_wands[Items.selected_wand].shuffle()
-		Items.player_wands[Items.selected_wand].running = true
+		Items.player_wands[Items.selected_wand].run(self)
 	
 	if Input.is_action_just_released("scrollup"):
 		Items.selected_wand -= 1

@@ -47,6 +47,8 @@ var using_seed := 0 # WorldRNG's seed changes, this one doesn't
 
 var last_pickup :Item = null
 
+var running_wands := []
+
 func _ready():
 	var generator_seed := hash(OS.get_time())
 	print("Generator seed: ", generator_seed)
@@ -102,14 +104,16 @@ func _process(delta):
 		OS.window_borderless = OS.window_fullscreen
 	
 	# Manage spell casts
-	for wand in player_wands:
+	for run in running_wands.duplicate():
+		var wand :Wand = run[0]
+		var caster :Node2D = run[1]
 		if wand is Wand:
 			# If the wand is being used
 			if wand.running:
 				# It can't cast if it's on cooldown
 				if can_cast:
 					can_cast = false
-					wand.current_spell += cast_spell(wand)
+					wand.current_spell += cast_spell(wand, caster)
 				# Cast cooldown
 				if (wand.current_spell >= wand.spell_capacity-1 or wand.spells[wand.current_spell] == null) and wand.recharge >= wand.full_recharge:
 					wand.recharge = 0.0
@@ -125,6 +129,7 @@ func _process(delta):
 					wand.recharge += delta
 			else: # If the wand isn't being cast
 				wand.current_spell = 0
+				running_wands.erase(run)
 
 
 func register_item(tier:int, name_id:String, name:String, desc:String, texture:Texture):
@@ -232,29 +237,29 @@ func shuffle_array(array: Array) -> Array:
 	return r
 
 
-func cast_spell(wand:Wand, slot_offset := 0, goal_offset := Vector2(0, 0)):
+func cast_spell(wand:Wand, caster:Node2D, slot_offset := 0, goal_offset := Vector2(0, 0)):
 	var away := 0
 	if wand.current_spell+slot_offset < wand.spell_capacity and wand.spells[wand.current_spell+slot_offset] != null:
 		var c_spell :Spell = wand.spells[wand.current_spell+slot_offset] 
 		if not c_spell is SpellMod:
 			var spell :Node2D = wand.spells[wand.current_spell+slot_offset].entity.instance()
-			spell.CastInfo.Caster = Player
-			spell.CastInfo.goal = Player.looking_at()
+			spell.CastInfo.Caster = caster
+			spell.CastInfo.goal = caster.looking_at()
 			spell.CastInfo.goal_offset = goal_offset
-			Player.get_parent().add_child(spell)
+			caster.get_parent().add_child(spell)
 		elif wand.current_spell + slot_offset + 1 < wand.spell_capacity and wand.spells[wand.current_spell+slot_offset+1] != null:
 			match c_spell.id:
 				"multiplicative":
 					away += 1
 					for i in c_spell.level:
-						var offset :Vector2 = (Player.looking_at()-Player.position).rotated(-2+randf()*4)
+						var offset :Vector2 = (caster.looking_at()-caster.position).rotated(-2+randf()*4)
 						if i == 0:
 							offset *= 0
-						away = max(cast_spell(wand, slot_offset + 1, offset), away)
+						away = max(cast_spell(wand, caster, slot_offset + 1, offset), away)
 				"unifying":
 					away += c_spell.level
 					for i in c_spell.level:
-						away = max(cast_spell(wand, slot_offset + i + 1, goal_offset), away)
+						away = max(cast_spell(wand, caster, slot_offset + i + 1, goal_offset), away)
 	return away + slot_offset
 
 func break_block(block: int, strength: float) -> int:

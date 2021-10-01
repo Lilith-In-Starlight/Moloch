@@ -59,3 +59,9 @@ func shuffle():
 						spells[s] = spells[s2]
 						spells[s2] = null
 						break
+
+
+func run(Caster:Node2D):
+	if not running:
+		running = true
+		Items.running_wands.append([self, Caster])
