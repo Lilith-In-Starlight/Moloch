@@ -281,7 +281,7 @@ func _process(delta):
 					n.position = pos
 					add_child(n)
 					added += 1
-				if Items.WorldRNG.randf()<0.3:
+				if Items.WorldRNG.randf()<0.1:
 					var pos :Vector2 = (a.position + Vector2(Items.WorldRNG.randf(), Items.WorldRNG.randf())*a.size)
 					var n := preload("res://Enemies/Incomplete.tscn").instance()
 					n.position = pos
