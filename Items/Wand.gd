@@ -17,6 +17,7 @@ var current_spell := 0
 
 var recharge := 0.0
 var running := false
+var can_cast := true
 
 
 func _init():
@@ -62,6 +63,7 @@ func shuffle():
 
 
 func run(Caster:Node2D):
-	if not running:
-		running = true
+	if not self.running:
+		can_cast = true
+		self.running = true
 		Items.running_wands.append([self, Caster])

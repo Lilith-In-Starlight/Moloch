@@ -31,7 +31,6 @@ var selected_wand := 0
 
 var Player :KinematicBody2D
 var player_health := Flesh.new()
-var can_cast := true
 
 var run_start_time :int
 
@@ -107,29 +106,33 @@ func _process(delta):
 	for run in running_wands.duplicate():
 		var wand :Wand = run[0]
 		var caster :Node2D = run[1]
+		if not is_instance_valid(caster):
+			running_wands.erase(run)
+			continue
 		if wand is Wand:
 			# If the wand is being used
 			if wand.running:
 				# It can't cast if it's on cooldown
-				if can_cast:
-					can_cast = false
+				if wand.can_cast:
+					wand.can_cast = false
 					wand.current_spell += cast_spell(wand, caster)
 				# Cast cooldown
 				if (wand.current_spell >= wand.spell_capacity-1 or wand.spells[wand.current_spell] == null) and wand.recharge >= wand.full_recharge:
 					wand.recharge = 0.0
 					wand.running = false
-					can_cast = true
+					wand.can_cast = true
 					wand.current_spell = 0
+					running_wands.erase(run)
+					continue
 				# Recharge
 				elif wand.recharge >= wand.spell_recharge and (wand.current_spell < wand.spell_capacity and wand.spells[wand.current_spell] != null):
 					wand.recharge = 0.0
 					wand.current_spell += 1
-					can_cast = true
+					wand.can_cast = true
 				else:
 					wand.recharge += delta
 			else: # If the wand isn't being cast
 				wand.current_spell = 0
-				running_wands.erase(run)
 
 
 func register_item(tier:int, name_id:String, name:String, desc:String, texture:Texture):
