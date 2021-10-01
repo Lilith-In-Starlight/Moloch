@@ -13,6 +13,7 @@ var noise := OpenSimplexNoise.new()
 var first_check := false
 var last_seen := Vector2(0, 0)
 var search_time := 0.0
+var health := Flesh.new()
 
 
 func _ready():
@@ -61,3 +62,6 @@ func _physics_process(delta):
 				last_seen = Vector2(0, 0)
 			speed = move_and_slide(speed)
 
+
+func health_object() -> Flesh:
+	return health
