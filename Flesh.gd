@@ -2,6 +2,8 @@ extends Reference
 
 signal hole_poked
 signal full_healed
+signal bled
+signal died
 
 
 class_name Flesh
@@ -46,3 +48,8 @@ func full_heal():
 	temperature = normal_temperature
 	soul = 1.0
 	emit_signal("full_healed")
+
+func process_health():
+	blood -= poked_holes * (0.5+randf())*0.0005
+	if temperature > death_hypertemperature or temperature < death_hypotemperature or soul <= 0.0 or blood <= 0.0:
+		emit_signal("died")

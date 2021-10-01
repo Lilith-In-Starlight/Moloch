@@ -61,6 +61,7 @@ func _ready():
 	Map = get_tree().get_nodes_in_group("World")[0]
 	health.connect("hole_poked", self, "message_send", ["Bleeding"])
 	health.connect("full_healed", self, "message_send", ["Your flesh is renewed"])
+	health.connect("died", self, "health_died")
 	health.is_players = true
 	Cam = get_tree().get_nodes_in_group("Camera")[0]
 	# The processes are off until the game starts
@@ -141,7 +142,7 @@ func _process(delta):
 	Cam.offset += (coffset-Cam.offset)/5.0
 	
 	# Death
-	if (health.temperature > health.death_hypertemperature or health.temperature < health.death_hypotemperature or health.soul <= 0.0 or health.blood <= 0.0 or Input.is_key_pressed(KEY_G)) and not dead:
+	if (Input.is_key_pressed(KEY_G)) and not dead:
 		emit_signal("player_died")
 		state = STATES.DEAD
 		dead = true
@@ -219,8 +220,7 @@ func _physics_process(delta):
 		spell_cast_pos = $CastDirection.get_collision_point() - position
 	else:
 		spell_cast_pos = $CastDirection.cast_to
-	# Bleed
-	health.blood -= health.poked_holes * (0.5+randf())*0.0005
+	health.process_health()
 	# Platforms
 	set_collision_mask_bit(2, not Input.is_key_pressed(KEY_S))
 	
@@ -629,3 +629,10 @@ func enable_pole(pos):
 
 func disable_pole():
 	can_climb_pole = false
+
+
+func health_died():
+	if not dead:
+		emit_signal("player_died")
+		state = STATES.DEAD
+		dead = true
