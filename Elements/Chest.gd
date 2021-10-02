@@ -14,7 +14,6 @@ var Player :KinematicBody2D
 func _ready():
 	Player = get_tree().get_nodes_in_group("Player")[0]
 	type = Items.LootRNG.randi()%TYPES.size()
-	type = 2
 	match type:
 		TYPES.ITEM:
 			$Sprite.modulate = "#96ff9a"
