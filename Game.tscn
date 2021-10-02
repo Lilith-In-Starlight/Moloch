@@ -82,26 +82,26 @@ corner_radius_bottom_right = 5
 corner_radius_bottom_left = 2
 anti_aliasing = false
 
-[sub_resource type="StyleBoxFlat" id=14]
+[sub_resource type="StyleBoxFlat" id=11]
 bg_color = Color( 0.0862745, 0.0862745, 0.0862745, 1 )
 
-[sub_resource type="StyleBoxFlat" id=15]
+[sub_resource type="StyleBoxFlat" id=12]
 bg_color = Color( 0, 1, 0.976471, 1 )
 
-[sub_resource type="StyleBoxFlat" id=16]
+[sub_resource type="StyleBoxFlat" id=13]
 bg_color = Color( 1, 0.513726, 0, 1 )
 
-[sub_resource type="StyleBoxFlat" id=17]
+[sub_resource type="StyleBoxFlat" id=14]
 bg_color = Color( 1, 0.223529, 0.223529, 1 )
 
-[sub_resource type="StyleBoxFlat" id=11]
+[sub_resource type="StyleBoxFlat" id=15]
 bg_color = Color( 0, 0, 0, 1 )
 
-[sub_resource type="DynamicFont" id=12]
+[sub_resource type="DynamicFont" id=16]
 use_mipmaps = true
 font_data = ExtResource( 5 )
 
-[sub_resource type="DynamicFont" id=13]
+[sub_resource type="DynamicFont" id=17]
 size = 11
 use_mipmaps = true
 font_data = ExtResource( 5 )
@@ -541,7 +541,7 @@ margin_left = -17.0
 margin_top = -129.0
 margin_right = -7.0
 margin_bottom = -7.0
-custom_styles/panel = SubResource( 14 )
+custom_styles/panel = SubResource( 11 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -555,7 +555,7 @@ margin_left = -16.0
 margin_top = -48.0
 margin_right = -8.0
 margin_bottom = -8.0
-custom_styles/panel = SubResource( 15 )
+custom_styles/panel = SubResource( 12 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -569,7 +569,7 @@ margin_left = -16.0
 margin_top = -88.0
 margin_right = -8.0
 margin_bottom = -48.0
-custom_styles/panel = SubResource( 16 )
+custom_styles/panel = SubResource( 13 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -583,7 +583,7 @@ margin_left = -16.0
 margin_top = -128.0
 margin_right = -8.0
 margin_bottom = -88.0
-custom_styles/panel = SubResource( 17 )
+custom_styles/panel = SubResource( 14 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -592,7 +592,7 @@ __meta__ = {
 modulate = Color( 1, 1, 1, 0 )
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_styles/panel = SubResource( 11 )
+custom_styles/panel = SubResource( 15 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -603,10 +603,10 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 margin_left = -56.0
-margin_top = -158.0
+margin_top = -166.0
 margin_right = 56.0
-margin_bottom = -142.0
-custom_fonts/font = SubResource( 12 )
+margin_bottom = -150.0
+custom_fonts/font = SubResource( 16 )
 text = "You Are Dead"
 align = 1
 __meta__ = {
@@ -619,12 +619,14 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 margin_left = -132.0
-margin_top = -48.0
+margin_top = -40.0
 margin_right = 132.0
-margin_bottom = 48.0
-custom_fonts/font = SubResource( 13 )
+margin_bottom = 56.0
+custom_fonts/font = SubResource( 17 )
 text = "Cause of Death:
 Run Length:
+Seed:
+Levels:
 
 Press G to start a new run"
 align = 1
@@ -637,7 +639,7 @@ __meta__ = {
 [node name="Generating" type="Panel" parent="HUD/HUD"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_styles/panel = SubResource( 11 )
+custom_styles/panel = SubResource( 15 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -651,7 +653,7 @@ margin_left = -56.0
 margin_top = -30.0
 margin_right = 56.0
 margin_bottom = -14.0
-custom_fonts/font = SubResource( 12 )
+custom_fonts/font = SubResource( 16 )
 text = "Generating World"
 align = 1
 __meta__ = {
@@ -667,7 +669,7 @@ margin_left = -132.0
 margin_top = -48.0
 margin_right = 132.0
 margin_bottom = 48.0
-custom_fonts/font = SubResource( 13 )
+custom_fonts/font = SubResource( 17 )
 text = "Avoid breaking your knees by not falling long distances"
 align = 1
 valign = 1

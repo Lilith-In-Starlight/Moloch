@@ -1,12 +1,20 @@
 extends Reference
 
+class_name Flesh
+
+
 signal hole_poked
 signal full_healed
 signal bled
 signal died
 
-
-class_name Flesh
+enum DEATHS {
+	BLED,
+	HYPER,
+	HYPO,
+	SOUL,
+	HOLES,
+}
 
 var moving_appendages := 2
 var broken_moving_appendages := 0
@@ -24,6 +32,8 @@ var hypotemperature := 5.0
 var death_hypertemperature := 140.0
 var death_hypotemperature := -40.0
 var temp_regulation := 0.002
+
+var cause_of_death := -1
 
 
 var has_soul := true
@@ -52,4 +62,16 @@ func full_heal():
 func process_health():
 	blood -= poked_holes * (0.5+randf())*0.0005
 	if temperature > death_hypertemperature or temperature < death_hypotemperature or soul <= 0.0 or blood <= 0.0:
+		if cause_of_death == -1:
+			if temperature > death_hypertemperature:
+				cause_of_death = DEATHS.HYPER
+			elif temperature < death_hypotemperature:
+				cause_of_death = DEATHS.HYPO
+			elif soul <= 0.0:
+				cause_of_death = DEATHS.SOUL
+			elif blood <= 0.0:
+				if poked_holes < 200:
+					cause_of_death = DEATHS.BLED
+				else:
+					cause_of_death = DEATHS.HOLES
 		emit_signal("died")

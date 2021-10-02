@@ -70,6 +70,14 @@ func _process(delta):
 	if player_died:
 		DeathScreen.modulate.a = move_toward(DeathScreen.modulate.a, 1.0, 0.2)
 		DeathScreenInfo.text = "Run Time: " + end_times + "\n"
+		var death := "Internal organs damaged by impact"
+		match Player.health_object().cause_of_death:
+			Flesh.DEATHS.BLED: death = "Ran out of blood"
+			Flesh.DEATHS.HOLES: death = "Sliced to at least two pieces"
+			Flesh.DEATHS.HYPER: death = "Extremely high temperatures"
+			Flesh.DEATHS.HYPO: death = "Extremely low temperatures"
+			Flesh.DEATHS.SOUL: death = "Soul leaked out of her body"
+		DeathScreenInfo.text += "Cause Of Death: " + death + "\n"
 		DeathScreenInfo.text += "Levels: " + str(Items.level) + "\n"
 		DeathScreenInfo.text += "Seed: " + str(Items.using_seed) + "\n\n"
 		DeathScreenInfo.text += "Right click to start a new run"
