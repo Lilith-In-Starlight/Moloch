@@ -23,9 +23,6 @@ position = Vector2( 0, 240 )
 ]]
 position = Vector2( 528, 240 )
 
-[node name="Chest" parent="Door3" instance=ExtResource( 3 )]
-position = Vector2( -264, -32 )
-
 [node name="VaseRow" type="Position2D" parent="." groups=[
 "Vases",
 ]]
@@ -45,3 +42,6 @@ position = Vector2( 400, 240 )
 "Vases",
 ]]
 position = Vector2( 96, 0 )
+
+[node name="Chest" parent="." instance=ExtResource( 3 )]
+position = Vector2( 264, 208 )

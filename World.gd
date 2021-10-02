@@ -52,7 +52,11 @@ func _ready():
 						if (rooms < 25 or generated_end_room):
 							if treasure_rooms < 4 and Items.WorldRNG.randf()<0.05 and rooms > 12:
 								is_treasure = true
-								new_room = preload("res://Rooms/Sacrifice/TreasureRoom1.tscn").instance()
+								match randi()%2:
+									0:
+										new_room = preload("res://Rooms/Sacrifice/TreasureRoom1.tscn").instance()
+									1:
+										new_room = preload("res://Rooms/Sacrifice/TreasureRoom2.tscn").instance()
 							else:
 								new_room = Rooms.rooms[Items.WorldRNG.randi()%Rooms.rooms.size()].instance()
 						else:
@@ -80,7 +84,11 @@ func _ready():
 						if (rooms < 25 or generated_end_room):
 							if treasure_rooms < 4 and Items.WorldRNG.randf()<0.05 and rooms > 12:
 								is_treasure = true
-								new_room = preload("res://Rooms/Sacrifice/TreasureRoom1.tscn").instance()
+								match randi()%2:
+									0:
+										new_room = preload("res://Rooms/Sacrifice/TreasureRoom1.tscn").instance()
+									1:
+										new_room = preload("res://Rooms/Sacrifice/TreasureRoom2.tscn").instance()
 							else:
 								new_room = Rooms.rooms[Items.WorldRNG.randi()%Rooms.rooms.size()].instance()
 						else:
