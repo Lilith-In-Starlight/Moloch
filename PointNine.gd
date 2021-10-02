@@ -11,7 +11,6 @@ func _process(delta):
 	visible = Items.player_items.has(".9")
 	var maximum := max(player_health.death_hypertemperature, player_health.temperature) + abs(player_health.death_hypotemperature) + player_health.soul + max(player_health.blood, player_health.max_blood)
 	var height := get_viewport_rect().size.y - 12
-	print(height)
 	$Soul.rect_size.y = (player_health.soul / maximum) * 12
 	$Heat.rect_size.y = (player_health.temperature / maximum) *0.3
 	$Blood.rect_size.y = (player_health.blood / maximum) * 12
