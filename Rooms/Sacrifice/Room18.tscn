@@ -43,15 +43,15 @@ position = Vector2( 224, 240 )
 position = Vector2( 64, 0 )
 
 [node name="Pole" parent="." instance=ExtResource( 4 )]
-position = Vector2( 88, 24 )
+position = Vector2( 64, 24 )
 size = 14
 
 [node name="Pole2" parent="." instance=ExtResource( 4 )]
-position = Vector2( 432, 24 )
+position = Vector2( 480, 24 )
 size = 10
 
 [node name="Pole3" parent="." instance=ExtResource( 4 )]
-position = Vector2( 392, 24 )
+position = Vector2( 416, 24 )
 size = 7
 
 [node name="Pole4" parent="." instance=ExtResource( 4 )]
@@ -59,7 +59,7 @@ position = Vector2( 336, 24 )
 size = 11
 
 [node name="Pole5" parent="." instance=ExtResource( 4 )]
-position = Vector2( 280, 24 )
+position = Vector2( 296, 24 )
 size = 14
 
 [node name="Pole6" parent="." instance=ExtResource( 4 )]
@@ -67,9 +67,9 @@ position = Vector2( 264, 24 )
 size = 10
 
 [node name="Pole7" parent="." instance=ExtResource( 4 )]
-position = Vector2( 216, 24 )
+position = Vector2( 200, 24 )
 size = 11
 
 [node name="Pole8" parent="." instance=ExtResource( 4 )]
-position = Vector2( 160, 24 )
+position = Vector2( 144, 24 )
 size = 8
