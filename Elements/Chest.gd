@@ -46,7 +46,7 @@ func _process(delta):
 						var mod := Items.pick_random_modifier()
 						var new := preload("res://Items/SpellEntity.tscn").instance()
 						new.spell = Items.pick_random_spell()
-						if Items.LootRNG.randf() < 1.0:
+						if Items.LootRNG.randf() < 0.2:
 							new.spell = mod
 						get_parent().add_child(new)
 						new.position = position
