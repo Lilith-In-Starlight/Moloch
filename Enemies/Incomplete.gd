@@ -20,6 +20,7 @@ var wand := Wand.new()
 func _ready():
 	noise.seed = hash(self)
 	health.connect("died", self, "health_died")
+	health.blood = 0.4
 	Player = get_tree().get_nodes_in_group("Player")[0]
 	wand.full_recharge = max(wand.full_recharge, 1.5)
 	if Player.position.distance_to(position) < 500:
@@ -29,7 +30,7 @@ func _ready():
 func _physics_process(delta):
 	$WandRenderSprite.render_wand(wand)
 	health.process_health()
-	for i in min(health.poked_holes, 12):
+	for i in min(health.poked_holes, 6):
 		if randf()>0.9:
 			var n :RigidBody2D = preload("res://Particles/Blood.tscn").instance()
 			n.position = position + Vector2(0, 6)
@@ -55,8 +56,8 @@ func _physics_process(delta):
 				var goal := (position - Player.position).normalized()*130 + Player.position
 				speed = lerp(speed, primordial_tremor*30 + (goal - position), 0.2)
 				last_seen = Player.position
-				$WandRenderSprite.position = lerp($WandRenderSprite.position, (Player.position - position).normalized()*30, 0.2)
-				$WandRenderSprite.rotation = lerp_angle($WandRenderSprite.rotation, Player.position.angle_to_point(position) + PI/4.0, 0.3)
+				$WandRenderSprite.rotation = lerp_angle($WandRenderSprite.rotation, Player.position.angle_to_point(position) + PI/4.0, 0.05)
+				$WandRenderSprite.position = lerp($WandRenderSprite.position, Vector2(cos(Player.position.angle_to_point(position)), sin(Player.position.angle_to_point(position)))*30, 0.5)
 				wand.run(self)
 			else:
 				speed = lerp(speed, primordial_tremor*60, 0.2)
@@ -87,7 +88,7 @@ func health_died():
 
 
 func cast_from():
-	return $WandRenderSprite.position + position
+	return $WandRenderSprite.position + position + Vector2(cos($WandRenderSprite.rotation-PI/4.0), sin($WandRenderSprite.rotation-PI/4.0))*5
 
 func looking_at():
-	return Player.position
+	return Vector2(cos($WandRenderSprite.rotation-PI/4.0), sin($WandRenderSprite.rotation-PI/4.0))*50 + position
