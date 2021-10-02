@@ -25,9 +25,10 @@ func _physics_process(delta):
 		if Ray.get_collider().has_method("health_object"):
 			Ray.get_collider().health_object().shatter_soul(0.1)
 		position = lerp(position, Ray.get_collision_point(), 0.99)
-		speed = speed.bounce(Ray.get_collision_normal().normalized())*1.02
 		if Ray.get_collision_normal() == Vector2(0, 0):
 			queue_free()
+		else:
+			speed = speed.bounce(Ray.get_collision_normal().normalized())*1.02
 		position += speed * delta * 60
 		flip = true
 		dtimer += 0.05
