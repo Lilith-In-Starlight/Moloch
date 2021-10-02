@@ -48,6 +48,8 @@ var last_pickup :Item = null
 
 var running_wands := []
 
+var spell_mods := []
+
 func _ready():
 	var generator_seed := hash(OS.get_time())
 	print("Generator seed: ", generator_seed)
@@ -196,12 +198,13 @@ func pick_random_modifier(rng:RandomNumberGenerator = LootRNG) -> SpellMod:
 			mod.name = "Multiplicative Cast"
 			mod.description = "Many from alterations of one\nIterations: " + str(mod.level)
 			mod.texture = preload("res://Sprites/Spells/Modifiers/Multiplicative.png")
-		2:
+		0:
 			mod.level = 1 + rng.randi() % 5
 			mod.id = "unifying"
 			mod.name = "Unifying Cast"
 			mod.description = "One from alterations of many\nAmalgamations: " + str(mod.level)
 			mod.texture = preload("res://Sprites/Spells/Modifiers/UnifyingM.png")
+	spell_mods.append(mod)
 	return mod
 
 
@@ -214,6 +217,7 @@ func reset_player():
 		generator_seed = custom_seed
 	else:
 		generator_seed = randi()
+	spell_mods = []
 	print("Generator seed: ", generator_seed)
 	WorldRNG = RandomNumberGenerator.new()
 	WorldRNG.seed = generator_seed
