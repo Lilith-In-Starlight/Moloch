@@ -14,6 +14,7 @@ var Player :KinematicBody2D
 func _ready():
 	Player = get_tree().get_nodes_in_group("Player")[0]
 	type = Items.LootRNG.randi()%TYPES.size()
+	type = 2
 	match type:
 		TYPES.ITEM:
 			$Sprite.modulate = "#96ff9a"
@@ -42,10 +43,11 @@ func _process(delta):
 						new.position = position
 						new.linear_velocity.x = -120 + randf()*240
 					TYPES.SPELL:
+						var mod := Items.pick_random_modifier()
 						var new := preload("res://Items/SpellEntity.tscn").instance()
 						new.spell = Items.pick_random_spell()
-						if Items.LootRNG.randf() < 0.18:
-							new.spell = Items.pick_random_modifier()
+						if Items.LootRNG.randf() < 1.0:
+							new.spell = mod
 						get_parent().add_child(new)
 						new.position = position
 						new.linear_velocity.x = -120 + randf()*240

@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=30 format=2]
 
 [ext_resource path="res://Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://EditorTileset.tres" type="TileSet" id=2]
@@ -11,6 +11,7 @@
 [ext_resource path="res://WandRenderRect.tscn" type="PackedScene" id=9]
 [ext_resource path="res://Sprites/Items/Scraps.png" type="Texture" id=10]
 [ext_resource path="res://Background.gd" type="Script" id=11]
+[ext_resource path="res://PointNine.gd" type="Script" id=12]
 
 [sub_resource type="CanvasItemMaterial" id=1]
 blend_mode = 1
@@ -80,6 +81,18 @@ corner_radius_top_right = 2
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 2
 anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id=14]
+bg_color = Color( 0.0862745, 0.0862745, 0.0862745, 1 )
+
+[sub_resource type="StyleBoxFlat" id=15]
+bg_color = Color( 0, 1, 0.976471, 1 )
+
+[sub_resource type="StyleBoxFlat" id=16]
+bg_color = Color( 1, 0.513726, 0, 1 )
+
+[sub_resource type="StyleBoxFlat" id=17]
+bg_color = Color( 1, 0.223529, 0.223529, 1 )
 
 [sub_resource type="StyleBoxFlat" id=11]
 bg_color = Color( 0, 0, 0, 1 )
@@ -507,6 +520,70 @@ size_flags_horizontal = 5
 custom_styles/normal = SubResource( 10 )
 custom_fonts/font = SubResource( 8 )
 text = "Name"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PointNine" type="Control" parent="HUD/HUD"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 12 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Border" type="Panel" parent="HUD/HUD/PointNine"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -17.0
+margin_top = -129.0
+margin_right = -7.0
+margin_bottom = -7.0
+custom_styles/panel = SubResource( 14 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Soul" type="Panel" parent="HUD/HUD/PointNine"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -16.0
+margin_top = -48.0
+margin_right = -8.0
+margin_bottom = -8.0
+custom_styles/panel = SubResource( 15 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Heat" type="Panel" parent="HUD/HUD/PointNine"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -16.0
+margin_top = -88.0
+margin_right = -8.0
+margin_bottom = -48.0
+custom_styles/panel = SubResource( 16 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Blood" type="Panel" parent="HUD/HUD/PointNine"]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -16.0
+margin_top = -128.0
+margin_right = -8.0
+margin_bottom = -88.0
+custom_styles/panel = SubResource( 17 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
