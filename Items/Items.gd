@@ -193,13 +193,13 @@ func pick_random_modifier(rng:RandomNumberGenerator = LootRNG) -> SpellMod:
 	var mod := SpellMod.new()
 	match rng.randi()%2:
 		1:
-			mod.level = 1 + rng.randi() % 5
+			mod.level = 2 + rng.randi() % 5
 			mod.id = "multiplicative"
 			mod.name = "Multiplicative Cast"
 			mod.description = "Many from alterations of one\nIterations: " + str(mod.level)
 			mod.texture = preload("res://Sprites/Spells/Modifiers/Multiplicative.png")
 		0:
-			mod.level = 1 + rng.randi() % 5
+			mod.level = 2 + rng.randi() % 5
 			mod.id = "unifying"
 			mod.name = "Unifying Cast"
 			mod.description = "One from alterations of many\nAmalgamations: " + str(mod.level)
