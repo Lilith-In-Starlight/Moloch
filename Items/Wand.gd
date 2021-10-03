@@ -2,6 +2,8 @@ extends Reference
 
 class_name Wand
 
+signal finished_casting
+
 var spell_capacity :int = 1 + Items.LootRNG.randi()%5
 var spell_recharge :float = Items.LootRNG.randf()*0.3
 var full_recharge :float = Items.LootRNG.randf()*1.7
@@ -67,3 +69,9 @@ func run(Caster:Node2D):
 		can_cast = true
 		self.running = true
 		Items.running_wands.append([self, Caster])
+
+
+func unrun():
+	if running:
+		running = false
+		emit_signal("finished_casting")

@@ -91,7 +91,6 @@ func _ready():
 	# If the player is in the tree, set the Player variable of this node to it
 	if not get_tree().get_nodes_in_group("Player").empty():
 		Player = get_tree().get_nodes_in_group("Player")[0]
-	var selected_wand := 0
 	player_health = Flesh.new()
 
 	player_wands[0] = Wand.new()
@@ -110,6 +109,7 @@ func _process(delta):
 		var wand :Wand = run[0]
 		var caster :Node2D = run[1]
 		if not is_instance_valid(caster):
+			wand.unrun()
 			running_wands.erase(run)
 			continue
 		if wand is Wand:
@@ -122,9 +122,9 @@ func _process(delta):
 				# Cast cooldown
 				if (wand.current_spell >= wand.spell_capacity-1 or wand.spells[wand.current_spell] == null) and wand.recharge >= wand.full_recharge:
 					wand.recharge = 0.0
-					wand.running = false
 					wand.can_cast = true
 					wand.current_spell = 0
+					wand.unrun()
 					running_wands.erase(run)
 					continue
 				# Recharge
@@ -135,7 +135,10 @@ func _process(delta):
 				else:
 					wand.recharge += delta
 			else: # If the wand isn't being cast
+				wand.unrun()
 				wand.current_spell = 0
+				running_wands.erase(run)
+				continue
 
 
 func register_item(tier:int, name_id:String, name:String, desc:String, texture:Texture):
@@ -191,19 +194,25 @@ func pick_random_item(rng:RandomNumberGenerator = LootRNG) -> Item:
 
 func pick_random_modifier(rng:RandomNumberGenerator = LootRNG) -> SpellMod:
 	var mod := SpellMod.new()
-	match rng.randi()%2:
-		1:
-			mod.level = 2 + rng.randi() % 5
+	match rng.randi()%3:
+		0:
+			mod.level = 2 + rng.randi() % 4
 			mod.id = "multiplicative"
 			mod.name = "Multiplicative Cast"
 			mod.description = "Many from alterations of one\nIterations: " + str(mod.level)
 			mod.texture = preload("res://Sprites/Spells/Modifiers/Multiplicative.png")
-		0:
-			mod.level = 2 + rng.randi() % 5
+		1:
+			mod.level = 2 + rng.randi() % 4
 			mod.id = "unifying"
 			mod.name = "Unifying Cast"
 			mod.description = "One from alterations of many\nAmalgamations: " + str(mod.level)
 			mod.texture = preload("res://Sprites/Spells/Modifiers/UnifyingM.png")
+		2:
+			mod.level = 1 + rng.randi() % 5
+			mod.id = "grenade"
+			mod.name = "Grenade Cast"
+			mod.description = "Copies spells into a grenade wand\nCopied Spells: " + str(mod.level)
+			mod.texture = preload("res://Sprites/Spells/Modifiers/Grenade.png")
 	spell_mods.append(mod)
 	return mod
 
@@ -227,8 +236,13 @@ func reset_player():
 	cloth_scraps = 3
 	player_items = []
 	player_spells = [null,null,null,null,null,null]
-	if LootRNG.randf() < 0.25:
+	if LootRNG.randf() < 1.0:
 		player_spells[0] = pick_random_modifier()
+		player_spells[1] = pick_random_modifier()
+		player_spells[2] = pick_random_modifier()
+		player_spells[3] = pick_random_modifier()
+		player_spells[4] = pick_random_modifier()
+		player_spells[5] = pick_random_modifier()
 	player_wands = [null,null,null,null,null,null]
 	player_wands[0] = Wand.new()
 	player_wands[1] = Wand.new()
@@ -268,6 +282,20 @@ func cast_spell(wand:Wand, caster:Node2D, slot_offset := 0, goal_offset := Vecto
 					away += c_spell.level
 					for i in c_spell.level:
 						away = max(cast_spell(wand, caster, slot_offset + i + 1, goal_offset), away)
+				"grenade":
+					away += c_spell.level + 1
+					var spell :Node2D = preload("res://Spells/CastGrenade.tscn").instance()
+					spell.CastInfo.Caster = caster
+					spell.CastInfo.goal = caster.looking_at()
+					spell.CastInfo.goal_offset = goal_offset
+					spell.wand = wand.duplicate()
+					spell.wand.spell_capacity = c_spell.level
+					var spells_to_cast := []
+					for i in c_spell.level:
+						spells_to_cast.append(wand.spells[wand.current_spell+slot_offset+1+i])
+					spell.wand.spells = spells_to_cast
+					caster.get_parent().add_child(spell)
+					
 	return away + slot_offset
 
 func break_block(block: int, strength: float) -> int:
