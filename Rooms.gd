@@ -12,7 +12,7 @@ func _ready():
 		var file := dir.get_next()
 		if file != "":
 			var di := "res://Rooms/Sacrifice/" + file
-			if di.find("Begin") == -1 and di.find("End") == -1 and di.find("Treasure"):
+			if di.find("Begin") == -1 and di.find("End") == -1:
 				print(di)
 				var c = load(di)
 				rooms.append(c)
