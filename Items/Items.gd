@@ -194,7 +194,7 @@ func pick_random_item(rng:RandomNumberGenerator = LootRNG) -> Item:
 
 func pick_random_modifier(rng:RandomNumberGenerator = LootRNG) -> SpellMod:
 	var mod := SpellMod.new()
-	match rng.randi()%3:
+	match rng.randi()%4:
 		0:
 			mod.level = 2 + rng.randi() % 4
 			mod.id = "multiplicative"
@@ -213,6 +213,12 @@ func pick_random_modifier(rng:RandomNumberGenerator = LootRNG) -> SpellMod:
 			mod.name = "Grenade Cast"
 			mod.description = "Copies spells into a grenade wand\nCopied Spells: " + str(mod.level)
 			mod.texture = preload("res://Sprites/Spells/Modifiers/Grenade.png")
+		3:
+			mod.level = 1 + rng.randi() % 5
+			mod.id = "landmine"
+			mod.name = "Landmine Cast"
+			mod.description = "Copies spells into a landmine wand\nCopied Spells: " + str(mod.level)
+			mod.texture = preload("res://Sprites/Spells/Modifiers/Landmine.png")
 	spell_mods.append(mod)
 	return mod
 
@@ -238,11 +244,6 @@ func reset_player():
 	player_spells = [null,null,null,null,null,null]
 	if LootRNG.randf() < 1.0:
 		player_spells[0] = pick_random_modifier()
-		player_spells[1] = pick_random_modifier()
-		player_spells[2] = pick_random_modifier()
-		player_spells[3] = pick_random_modifier()
-		player_spells[4] = pick_random_modifier()
-		player_spells[5] = pick_random_modifier()
 	player_wands = [null,null,null,null,null,null]
 	player_wands[0] = Wand.new()
 	player_wands[1] = Wand.new()
@@ -274,6 +275,8 @@ func cast_spell(wand:Wand, caster:Node2D, slot_offset := 0, goal_offset := Vecto
 				"multiplicative":
 					away += 1
 					for i in c_spell.level:
+						if i + slot_offset + 1 >= wand.spell_capacity:
+							break
 						var offset :Vector2 = (caster.looking_at()-caster.position).rotated(-2+randf()*4)
 						if i == 0:
 							offset *= 0
@@ -281,9 +284,11 @@ func cast_spell(wand:Wand, caster:Node2D, slot_offset := 0, goal_offset := Vecto
 				"unifying":
 					away += c_spell.level
 					for i in c_spell.level:
+						if i + slot_offset + 1 >= wand.spell_capacity:
+							break
 						away = max(cast_spell(wand, caster, slot_offset + i + 1, goal_offset), away)
 				"grenade":
-					away += c_spell.level + 1
+					away += c_spell.level
 					var spell :Node2D = preload("res://Spells/CastGrenade.tscn").instance()
 					spell.CastInfo.Caster = caster
 					spell.CastInfo.goal = caster.looking_at()
@@ -292,6 +297,23 @@ func cast_spell(wand:Wand, caster:Node2D, slot_offset := 0, goal_offset := Vecto
 					spell.wand.spell_capacity = c_spell.level
 					var spells_to_cast := []
 					for i in c_spell.level:
+						if i + slot_offset + 1 >= wand.spell_capacity:
+							break
+						spells_to_cast.append(wand.spells[wand.current_spell+slot_offset+1+i])
+					spell.wand.spells = spells_to_cast
+					caster.get_parent().add_child(spell)
+				"landmine":
+					away += c_spell.level
+					var spell :Node2D = preload("res://Spells/CastLandmine.tscn").instance()
+					spell.CastInfo.Caster = caster
+					spell.CastInfo.goal = caster.looking_at()
+					spell.CastInfo.goal_offset = goal_offset
+					spell.wand = wand.duplicate()
+					spell.wand.spell_capacity = c_spell.level
+					var spells_to_cast := []
+					for i in c_spell.level:
+						if i + slot_offset + 1 >= wand.spell_capacity:
+							break
 						spells_to_cast.append(wand.spells[wand.current_spell+slot_offset+1+i])
 					spell.wand.spells = spells_to_cast
 					caster.get_parent().add_child(spell)
