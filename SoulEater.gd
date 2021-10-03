@@ -24,7 +24,7 @@ func _physics_process(delta):
 				var shatter := min(col.health_object().soul, 0.1)
 				CastInfo.Caster.health_object().shatter_soul(-shatter)
 				col.health_object().shatter_soul(shatter)
-		elif is_instance_valid(CastInfo.Caster) and not did:
+		elif is_instance_valid(CastInfo.Caster) and not did and CastInfo.Caster.has_method("health_object"):
 			CastInfo.Caster.health_object().shatter_soul(0.1)
 			did = true
 		$Line2D.points = [Vector2(0, 0), get_collision_point()-position]

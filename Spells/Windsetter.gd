@@ -26,7 +26,7 @@ func _process(delta):
 			n.rotation = angle+(-3+i)*0.2
 			get_parent().add_child(n)
 		if rc.is_colliding():
-			if is_instance_valid(CastInfo.Caster):
+			if is_instance_valid(CastInfo.Caster) and CastInfo.Caster.get("speed"):
 				CastInfo.Caster.speed -= rc.cast_to.normalized()*4.5
 			if rc.get_collider().get("speed"):
 				rc.get_collider().speed += rc.cast_to.normalized()*4.5

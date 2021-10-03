@@ -33,7 +33,7 @@ func _process(delta):
 				2: n.modulate = "#feb700"
 			get_parent().add_child(n)
 		if rc.is_colliding():
-			if is_instance_valid(CastInfo.Caster):
+			if is_instance_valid(CastInfo.Caster) and CastInfo.Caster.get("speed"):
 				CastInfo.Caster.speed -= rc.cast_to.normalized()*4.5
 			if rc.get_collider().has_method("health_object"):
 				rc.get_collider().health_object().temp_change(12)
