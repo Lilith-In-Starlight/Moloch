@@ -8,7 +8,7 @@ func _ready():
 	$Sprite.render_wand(wand)
 	Player = get_tree().get_nodes_in_group("Player")[0]
 
-func _process(delta):
+func _process(_delta):
 	$Sprite.render_wand(wand)
 	$Sprite.rotation = -rotation
 	

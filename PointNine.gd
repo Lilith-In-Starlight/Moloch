@@ -7,7 +7,7 @@ func _ready():
 	player_health = get_tree().get_nodes_in_group("Player")[0].health_object()
 
 
-func _process(delta):
+func _process(_delta):
 	visible = Items.player_items.has(".9")
 	var maximum := max(player_health.death_hypertemperature, player_health.temperature) + abs(player_health.death_hypotemperature) + player_health.soul + max(player_health.blood, player_health.max_blood)
 	var height := get_viewport_rect().size.y - 12

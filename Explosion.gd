@@ -26,7 +26,7 @@ func _process(delta):
 		modulate.a -= 0.1
 	update()
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	if done < 3:
 		for body in get_overlapping_bodies():
 			if body.has_method("health_object"):

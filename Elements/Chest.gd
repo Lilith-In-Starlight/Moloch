@@ -22,7 +22,7 @@ func _ready():
 		TYPES.SPELL:
 			$Sprite.modulate = "#188add"
 
-func _process(delta):
+func _process(_delta):
 	if not open:
 		if Player.position.distance_to(position) < 16:
 			if Input.is_action_just_pressed("down"):

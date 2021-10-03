@@ -2,7 +2,7 @@ extends Control
 
 var been_to := []
 
-func _process(delta):
+func _process(_delta):
 	update()
 
 func _draw():

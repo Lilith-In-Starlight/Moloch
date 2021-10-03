@@ -7,7 +7,7 @@ var Cam :Camera2D
 func _ready():
 	Cam = get_tree().get_nodes_in_group("Camera")[0]
 
-func _process(delta):
+func _process(_delta):
 	var cam_pos := Cam.get_camera_position() + Cam.offset - Vector2(400, 225)/2.0
 	var x := -1
 	var y := -1

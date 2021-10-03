@@ -15,5 +15,3 @@ shape = SubResource( 1 )
 [node name="Sprite" type="Sprite" parent="."]
 scale = Vector2( 1.5, 1.5 )
 texture = ExtResource( 2 )
-
-[connection signal="body_entered" from="." to="." method="_on_body_entered"]

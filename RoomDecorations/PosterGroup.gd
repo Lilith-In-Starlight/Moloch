@@ -14,7 +14,7 @@ func _ready():
 			n.z_index = -1
 			get_parent().get_parent().call_deferred("add_child", n)
 
-func _process(delta):
+func _process(_delta):
 	if Engine.editor_hint and shape != null:
 		update()
 

@@ -12,13 +12,13 @@ func _ready():
 	else:
 		$AnimationPlayer.play_backwards("Open")
 
-func _process(delta):
+func _process(_delta):
 	if not came_from:
 		if position.distance_to(Player.position) < 20 and Input.is_action_just_pressed("down"):
 			$AnimationPlayer.play("Open")
 			
 
 
-func _on_animation_finished(anim_name):
+func _on_animation_finished(_anim_name):
 	if not came_from:
 		emit_signal("level_ended")

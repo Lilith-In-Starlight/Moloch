@@ -20,7 +20,7 @@ func _ready():
 						pos.x += 17 + Items.WorldRNG.randf()*8
 
 
-func _process(delta):
+func _process(_delta):
 	if Engine.editor_hint:
 		update()
 	else:

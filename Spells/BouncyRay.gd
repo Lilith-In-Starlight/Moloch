@@ -20,12 +20,11 @@ func _ready():
 func _physics_process(delta):
 	timer += delta
 	if is_colliding():
+		var pos := get_collision_point()
 		if get_collider().has_method("health_object") and not did:
 			get_collider().health_object().poke_hole()
 			did = true
-		var pos := get_collision_point()
-		var normal := get_collision_normal()
-		$RayCast2D.points = [Vector2(0, 0), get_collision_point()-position]
+		$RayCast2D.points = [Vector2(0, 0), pos-position]
 		if times_done < 12 and timer > 0.18 and not casted:
 			casted = true
 			var new = load("res://Spells/BouncyRay.tscn").instance()

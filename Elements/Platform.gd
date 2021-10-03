@@ -28,7 +28,7 @@ func _ready():
 			Vector2(0, 4),
 		]
 
-func _process(delta):
+func _process(_delta):
 	if Engine.editor_hint:
 		$KinematicBody2D/StaticBody2D.shape = RectangleShape2D.new()
 		$KinematicBody2D/StaticBody2D.shape.extents = Vector2(size*4, 4)

@@ -14,7 +14,7 @@ func _ready():
 		$VisibilityEnabler2D.rect = Rect2(-6,0,12,8*size)
 		Map = get_tree().get_nodes_in_group("World")[0]
 
-func _process(delta):
+func _process(_delta):
 	if Engine.editor_hint:
 		$Poles.scale.y = 0.5 * size
 	else:
