@@ -182,7 +182,7 @@ func _process(delta):
 		health.temp_regulation += 0.005
 	
 	for i in Items.player_items.count("gluestone"):
-		if get_tree().get_nodes_in_group("Gluestone").size() > i:
+		if get_tree().get_nodes_in_group("Gluestone").size() <= i:
 			var new_gluestone := preload("res://Companions/Gluestone.tscn").instance()
 			new_gluestone.position = position
 			get_parent().add_child(new_gluestone)
