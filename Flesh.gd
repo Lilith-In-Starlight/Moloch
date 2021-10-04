@@ -22,6 +22,7 @@ var broken_moving_appendages := 0
 var needs_blood := true
 var max_blood := 1.0
 var poked_holes := 0
+var max_holes := 200
 var blood := 1.0
 
 var weak_to_temp := true
@@ -61,7 +62,7 @@ func full_heal():
 
 func process_health():
 	blood -= poked_holes * (0.5+randf())*0.0005
-	if temperature > death_hypertemperature or temperature < death_hypotemperature or soul <= 0.0 or blood <= 0.0:
+	if temperature > death_hypertemperature or temperature < death_hypotemperature or soul <= 0.0 or blood <= 0.0 or poked_holes > max_holes:
 		if cause_of_death == -1:
 			if temperature > death_hypertemperature:
 				cause_of_death = DEATHS.HYPER
@@ -69,9 +70,9 @@ func process_health():
 				cause_of_death = DEATHS.HYPO
 			elif soul <= 0.0:
 				cause_of_death = DEATHS.SOUL
+			elif poked_holes > max_holes:
+				cause_of_death = DEATHS.HOLES
 			elif blood <= 0.0:
-				if poked_holes < 200:
-					cause_of_death = DEATHS.BLED
-				else:
-					cause_of_death = DEATHS.HOLES
+				cause_of_death = DEATHS.BLED
+				
 		emit_signal("died")
