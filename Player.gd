@@ -187,6 +187,12 @@ func _process(delta):
 			new_gluestone.position = position
 			get_parent().add_child(new_gluestone)
 	
+	for i in Items.player_items.count("egg"):
+		if get_tree().get_nodes_in_group("Egg").size() <= i:
+			var new_gluestone := preload("res://Companions/FloatingEgg.tscn").instance()
+			new_gluestone.position = position
+			get_parent().add_child(new_gluestone)
+	
 	# Control wand HUD
 	if Items.player_wands[Items.selected_wand] is Wand and Input.is_action_just_pressed("Interact1") and not Items.player_wands[Items.selected_wand].running and not get_tree().get_nodes_in_group("HUD")[0].block_cast:
 		Items.player_wands[Items.selected_wand].shuffle()
