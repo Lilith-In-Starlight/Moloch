@@ -42,15 +42,19 @@ var soul := 1.0
 
 var is_players := false
 
+
 func shatter_soul(freq :float) -> void:
 	soul -= freq
-	
+
+
 func poke_hole(holes := 1) -> void:
 	poked_holes += holes
 	emit_signal("hole_poked")
 
+
 func temp_change(deg :float) -> void:
 	temperature += deg
+
 
 func full_heal():
 	broken_moving_appendages = 0
@@ -59,6 +63,7 @@ func full_heal():
 	temperature = normal_temperature
 	soul = 1.0
 	emit_signal("full_healed")
+
 
 func process_health():
 	blood -= poked_holes * (0.5+randf())*0.0005
@@ -76,3 +81,4 @@ func process_health():
 				cause_of_death = DEATHS.BLED
 				
 		emit_signal("died")
+
