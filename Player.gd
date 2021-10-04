@@ -181,6 +181,12 @@ func _process(delta):
 		Items.player_items.erase("dissipator")
 		health.temp_regulation += 0.005
 	
+	for i in Items.player_items.count("gluestone"):
+		if get_tree().get_nodes_in_group("Gluestone").size() > i:
+			var new_gluestone := preload("res://Companions/Gluestone.tscn").instance()
+			new_gluestone.position = position
+			get_parent().add_child(new_gluestone)
+	
 	# Control wand HUD
 	if Items.player_wands[Items.selected_wand] is Wand and Input.is_action_just_pressed("Interact1") and not Items.player_wands[Items.selected_wand].running and not get_tree().get_nodes_in_group("HUD")[0].block_cast:
 		Items.player_wands[Items.selected_wand].shuffle()
