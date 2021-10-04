@@ -50,6 +50,8 @@ var running_wands := []
 
 var spell_mods := []
 
+var companions := []
+
 func _ready():
 	var generator_seed := hash(OS.get_time())
 	print("Generator seed: ", generator_seed)
@@ -242,7 +244,7 @@ func reset_player():
 	LootRNG.seed = generator_seed*2
 	player_health = Flesh.new()
 	cloth_scraps = 3
-	player_items = []
+	player_items = ["egg","egg","egg","egg"]
 	player_spells = [null,null,null,null,null,null]
 	if LootRNG.randf() < 1.0:
 		player_spells[0] = pick_random_modifier()

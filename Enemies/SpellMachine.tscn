@@ -7,7 +7,9 @@
 
 [sub_resource type="CircleShape2D" id=1]
 
-[node name="SpellMachine" type="KinematicBody2D"]
+[node name="SpellMachine" type="KinematicBody2D" groups=[
+"Enemy",
+]]
 collision_layer = 8
 collision_mask = 203
 script = ExtResource( 1 )

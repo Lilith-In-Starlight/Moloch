@@ -25,7 +25,8 @@ func _process(delta):
 		angle_accel = 0.1*60
 	if is_instance_valid(CastInfo.Caster):
 		position = CastInfo.Caster.position + Vector2(cos(rotation), sin(rotation))*lenght + Vector2(0, fallen)
-		CastInfo.Caster.speed += Vector2(cos(rotation), sin(rotation))*48/lenght
+		if CastInfo.Caster.get("speed"):
+			CastInfo.Caster.speed += Vector2(cos(rotation), sin(rotation))*48/lenght
 	else:
 		queue_free()
 	timer += delta
