@@ -67,17 +67,17 @@ func full_heal():
 
 func process_health():
 	blood -= poked_holes * (0.5+randf())*0.0005
-	if temperature > death_hypertemperature or temperature < death_hypotemperature or soul <= 0.0 or blood <= 0.0 or poked_holes > max_holes:
+	if ((temperature > death_hypertemperature or temperature < death_hypotemperature) and weak_to_temp) or (soul <= 0.0 and has_soul) or (blood <= 0.0 and needs_blood) or poked_holes > max_holes:
 		if cause_of_death == -1:
-			if temperature > death_hypertemperature:
+			if temperature > death_hypertemperature and weak_to_temp:
 				cause_of_death = DEATHS.HYPER
-			elif temperature < death_hypotemperature:
+			elif temperature < death_hypotemperature and weak_to_temp:
 				cause_of_death = DEATHS.HYPO
-			elif soul <= 0.0:
+			elif soul <= 0.0 and has_soul:
 				cause_of_death = DEATHS.SOUL
 			elif poked_holes > max_holes:
 				cause_of_death = DEATHS.HOLES
-			elif blood <= 0.0:
+			elif blood <= 0.0 and needs_blood:
 				cause_of_death = DEATHS.BLED
 				
 		emit_signal("died")
