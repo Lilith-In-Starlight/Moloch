@@ -4,5 +4,8 @@
 export.cfg
 export_presets.cfg
 
+# I keep accidentally saving things in aseprite format
+*.aseprite
+
 # Mono-specific ignores
 .mono/
