@@ -69,6 +69,7 @@ func _ready():
 	register_item(3, "dissipator", "Black Body Radiation", "Your body temperature lowers slightly faster", preload("res://Sprites/Items/DissipateHeat.png"))
 	register_item(2, "heatadapt", "Heat Adaptation", "You become able to stand slightly greater temperatures", preload("res://Sprites/Items/SurviveHeat.png"))
 	register_item(2, ".9", "Point Nine", "Displays the current state of the bearer's body.", preload("res://Sprites/Items/pointnine.png"))
+	register_item(1, "gluestone", "Gluestone", "Small entity that tries to act as a shield.", preload("res://Sprites/Items/Gluestone.png"))
 	
 	register_spell(4, "fuck you", "Fuck You", "Fuck everything in that particular direction", preload("res://Sprites/Spells/FuckYou.png"), preload("res://Spells/FuckYou.tscn"))
 	register_spell(2, "evilsight", "Evil Eye", "Look at things so fiercely you tear them apart", preload("res://Sprites/Spells/EvilEye.png"), preload("res://Spells/EvilSight.tscn"))
