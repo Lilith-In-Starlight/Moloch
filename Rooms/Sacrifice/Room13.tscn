@@ -5,6 +5,7 @@
 [ext_resource path="res://Elements/Platform.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Elements/Pole.tscn" type="PackedScene" id=4]
 
+
 [node name="Room" type="TileMap"]
 tile_set = ExtResource( 1 )
 cell_size = Vector2( 8, 8 )

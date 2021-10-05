@@ -60,9 +60,9 @@ config/windows_native_icon="res://icon.ico"
 
 [autoload]
 
-Decorations="*res://Decorations.gd"
-Rooms="*res://Rooms.gd"
-Items="*res://Items/Items.gd"
+Decorations="*res://Autoload/Decorations.gd"
+Rooms="*res://Autoload/Rooms.gd"
+Items="*res://Autoload/Items.gd"
 
 [display]
 

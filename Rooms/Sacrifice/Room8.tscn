@@ -3,6 +3,7 @@
 [ext_resource path="res://EditorTileset.tres" type="TileSet" id=1]
 [ext_resource path="res://Room.gd" type="Script" id=2]
 
+
 [node name="Room" type="TileMap"]
 tile_set = ExtResource( 1 )
 cell_size = Vector2( 8, 8 )
