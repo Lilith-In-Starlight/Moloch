@@ -21,7 +21,7 @@ onready var MouseSpellSlot := $HUD/MouseSlot
 onready var MouseWandSlot := $HUD/MouseWand
 
 var Player :KinematicBody2D
-
+var Map :TileMap
 
 var messages := []
 var message_timer := 0.0
@@ -52,6 +52,7 @@ var end_times : String # How long did the run last
 
 func _ready():
 	Player = get_tree().get_nodes_in_group("Player")[0]
+	Map = get_tree().get_nodes_in_group("World")[0]
 	if Items.level == 1:
 		Items.using_seed = Items.WorldRNG.seed
 	UsefulAdvice.text = advice[randi()%advice.size()] + "\n"
@@ -311,18 +312,10 @@ func _process(delta):
 	# drop the  item
 	if Input.is_action_just_pressed("Interact2") and clicked == -1:
 		if mouse_spell != null:
-			var new := preload("res://Items/SpellEntity.tscn").instance()
-			new.spell = mouse_spell
-			get_parent().add_child(new)
-			new.position = Player.position
-			new.linear_velocity.x = -120 + randf()*240
+			Map.summon_spell(mouse_spell, Player.position, Vector2(-120 + randf()*240, -100))
 		mouse_spell = null
 		if mouse_wand != null:
-			var new := preload("res://Items/WandEntity.tscn").instance()
-			new.wand = mouse_wand
-			get_parent().add_child(new)
-			new.position = Player.position
-			new.linear_velocity.x = -120 + randf()*240
+			Map.summon_wand(mouse_wand, Player.position, Vector2(-120 + randf()*240, -100))
 		mouse_wand = null
 	
 	# Hide the mouse slots if they have nothing

@@ -353,3 +353,28 @@ func fill_empty_space():
 			elif msec < 200:
 				iterations += 1
 			break
+
+
+func summon_item(item:Item, position: Vector2, speed: Vector2) -> void:
+	var new_item_entity := preload("res://Items/ItemEntity.tscn").instance()
+	new_item_entity.item = item
+	new_item_entity.position = position
+	new_item_entity.linear_velocity = speed
+	add_child(new_item_entity)
+
+
+func summon_spell(spell:Spell, position: Vector2, speed: Vector2) -> void:
+	var new_spell_entity := preload("res://Items/SpellEntity.tscn").instance()
+	new_spell_entity.spell = spell
+	new_spell_entity.position = position
+	new_spell_entity.linear_velocity = speed
+	add_child(new_spell_entity)
+
+
+func summon_wand(wand:Wand, position: Vector2, speed: Vector2) -> void:
+	var new_wand_entity := preload("res://Items/WandEntity.tscn").instance()
+	new_wand_entity.wand = wand
+	new_wand_entity.position = position
+	new_wand_entity.linear_velocity = speed
+	add_child(new_wand_entity)
+
