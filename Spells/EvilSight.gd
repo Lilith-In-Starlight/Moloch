@@ -47,7 +47,8 @@ func _physics_process(delta):
 			if is_instance_valid(CastInfo.Caster):
 				CastInfo.Caster.health_object().temperature += 1/60.0
 				CastInfo.Caster.health_object().temperature += 1/150.0
-				CastInfo.Caster.speed -= (pos-position).normalized()*5
+				if CastInfo.Caster.get("speed"):
+					CastInfo.Caster.speed -= (pos-position).normalized()*5
 		$Line2D.points = [Vector2(0, 0), pos2-position]
 	else:
 		$Line2D.points = [Vector2(0, 0), Vector2(cos(rotate), sin(rotate))*124]

@@ -72,7 +72,7 @@ func _ready():
 	register_item(2, "heatadapt", "Heat Adaptation", "You become able to stand slightly greater temperatures", preload("res://Sprites/Items/SurviveHeat.png"))
 	register_item(2, ".9", "Point Nine", "Displays the current state of the bearer's body.", preload("res://Sprites/Items/pointnine.png"))
 	register_item(1, "gluestone", "Gluestone", "Small entity that tries to act as a shield.", preload("res://Sprites/Items/Gluestone.png"))
-#	register_item(3, "egg", "Magic Egg", "If it hatches, it will summon a surprise.", preload("res://Sprites/Items/Egg.png"))
+	register_item(3, "egg", "Magic Egg", "If it hatches, it will summon a surprise.", preload("res://Sprites/Items/Egg.png"))
 	
 	register_spell(4, "fuck you", "Fuck You", "Fuck everything in that particular direction", preload("res://Sprites/Spells/FuckYou.png"), preload("res://Spells/FuckYou.tscn"))
 	register_spell(2, "evilsight", "Evil Eye", "Look at things so fiercely you tear them apart", preload("res://Sprites/Spells/EvilEye.png"), preload("res://Spells/EvilSight.tscn"))
@@ -244,7 +244,7 @@ func reset_player():
 	LootRNG.seed = generator_seed*2
 	player_health = Flesh.new()
 	cloth_scraps = 3
-	player_items = ["egg","egg","egg","egg"]
+	player_items = []
 	player_spells = [null,null,null,null,null,null]
 	if LootRNG.randf() < 1.0:
 		player_spells[0] = pick_random_modifier()
@@ -279,7 +279,7 @@ func cast_spell(wand:Wand, caster:Node2D, slot_offset := 0, goal_offset := Vecto
 				"multiplicative":
 					away += 1
 					for i in c_spell.level:
-						if i + slot_offset + 1 >= wand.spell_capacity:
+						if slot_offset + 1 >= wand.spell_capacity:
 							break
 						var offset :Vector2 = (caster.looking_at()-caster.position).rotated(-2+randf()*4)
 						if i == 0:

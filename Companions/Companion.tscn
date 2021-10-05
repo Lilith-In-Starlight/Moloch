@@ -18,3 +18,6 @@ texture = ExtResource( 2 )
 
 [node name="KinematicBody2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )
+
+[node name="RayCast2D" type="RayCast2D" parent="."]
+collision_mask = 11

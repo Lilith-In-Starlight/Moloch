@@ -10,6 +10,7 @@ onready var DeathScreenInfo := $HUD/Death/Info
 onready var MessageHUD := $HUD/Messages
 onready var ScrapsAmount := $HUD/Scraps/Amount
 onready var WandHUD := $HUD/Wands
+onready var CompanionWandHUD := $HUD/CompanionWands
 onready var SpellBagHUD := $HUD/SpellBag
 onready var WandSpellHUD := $HUD/Spells
 onready var DescriptionBox := $HUD/Description
@@ -130,6 +131,14 @@ func _process(delta):
 	for i in WandHUD.get_child_count():
 		WandHUD.get_child(i).render_wand(Items.player_wands[i], i == Items.selected_wand)
 	
+	for i in CompanionWandHUD.get_child_count():
+		if Items.companions.size() > i:
+			CompanionWandHUD.get_child(i).render_wand(Items.companions[i][1])
+			CompanionWandHUD.get_child(i).visible = true
+		else:
+			CompanionWandHUD.get_child(i).visible = false
+			
+	
 	# Show the spells the player is carrying
 	for i in SpellBagHUD.get_child_count():
 		if Items.player_spells[i] != null:
@@ -195,8 +204,33 @@ func _process(delta):
 						ShortDescriptionBox.text =  str(Items.player_wands[i].spell_recharge).pad_decimals(2) + "/" + str(Items.player_wands[i].full_recharge).pad_decimals(2)
 				break # Stop checking for if it's in a slot, we already did all this stuff
 	
+	# If the mouse is in the companions' wand area
+	elif mouse.x > 140 and mouse.y > 4 and mouse.y < 20 and mouse.x < 140 + 20*Items.companions.size():
+		for i in Items.companions.size():
+			# If a slot is selected
+			if mouse.x >= 140+i*(16+4) and mouse.x < 140+(i+1)*(16+4):
+				# Set the inventory and slot clicked, and don't let the
+				# player cast spells
+				clicked = 3
+				slot = i
+				block_cast = true 
+				# If the slot isn't empty
+				if Items.companions[i][1] != null:
+					# Which information to set
+					if Input.is_key_pressed(KEY_SHIFT):
+						DescriptionBox.visible = true
+						DescriptionBoxName.text = "Wand"
+						DescriptionBoxInfo.text = "Cast Cooldown: " + str(Items.companions[i][1].spell_recharge).pad_decimals(3)
+						DescriptionBoxInfo.text += "\nRecharge Time: " + str(Items.companions[i][1].full_recharge).pad_decimals(3)
+						if Items.companions[i][1].shuffle:
+							DescriptionBoxInfo.text += "\nShuffle"
+					else:
+						ShortDescriptionBox.visible = true
+						ShortDescriptionBox.text =  str(Items.companions[i][1].spell_recharge).pad_decimals(2) + "/" + str(Items.companions[i][1].full_recharge).pad_decimals(2)
+				break # Stop checking for if it's in a slot, we already did all this stuff
+	
 	# If the mouse is in the wands' spells area and is holding a wand
-	if mouse.x < 116 and mouse.y > 25 and mouse.y < 25+16 and Items.player_wands[Items.selected_wand] != null:
+	elif mouse.x < 116 and mouse.y > 25 and mouse.y < 25+16 and Items.player_wands[Items.selected_wand] != null:
 		var wand :Wand = Items.player_wands[Items.selected_wand]
 		for i in 6:
 			# If it's in a slot
@@ -266,6 +300,11 @@ func _process(delta):
 				if slot != -1:
 					var k :Wand = Items.player_wands[slot]
 					Items.player_wands[slot] = mouse_wand
+					mouse_wand = k
+			3:
+				if slot != -1:
+					var k :Wand = Items.companions[slot][1]
+					Items.companions[slot][1] = mouse_wand
 					mouse_wand = k
 	
 	# If the player right clicks and is not in an inventory space

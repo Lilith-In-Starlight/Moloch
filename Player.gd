@@ -194,10 +194,13 @@ func _process(delta):
 			get_parent().add_child(new_gluestone)
 	
 	# Companions
-	for i in Items.companions:
-		if not get_tree().get_nodes_in_group("Companion").has(i) and is_instance_valid(i):
-			i.position = position
-			get_parent().add_child(i)
+	for i in Items.companions.size():
+		if get_tree().get_nodes_in_group("Companion").size() <= i:
+			var new_gluestone := preload("res://Companions/Companion.tscn").instance()
+			new_gluestone.position = position
+			new_gluestone.health = Items.companions[i][0]
+			new_gluestone.wand = Items.companions[i][1]
+			get_parent().add_child(new_gluestone)
 	
 	# Control wand HUD
 	if Items.player_wands[Items.selected_wand] is Wand and Input.is_action_just_pressed("Interact1") and not Items.player_wands[Items.selected_wand].running and not get_tree().get_nodes_in_group("HUD")[0].block_cast:

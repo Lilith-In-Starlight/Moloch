@@ -340,6 +340,56 @@ margin_left = 100.0
 margin_right = 116.0
 margin_bottom = 16.0
 
+[node name="CompanionWands" type="HBoxContainer" parent="HUD/HUD"]
+margin_left = 140.0
+margin_top = 4.0
+margin_right = 256.0
+margin_bottom = 20.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Slot1" parent="HUD/HUD/CompanionWands" instance=ExtResource( 9 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 16.0
+margin_bottom = 16.0
+
+[node name="Slot2" parent="HUD/HUD/CompanionWands" instance=ExtResource( 9 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 20.0
+margin_right = 36.0
+margin_bottom = 16.0
+
+[node name="Slot3" parent="HUD/HUD/CompanionWands" instance=ExtResource( 9 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 40.0
+margin_right = 56.0
+margin_bottom = 16.0
+
+[node name="Slot4" parent="HUD/HUD/CompanionWands" instance=ExtResource( 9 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 60.0
+margin_right = 76.0
+margin_bottom = 16.0
+
+[node name="Slot5" parent="HUD/HUD/CompanionWands" instance=ExtResource( 9 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 80.0
+margin_right = 96.0
+margin_bottom = 16.0
+
+[node name="Slot6" parent="HUD/HUD/CompanionWands" instance=ExtResource( 9 )]
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_left = 100.0
+margin_right = 116.0
+margin_bottom = 16.0
+
 [node name="Spells" type="HBoxContainer" parent="HUD/HUD"]
 margin_left = 4.0
 margin_top = 25.0
@@ -637,6 +687,7 @@ __meta__ = {
 }
 
 [node name="Generating" type="Panel" parent="HUD/HUD"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 custom_styles/panel = SubResource( 15 )

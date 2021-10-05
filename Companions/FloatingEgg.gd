@@ -16,7 +16,7 @@ func _ready() -> void:
 	health.death_hypertemperature = 60.0
 	health.death_hypotemperature = 10.0
 	health.connect("died", self, "_on_broken_egg")
-#	$Timer.wait_time = 120.0 + randf() * 180.0
+	$Timer.wait_time = 120.0 + randf() * 180.0
 	$Timer.start()
 
 
@@ -45,5 +45,6 @@ func health_object() -> Flesh:
 
 func _on_hatch() -> void:
 	Items.player_items.erase("egg")
-	Items.companions.append(preload("res://Companions/Companion.tscn").instance())
+	if randf()<0.4:
+		Items.companions.append([Flesh.new(), null])
 	queue_free()
