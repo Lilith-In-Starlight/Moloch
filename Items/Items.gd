@@ -246,7 +246,7 @@ func reset_player():
 	cloth_scraps = 3
 	player_items = []
 	player_spells = [null,null,null,null,null,null]
-	if LootRNG.randf() < 1.0:
+	if LootRNG.randf() < 0.2:
 		player_spells[0] = pick_random_modifier()
 	player_wands = [null,null,null,null,null,null]
 	player_wands[0] = Wand.new()
@@ -298,13 +298,13 @@ func cast_spell(wand:Wand, caster:Node2D, slot_offset := 0, goal_offset := Vecto
 					spell.CastInfo.goal = caster.looking_at()
 					spell.CastInfo.goal_offset = goal_offset
 					spell.wand = wand.duplicate()
-					spell.wand.spell_capacity = c_spell.level
 					var spells_to_cast := []
 					for i in c_spell.level:
 						if wand.current_spell+slot_offset+1+i >= wand.spell_capacity:
 							break
 						spells_to_cast.append(wand.spells[wand.current_spell+slot_offset+1+i])
 					spell.wand.spells = spells_to_cast
+					spell.wand.spell_capacity = c_spell.level
 					caster.get_parent().add_child(spell)
 				"landmine":
 					away += c_spell.level
@@ -313,13 +313,13 @@ func cast_spell(wand:Wand, caster:Node2D, slot_offset := 0, goal_offset := Vecto
 					spell.CastInfo.goal = caster.looking_at()
 					spell.CastInfo.goal_offset = goal_offset
 					spell.wand = wand.duplicate()
-					spell.wand.spell_capacity = c_spell.level
 					var spells_to_cast := []
 					for i in c_spell.level:
 						if wand.current_spell+slot_offset+1+i >= wand.spell_capacity:
 							break
 						spells_to_cast.append(wand.spells[wand.current_spell+slot_offset+1+i])
 					spell.wand.spells = spells_to_cast
+					spell.wand.spell_capacity = c_spell.level
 					caster.get_parent().add_child(spell)
 					
 	return away + slot_offset
