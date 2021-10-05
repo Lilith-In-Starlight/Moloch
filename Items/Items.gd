@@ -299,7 +299,6 @@ func cast_spell(wand:Wand, caster:Node2D, slot_offset := 0, goal_offset := Vecto
 					spell.CastInfo.goal_offset = goal_offset
 					spell.wand = wand.duplicate()
 					spell.wand.spell_capacity = c_spell.level
-					spell.wand.fix_spells()
 					var spells_to_cast := []
 					for i in c_spell.level:
 						if wand.current_spell+slot_offset+1+i >= wand.spell_capacity:
@@ -315,7 +314,6 @@ func cast_spell(wand:Wand, caster:Node2D, slot_offset := 0, goal_offset := Vecto
 					spell.CastInfo.goal_offset = goal_offset
 					spell.wand = wand.duplicate()
 					spell.wand.spell_capacity = c_spell.level
-					spell.wand.fix_spells()
 					var spells_to_cast := []
 					for i in c_spell.level:
 						if wand.current_spell+slot_offset+1+i >= wand.spell_capacity:

@@ -4,7 +4,7 @@ class_name Wand
 
 signal finished_casting
 
-var spell_capacity :int = 1 + Items.LootRNG.randi()%5
+var spell_capacity :int = 1 + Items.LootRNG.randi()%5 setget set_spell_capacity
 var spell_recharge :float = Items.LootRNG.randf()*0.3
 var full_recharge :float = Items.LootRNG.randf()*1.7
 var spells := []
@@ -32,9 +32,7 @@ func _init():
 		randspell = Items.pick_random_spell()
 		spells.append(randspell)
 	
-	while spells.size() < spell_capacity:
-		spells.append(null)
-
+	fix_spells()
 
 func string():
 	return "SC: " + str(spell_capacity) + " SR: " + str(spell_recharge) + " FR: " + str(full_recharge) + " S: " + str(spells) + " RC: " + str(recharge) + " R: " + str(running) + " CS: " + str(current_spell)
@@ -75,3 +73,15 @@ func unrun():
 	if running:
 		running = false
 		emit_signal("finished_casting")
+
+
+func fix_spells() -> void:
+	while spells.size() < spell_capacity:
+		spells.append(null)
+	while spells.size() > spell_capacity:
+		spells.pop_back()
+
+
+func set_spell_capacity(new_value:int) -> void:
+	spell_capacity = new_value
+	fix_spells()
