@@ -12,8 +12,9 @@
 [ext_resource path="res://Sprites/Player/wallCling_oneleg.png" type="Texture" id=10]
 [ext_resource path="res://Sprites/Player/Crawling.png" type="Texture" id=11]
 [ext_resource path="res://Sprites/Player/Crawl.png" type="Texture" id=12]
-[ext_resource path="res://WandRenderSprite.tscn" type="PackedScene" id=13]
+[ext_resource path="res://Items/WandRenderSprite.tscn" type="PackedScene" id=13]
 [ext_resource path="res://Sprites/Player/RunLookback.png" type="Texture" id=14]
+
 
 [sub_resource type="RectangleShape2D" id=25]
 extents = Vector2( 3.03508, 10.5291 )
