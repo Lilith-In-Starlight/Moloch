@@ -25,6 +25,7 @@ var first_check := false
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	noise.seed = randi()
+	health.connect("holes_poked", self, "_on_holes_poked")
 	Player = get_tree().get_nodes_in_group("Player")[0]
 	if Player.position.distance_to(position) < 500:
 		queue_free()
@@ -131,3 +132,11 @@ func looking_at():
 
 func cast_from():
 	return $Eye.position + position
+
+
+func _on_holes_poked(amount:int) -> void:
+	match health.poked_holes:
+		0:
+			$Sprite.texture = preload("res://Sprites/Enemies/SoulDrone/body.png")
+		_:
+			$Sprite.texture = preload("res://Sprites/Enemies/SoulDrone/body_1.png")

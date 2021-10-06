@@ -4,6 +4,7 @@ class_name Flesh
 
 
 signal hole_poked
+signal holes_poked(amount)
 signal full_healed
 signal bled
 signal died
@@ -50,6 +51,7 @@ func shatter_soul(freq :float) -> void:
 func poke_hole(holes := 1) -> void:
 	poked_holes += holes
 	emit_signal("hole_poked")
+	emit_signal("holes_poked", holes)
 
 
 func temp_change(deg :float) -> void:
