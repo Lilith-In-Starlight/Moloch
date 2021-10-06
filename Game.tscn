@@ -10,7 +10,7 @@
 [ext_resource path="res://Sprites/Spells/Empty.png" type="Texture" id=8]
 [ext_resource path="res://HUD/WandRenderRect.tscn" type="PackedScene" id=9]
 [ext_resource path="res://Sprites/Items/Scraps.png" type="Texture" id=10]
-[ext_resource path="res://Background.gd" type="Script" id=11]
+[ext_resource path="res://RoomDecorations/Background.gd" type="Script" id=11]
 [ext_resource path="res://HUD/PointNine.gd" type="Script" id=12]
 
 [sub_resource type="CanvasItemMaterial" id=1]
