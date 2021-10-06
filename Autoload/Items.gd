@@ -52,6 +52,9 @@ var spell_mods := []
 
 var companions := []
 
+var all_items := {}
+var all_spells := {}
+
 
 func _ready():
 	var generator_seed := hash(OS.get_time())
@@ -75,7 +78,7 @@ func _ready():
 	register_item(1, "gluestone", "Gluestone", "Small entity that tries to act as a shield.", preload("res://Sprites/Items/Gluestone.png"))
 	register_item(3, "egg", "Magic Egg", "If it hatches, it will summon a surprise.", preload("res://Sprites/Items/Egg.png"))
 	
-	register_spell(4, "fuck you", "Fuck You", "Fuck everything in that particular direction", preload("res://Sprites/Spells/FuckYou.png"), preload("res://Spells/FuckYou.tscn"))
+	register_spell(4, "fuckyou", "Fuck You", "Fuck everything in that particular direction", preload("res://Sprites/Spells/FuckYou.png"), preload("res://Spells/FuckYou.tscn"))
 	register_spell(2, "evilsight", "Evil Eye", "Look at things so fiercely you tear them apart", preload("res://Sprites/Spells/EvilEye.png"), preload("res://Spells/EvilSight.tscn"))
 	register_spell(1, "shatter", "Unstable Shattering", "Summon orbs that vibrate in frequencies that disturb souls", preload("res://Sprites/Spells/Unstable.png"), preload("res://Spells/ShatteringOrb.tscn"))
 	register_spell(1, "ray", "Generic Ray", "Pew pew!", preload("res://Sprites/Spells/Ray.png"), preload("res://Spells/Ray.tscn"))
@@ -153,8 +156,9 @@ func register_item(tier:int, name_id:String, name:String, desc:String, texture:T
 	new.texture = texture
 	new.id = name_id
 	items[tier][name_id] = new
-	
-	
+	all_items[name_id] = new
+
+
 func register_spell(tier:int, name_id:String, name:String, desc:String, texture :Texture, entity :PackedScene):
 	var new := Spell.new()
 	new.name = name
@@ -163,6 +167,7 @@ func register_spell(tier:int, name_id:String, name:String, desc:String, texture 
 	new.texture = texture
 	new.entity = entity
 	spells[tier][name_id] = new
+	all_spells[name_id] = new
 
 
 func pick_random_spell(rng:RandomNumberGenerator = LootRNG) -> Spell:

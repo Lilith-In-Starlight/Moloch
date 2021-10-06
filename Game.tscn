@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=2]
+[gd_scene load_steps=34 format=2]
 
 [ext_resource path="res://Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://EditorTileset.tres" type="TileSet" id=2]
@@ -12,6 +12,7 @@
 [ext_resource path="res://Sprites/Items/Scraps.png" type="Texture" id=10]
 [ext_resource path="res://RoomDecorations/Background.gd" type="Script" id=11]
 [ext_resource path="res://HUD/PointNine.gd" type="Script" id=12]
+[ext_resource path="res://HUD/Console.gd" type="Script" id=13]
 
 [sub_resource type="CanvasItemMaterial" id=1]
 blend_mode = 1
@@ -105,6 +106,16 @@ font_data = ExtResource( 5 )
 size = 11
 use_mipmaps = true
 font_data = ExtResource( 5 )
+
+[sub_resource type="StyleBoxFlat" id=18]
+bg_color = Color( 0, 0, 0, 0.329412 )
+
+[sub_resource type="DynamicFont" id=20]
+size = 10
+font_data = ExtResource( 5 )
+
+[sub_resource type="StyleBoxFlat" id=19]
+bg_color = Color( 0, 0, 0, 0.552941 )
 
 [node name="Game" type="Node2D"]
 
@@ -222,6 +233,7 @@ __meta__ = {
 [node name="HUD" type="CanvasLayer" parent="." groups=[
 "HUD",
 ]]
+pause_mode = 2
 script = ExtResource( 6 )
 
 [node name="HUD" type="Control" parent="HUD"]
@@ -687,6 +699,7 @@ __meta__ = {
 }
 
 [node name="Generating" type="Panel" parent="HUD/HUD"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 custom_styles/panel = SubResource( 15 )
@@ -728,6 +741,34 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Console" type="VBoxContainer" parent="HUD/HUD"]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -220.0
+margin_bottom = 64.0
+custom_constants/separation = 0
+script = ExtResource( 13 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Output" type="RichTextLabel" parent="HUD/HUD/Console"]
+margin_right = 220.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 0, 50 )
+custom_styles/normal = SubResource( 18 )
+custom_fonts/normal_font = SubResource( 20 )
+bbcode_enabled = true
+scroll_following = true
+
+[node name="Input" type="LineEdit" parent="HUD/HUD/Console"]
+margin_top = 50.0
+margin_right = 220.0
+margin_bottom = 60.0
+custom_styles/normal = SubResource( 19 )
+custom_fonts/font = SubResource( 20 )
+caret_blink = true
+
 [node name="Player" parent="." groups=[
 "Player",
 ] instance=ExtResource( 1 )]
@@ -752,6 +793,8 @@ zoom = Vector2( 1.2, 1.2 )
 drag_margin_top = 0.4
 drag_margin_bottom = 0.4
 
+[connection signal="focus_entered" from="HUD/HUD/Console/Input" to="HUD/HUD/Console" method="_on_Input_focus_entered"]
+[connection signal="focus_exited" from="HUD/HUD/Console/Input" to="HUD/HUD/Console" method="_on_Input_focus_exited"]
 [connection signal="player_died" from="Player" to="HUD" method="_on_player_died"]
 [connection signal="generated_world" from="World" to="HUD" method="_on_generated_world"]
 [connection signal="generated_world" from="World" to="Player" method="_on_generated_world"]
