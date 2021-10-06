@@ -124,7 +124,7 @@ func _process(delta):
 		temp_stage = 2
 		# Player explodes on high temperatures if their blood is nitro
 		if Items.player_items.has("gasolineblood"):
-			var n := preload("res://Explosion.tscn").instance()
+			var n := preload("res://Particles/Explosion.tscn").instance()
 			n.position = position
 			get_parent().add_child(n)
 		message_send("You should slow down to cool off")
@@ -132,7 +132,7 @@ func _process(delta):
 		temp_stage = 3
 		# Player explodes on high temperatures if their blood is nitro
 		if Items.player_items.has("gasolineblood"):
-			var n := preload("res://Explosion.tscn").instance()
+			var n := preload("res://Particles/Explosion.tscn").instance()
 			n.position = position
 			get_parent().add_child(n)
 		message_send("Your insides feel like they're melting")
@@ -404,7 +404,7 @@ func _physics_process(delta):
 						# Break legs
 						if speed_before_collision.y > 800:
 							if Items.player_items.has("gasolineblood"):
-								var n := preload("res://Explosion.tscn").instance()
+								var n := preload("res://Particles/Explosion.tscn").instance()
 								n.position = position
 								get_parent().add_child(n)
 							
