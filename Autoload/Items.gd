@@ -52,6 +52,7 @@ var spell_mods := []
 
 var companions := []
 
+
 func _ready():
 	var generator_seed := hash(OS.get_time())
 	print("Generator seed: ", generator_seed)
