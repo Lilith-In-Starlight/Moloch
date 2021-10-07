@@ -8,6 +8,7 @@ signal holes_poked(amount)
 signal full_healed
 signal bled
 signal died
+signal was_damaged(type)
 
 enum DEATHS {
 	BLED,
@@ -46,16 +47,24 @@ var is_players := false
 
 func shatter_soul(freq :float) -> void:
 	soul -= freq
+	if freq > 0.0:
+		emit_signal("was_damaged", "soul")
 
 
 func poke_hole(holes := 1) -> void:
 	poked_holes += holes
 	emit_signal("hole_poked")
 	emit_signal("holes_poked", holes)
+	if holes > 0:
+		emit_signal("was_damaged", "hole")
 
 
 func temp_change(deg :float) -> void:
 	temperature += deg
+	if deg > 0:
+		emit_signal("was_damaged", "heat")
+	elif deg < 0:
+		emit_signal("was_damaged", "cold")
 
 
 func full_heal():

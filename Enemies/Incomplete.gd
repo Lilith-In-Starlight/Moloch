@@ -20,6 +20,7 @@ var wand := Wand.new()
 func _ready():
 	noise.seed = hash(self)
 	health.connect("died", self, "health_died")
+	health.connect("was_damaged",self, "_on_damaged")
 	health.blood = 0.4
 	Player = get_tree().get_nodes_in_group("Player")[0]
 	wand.full_recharge = max(wand.full_recharge, 1.5)
@@ -90,5 +91,14 @@ func health_died():
 func cast_from():
 	return $WandRenderSprite.position + position + Vector2(cos($WandRenderSprite.rotation-PI/4.0), sin($WandRenderSprite.rotation-PI/4.0))*5
 
+
 func looking_at():
 	return Vector2(cos($WandRenderSprite.rotation-PI/4.0), sin($WandRenderSprite.rotation-PI/4.0))*50 + position
+
+
+func _on_DamageTimer_timeout() -> void:
+	modulate = Color("#ffffff")
+
+
+func _on_damaged(damage_type:String) -> void:
+	Items.damage_visuals(self, $DamageTimer, damage_type)

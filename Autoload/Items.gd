@@ -330,9 +330,23 @@ func cast_spell(wand:Wand, caster:Node2D, slot_offset := 0, goal_offset := Vecto
 					
 	return away + slot_offset
 
+
 func break_block(block: int, strength: float) -> int:
 	match block:
 		0:
 			if strength > 0.2:
 				return -1
 	return block
+
+
+func damage_visuals(entity:Node2D, timer:Timer, damage_type: String) -> void:
+	timer.start()
+	match damage_type:
+		"hole":
+			entity.modulate = Color("#ff0000")
+		"heat":
+			entity.modulate = ColorN("orange")
+		"cold":
+			entity.modulate = Color("#00ffff")
+		"soul":
+			entity.modulate = Color("#00ff80")

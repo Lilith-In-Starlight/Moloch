@@ -32,3 +32,8 @@ texture = ExtResource( 2 )
 
 [node name="Eye" type="Sprite" parent="."]
 texture = ExtResource( 3 )
+
+[node name="DamageTimer" type="Timer" parent="."]
+wait_time = 0.2
+
+[connection signal="timeout" from="DamageTimer" to="." method="_on_DamageTimer_timeout"]

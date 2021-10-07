@@ -26,6 +26,7 @@ var first_check := false
 func _ready():
 	noise.seed = randi()
 	health.connect("holes_poked", self, "_on_holes_poked")
+	health.connect("was_damaged",self, "_on_damaged")
 	Player = get_tree().get_nodes_in_group("Player")[0]
 	if Player.position.distance_to(position) < 500:
 		queue_free()
@@ -140,3 +141,11 @@ func _on_holes_poked(amount:int) -> void:
 			$Sprite.texture = preload("res://Sprites/Enemies/SoulDrone/body.png")
 		_:
 			$Sprite.texture = preload("res://Sprites/Enemies/SoulDrone/body_1.png")
+
+
+func _on_DamageTimer_timeout() -> void:
+	modulate = Color("#ffffff")
+
+
+func _on_damaged(damage_type:String) -> void:
+	Items.damage_visuals(self, $DamageTimer, damage_type)

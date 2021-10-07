@@ -5,6 +5,7 @@ onready var SeedLineEdit := $LineEdit
 
 
 func _ready():
+	$VisualizeDamage.pressed = Config.damage_visuals
 	Animations.play("License")
 
 
@@ -33,3 +34,8 @@ func _on_Exit_pressed():
 func _on_animation_finished(anim_name):
 	if anim_name == "Fadein":
 		get_tree().change_scene("res://Game.tscn")
+
+
+func _on_VisualizeDamage_pressed() -> void:
+	Config.damage_visuals = $VisualizeDamage.pressed
+	Config.save_config()

@@ -59,6 +59,7 @@ func _ready():
 	# Setup
 	Items.Player = get_tree().get_nodes_in_group("Player")[0]
 	Map = get_tree().get_nodes_in_group("World")[0]
+	health.connect("was_damaged",self, "_on_damaged")
 	health.connect("hole_poked", self, "message_send", ["Bleeding"])
 	health.connect("full_healed", self, "message_send", ["Your flesh is renewed"])
 	health.connect("died", self, "health_died")
@@ -657,3 +658,11 @@ func health_died():
 		emit_signal("player_died")
 		state = STATES.DEAD
 		dead = true
+
+
+func _on_DamageTimer_timeout() -> void:
+	modulate = Color("#ffffff")
+
+
+func _on_damaged(damage_type:String) -> void:
+	Items.damage_visuals(self, $DamageTimer, damage_type)
