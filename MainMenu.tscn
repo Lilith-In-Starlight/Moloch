@@ -178,6 +178,10 @@ anti_aliasing = false
 size = 12
 font_data = ExtResource( 2 )
 
+[sub_resource type="DynamicFont" id=15]
+size = 12
+font_data = ExtResource( 2 )
+
 [sub_resource type="StyleBoxFlat" id=12]
 bg_color = Color( 0, 0, 0, 1 )
 
@@ -187,10 +191,6 @@ font_data = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=14]
 size = 40
-font_data = ExtResource( 2 )
-
-[sub_resource type="DynamicFont" id=15]
-size = 12
 font_data = ExtResource( 2 )
 
 [node name="MainMenu" type="Control"]
@@ -279,8 +279,18 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="VisualizeDamage" type="CheckBox" parent="."]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_top = -24.0
+margin_right = 102.0
+custom_fonts/font = SubResource( 15 )
+text = "Visualize Damage"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="Thing" type="Panel" parent="."]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 custom_styles/panel = SubResource( 12 )
@@ -289,7 +299,6 @@ __meta__ = {
 }
 
 [node name="Image" type="Control" parent="."]
-visible = false
 modulate = Color( 1, 1, 1, 0 )
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -325,17 +334,6 @@ custom_fonts/font = SubResource( 14 )
 text = "SadBlockGames"
 align = 1
 autowrap = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="VisualizeDamage" type="CheckBox" parent="."]
-anchor_top = 1.0
-anchor_bottom = 1.0
-margin_top = -24.0
-margin_right = 102.0
-custom_fonts/font = SubResource( 15 )
-text = "Visualize Damage"
 __meta__ = {
 "_edit_use_anchors_": false
 }

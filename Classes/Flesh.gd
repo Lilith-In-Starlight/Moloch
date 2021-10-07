@@ -41,6 +41,7 @@ var cause_of_death := -1
 
 var has_soul := true
 var soul := 1.0
+var needed_soul := 1.0
 
 var is_players := false
 

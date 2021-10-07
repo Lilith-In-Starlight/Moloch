@@ -189,6 +189,7 @@ collision_mask = 2
 [node name="Player" type="AnimatedSprite" parent="."]
 frames = SubResource( 24 )
 animation = "run_lookback"
+frame = 3
 playing = true
 
 [node name="WandRender" parent="." instance=ExtResource( 13 )]

@@ -556,8 +556,8 @@ func _physics_process(delta):
 	speed = move_and_slide(speed, -gravity_direction)
 	
 	# If the soul is unstable, the player jitters
-	if randf() < (1.0-health.soul)/15.0:
-		move_and_collide(Vector2(-1+randf()*2, -1+randf()*2)*((1.0-health.soul/10.0))*5.0)
+	if randf() < (health.needed_soul-health.soul)/15.0:
+		move_and_collide(Vector2(-1+randf()*2, -1+randf()*2)*((health.needed_soul-health.soul/10.0))*5.0)
 	
 	# Move the camera
 	$"../Camera2D".position = lerp($"../Camera2D".position, position, 0.1)
