@@ -94,3 +94,5 @@ func process_health():
 				
 		emit_signal("died")
 
+func _instakill_pressed():
+		emit_signal("died")

@@ -153,7 +153,7 @@ func _input(event: InputEvent) -> void:
 						"wandjson": 
 							if Items.player_wands[Items.selected_wand] != null:
 								OS.set_clipboard(Items.player_wands[Items.selected_wand].get_json())
-			KEY_ESCAPE:
+			KEY_F1:
 				$Input.release_focus()
 				visible = false
 

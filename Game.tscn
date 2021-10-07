@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=2]
+[gd_scene load_steps=37 format=2]
 
 [ext_resource path="res://Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://EditorTileset.tres" type="TileSet" id=2]
@@ -13,6 +13,7 @@
 [ext_resource path="res://RoomDecorations/Background.gd" type="Script" id=11]
 [ext_resource path="res://HUD/PointNine.gd" type="Script" id=12]
 [ext_resource path="res://HUD/Console.gd" type="Script" id=13]
+[ext_resource path="res://HUD/Pause.gd" type="Script" id=14]
 
 [sub_resource type="CanvasItemMaterial" id=1]
 blend_mode = 1
@@ -96,23 +97,29 @@ bg_color = Color( 1, 0.513726, 0, 1 )
 bg_color = Color( 1, 0.223529, 0.223529, 1 )
 
 [sub_resource type="StyleBoxFlat" id=18]
-bg_color = Color( 0, 0, 0, 0.329412 )
+bg_color = Color( 0, 0, 0, 0.423529 )
 
 [sub_resource type="DynamicFont" id=19]
+font_data = ExtResource( 5 )
+
+[sub_resource type="StyleBoxFlat" id=15]
+bg_color = Color( 0, 0, 0, 0.329412 )
+
+[sub_resource type="DynamicFont" id=16]
 size = 10
 font_data = ExtResource( 5 )
 
-[sub_resource type="StyleBoxFlat" id=20]
+[sub_resource type="StyleBoxFlat" id=17]
 bg_color = Color( 0, 0, 0, 0.552941 )
 
-[sub_resource type="StyleBoxFlat" id=15]
+[sub_resource type="StyleBoxFlat" id=20]
 bg_color = Color( 0, 0, 0, 1 )
 
-[sub_resource type="DynamicFont" id=16]
+[sub_resource type="DynamicFont" id=21]
 use_mipmaps = true
 font_data = ExtResource( 5 )
 
-[sub_resource type="DynamicFont" id=17]
+[sub_resource type="DynamicFont" id=22]
 size = 11
 use_mipmaps = true
 font_data = ExtResource( 5 )
@@ -648,6 +655,49 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Pause" type="Panel" parent="HUD/HUD" groups=[
+"PauseMenu",
+]]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_styles/panel = SubResource( 18 )
+script = ExtResource( 14 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Options" type="VBoxContainer" parent="HUD/HUD/Pause"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -47.5
+margin_top = -26.0
+margin_right = 47.5
+margin_bottom = 26.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DieInstantly" type="ToolButton" parent="HUD/HUD/Pause/Options"]
+margin_right = 95.0
+margin_bottom = 24.0
+custom_fonts/font = SubResource( 19 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_hover = Color( 0.737255, 1, 0.968627, 1 )
+custom_colors/font_color_pressed = Color( 1, 0.596078, 0.929412, 1 )
+text = "Die Instantly"
+
+[node name="Settings" type="ToolButton" parent="HUD/HUD/Pause/Options"]
+margin_top = 28.0
+margin_right = 95.0
+margin_bottom = 52.0
+custom_fonts/font = SubResource( 19 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_hover = Color( 0.737255, 1, 0.968627, 1 )
+custom_colors/font_color_pressed = Color( 1, 0.596078, 0.929412, 1 )
+text = "Settings"
+
 [node name="Console" type="VBoxContainer" parent="HUD/HUD"]
 visible = false
 anchor_left = 1.0
@@ -664,8 +714,8 @@ __meta__ = {
 margin_right = 220.0
 margin_bottom = 50.0
 rect_min_size = Vector2( 0, 50 )
-custom_styles/normal = SubResource( 18 )
-custom_fonts/normal_font = SubResource( 19 )
+custom_styles/normal = SubResource( 15 )
+custom_fonts/normal_font = SubResource( 16 )
 bbcode_enabled = true
 scroll_following = true
 
@@ -673,15 +723,16 @@ scroll_following = true
 margin_top = 50.0
 margin_right = 220.0
 margin_bottom = 60.0
-custom_styles/normal = SubResource( 20 )
-custom_fonts/font = SubResource( 19 )
+custom_styles/normal = SubResource( 17 )
+custom_fonts/font = SubResource( 16 )
 caret_blink = true
 
 [node name="Death" type="Panel" parent="HUD/HUD"]
+visible = false
 modulate = Color( 1, 1, 1, 0 )
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_styles/panel = SubResource( 15 )
+custom_styles/panel = SubResource( 20 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -695,7 +746,7 @@ margin_left = -56.0
 margin_top = -166.0
 margin_right = 56.0
 margin_bottom = -150.0
-custom_fonts/font = SubResource( 16 )
+custom_fonts/font = SubResource( 21 )
 text = "You Are Dead"
 align = 1
 __meta__ = {
@@ -711,7 +762,7 @@ margin_left = -132.0
 margin_top = -40.0
 margin_right = 132.0
 margin_bottom = 56.0
-custom_fonts/font = SubResource( 17 )
+custom_fonts/font = SubResource( 22 )
 text = "Cause of Death:
 Run Length:
 Seed:
@@ -726,9 +777,10 @@ __meta__ = {
 }
 
 [node name="Generating" type="Panel" parent="HUD/HUD"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_styles/panel = SubResource( 15 )
+custom_styles/panel = SubResource( 20 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -742,7 +794,7 @@ margin_left = -56.0
 margin_top = -30.0
 margin_right = 56.0
 margin_bottom = -14.0
-custom_fonts/font = SubResource( 16 )
+custom_fonts/font = SubResource( 21 )
 text = "Generating World"
 align = 1
 __meta__ = {
@@ -758,7 +810,7 @@ margin_left = -132.0
 margin_top = -48.0
 margin_right = 132.0
 margin_bottom = 48.0
-custom_fonts/font = SubResource( 17 )
+custom_fonts/font = SubResource( 22 )
 text = "Avoid breaking your knees by not falling long distances"
 align = 1
 valign = 1
@@ -791,6 +843,7 @@ zoom = Vector2( 1.2, 1.2 )
 drag_margin_top = 0.4
 drag_margin_bottom = 0.4
 
+[connection signal="pressed" from="HUD/HUD/Pause/Options/Settings" to="HUD/HUD/Pause" method="_on_Settings_pressed"]
 [connection signal="focus_entered" from="HUD/HUD/Console/Input" to="HUD/HUD/Console" method="_on_Input_focus_entered"]
 [connection signal="focus_exited" from="HUD/HUD/Console/Input" to="HUD/HUD/Console" method="_on_Input_focus_exited"]
 [connection signal="player_died" from="Player" to="HUD" method="_on_player_died"]
