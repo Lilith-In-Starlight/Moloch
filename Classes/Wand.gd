@@ -85,3 +85,19 @@ func fix_spells() -> void:
 func set_spell_capacity(new_value:int) -> void:
 	spell_capacity = new_value
 	fix_spells()
+
+
+func get_json() -> String:
+	var string := "{"
+	string += '"cast":' + '"' + str(spell_recharge) + '",'
+	string += '"recharge":' + '"' + str(full_recharge) + '",'
+	string += '"spellcap":' + '"' + str(spell_capacity) + '",'
+	if shuffle:
+		string += '"shuffle":"1",'
+	else:
+		string += '"shuffle":"0",'
+	string += '"color1":"#' + color1.to_html() + '",'
+	string += '"color2":"#' + color2.to_html() + '",'
+	string += '"color3":"#' + color3.to_html() + '"}'
+	return string
+

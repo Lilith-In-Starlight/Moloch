@@ -102,6 +102,8 @@ func _input(event: InputEvent) -> void:
 										if Items.player_wands.has(null):
 											var new_wand := Wand.new()
 											var tags :Dictionary = parse_result.result
+											for i in tags:
+												tags[i] = tags[i] as String
 											if "cast" in tags:
 												if tags["cast"].is_valid_float():
 													new_wand.spell_recharge = tags["cast"] as float
@@ -130,24 +132,27 @@ func _input(event: InputEvent) -> void:
 													_:
 														new_wand.shuffle = true
 											if "color1" in tags:
-												if tags["color1"].is_valid_hex_number():
+												if tags["color1"].is_valid_html_color():
 													new_wand.color1 = Color(tags["color1"])
 												elif tags["color1"] != "*":
 													output("[color=red]color1 is an invalid hex number[/color]")
 											if "color2" in tags:
-												if tags["color2"].is_valid_hex_number():
+												if tags["color2"].is_valid_html_color():
 													new_wand.color2 = Color(tags["color2"])
 												elif tags["color2"] != "*":
 													output("[color=red]color2 is an invalid hex number[/color]")
 											if "color3" in tags:
-												if tags["color3"].is_valid_hex_number():
-													new_wand.color1 = Color(tags["color3"])
+												if tags["color3"].is_valid_html_color():
+													new_wand.color3 = Color(tags["color3"])
 												elif tags["color2"] != "*":
 													output("[color=red]color3 is an invalid hex number[/color]")
 											var slot := Items.player_wands.find(null)
 											Items.player_wands[slot] = new_wand
 										else:
 											output("[color=red]No inventory space[/color]")
+						"wandjson": 
+							if Items.player_wands[Items.selected_wand] != null:
+								OS.set_clipboard(Items.player_wands[Items.selected_wand].get_json())
 			KEY_ESCAPE:
 				$Input.release_focus()
 				visible = false
