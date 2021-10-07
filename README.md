@@ -34,3 +34,6 @@ Moloch allows you to collect spells, letting you move them from wands and create
 
 ### Destructible levels
 Mostly everything can be destroyed if you have the right spells for it. Mostly. This means that, with the right equipment, nothing stops you from skipping rooms entirely or digging out of the world and miserably ending your run by falling to the void.
+
+## Code Documentation
+Under the hood, Moloch does weird stuff with classes to keep everything tidy and separate (this kind of thing is why spells and wands can be used by entities other than the player). If you want to know how this weird stuff works, here's a hopefully-not-so-outdated documentation: https://hackmd.io/@katie-and/HJlqEQMVK/https%3A%2F%2Fhackmd.io%2F%40katie-and%2FBJ4uZQMVF
