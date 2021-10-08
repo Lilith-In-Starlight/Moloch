@@ -81,6 +81,9 @@ func _physics_process(delta):
 	
 	# If the soul is unstable, the entity jitters
 	if randf() < (health.needed_soul-health.soul)/15.0:
+		var n := preload("res://Particles/Soul.tscn").instance()
+		n.position = position
+		get_parent().add_child(n)
 		move_and_collide(Vector2(-1 + randf() * 2, -1 +  randf()  * 2)  * ((1.0  - health.needed_soul / 10.0)) * 5.0)
 
 
