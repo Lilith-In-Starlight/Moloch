@@ -394,8 +394,8 @@ func _process(delta):
 				Items.player_wands[Items.selected_wand].spells[which_slot] = mouse_spell
 				mouse_spell = k
 			2:
-				var k :Wand = Items.player_wands[which_slot]
-				Items.player_wands[which_slot] = mouse_wand
+				var k :Wand = Items.player_wands[Items.selected_wand]
+				Items.player_wands[Items.selected_wand] = mouse_wand
 				mouse_wand = k
 			3:
 				var k :Wand = Items.companions[which_slot][1]
