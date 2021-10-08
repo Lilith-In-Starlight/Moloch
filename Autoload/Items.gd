@@ -340,13 +340,14 @@ func break_block(block: int, strength: float) -> int:
 
 
 func damage_visuals(entity:Node2D, timer:Timer, damage_type: String) -> void:
-	timer.start()
-	match damage_type:
-		"hole":
-			entity.modulate = Color("#ff0000")
-		"heat":
-			entity.modulate = ColorN("orange")
-		"cold":
-			entity.modulate = Color("#00ffff")
-		"soul":
-			entity.modulate = Color("#00ff80")
+	if Config.damage_visuals:
+		timer.start()
+		match damage_type:
+			"hole":
+				entity.modulate = Color("#ff0000")
+			"heat":
+				entity.modulate = ColorN("orange")
+			"cold":
+				entity.modulate = Color("#00ffff")
+			"soul":
+				entity.modulate = Color("#00ff80")

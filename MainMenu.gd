@@ -6,6 +6,7 @@ onready var SeedLineEdit := $LineEdit
 
 func _ready():
 	$VisualizeDamage.pressed = Config.damage_visuals
+	$InstantDeathButton.pressed = Config.instant_death_button
 	Animations.play("License")
 
 
@@ -38,4 +39,9 @@ func _on_animation_finished(anim_name):
 
 func _on_VisualizeDamage_pressed() -> void:
 	Config.damage_visuals = $VisualizeDamage.pressed
+	Config.save_config()
+
+
+func _on_InstantDeathButton_pressed() -> void:
+	Config.instant_death_button = $InstantDeathButton.pressed
 	Config.save_config()

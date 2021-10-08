@@ -297,7 +297,7 @@ margin_top = -48.0
 margin_right = 123.0
 margin_bottom = -24.0
 custom_fonts/font = SubResource( 12 )
-text = "Instant  Death Button"
+text = "Instant Death Button"
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -356,3 +356,4 @@ __meta__ = {
 [connection signal="pressed" from="Exit" to="." method="_on_Exit_pressed"]
 [connection signal="animation_finished" from="Animations" to="." method="_on_animation_finished"]
 [connection signal="pressed" from="VisualizeDamage" to="." method="_on_VisualizeDamage_pressed"]
+[connection signal="pressed" from="InstantDeathButton" to="." method="_on_InstantDeathButton_pressed"]

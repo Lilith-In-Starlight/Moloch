@@ -143,7 +143,7 @@ func _process(delta):
 	Cam.offset += (coffset-Cam.offset)/5.0
 	
 	# Death
-	if (Input.is_key_pressed(KEY_G)) and not dead:
+	if (Input.is_action_just_pressed("instant_death")) and not dead and Config.instant_death_button:
 		emit_signal("player_died")
 		state = STATES.DEAD
 		dead = true
