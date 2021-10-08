@@ -9,6 +9,7 @@ var last_input_was_controller := false
 # Accessibility
 var damage_visuals := false
 var instant_death_button := false
+var joystick_sensitivity := 6
 
 
 func _ready() -> void:
@@ -16,6 +17,7 @@ func _ready() -> void:
 	if err == OK:
 		damage_visuals = config_file.get_value("config", "damage_visuals", false)
 		instant_death_button = config_file.get_value("config", "instant_death_button", false)
+		joystick_sensitivity = config_file.get_value("config", "joystick_sensitivity", 6)
 	else:
 		save_config()
 	
@@ -26,6 +28,7 @@ func _ready() -> void:
 func save_config() -> void:
 	config_file.set_value("config", "damage_visuals", damage_visuals)
 	config_file.set_value("config", "instant_death_button", instant_death_button)
+	config_file.set_value("config", "joystick_sensitivity", joystick_sensitivity)
 	config_file.save("user://config.moloch")
 
 

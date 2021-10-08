@@ -7,6 +7,7 @@ onready var SeedLineEdit := $LineEdit
 func _ready():
 	$VisualizeDamage.pressed = Config.damage_visuals
 	$InstantDeathButton.pressed = Config.instant_death_button
+	$JoystickSensitivity/Text.text = "Joystick Sensitivity: " + str(Config.joystick_sensitivity)
 	Animations.play("License")
 
 
@@ -45,3 +46,10 @@ func _on_VisualizeDamage_pressed() -> void:
 func _on_InstantDeathButton_pressed() -> void:
 	Config.instant_death_button = $InstantDeathButton.pressed
 	Config.save_config()
+
+
+func _on_JoystickSensitivity_value_changed(value: float) -> void:
+	$JoystickSensitivity/Text.text = "Joystick Sensitivity: " + str(value)
+	Config.joystick_sensitivity = value
+	Config.save_config()
+	

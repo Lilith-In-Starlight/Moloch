@@ -8,6 +8,7 @@ func _ready() -> void:
 	$Settings/VisualizeDamage.connect("pressed", Items.player_health, "_instakill_pressed")
 	$Settings/VisualizeDamage.pressed = Config.damage_visuals
 	$Settings/InstantDeathButton.pressed = Config.instant_death_button
+	$Settings/JoystickSensitivity/Text.text = "Joystick Sensitivity: " + str(Config.joystick_sensitivity)
 
 
 func _on_DieInstantly_pressed() -> void:
@@ -42,4 +43,10 @@ func _on_VisualizeDamage_pressed() -> void:
 
 func _on_InstantDeathButton_pressed() -> void:
 	Config.instant_death_button = $Settings/InstantDeathButton.pressed
+	Config.save_config()
+
+
+func _on_JoystickSensitivity_value_changed(value: float) -> void:
+	$Settings/JoystickSensitivity/Text.text = "Joystick Sensitivity: " + str(value)
+	Config.joystick_sensitivity = value
 	Config.save_config()

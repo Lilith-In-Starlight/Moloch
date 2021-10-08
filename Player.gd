@@ -145,7 +145,7 @@ func _process(delta):
 	var xproportion := get_viewport().size.x/800.0
 	var yproportion := get_viewport().size.y/450.0
 	var axis := Vector2(Input.get_joy_axis(0, JOY_ANALOG_RX), Input.get_joy_axis(0, JOY_ANALOG_RY))
-	axis = axis.normalized()*axis.length_squared() * 6.0
+	axis = axis.normalized()*axis.length_squared() * Config.joystick_sensitivity
 	var dx := abs(axis.x * xproportion)
 	var dy := abs(axis.y * yproportion)
 	if Input.is_action_pressed("aim_up"):
