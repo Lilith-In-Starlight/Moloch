@@ -20,7 +20,7 @@ func _process(delta):
 	var i := 0
 	if is_instance_valid(CastInfo.Caster):
 		if CastInfo.Caster.has_method("health_object"):
-			CastInfo.Caster.health_object().temp_change(-0.1)
+			CastInfo.Caster.health_object().temp_change(-0.5)
 	for rc in get_children():
 		rc.force_raycast_update()
 		if randf()<0.3:
