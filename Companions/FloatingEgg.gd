@@ -45,6 +45,6 @@ func health_object() -> Flesh:
 
 func _on_hatch() -> void:
 	Items.player_items.erase("egg")
-	if randf()<0.4:
+	if randf()<0.4 and Items.companions.size() <= 6:
 		Items.companions.append([Flesh.new(), null])
 	queue_free()
