@@ -694,6 +694,7 @@ __meta__ = {
 [node name="Pause" type="Panel" parent="HUD/HUD" groups=[
 "PauseMenu",
 ]]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 custom_styles/panel = SubResource( 16 )
@@ -839,7 +840,6 @@ __meta__ = {
 }
 
 [node name="Death" type="Panel" parent="HUD/HUD"]
-visible = false
 modulate = Color( 1, 1, 1, 0 )
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -888,7 +888,6 @@ __meta__ = {
 }
 
 [node name="Generating" type="Panel" parent="HUD/HUD"]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 custom_styles/panel = SubResource( 23 )
@@ -963,4 +962,6 @@ drag_margin_bottom = 0.4
 [connection signal="focus_exited" from="HUD/HUD/Console/Input" to="HUD/HUD/Console" method="_on_Input_focus_exited"]
 [connection signal="player_died" from="Player" to="HUD" method="_on_player_died"]
 [connection signal="generated_world" from="World" to="HUD" method="_on_generated_world"]
+[connection signal="generated_world" from="World" to="HUD/HUD/Pause" method="_on_World_generated_world"]
+[connection signal="generated_world" from="World" to="HUD/HUD/Console" method="_on_World_generated_world"]
 [connection signal="generated_world" from="World" to="Player" method="_on_generated_world"]

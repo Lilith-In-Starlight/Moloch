@@ -1,7 +1,10 @@
 extends VBoxContainer
 
+var finished_gen := false
+
+
 func _input(event: InputEvent) -> void:
-	if event is InputEventKey and event.is_pressed():
+	if event is InputEventKey and event.is_pressed() and finished_gen:
 		match event.scancode:
 			KEY_F12:
 				$Input.grab_focus()
@@ -168,3 +171,7 @@ func _on_Input_focus_entered() -> void:
 
 func _on_Input_focus_exited() -> void:
 	get_tree().paused = false
+
+
+func _on_generated_world() -> void:
+	finished_gen = true

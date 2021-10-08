@@ -2,6 +2,7 @@ extends Panel
 
 
 onready var Console := $"../Console"
+var finished_gen := false
 
 
 func _ready() -> void:
@@ -21,7 +22,7 @@ func _on_Settings_pressed() -> void:
 	$Options.visible = false
 
 func _input(event: InputEvent) -> void:
-	if not Console.has_focus() and event.is_pressed():
+	if not Console.has_focus() and event.is_pressed() and finished_gen:
 		if event is InputEventKey:
 			match event.scancode:
 				KEY_ESCAPE:
@@ -51,3 +52,7 @@ func _on_JoystickSensitivity_value_changed(value: float) -> void:
 	$Settings/JoystickSensitivity/Text.text = "Joystick Sensitivity: " + str(value)
 	Config.joystick_sensitivity = value
 	Config.save_config()
+
+
+func _on_World_generated_world() -> void:
+	finished_gen = true
