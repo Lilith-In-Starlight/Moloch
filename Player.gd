@@ -143,7 +143,8 @@ func _process(delta):
 	Cam.offset += (coffset-Cam.offset)/5.0
 	
 	# Death
-	if (Input.is_action_just_pressed("instant_death")) and not dead and Config.instant_death_button:
+	# To avoid ruining runs for controller users, it takes two buttons to instantly die
+	if (Input.is_action_just_pressed("instant_death") or (Input.is_action_pressed("instant_death_controller1") and Input.is_action_pressed("instant_death_controller2"))) and not dead and Config.instant_death_button:
 		emit_signal("player_died")
 		state = STATES.DEAD
 		dead = true
