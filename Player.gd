@@ -159,7 +159,7 @@ func _process(delta):
 			get_viewport().warp_mouse(Vector2(1, mouse_pos.y))
 	elif Input.is_action_pressed("aim_right"):
 		if mouse_pos.x + 10 < get_viewport().size.x:
-			get_viewport().warp_mouse(mouse_pos - Vector2(10, 0))
+			get_viewport().warp_mouse(mouse_pos + Vector2(10, 0))
 		else:
 			get_viewport().warp_mouse(Vector2(get_viewport().size.x-1, mouse_pos.y))
 	
