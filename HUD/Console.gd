@@ -156,6 +156,32 @@ func _input(event: InputEvent) -> void:
 						"wandjson": 
 							if Items.player_wands[Items.selected_wand] != null:
 								OS.set_clipboard(Items.player_wands[Items.selected_wand].get_json())
+						"givemod":
+							print(Items.base_spell_mods)
+							if cmd.size() == 3:
+								if Items.base_spell_mods.has(cmd[1]):
+									if cmd[2].is_valid_integer():
+										var slot := Items.player_spells.find(null)
+										if slot != -1:
+											var base :SpellMod = Items.base_spell_mods[cmd[1]]
+											var new_spell := SpellMod.new()
+											new_spell.name = base.name
+											new_spell.id = base.id
+											new_spell.texture = base.texture
+											new_spell.description = base.description + cmd[2]
+											new_spell.level = clamp(2,5,cmd[2] as int)
+											Items.player_spells[slot] = new_spell
+											Items.spell_mods.append(new_spell)
+										else:
+											output("[color=red]No inventory space[/color]")
+									else:
+										output("[color=red]Level is not a valid integer[/color]")
+								else:
+									output("[color=red]Modifier not found[/color]")
+							else:
+								output("[color=red]givemod <modname> <level>[/color]")
+											
+									
 			KEY_F1:
 				$Input.release_focus()
 				visible = false

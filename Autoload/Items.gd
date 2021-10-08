@@ -55,6 +55,8 @@ var companions := []
 var all_items := {}
 var all_spells := {}
 
+var base_spell_mods := {}
+
 
 func _ready():
 	var generator_seed := hash(OS.get_time())
@@ -95,6 +97,11 @@ func _ready():
 	register_spell(1, "spinsword", "Haunted Sword", "Summons a sword that cuts everything around you", preload("res://Sprites/Spells/SpinSword.png"), preload("res://Spells/SpinSword.tscn"))
 	register_spell(1, "windsetter", "Windsetter", "Summons a gust of wind", preload("res://Sprites/Spells/Windsetter.png"), preload("res://Spells/Windsetter.tscn"))
 	register_spell(3, "westdragon", "Dragon Of The West", "They call him that for a  reason.", preload("res://Sprites/Spells/WestDragon.png"), preload("res://Spells/WestDragon.tscn"))
+	
+	register_base_mod("multiplicative", "Multiplicative Cast", "Many from alterations of one\nIterations: ", preload("res://Sprites/Spells/Modifiers/Multiplicative.png"))
+	register_base_mod("unifying", "Unifying Cast", "One from alterations of many\nAmalgamations: ", preload("res://Sprites/Spells/Modifiers/UnifyingM.png"))
+	register_base_mod("grenade", "Grenade Cast", "Copies spells into a grenade wand\nCopied Spells: ", preload("res://Sprites/Spells/Modifiers/Grenade.png"))
+	register_base_mod("landmine", "Landmine Cast", "Copies spells into a landmine wand\nCopied Spells: ", preload("res://Sprites/Spells/Modifiers/Landmine.png"))
 	
 	# If the player is in the tree, set the Player variable of this node to it
 	if not get_tree().get_nodes_in_group("Player").empty():
@@ -168,6 +175,15 @@ func register_spell(tier:int, name_id:String, name:String, desc:String, texture 
 	new.entity = entity
 	spells[tier][name_id] = new
 	all_spells[name_id] = new
+
+
+func register_base_mod(name_id:String, name:String, desc:String, texture:Texture) -> void:
+	var mod := SpellMod.new()
+	mod.id = name_id
+	mod.name = name
+	mod.description = desc
+	mod.texture = texture
+	base_spell_mods[name_id] = mod
 
 
 func pick_random_spell(rng:RandomNumberGenerator = LootRNG) -> Spell:
