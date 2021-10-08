@@ -15,17 +15,17 @@
 [ext_resource path="res://HUD/Console.gd" type="Script" id=13]
 [ext_resource path="res://HUD/Pause.gd" type="Script" id=14]
 
-[sub_resource type="CanvasItemMaterial" id=1]
+[sub_resource type="CanvasItemMaterial" id=24]
 blend_mode = 1
 light_mode = 1
 
-[sub_resource type="StyleBoxFlat" id=2]
+[sub_resource type="StyleBoxFlat" id=25]
 bg_color = Color( 0.490196, 0, 0, 1 )
 
-[sub_resource type="StyleBoxFlat" id=3]
+[sub_resource type="StyleBoxFlat" id=26]
 bg_color = Color( 0.180392, 0.694118, 1, 0.478431 )
 
-[sub_resource type="StyleBoxFlat" id=4]
+[sub_resource type="StyleBoxFlat" id=27]
 content_margin_top = 3.0
 bg_color = Color( 1, 0.74902, 0.12549, 1 )
 border_width_left = 1
@@ -37,7 +37,7 @@ corner_radius_top_right = 2
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 2
 
-[sub_resource type="DynamicFont" id=5]
+[sub_resource type="DynamicFont" id=28]
 size = 12
 font_data = ExtResource( 5 )
 
@@ -45,10 +45,10 @@ font_data = ExtResource( 5 )
 size = 12
 font_data = ExtResource( 5 )
 
-[sub_resource type="DynamicFont" id=6]
+[sub_resource type="DynamicFont" id=29]
 font_data = ExtResource( 5 )
 
-[sub_resource type="StyleBoxFlat" id=7]
+[sub_resource type="StyleBoxFlat" id=30]
 content_margin_left = 5.0
 content_margin_right = 5.0
 content_margin_top = 5.0
@@ -63,17 +63,17 @@ corner_radius_bottom_right = 10
 corner_radius_bottom_left = 5
 anti_aliasing = false
 
-[sub_resource type="DynamicFont" id=8]
+[sub_resource type="DynamicFont" id=31]
 size = 12
 use_mipmaps = true
 font_data = ExtResource( 5 )
 
-[sub_resource type="DynamicFont" id=9]
+[sub_resource type="DynamicFont" id=32]
 size = 10
 use_mipmaps = true
 font_data = ExtResource( 5 )
 
-[sub_resource type="StyleBoxFlat" id=10]
+[sub_resource type="StyleBoxFlat" id=33]
 content_margin_left = 5.0
 content_margin_right = 5.0
 content_margin_top = 5.0
@@ -88,47 +88,47 @@ corner_radius_bottom_right = 5
 corner_radius_bottom_left = 2
 anti_aliasing = false
 
-[sub_resource type="StyleBoxFlat" id=11]
+[sub_resource type="StyleBoxFlat" id=34]
 bg_color = Color( 0.0862745, 0.0862745, 0.0862745, 1 )
 
-[sub_resource type="StyleBoxFlat" id=12]
+[sub_resource type="StyleBoxFlat" id=35]
 bg_color = Color( 0, 1, 0.976471, 1 )
 
-[sub_resource type="StyleBoxFlat" id=13]
+[sub_resource type="StyleBoxFlat" id=36]
 bg_color = Color( 1, 0.513726, 0, 1 )
 
-[sub_resource type="StyleBoxFlat" id=14]
+[sub_resource type="StyleBoxFlat" id=37]
 bg_color = Color( 1, 0.223529, 0.223529, 1 )
 
-[sub_resource type="StyleBoxFlat" id=15]
+[sub_resource type="StyleBoxFlat" id=38]
 bg_color = Color( 0, 0, 0, 0.423529 )
 
-[sub_resource type="DynamicFont" id=16]
+[sub_resource type="DynamicFont" id=39]
 font_data = ExtResource( 5 )
 
-[sub_resource type="StyleBoxFlat" id=17]
+[sub_resource type="StyleBoxFlat" id=40]
 bg_color = Color( 0, 0, 0, 0.329412 )
 
-[sub_resource type="DynamicFont" id=18]
+[sub_resource type="DynamicFont" id=41]
 size = 10
 font_data = ExtResource( 5 )
 
-[sub_resource type="StyleBoxFlat" id=19]
+[sub_resource type="StyleBoxFlat" id=42]
 bg_color = Color( 0, 0, 0, 0.552941 )
 
-[sub_resource type="StyleBoxFlat" id=20]
+[sub_resource type="StyleBoxFlat" id=43]
 bg_color = Color( 0, 0, 0, 1 )
 
-[sub_resource type="DynamicFont" id=21]
+[sub_resource type="DynamicFont" id=44]
 use_mipmaps = true
 font_data = ExtResource( 5 )
 
-[sub_resource type="DynamicFont" id=22]
+[sub_resource type="DynamicFont" id=45]
 size = 11
 use_mipmaps = true
 font_data = ExtResource( 5 )
 
-[sub_resource type="StyleBoxFlat" id=24]
+[sub_resource type="StyleBoxFlat" id=46]
 bg_color = Color( 1, 1, 1, 1 )
 corner_radius_top_left = 8
 corner_radius_top_right = 8
@@ -264,20 +264,20 @@ __meta__ = {
 
 [node name="Hot" type="Panel" parent="HUD/HUD"]
 modulate = Color( 1, 1, 1, 0 )
-material = SubResource( 1 )
+material = SubResource( 24 )
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_styles/panel = SubResource( 2 )
+custom_styles/panel = SubResource( 25 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Cold" type="Panel" parent="HUD/HUD"]
 modulate = Color( 1, 1, 1, 0 )
-material = SubResource( 1 )
+material = SubResource( 24 )
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_styles/panel = SubResource( 3 )
+custom_styles/panel = SubResource( 26 )
 
 [node name="LastItem" type="TextureRect" parent="HUD/HUD"]
 margin_left = 4.0
@@ -310,8 +310,8 @@ margin_left = -148.0
 margin_top = 87.5
 margin_right = 148.0
 margin_bottom = 103.5
-custom_styles/normal = SubResource( 4 )
-custom_fonts/normal_font = SubResource( 5 )
+custom_styles/normal = SubResource( 27 )
+custom_fonts/normal_font = SubResource( 28 )
 custom_colors/default_color = Color( 0, 0, 0, 1 )
 bbcode_enabled = true
 bbcode_text = "[center]broken leg[/center]"
@@ -570,7 +570,7 @@ margin_left = 19.0
 margin_top = 1.0
 margin_right = 53.0
 margin_bottom = 17.0
-custom_fonts/font = SubResource( 6 )
+custom_fonts/font = SubResource( 29 )
 text = "2"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -582,7 +582,7 @@ margin_top = 40.0
 margin_right = 184.0
 margin_bottom = 104.0
 size_flags_horizontal = 5
-custom_styles/panel = SubResource( 7 )
+custom_styles/panel = SubResource( 30 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -593,7 +593,7 @@ margin_top = 8.0
 margin_right = 136.0
 margin_bottom = 20.0
 size_flags_horizontal = 5
-custom_fonts/font = SubResource( 8 )
+custom_fonts/font = SubResource( 31 )
 text = "Name"
 autowrap = true
 
@@ -603,7 +603,7 @@ margin_top = 18.0
 margin_right = 136.0
 margin_bottom = 30.0
 size_flags_horizontal = 5
-custom_fonts/font = SubResource( 9 )
+custom_fonts/font = SubResource( 32 )
 text = "Information"
 autowrap = true
 __meta__ = {
@@ -616,8 +616,8 @@ margin_top = 40.0
 margin_right = 71.0
 margin_bottom = 59.0
 size_flags_horizontal = 5
-custom_styles/normal = SubResource( 10 )
-custom_fonts/font = SubResource( 8 )
+custom_styles/normal = SubResource( 33 )
+custom_fonts/font = SubResource( 31 )
 text = "Name"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -640,7 +640,7 @@ margin_left = -17.0
 margin_top = -129.0
 margin_right = -7.0
 margin_bottom = -7.0
-custom_styles/panel = SubResource( 11 )
+custom_styles/panel = SubResource( 34 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -654,7 +654,7 @@ margin_left = -16.0
 margin_top = -48.0
 margin_right = -8.0
 margin_bottom = -8.0
-custom_styles/panel = SubResource( 12 )
+custom_styles/panel = SubResource( 35 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -668,7 +668,7 @@ margin_left = -16.0
 margin_top = -88.0
 margin_right = -8.0
 margin_bottom = -48.0
-custom_styles/panel = SubResource( 13 )
+custom_styles/panel = SubResource( 36 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -682,7 +682,7 @@ margin_left = -16.0
 margin_top = -128.0
 margin_right = -8.0
 margin_bottom = -88.0
-custom_styles/panel = SubResource( 14 )
+custom_styles/panel = SubResource( 37 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -693,7 +693,7 @@ __meta__ = {
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_styles/panel = SubResource( 15 )
+custom_styles/panel = SubResource( 38 )
 script = ExtResource( 14 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -715,7 +715,7 @@ __meta__ = {
 [node name="Settings" type="ToolButton" parent="HUD/HUD/Pause/Options"]
 margin_right = 95.0
 margin_bottom = 24.0
-custom_fonts/font = SubResource( 16 )
+custom_fonts/font = SubResource( 39 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_colors/font_color_hover = Color( 0.737255, 1, 0.968627, 1 )
 custom_colors/font_color_pressed = Color( 1, 0.596078, 0.929412, 1 )
@@ -725,7 +725,7 @@ text = "Settings"
 margin_top = 28.0
 margin_right = 95.0
 margin_bottom = 52.0
-custom_fonts/font = SubResource( 16 )
+custom_fonts/font = SubResource( 39 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_colors/font_color_hover = Color( 0.737255, 1, 0.968627, 1 )
 custom_colors/font_color_pressed = Color( 1, 0.596078, 0.929412, 1 )
@@ -768,7 +768,7 @@ __meta__ = {
 margin_top = 56.0
 margin_right = 119.0
 margin_bottom = 80.0
-custom_fonts/font = SubResource( 16 )
+custom_fonts/font = SubResource( 39 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_colors/font_color_hover = Color( 0.737255, 1, 0.968627, 1 )
 custom_colors/font_color_pressed = Color( 1, 0.596078, 0.929412, 1 )
@@ -790,8 +790,8 @@ __meta__ = {
 margin_right = 220.0
 margin_bottom = 50.0
 rect_min_size = Vector2( 0, 50 )
-custom_styles/normal = SubResource( 17 )
-custom_fonts/normal_font = SubResource( 18 )
+custom_styles/normal = SubResource( 40 )
+custom_fonts/normal_font = SubResource( 41 )
 bbcode_enabled = true
 scroll_following = true
 
@@ -799,15 +799,15 @@ scroll_following = true
 margin_top = 50.0
 margin_right = 220.0
 margin_bottom = 60.0
-custom_styles/normal = SubResource( 19 )
-custom_fonts/font = SubResource( 18 )
+custom_styles/normal = SubResource( 42 )
+custom_fonts/font = SubResource( 41 )
 caret_blink = true
 
 [node name="Death" type="Panel" parent="HUD/HUD"]
 modulate = Color( 1, 1, 1, 0 )
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_styles/panel = SubResource( 20 )
+custom_styles/panel = SubResource( 43 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -821,7 +821,7 @@ margin_left = -56.0
 margin_top = -166.0
 margin_right = 56.0
 margin_bottom = -150.0
-custom_fonts/font = SubResource( 21 )
+custom_fonts/font = SubResource( 44 )
 text = "You Are Dead"
 align = 1
 __meta__ = {
@@ -837,7 +837,7 @@ margin_left = -132.0
 margin_top = -40.0
 margin_right = 132.0
 margin_bottom = 56.0
-custom_fonts/font = SubResource( 22 )
+custom_fonts/font = SubResource( 45 )
 text = "Cause of Death:
 Run Length:
 Seed:
@@ -854,7 +854,7 @@ __meta__ = {
 [node name="Generating" type="Panel" parent="HUD/HUD"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_styles/panel = SubResource( 20 )
+custom_styles/panel = SubResource( 43 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -868,7 +868,7 @@ margin_left = -56.0
 margin_top = -30.0
 margin_right = 56.0
 margin_bottom = -14.0
-custom_fonts/font = SubResource( 21 )
+custom_fonts/font = SubResource( 44 )
 text = "Generating World"
 align = 1
 __meta__ = {
@@ -884,7 +884,7 @@ margin_left = -132.0
 margin_top = -48.0
 margin_right = 132.0
 margin_bottom = 48.0
-custom_fonts/font = SubResource( 22 )
+custom_fonts/font = SubResource( 45 )
 text = "Avoid breaking your knees by not falling long distances"
 align = 1
 valign = 1
@@ -896,7 +896,7 @@ __meta__ = {
 [node name="ControllerSelect" type="Panel" parent="HUD/HUD"]
 margin_right = 8.0
 margin_bottom = 8.0
-custom_styles/panel = SubResource( 24 )
+custom_styles/panel = SubResource( 46 )
 __meta__ = {
 "_edit_use_anchors_": false
 }

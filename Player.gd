@@ -142,26 +142,41 @@ func _process(delta):
 	
 	# Controller aim
 	var mouse_pos := get_viewport().get_mouse_position()
+	var xproportion := get_viewport().size.x/800.0
+	var yproportion := get_viewport().size.y/450.0
+	var axis := Vector2(Input.get_joy_axis(0, JOY_ANALOG_RX), Input.get_joy_axis(0, JOY_ANALOG_RY))
+	axis = axis.normalized()*axis.length_squared() * 6.0
+	var dx := abs(axis.x * xproportion)
+	var dy := abs(axis.y * yproportion)
 	if Input.is_action_pressed("aim_up"):
-		if mouse_pos.y - 10 > 0:
-			get_viewport().warp_mouse(mouse_pos - Vector2(0, 10))
+		if mouse_pos.y - dy > 0:
+			get_viewport().warp_mouse(mouse_pos - Vector2(0, dy))
+			mouse_pos -= Vector2(0, dy)
 		else:
 			get_viewport().warp_mouse(Vector2(mouse_pos.x, 1))
+			mouse_pos.y = 1
 	elif Input.is_action_pressed("aim_down"):
-		if mouse_pos.y + 10 < get_viewport().size.y:
-			get_viewport().warp_mouse(mouse_pos + Vector2(0, 10))
+		if mouse_pos.y + dy < get_viewport().size.y:
+			get_viewport().warp_mouse(mouse_pos + Vector2(0, dy))
+			mouse_pos += Vector2(0, dy)
 		else:
 			get_viewport().warp_mouse(Vector2(mouse_pos.x, get_viewport().size.y-1))
+			mouse_pos.y = get_viewport().size.y-1
+	
 	if Input.is_action_pressed("aim_left"):
-		if mouse_pos.x - 10 > 0:
-			get_viewport().warp_mouse(mouse_pos - Vector2(10, 0))
+		if mouse_pos.x - dx > 0:
+			get_viewport().warp_mouse(mouse_pos - Vector2(dx, 0))
+			mouse_pos -= Vector2(dx, 0)
 		else:
 			get_viewport().warp_mouse(Vector2(1, mouse_pos.y))
+			mouse_pos.x = 0
 	elif Input.is_action_pressed("aim_right"):
-		if mouse_pos.x + 10 < get_viewport().size.x:
-			get_viewport().warp_mouse(mouse_pos + Vector2(10, 0))
+		if mouse_pos.x + dx < get_viewport().size.x:
+			get_viewport().warp_mouse(mouse_pos + Vector2(dx, 0))
+			mouse_pos += Vector2(dx, 0)
 		else:
 			get_viewport().warp_mouse(Vector2(get_viewport().size.x-1, mouse_pos.y))
+			mouse_pos.x = get_viewport().size.x-1
 	
 	# Control the camera with the mouse
 	var coffset := get_local_mouse_position()/2.5
