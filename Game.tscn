@@ -41,6 +41,10 @@ corner_radius_bottom_left = 2
 size = 12
 font_data = ExtResource( 5 )
 
+[sub_resource type="DynamicFont" id=23]
+size = 12
+font_data = ExtResource( 5 )
+
 [sub_resource type="DynamicFont" id=6]
 font_data = ExtResource( 5 )
 
@@ -100,10 +104,6 @@ bg_color = Color( 1, 0.223529, 0.223529, 1 )
 bg_color = Color( 0, 0, 0, 0.423529 )
 
 [sub_resource type="DynamicFont" id=16]
-font_data = ExtResource( 5 )
-
-[sub_resource type="DynamicFont" id=23]
-size = 12
 font_data = ExtResource( 5 )
 
 [sub_resource type="StyleBoxFlat" id=17]
@@ -384,42 +384,62 @@ __meta__ = {
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_right = 16.0
-margin_bottom = 16.0
+margin_bottom = 24.0
 
 [node name="Slot2" parent="HUD/HUD/CompanionWands" instance=ExtResource( 9 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 20.0
 margin_right = 36.0
-margin_bottom = 16.0
+margin_bottom = 24.0
 
 [node name="Slot3" parent="HUD/HUD/CompanionWands" instance=ExtResource( 9 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 40.0
 margin_right = 56.0
-margin_bottom = 16.0
+margin_bottom = 24.0
 
 [node name="Slot4" parent="HUD/HUD/CompanionWands" instance=ExtResource( 9 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 60.0
 margin_right = 76.0
-margin_bottom = 16.0
+margin_bottom = 24.0
 
 [node name="Slot5" parent="HUD/HUD/CompanionWands" instance=ExtResource( 9 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 80.0
 margin_right = 96.0
-margin_bottom = 16.0
+margin_bottom = 24.0
 
 [node name="Slot6" parent="HUD/HUD/CompanionWands" instance=ExtResource( 9 )]
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 100.0
 margin_right = 116.0
-margin_bottom = 16.0
+margin_bottom = 24.0
+
+[node name="VisualizeDamage" type="CheckBox" parent="HUD/HUD/CompanionWands"]
+margin_left = 120.0
+margin_right = 222.0
+margin_bottom = 24.0
+custom_fonts/font = SubResource( 23 )
+text = "Visualize Damage"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="InstantDeathButton" type="CheckBox" parent="HUD/HUD/CompanionWands"]
+margin_left = 226.0
+margin_right = 345.0
+margin_bottom = 24.0
+custom_fonts/font = SubResource( 23 )
+text = "Instant Death Button"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Spells" type="HBoxContainer" parent="HUD/HUD"]
 margin_left = 4.0

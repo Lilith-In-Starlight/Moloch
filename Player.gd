@@ -54,6 +54,8 @@ var can_climb_pole := false
 var pole_pos := 0.0
 var pole_side := false
 
+var aim := Vector2(0, 0)
+
 
 func _ready():
 	# Setup
@@ -138,6 +140,29 @@ func _process(delta):
 			get_parent().add_child(n)
 		message_send("Your insides feel like they're melting")
 	
+	# Controller aim
+	var mouse_pos := get_viewport().get_mouse_position()
+	if Input.is_action_pressed("aim_up"):
+		if mouse_pos.y - 10 > 0:
+			get_viewport().warp_mouse(mouse_pos - Vector2(0, 10))
+		else:
+			get_viewport().warp_mouse(Vector2(mouse_pos.x, 1))
+	elif Input.is_action_pressed("aim_down"):
+		if mouse_pos.y + 10 < get_viewport().size.y:
+			get_viewport().warp_mouse(mouse_pos + Vector2(0, 10))
+		else:
+			get_viewport().warp_mouse(Vector2(mouse_pos.x, get_viewport().size.y-1))
+	if Input.is_action_pressed("aim_left"):
+		if mouse_pos.x - 10 > 0:
+			get_viewport().warp_mouse(mouse_pos - Vector2(10, 0))
+		else:
+			get_viewport().warp_mouse(Vector2(1, mouse_pos.y))
+	elif Input.is_action_pressed("aim_right"):
+		if mouse_pos.x + 10 < get_viewport().size.x:
+			get_viewport().warp_mouse(mouse_pos - Vector2(10, 0))
+		else:
+			get_viewport().warp_mouse(Vector2(get_viewport().size.x-1, mouse_pos.y))
+	
 	# Control the camera with the mouse
 	var coffset := get_local_mouse_position()/2.5
 	Cam.offset += (coffset-Cam.offset)/5.0
@@ -209,13 +234,14 @@ func _process(delta):
 		Items.player_wands[Items.selected_wand].shuffle()
 		Items.player_wands[Items.selected_wand].run(self)
 	
-	if Input.is_action_just_released("scrollup"):
-		Items.selected_wand -= 1
-		if Items.selected_wand < 0:
-			Items.selected_wand = 5
-		
-	elif Input.is_action_just_released("scrolldown"):
-		Items.selected_wand = (Items.selected_wand + 1) % 6
+	if not Config.last_input_was_controller:
+		if Input.is_action_just_released("scrollup"):
+			Items.selected_wand -= 1
+			if Items.selected_wand < 0:
+				Items.selected_wand = 5
+
+		elif Input.is_action_just_released("scrolldown"):
+			Items.selected_wand = (Items.selected_wand + 1) % 6
 	
 	if Input.is_action_just_pressed("hotbar1"):
 		Items.selected_wand = 0
@@ -245,7 +271,7 @@ func _physics_process(delta):
 		spell_cast_pos = $CastDirection.cast_to
 	health.process_health()
 	# Platforms
-	set_collision_mask_bit(2, not Input.is_key_pressed(KEY_S))
+	set_collision_mask_bit(2, not Input.is_action_pressed("down"))
 	
 	# Player is alive
 	if not dead:

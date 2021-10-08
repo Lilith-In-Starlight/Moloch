@@ -299,8 +299,11 @@ func _process(delta):
 				elif Input.is_action_just_released("scrolldown"):
 					Items.selected_wand = Items.selected_wand + 1
 					if Items.selected_wand >= 6:
-						Items.selected_wand = 0
-						which_inventory = 3
+						Items.selected_wand = 5
+						if Items.companions.size() > 0:
+							which_inventory = 3
+						else:
+							Items.selected_wand = 0
 				elif Input.is_action_just_pressed("scroll_left"):
 					which_inventory = 0
 					which_slot = 5
@@ -355,14 +358,13 @@ func _process(delta):
 						which_slot = 0
 				$HUD/ControllerSelect.rect_position = Vector2(140+8+20*which_slot, 4+16+3)
 		
-		print(which_inventory, " ", which_slot)
 				
 	# If the player clicks a part of the inventory, swap that slot's content
 	# with the mouse slot's content
 	if not Config.last_input_was_controller and Input.is_action_just_pressed("Interact1") and clicked != -1:
 		match clicked:
 			1:
-				if slot != -1:
+				if slot != -1 and Items.player_wands[Items.selected_wand] != null:
 					var wand :Wand = Items.player_wands[Items.selected_wand]
 					var k :Spell = wand.spells[slot]
 					Items.player_wands[Items.selected_wand].spells[slot] = mouse_spell
@@ -382,17 +384,18 @@ func _process(delta):
 					var k :Wand = Items.companions[slot][1]
 					Items.companions[slot][1] = mouse_wand
 					mouse_wand = k
-	elif Config.last_input_was_controller and Input.is_action_just_pressed("Interact1"):
+	elif Config.last_input_was_controller and  Input.is_action_just_pressed("select_inventory"):
 		match which_inventory:
 			0:
 				var k :Spell = Items.player_spells[which_slot]
 				Items.player_spells[which_slot] = mouse_spell
 				mouse_spell = k
 			1:
-				var wand :Wand = Items.player_wands[Items.selected_wand]
-				var k :Spell = wand.spells[which_slot]
-				Items.player_wands[Items.selected_wand].spells[which_slot] = mouse_spell
-				mouse_spell = k
+				if Items.player_wands[Items.selected_wand] != null:
+					var wand :Wand = Items.player_wands[Items.selected_wand]
+					var k :Spell = wand.spells[which_slot]
+					Items.player_wands[Items.selected_wand].spells[which_slot] = mouse_spell
+					mouse_spell = k
 			2:
 				var k :Wand = Items.player_wands[Items.selected_wand]
 				Items.player_wands[Items.selected_wand] = mouse_wand
