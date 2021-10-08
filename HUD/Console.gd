@@ -173,5 +173,5 @@ func _on_Input_focus_exited() -> void:
 	get_tree().paused = false
 
 
-func _on_generated_world() -> void:
+func _on_World_generated_world() -> void:
 	finished_gen = true
