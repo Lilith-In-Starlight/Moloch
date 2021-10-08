@@ -50,6 +50,11 @@ var player_died := false
 var end_times : String # How long did the run last
 
 
+# Control the inventory with controller
+var which_inventory := 2
+var which_slot := 0
+
+
 func _ready():
 	Player = get_tree().get_nodes_in_group("Player")[0]
 	Map = get_tree().get_nodes_in_group("World")[0]
@@ -180,6 +185,7 @@ func _process(delta):
 	block_cast = false # Also stop blocking the player's ability to
 	# cast spells
 	
+	# Navigate inventory with keyboard
 	# If the mouse is in the wands' area
 	if mouse.x < 116 and mouse.y > 4 and mouse.y < 20:
 		for i in 6:
@@ -282,9 +288,78 @@ func _process(delta):
 			ShortDescriptionBox.visible = true
 			ShortDescriptionBox.text = Items.last_pickup.name
 	
+	# Navigate inventory with controller
+	if Config.last_input_was_controller:
+		match which_inventory:
+			2:
+				if Input.is_action_just_released("scrollup"):
+					Items.selected_wand -= 1
+					if Items.selected_wand < 0:
+						Items.selected_wand = 5
+				elif Input.is_action_just_released("scrolldown"):
+					Items.selected_wand = Items.selected_wand + 1
+					if Items.selected_wand >= 6:
+						Items.selected_wand = 0
+						which_inventory = 3
+				elif Input.is_action_just_pressed("scroll_left"):
+					which_inventory = 0
+					which_slot = 5
+				elif Input.is_action_just_pressed("scroll_right"):
+					if Items.player_wands[Items.selected_wand] != null:
+						which_inventory = 1
+					else:
+						which_inventory = 0
+					which_slot = 0
+				$HUD/ControllerSelect.rect_position = Vector2(-20,20)
+			0:
+				if Input.is_action_just_released("scrollup"):
+					which_slot -= 1
+					if which_slot < 0:
+						which_slot = 0
+						if Items.player_wands[Items.selected_wand] != null:
+							which_inventory = 1
+				elif Input.is_action_just_released("scrolldown"):
+					which_slot = which_slot + 1
+					if which_slot >= 6:
+						which_slot = 0
+						which_inventory = 2
+				elif Input.is_action_just_pressed("scroll_left"):
+					which_inventory = 2
+				elif Input.is_action_just_pressed("scroll_right"):
+					if Items.player_wands[Items.selected_wand] != null:
+						which_inventory = 1
+				$HUD/ControllerSelect.rect_position = Vector2(4+16+8,62+3+20*which_slot)
+			1:
+				if Input.is_action_just_released("scrollup"):
+					which_slot -= 1
+					if which_slot < 0:
+						which_slot = Items.player_wands[Items.selected_wand].spell_capacity - 1
+				elif Input.is_action_just_released("scrolldown"):
+					which_slot = which_slot + 1
+					if which_slot >= Items.player_wands[Items.selected_wand].spell_capacity:
+						which_slot = 0
+				elif Input.is_action_just_pressed("scroll_left"):
+					which_inventory = 2
+				elif Input.is_action_just_pressed("scroll_right"):
+					which_inventory = 0
+				$HUD/ControllerSelect.rect_position = Vector2(4+3+20*which_slot, 20+16+8)
+			3:
+				if Input.is_action_just_released("scrollup"):
+					which_slot -= 1
+					if which_slot < 0:
+						Items.selected_wand = 5
+						which_inventory = 2
+				elif Input.is_action_just_released("scrolldown"):
+					which_slot = which_slot + 1
+					if which_slot >= 6:
+						which_slot = 0
+				$HUD/ControllerSelect.rect_position = Vector2(140+8+20*which_slot, 4+16+3)
+		
+		print(which_inventory, " ", which_slot)
+				
 	# If the player clicks a part of the inventory, swap that slot's content
 	# with the mouse slot's content
-	if Input.is_action_just_pressed("Interact1") and clicked != -1:
+	if not Config.last_input_was_controller and Input.is_action_just_pressed("Interact1") and clicked != -1:
 		match clicked:
 			1:
 				if slot != -1:
@@ -307,10 +382,30 @@ func _process(delta):
 					var k :Wand = Items.companions[slot][1]
 					Items.companions[slot][1] = mouse_wand
 					mouse_wand = k
+	elif Config.last_input_was_controller and Input.is_action_just_pressed("Interact1"):
+		match which_inventory:
+			0:
+				var k :Spell = Items.player_spells[which_slot]
+				Items.player_spells[which_slot] = mouse_spell
+				mouse_spell = k
+			1:
+				var wand :Wand = Items.player_wands[Items.selected_wand]
+				var k :Spell = wand.spells[which_slot]
+				Items.player_wands[Items.selected_wand].spells[which_slot] = mouse_spell
+				mouse_spell = k
+			2:
+				var k :Wand = Items.player_wands[which_slot]
+				Items.player_wands[which_slot] = mouse_wand
+				mouse_wand = k
+			3:
+				var k :Wand = Items.companions[which_slot][1]
+				Items.companions[which_slot][1] = mouse_wand
+				mouse_wand = k
+				
 	
 	# If the player right clicks and is not in an inventory space
 	# drop the  item
-	if Input.is_action_just_pressed("Interact2") and clicked == -1:
+	if (Input.is_action_just_pressed("Interact2") and clicked == -1) or (Input.is_action_just_pressed("Interact2") and Config.last_input_was_controller):
 		if mouse_spell != null:
 			Map.summon_spell(mouse_spell, Player.position, Vector2(-120 + randf()*240, -100))
 		mouse_spell = null
