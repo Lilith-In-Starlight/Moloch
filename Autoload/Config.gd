@@ -18,6 +18,12 @@ func _ready() -> void:
 		damage_visuals = config_file.get_value("config", "damage_visuals", false)
 		instant_death_button = config_file.get_value("config", "instant_death_button", false)
 		joystick_sensitivity = config_file.get_value("config", "joystick_sensitivity", 6)
+		for i in InputMap.get_actions():
+			var obtained = config_file.get_value("config", "keybinds_%s"%i, InputMap.get_action_list(i))
+			InputMap.action_erase_events(i)
+			for j in obtained:
+				InputMap.action_add_event(i, j)
+		config_file.save("user://config.moloch")
 	else:
 		save_config()
 	
@@ -29,6 +35,8 @@ func save_config() -> void:
 	config_file.set_value("config", "damage_visuals", damage_visuals)
 	config_file.set_value("config", "instant_death_button", instant_death_button)
 	config_file.set_value("config", "joystick_sensitivity", joystick_sensitivity)
+	for i in InputMap.get_actions():
+		config_file.set_value("config", "keybinds_%s"%i, InputMap.get_action_list(i))
 	config_file.save("user://config.moloch")
 
 
