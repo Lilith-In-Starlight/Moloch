@@ -1,13 +1,14 @@
 extends Control
 
 onready var Animations := $Animations
-onready var SeedLineEdit := $LineEdit
+onready var SeedLineEdit := $MainMenu/LineEdit
 
 
 func _ready():
-	$VisualizeDamage.pressed = Config.damage_visuals
-	$InstantDeathButton.pressed = Config.instant_death_button
-	$JoystickSensitivity/Text.text = "Joystick Sensitivity: " + str(Config.joystick_sensitivity)
+	$Settings/VisualizeDamage.pressed = Config.damage_visuals
+	$Settings/InstantDeathButton.pressed = Config.instant_death_button
+	$Settings/JoystickSensitivity/Text.text = "Joystick Sensitivity: " + str(Config.joystick_sensitivity)
+	$Settings/JoystickSensitivity.value = Config.joystick_sensitivity
 	Animations.play("License")
 
 
@@ -39,17 +40,27 @@ func _on_animation_finished(anim_name):
 
 
 func _on_VisualizeDamage_pressed() -> void:
-	Config.damage_visuals = $VisualizeDamage.pressed
+	Config.damage_visuals = $Settings/VisualizeDamage.pressed
 	Config.save_config()
 
 
 func _on_InstantDeathButton_pressed() -> void:
-	Config.instant_death_button = $InstantDeathButton.pressed
+	Config.instant_death_button = $Settings/InstantDeathButton.pressed
 	Config.save_config()
 
 
 func _on_JoystickSensitivity_value_changed(value: float) -> void:
-	$JoystickSensitivity/Text.text = "Joystick Sensitivity: " + str(value)
+	$Settings/JoystickSensitivity/Text.text = "Joystick Sensitivity: " + str(value)
 	Config.joystick_sensitivity = value
 	Config.save_config()
 	
+
+
+func _on_Settings_pressed() -> void:
+	$MainMenu.visible = false
+	$Settings.visible = true
+
+
+func _on_Back_pressed() -> void:
+	$MainMenu.visible = true
+	$Settings.visible = false

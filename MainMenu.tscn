@@ -4,53 +4,7 @@
 [ext_resource path="res://dpcomic.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://MainMenu.gd" type="Script" id=3]
 
-[sub_resource type="StyleBoxFlat" id=1]
-bg_color = Color( 1, 0.372549, 0.341176, 1 )
-border_width_bottom = 2
-border_color = Color( 0.733333, 0.101961, 0, 1 )
-corner_radius_top_left = 2
-corner_radius_top_right = 2
-corner_radius_bottom_right = 2
-corner_radius_bottom_left = 2
-expand_margin_left = 3.0
-expand_margin_right = 3.0
-expand_margin_top = 1.0
-anti_aliasing = false
-
-[sub_resource type="StyleBoxFlat" id=2]
-bg_color = Color( 1, 0.541176, 0.266667, 1 )
-border_width_bottom = 2
-border_color = Color( 0.67451, 0.27451, 0, 1 )
-corner_radius_top_left = 2
-corner_radius_top_right = 2
-corner_radius_bottom_right = 2
-corner_radius_bottom_left = 2
-expand_margin_left = 3.0
-expand_margin_right = 3.0
-expand_margin_top = 1.0
-anti_aliasing = false
-
-[sub_resource type="StyleBoxEmpty" id=3]
-
-[sub_resource type="StyleBoxFlat" id=4]
-bg_color = Color( 0.945098, 0.219608, 0.0980392, 1 )
-border_width_bottom = 2
-border_color = Color( 0.607843, 0, 0, 1 )
-corner_radius_top_left = 2
-corner_radius_top_right = 2
-corner_radius_bottom_right = 2
-corner_radius_bottom_left = 2
-expand_margin_left = 3.0
-expand_margin_right = 3.0
-expand_margin_top = 1.0
-anti_aliasing = false
-
-[sub_resource type="DynamicFont" id=5]
-font_data = ExtResource( 2 )
-
-[sub_resource type="StyleBoxEmpty" id=6]
-
-[sub_resource type="Animation" id=7]
+[sub_resource type="Animation" id=13]
 resource_name = "Fadein"
 length = 1.1
 tracks/0/type = "value"
@@ -78,7 +32,7 @@ tracks/1/keys = {
 "values": [ true, true ]
 }
 
-[sub_resource type="Animation" id=8]
+[sub_resource type="Animation" id=14]
 resource_name = "Fadeout"
 tracks/0/type = "value"
 tracks/0/path = NodePath("Thing:modulate")
@@ -93,7 +47,7 @@ tracks/0/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
 }
 
-[sub_resource type="Animation" id=9]
+[sub_resource type="Animation" id=15]
 resource_name = "License"
 length = 2.0
 tracks/0/type = "value"
@@ -157,7 +111,53 @@ tracks/4/keys = {
 "values": [ true, false ]
 }
 
-[sub_resource type="StyleBoxFlat" id=10]
+[sub_resource type="StyleBoxFlat" id=16]
+bg_color = Color( 1, 0.372549, 0.341176, 1 )
+border_width_bottom = 2
+border_color = Color( 0.733333, 0.101961, 0, 1 )
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+expand_margin_left = 3.0
+expand_margin_right = 3.0
+expand_margin_top = 1.0
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id=17]
+bg_color = Color( 1, 0.541176, 0.266667, 1 )
+border_width_bottom = 2
+border_color = Color( 0.67451, 0.27451, 0, 1 )
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+expand_margin_left = 3.0
+expand_margin_right = 3.0
+expand_margin_top = 1.0
+anti_aliasing = false
+
+[sub_resource type="StyleBoxEmpty" id=18]
+
+[sub_resource type="StyleBoxFlat" id=19]
+bg_color = Color( 0.945098, 0.219608, 0.0980392, 1 )
+border_width_bottom = 2
+border_color = Color( 0.607843, 0, 0, 1 )
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+expand_margin_left = 3.0
+expand_margin_right = 3.0
+expand_margin_top = 1.0
+anti_aliasing = false
+
+[sub_resource type="DynamicFont" id=20]
+font_data = ExtResource( 2 )
+
+[sub_resource type="StyleBoxEmpty" id=21]
+
+[sub_resource type="StyleBoxFlat" id=22]
 content_margin_left = 5.0
 content_margin_right = 5.0
 content_margin_top = 5.0
@@ -174,7 +174,7 @@ corner_radius_bottom_right = 5
 corner_radius_bottom_left = 2
 anti_aliasing = false
 
-[sub_resource type="DynamicFont" id=11]
+[sub_resource type="DynamicFont" id=23]
 size = 12
 font_data = ExtResource( 2 )
 
@@ -182,14 +182,14 @@ font_data = ExtResource( 2 )
 size = 12
 font_data = ExtResource( 2 )
 
-[sub_resource type="StyleBoxFlat" id=13]
+[sub_resource type="StyleBoxFlat" id=24]
 bg_color = Color( 0, 0, 0, 1 )
 
-[sub_resource type="DynamicFont" id=14]
+[sub_resource type="DynamicFont" id=25]
 size = 15
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=15]
+[sub_resource type="DynamicFont" id=26]
 size = 40
 font_data = ExtResource( 2 )
 
@@ -200,6 +200,11 @@ script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Animations" type="AnimationPlayer" parent="."]
+anims/Fadein = SubResource( 13 )
+anims/Fadeout = SubResource( 14 )
+anims/License = SubResource( 15 )
 
 [node name="Logo" type="TextureRect" parent="."]
 anchor_left = 0.5
@@ -213,65 +218,88 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="NewRun" type="Button" parent="."]
-anchor_left = 0.437
-anchor_top = 0.556
-anchor_right = 0.565
-anchor_bottom = 0.636
-margin_left = 0.199997
-margin_top = -0.100014
-margin_bottom = -0.100006
+[node name="MainMenu" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Buttons" type="VBoxContainer" parent="MainMenu"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -25.0
+margin_top = 4.0
+margin_right = 25.0
+margin_bottom = 44.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="NewRun" type="Button" parent="MainMenu/Buttons"]
+margin_right = 50.0
+margin_bottom = 18.0
 grow_horizontal = 2
 grow_vertical = 2
 focus_mode = 1
-custom_styles/hover = SubResource( 1 )
-custom_styles/pressed = SubResource( 2 )
-custom_styles/focus = SubResource( 3 )
-custom_styles/disabled = SubResource( 2 )
-custom_styles/normal = SubResource( 4 )
-custom_fonts/font = SubResource( 5 )
+custom_styles/hover = SubResource( 16 )
+custom_styles/pressed = SubResource( 17 )
+custom_styles/focus = SubResource( 18 )
+custom_styles/disabled = SubResource( 17 )
+custom_styles/normal = SubResource( 19 )
+custom_fonts/font = SubResource( 20 )
 text = "New run"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Exit" type="Button" parent="."]
-anchor_left = 0.437
-anchor_top = 0.662
-anchor_right = 0.565
-anchor_bottom = 0.742
-margin_left = 0.199997
-margin_top = 0.0499878
-margin_bottom = 0.0499878
+[node name="Settings" type="Button" parent="MainMenu/Buttons"]
+margin_top = 22.0
+margin_right = 50.0
+margin_bottom = 38.0
 grow_horizontal = 2
 grow_vertical = 2
-custom_styles/hover = SubResource( 6 )
-custom_styles/pressed = SubResource( 6 )
-custom_styles/focus = SubResource( 6 )
-custom_styles/disabled = SubResource( 6 )
-custom_styles/normal = SubResource( 6 )
-custom_fonts/font = SubResource( 5 )
+custom_styles/hover = SubResource( 21 )
+custom_styles/pressed = SubResource( 21 )
+custom_styles/focus = SubResource( 21 )
+custom_styles/disabled = SubResource( 21 )
+custom_styles/normal = SubResource( 21 )
+custom_fonts/font = SubResource( 20 )
+text = "Settings"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Exit" type="Button" parent="MainMenu/Buttons"]
+margin_top = 42.0
+margin_right = 50.0
+margin_bottom = 58.0
+grow_horizontal = 2
+grow_vertical = 2
+custom_styles/hover = SubResource( 21 )
+custom_styles/pressed = SubResource( 21 )
+custom_styles/focus = SubResource( 21 )
+custom_styles/disabled = SubResource( 21 )
+custom_styles/normal = SubResource( 21 )
+custom_fonts/font = SubResource( 20 )
 text = "Exit"
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Animations" type="AnimationPlayer" parent="."]
-anims/Fadein = SubResource( 7 )
-anims/Fadeout = SubResource( 8 )
-anims/License = SubResource( 9 )
-
-[node name="LineEdit" type="LineEdit" parent="."]
+[node name="LineEdit" type="LineEdit" parent="MainMenu"]
 anchor_left = 0.32
 anchor_top = 0.867
 anchor_right = 0.682
 anchor_bottom = 0.964
-margin_left = -1.52588e-05
-margin_top = -0.0750122
-margin_right = 0.199982
-margin_bottom = 0.0999908
-custom_styles/normal = SubResource( 10 )
-custom_fonts/font = SubResource( 11 )
+margin_left = 2.86102e-06
+margin_top = -0.0749964
+margin_right = 0.200007
+margin_bottom = 0.100003
+custom_styles/normal = SubResource( 22 )
+custom_fonts/font = SubResource( 23 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 align = 1
 placeholder_text = "Leave empty for random seed"
@@ -279,41 +307,29 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VisualizeDamage" type="CheckBox" parent="."]
-anchor_top = 1.0
-anchor_bottom = 1.0
-margin_top = -24.0
-margin_right = 102.0
-custom_fonts/font = SubResource( 12 )
-text = "Visualize Damage"
+[node name="Settings" type="VBoxContainer" parent="."]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -59.5
+margin_top = 13.0
+margin_right = 59.5
+margin_bottom = 77.0
+custom_constants/separation = 0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="InstantDeathButton" type="CheckBox" parent="."]
-anchor_top = 1.0
-anchor_bottom = 1.0
-margin_top = -48.0
-margin_right = 123.0
-margin_bottom = -24.0
-custom_fonts/font = SubResource( 12 )
-text = "Instant Death Button"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="JoystickSensitivity" type="HSlider" parent="."]
-anchor_top = 0.702
-anchor_right = 0.307
-anchor_bottom = 0.809
-margin_top = -2.95001
-margin_right = 0.199996
-margin_bottom = -3.025
+[node name="JoystickSensitivity" type="HSlider" parent="Settings"]
+margin_right = 119.0
+margin_bottom = 16.0
 min_value = 1.0
 max_value = 12.0
 value = 1.0
 
-[node name="Text" type="Label" parent="JoystickSensitivity"]
+[node name="Text" type="Label" parent="Settings/JoystickSensitivity"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -330,11 +346,48 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="VisualizeDamage" type="CheckBox" parent="Settings"]
+margin_top = 16.0
+margin_right = 119.0
+margin_bottom = 40.0
+custom_fonts/font = SubResource( 12 )
+text = "Visualize Damage"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="InstantDeathButton" type="CheckBox" parent="Settings"]
+margin_top = 40.0
+margin_right = 119.0
+margin_bottom = 64.0
+custom_fonts/font = SubResource( 12 )
+text = "Instant Death Button"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Back" type="Button" parent="Settings"]
+margin_top = 64.0
+margin_right = 119.0
+margin_bottom = 80.0
+grow_horizontal = 2
+grow_vertical = 2
+custom_styles/hover = SubResource( 21 )
+custom_styles/pressed = SubResource( 21 )
+custom_styles/focus = SubResource( 21 )
+custom_styles/disabled = SubResource( 21 )
+custom_styles/normal = SubResource( 21 )
+custom_fonts/font = SubResource( 20 )
+text = "Back"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="Thing" type="Panel" parent="."]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_styles/panel = SubResource( 13 )
+custom_styles/panel = SubResource( 24 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -356,7 +409,7 @@ margin_left = -49.0
 margin_top = 203.0
 margin_right = 50.0
 margin_bottom = -8.0
-custom_fonts/font = SubResource( 14 )
+custom_fonts/font = SubResource( 25 )
 text = "Made With Godot"
 align = 1
 __meta__ = {
@@ -372,7 +425,7 @@ margin_left = -212.0
 margin_top = -18.5
 margin_right = 212.0
 margin_bottom = 18.5
-custom_fonts/font = SubResource( 15 )
+custom_fonts/font = SubResource( 26 )
 text = "SadBlockGames"
 align = 1
 autowrap = true
@@ -380,9 +433,11 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[connection signal="pressed" from="NewRun" to="." method="_on_NewRun_pressed"]
-[connection signal="pressed" from="Exit" to="." method="_on_Exit_pressed"]
 [connection signal="animation_finished" from="Animations" to="." method="_on_animation_finished"]
-[connection signal="pressed" from="VisualizeDamage" to="." method="_on_VisualizeDamage_pressed"]
-[connection signal="pressed" from="InstantDeathButton" to="." method="_on_InstantDeathButton_pressed"]
-[connection signal="value_changed" from="JoystickSensitivity" to="." method="_on_JoystickSensitivity_value_changed"]
+[connection signal="pressed" from="MainMenu/Buttons/NewRun" to="." method="_on_NewRun_pressed"]
+[connection signal="pressed" from="MainMenu/Buttons/Settings" to="." method="_on_Settings_pressed"]
+[connection signal="pressed" from="MainMenu/Buttons/Exit" to="." method="_on_Exit_pressed"]
+[connection signal="value_changed" from="Settings/JoystickSensitivity" to="." method="_on_JoystickSensitivity_value_changed"]
+[connection signal="pressed" from="Settings/VisualizeDamage" to="." method="_on_VisualizeDamage_pressed"]
+[connection signal="pressed" from="Settings/InstantDeathButton" to="." method="_on_InstantDeathButton_pressed"]
+[connection signal="pressed" from="Settings/Back" to="." method="_on_Back_pressed"]
