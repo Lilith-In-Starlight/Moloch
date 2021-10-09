@@ -4,7 +4,7 @@
 [ext_resource path="res://dpcomic.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://MainMenu.gd" type="Script" id=3]
 
-[sub_resource type="Animation" id=13]
+[sub_resource type="Animation" id=1]
 resource_name = "Fadein"
 length = 1.1
 tracks/0/type = "value"
@@ -32,7 +32,7 @@ tracks/1/keys = {
 "values": [ true, true ]
 }
 
-[sub_resource type="Animation" id=14]
+[sub_resource type="Animation" id=2]
 resource_name = "Fadeout"
 tracks/0/type = "value"
 tracks/0/path = NodePath("Thing:modulate")
@@ -47,7 +47,7 @@ tracks/0/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
 }
 
-[sub_resource type="Animation" id=15]
+[sub_resource type="Animation" id=3]
 resource_name = "License"
 length = 2.0
 tracks/0/type = "value"
@@ -111,7 +111,7 @@ tracks/4/keys = {
 "values": [ true, false ]
 }
 
-[sub_resource type="StyleBoxFlat" id=16]
+[sub_resource type="StyleBoxFlat" id=4]
 bg_color = Color( 1, 0.372549, 0.341176, 1 )
 border_width_bottom = 2
 border_color = Color( 0.733333, 0.101961, 0, 1 )
@@ -124,7 +124,7 @@ expand_margin_right = 3.0
 expand_margin_top = 1.0
 anti_aliasing = false
 
-[sub_resource type="StyleBoxFlat" id=17]
+[sub_resource type="StyleBoxFlat" id=5]
 bg_color = Color( 1, 0.541176, 0.266667, 1 )
 border_width_bottom = 2
 border_color = Color( 0.67451, 0.27451, 0, 1 )
@@ -137,9 +137,9 @@ expand_margin_right = 3.0
 expand_margin_top = 1.0
 anti_aliasing = false
 
-[sub_resource type="StyleBoxEmpty" id=18]
+[sub_resource type="StyleBoxEmpty" id=6]
 
-[sub_resource type="StyleBoxFlat" id=19]
+[sub_resource type="StyleBoxFlat" id=7]
 bg_color = Color( 0.945098, 0.219608, 0.0980392, 1 )
 border_width_bottom = 2
 border_color = Color( 0.607843, 0, 0, 1 )
@@ -152,12 +152,12 @@ expand_margin_right = 3.0
 expand_margin_top = 1.0
 anti_aliasing = false
 
-[sub_resource type="DynamicFont" id=20]
+[sub_resource type="DynamicFont" id=8]
 font_data = ExtResource( 2 )
 
-[sub_resource type="StyleBoxEmpty" id=21]
+[sub_resource type="StyleBoxEmpty" id=9]
 
-[sub_resource type="StyleBoxFlat" id=22]
+[sub_resource type="StyleBoxFlat" id=10]
 content_margin_left = 5.0
 content_margin_right = 5.0
 content_margin_top = 5.0
@@ -174,7 +174,7 @@ corner_radius_bottom_right = 5
 corner_radius_bottom_left = 2
 anti_aliasing = false
 
-[sub_resource type="DynamicFont" id=23]
+[sub_resource type="DynamicFont" id=11]
 size = 12
 font_data = ExtResource( 2 )
 
@@ -182,14 +182,14 @@ font_data = ExtResource( 2 )
 size = 12
 font_data = ExtResource( 2 )
 
-[sub_resource type="StyleBoxFlat" id=24]
+[sub_resource type="StyleBoxFlat" id=13]
 bg_color = Color( 0, 0, 0, 1 )
 
-[sub_resource type="DynamicFont" id=25]
+[sub_resource type="DynamicFont" id=14]
 size = 15
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=26]
+[sub_resource type="DynamicFont" id=15]
 size = 40
 font_data = ExtResource( 2 )
 
@@ -202,9 +202,9 @@ __meta__ = {
 }
 
 [node name="Animations" type="AnimationPlayer" parent="."]
-anims/Fadein = SubResource( 13 )
-anims/Fadeout = SubResource( 14 )
-anims/License = SubResource( 15 )
+anims/Fadein = SubResource( 1 )
+anims/Fadeout = SubResource( 2 )
+anims/License = SubResource( 3 )
 
 [node name="MainMenu" type="Control" parent="."]
 anchor_right = 1.0
@@ -244,12 +244,12 @@ margin_bottom = 18.0
 grow_horizontal = 2
 grow_vertical = 2
 focus_mode = 1
-custom_styles/hover = SubResource( 16 )
-custom_styles/pressed = SubResource( 17 )
-custom_styles/focus = SubResource( 18 )
-custom_styles/disabled = SubResource( 17 )
-custom_styles/normal = SubResource( 19 )
-custom_fonts/font = SubResource( 20 )
+custom_styles/hover = SubResource( 4 )
+custom_styles/pressed = SubResource( 5 )
+custom_styles/focus = SubResource( 6 )
+custom_styles/disabled = SubResource( 5 )
+custom_styles/normal = SubResource( 7 )
+custom_fonts/font = SubResource( 8 )
 text = "New run"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -261,12 +261,12 @@ margin_right = 50.0
 margin_bottom = 38.0
 grow_horizontal = 2
 grow_vertical = 2
-custom_styles/hover = SubResource( 21 )
-custom_styles/pressed = SubResource( 21 )
-custom_styles/focus = SubResource( 21 )
-custom_styles/disabled = SubResource( 21 )
-custom_styles/normal = SubResource( 21 )
-custom_fonts/font = SubResource( 20 )
+custom_styles/hover = SubResource( 9 )
+custom_styles/pressed = SubResource( 9 )
+custom_styles/focus = SubResource( 9 )
+custom_styles/disabled = SubResource( 9 )
+custom_styles/normal = SubResource( 9 )
+custom_fonts/font = SubResource( 8 )
 text = "Settings"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -278,12 +278,12 @@ margin_right = 50.0
 margin_bottom = 58.0
 grow_horizontal = 2
 grow_vertical = 2
-custom_styles/hover = SubResource( 21 )
-custom_styles/pressed = SubResource( 21 )
-custom_styles/focus = SubResource( 21 )
-custom_styles/disabled = SubResource( 21 )
-custom_styles/normal = SubResource( 21 )
-custom_fonts/font = SubResource( 20 )
+custom_styles/hover = SubResource( 9 )
+custom_styles/pressed = SubResource( 9 )
+custom_styles/focus = SubResource( 9 )
+custom_styles/disabled = SubResource( 9 )
+custom_styles/normal = SubResource( 9 )
+custom_fonts/font = SubResource( 8 )
 text = "Exit"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -298,8 +298,8 @@ margin_left = 2.86102e-06
 margin_top = -0.0749964
 margin_right = 0.200007
 margin_bottom = 0.100003
-custom_styles/normal = SubResource( 22 )
-custom_fonts/font = SubResource( 23 )
+custom_styles/normal = SubResource( 10 )
+custom_fonts/font = SubResource( 11 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 align = 1
 placeholder_text = "Leave empty for random seed"
@@ -372,12 +372,12 @@ margin_right = 119.0
 margin_bottom = 80.0
 grow_horizontal = 2
 grow_vertical = 2
-custom_styles/hover = SubResource( 21 )
-custom_styles/pressed = SubResource( 21 )
-custom_styles/focus = SubResource( 21 )
-custom_styles/disabled = SubResource( 21 )
-custom_styles/normal = SubResource( 21 )
-custom_fonts/font = SubResource( 20 )
+custom_styles/hover = SubResource( 9 )
+custom_styles/pressed = SubResource( 9 )
+custom_styles/focus = SubResource( 9 )
+custom_styles/disabled = SubResource( 9 )
+custom_styles/normal = SubResource( 9 )
+custom_fonts/font = SubResource( 8 )
 text = "Controls"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -389,12 +389,12 @@ margin_right = 119.0
 margin_bottom = 96.0
 grow_horizontal = 2
 grow_vertical = 2
-custom_styles/hover = SubResource( 21 )
-custom_styles/pressed = SubResource( 21 )
-custom_styles/focus = SubResource( 21 )
-custom_styles/disabled = SubResource( 21 )
-custom_styles/normal = SubResource( 21 )
-custom_fonts/font = SubResource( 20 )
+custom_styles/hover = SubResource( 9 )
+custom_styles/pressed = SubResource( 9 )
+custom_styles/focus = SubResource( 9 )
+custom_styles/disabled = SubResource( 9 )
+custom_styles/normal = SubResource( 9 )
+custom_fonts/font = SubResource( 8 )
 text = "Back"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -418,12 +418,12 @@ margin_right = 400.0
 margin_bottom = 16.0
 grow_horizontal = 2
 grow_vertical = 2
-custom_styles/hover = SubResource( 21 )
-custom_styles/pressed = SubResource( 21 )
-custom_styles/focus = SubResource( 21 )
-custom_styles/disabled = SubResource( 21 )
-custom_styles/normal = SubResource( 21 )
-custom_fonts/font = SubResource( 20 )
+custom_styles/hover = SubResource( 9 )
+custom_styles/pressed = SubResource( 9 )
+custom_styles/focus = SubResource( 9 )
+custom_styles/disabled = SubResource( 9 )
+custom_styles/normal = SubResource( 9 )
+custom_fonts/font = SubResource( 8 )
 text = "Heal"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -435,12 +435,12 @@ margin_right = 400.0
 margin_bottom = 32.0
 grow_horizontal = 2
 grow_vertical = 2
-custom_styles/hover = SubResource( 21 )
-custom_styles/pressed = SubResource( 21 )
-custom_styles/focus = SubResource( 21 )
-custom_styles/disabled = SubResource( 21 )
-custom_styles/normal = SubResource( 21 )
-custom_fonts/font = SubResource( 20 )
+custom_styles/hover = SubResource( 9 )
+custom_styles/pressed = SubResource( 9 )
+custom_styles/focus = SubResource( 9 )
+custom_styles/disabled = SubResource( 9 )
+custom_styles/normal = SubResource( 9 )
+custom_fonts/font = SubResource( 8 )
 text = "Grab"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -452,12 +452,12 @@ margin_right = 400.0
 margin_bottom = 48.0
 grow_horizontal = 2
 grow_vertical = 2
-custom_styles/hover = SubResource( 21 )
-custom_styles/pressed = SubResource( 21 )
-custom_styles/focus = SubResource( 21 )
-custom_styles/disabled = SubResource( 21 )
-custom_styles/normal = SubResource( 21 )
-custom_fonts/font = SubResource( 20 )
+custom_styles/hover = SubResource( 9 )
+custom_styles/pressed = SubResource( 9 )
+custom_styles/focus = SubResource( 9 )
+custom_styles/disabled = SubResource( 9 )
+custom_styles/normal = SubResource( 9 )
+custom_fonts/font = SubResource( 8 )
 text = "Shoot"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -469,12 +469,12 @@ margin_right = 400.0
 margin_bottom = 64.0
 grow_horizontal = 2
 grow_vertical = 2
-custom_styles/hover = SubResource( 21 )
-custom_styles/pressed = SubResource( 21 )
-custom_styles/focus = SubResource( 21 )
-custom_styles/disabled = SubResource( 21 )
-custom_styles/normal = SubResource( 21 )
-custom_fonts/font = SubResource( 20 )
+custom_styles/hover = SubResource( 9 )
+custom_styles/pressed = SubResource( 9 )
+custom_styles/focus = SubResource( 9 )
+custom_styles/disabled = SubResource( 9 )
+custom_styles/normal = SubResource( 9 )
+custom_fonts/font = SubResource( 8 )
 text = "Drop"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -486,12 +486,12 @@ margin_right = 400.0
 margin_bottom = 80.0
 grow_horizontal = 2
 grow_vertical = 2
-custom_styles/hover = SubResource( 21 )
-custom_styles/pressed = SubResource( 21 )
-custom_styles/focus = SubResource( 21 )
-custom_styles/disabled = SubResource( 21 )
-custom_styles/normal = SubResource( 21 )
-custom_fonts/font = SubResource( 20 )
+custom_styles/hover = SubResource( 9 )
+custom_styles/pressed = SubResource( 9 )
+custom_styles/focus = SubResource( 9 )
+custom_styles/disabled = SubResource( 9 )
+custom_styles/normal = SubResource( 9 )
+custom_fonts/font = SubResource( 8 )
 text = "Up"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -503,12 +503,12 @@ margin_right = 400.0
 margin_bottom = 96.0
 grow_horizontal = 2
 grow_vertical = 2
-custom_styles/hover = SubResource( 21 )
-custom_styles/pressed = SubResource( 21 )
-custom_styles/focus = SubResource( 21 )
-custom_styles/disabled = SubResource( 21 )
-custom_styles/normal = SubResource( 21 )
-custom_fonts/font = SubResource( 20 )
+custom_styles/hover = SubResource( 9 )
+custom_styles/pressed = SubResource( 9 )
+custom_styles/focus = SubResource( 9 )
+custom_styles/disabled = SubResource( 9 )
+custom_styles/normal = SubResource( 9 )
+custom_fonts/font = SubResource( 8 )
 text = "Down"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -520,12 +520,12 @@ margin_right = 400.0
 margin_bottom = 112.0
 grow_horizontal = 2
 grow_vertical = 2
-custom_styles/hover = SubResource( 21 )
-custom_styles/pressed = SubResource( 21 )
-custom_styles/focus = SubResource( 21 )
-custom_styles/disabled = SubResource( 21 )
-custom_styles/normal = SubResource( 21 )
-custom_fonts/font = SubResource( 20 )
+custom_styles/hover = SubResource( 9 )
+custom_styles/pressed = SubResource( 9 )
+custom_styles/focus = SubResource( 9 )
+custom_styles/disabled = SubResource( 9 )
+custom_styles/normal = SubResource( 9 )
+custom_fonts/font = SubResource( 8 )
 text = "Left"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -537,12 +537,12 @@ margin_right = 400.0
 margin_bottom = 128.0
 grow_horizontal = 2
 grow_vertical = 2
-custom_styles/hover = SubResource( 21 )
-custom_styles/pressed = SubResource( 21 )
-custom_styles/focus = SubResource( 21 )
-custom_styles/disabled = SubResource( 21 )
-custom_styles/normal = SubResource( 21 )
-custom_fonts/font = SubResource( 20 )
+custom_styles/hover = SubResource( 9 )
+custom_styles/pressed = SubResource( 9 )
+custom_styles/focus = SubResource( 9 )
+custom_styles/disabled = SubResource( 9 )
+custom_styles/normal = SubResource( 9 )
+custom_fonts/font = SubResource( 8 )
 text = "Right"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -554,12 +554,12 @@ margin_right = 400.0
 margin_bottom = 144.0
 grow_horizontal = 2
 grow_vertical = 2
-custom_styles/hover = SubResource( 21 )
-custom_styles/pressed = SubResource( 21 )
-custom_styles/focus = SubResource( 21 )
-custom_styles/disabled = SubResource( 21 )
-custom_styles/normal = SubResource( 21 )
-custom_fonts/font = SubResource( 20 )
+custom_styles/hover = SubResource( 9 )
+custom_styles/pressed = SubResource( 9 )
+custom_styles/focus = SubResource( 9 )
+custom_styles/disabled = SubResource( 9 )
+custom_styles/normal = SubResource( 9 )
+custom_fonts/font = SubResource( 8 )
 text = "Jump"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -571,12 +571,12 @@ margin_right = 400.0
 margin_bottom = 160.0
 grow_horizontal = 2
 grow_vertical = 2
-custom_styles/hover = SubResource( 21 )
-custom_styles/pressed = SubResource( 21 )
-custom_styles/focus = SubResource( 21 )
-custom_styles/disabled = SubResource( 21 )
-custom_styles/normal = SubResource( 21 )
-custom_fonts/font = SubResource( 20 )
+custom_styles/hover = SubResource( 9 )
+custom_styles/pressed = SubResource( 9 )
+custom_styles/focus = SubResource( 9 )
+custom_styles/disabled = SubResource( 9 )
+custom_styles/normal = SubResource( 9 )
+custom_fonts/font = SubResource( 8 )
 text = "Extra Info"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -588,12 +588,12 @@ margin_right = 400.0
 margin_bottom = 176.0
 grow_horizontal = 2
 grow_vertical = 2
-custom_styles/hover = SubResource( 21 )
-custom_styles/pressed = SubResource( 21 )
-custom_styles/focus = SubResource( 21 )
-custom_styles/disabled = SubResource( 21 )
-custom_styles/normal = SubResource( 21 )
-custom_fonts/font = SubResource( 20 )
+custom_styles/hover = SubResource( 9 )
+custom_styles/pressed = SubResource( 9 )
+custom_styles/focus = SubResource( 9 )
+custom_styles/disabled = SubResource( 9 )
+custom_styles/normal = SubResource( 9 )
+custom_fonts/font = SubResource( 8 )
 text = "Instant Death"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -605,12 +605,12 @@ margin_right = 400.0
 margin_bottom = 176.0
 grow_horizontal = 2
 grow_vertical = 2
-custom_styles/hover = SubResource( 21 )
-custom_styles/pressed = SubResource( 21 )
-custom_styles/focus = SubResource( 21 )
-custom_styles/disabled = SubResource( 21 )
-custom_styles/normal = SubResource( 21 )
-custom_fonts/font = SubResource( 20 )
+custom_styles/hover = SubResource( 9 )
+custom_styles/pressed = SubResource( 9 )
+custom_styles/focus = SubResource( 9 )
+custom_styles/disabled = SubResource( 9 )
+custom_styles/normal = SubResource( 9 )
+custom_fonts/font = SubResource( 8 )
 text = "Reset To Default"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -622,12 +622,12 @@ margin_right = 400.0
 margin_bottom = 192.0
 grow_horizontal = 2
 grow_vertical = 2
-custom_styles/hover = SubResource( 21 )
-custom_styles/pressed = SubResource( 21 )
-custom_styles/focus = SubResource( 21 )
-custom_styles/disabled = SubResource( 21 )
-custom_styles/normal = SubResource( 21 )
-custom_fonts/font = SubResource( 20 )
+custom_styles/hover = SubResource( 9 )
+custom_styles/pressed = SubResource( 9 )
+custom_styles/focus = SubResource( 9 )
+custom_styles/disabled = SubResource( 9 )
+custom_styles/normal = SubResource( 9 )
+custom_fonts/font = SubResource( 8 )
 text = "Back"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -637,7 +637,7 @@ __meta__ = {
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_styles/panel = SubResource( 24 )
+custom_styles/panel = SubResource( 13 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -659,7 +659,7 @@ margin_left = -49.0
 margin_top = 203.0
 margin_right = 50.0
 margin_bottom = -8.0
-custom_fonts/font = SubResource( 25 )
+custom_fonts/font = SubResource( 14 )
 text = "Made With Godot"
 align = 1
 __meta__ = {
@@ -675,7 +675,7 @@ margin_left = -212.0
 margin_top = -18.5
 margin_right = 212.0
 margin_bottom = 18.5
-custom_fonts/font = SubResource( 26 )
+custom_fonts/font = SubResource( 15 )
 text = "SadBlockGames"
 align = 1
 autowrap = true
