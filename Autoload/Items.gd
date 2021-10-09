@@ -96,7 +96,8 @@ func _ready():
 	register_spell(2, "bouncyray", "Bouncing Lightray", "Casts a ray of magical light that bounces through the room", preload("res://Sprites/Spells/BouncyRay.png"), preload("res://Spells/BouncyRay.tscn"))
 	register_spell(1, "spinsword", "Haunted Sword", "Summons a sword that cuts everything around you", preload("res://Sprites/Spells/SpinSword.png"), preload("res://Spells/SpinSword.tscn"))
 	register_spell(1, "windsetter", "Windsetter", "Summons a gust of wind", preload("res://Sprites/Spells/Windsetter.png"), preload("res://Spells/Windsetter.tscn"))
-	register_spell(3, "westdragon", "Dragon Of The West", "They call him that for a  reason.", preload("res://Sprites/Spells/WestDragon.png"), preload("res://Spells/WestDragon.tscn"))
+	register_spell(3, "westdragon", "Dragon Of The West", "They call him that for a reason.", preload("res://Sprites/Spells/WestDragon.png"), preload("res://Spells/WestDragon.tscn"))
+	register_spell(3, "lightning", "Lightning", "Uncontrollable wrath.", preload("res://Sprites/Spells/Lightning.png"), preload("res://Spells/Lightning.tscn"))
 	
 	register_base_mod("multiplicative", "Multiplicative Cast", "Many from alterations of one\nIterations: ", preload("res://Sprites/Spells/Modifiers/Multiplicative.png"))
 	register_base_mod("unifying", "Unifying Cast", "One from alterations of many\nAmalgamations: ", preload("res://Sprites/Spells/Modifiers/UnifyingM.png"))
