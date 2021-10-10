@@ -195,7 +195,7 @@ func _input(event: InputEvent) -> void:
 								output("[color=red]givemod <modname> <level>[/color]")
 											
 									
-			KEY_F1:
+			KEY_F1, KEY_ESCAPE:
 				$Input.release_focus()
 				visible = false
 
