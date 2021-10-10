@@ -17,7 +17,7 @@
 [ext_resource path="res://Sprites/Particles/fire.png" type="Texture" id=15]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 3.03508, 10.5291 )
+extents = Vector2( 3, 10.5 )
 
 [sub_resource type="AtlasTexture" id=25]
 atlas = ExtResource( 15 )
@@ -212,12 +212,13 @@ visible = false
 position = Vector2( 0, -9 )
 scale = Vector2( 0.75, 1 )
 frames = SubResource( 28 )
+frame = 2
 playing = true
 
 [node name="Player" type="AnimatedSprite" parent="."]
 frames = SubResource( 24 )
 animation = "run_lookback"
-frame = 1
+frame = 4
 playing = true
 
 [node name="WandRender" parent="." instance=ExtResource( 13 )]

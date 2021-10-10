@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Spells/TeleportWand.gd" type="Script" id=1]
+
+[node name="TeleportWand" type="RayCast2D"]
+position = Vector2( -1, 0 )
+collision_mask = 91
+script = ExtResource( 1 )
