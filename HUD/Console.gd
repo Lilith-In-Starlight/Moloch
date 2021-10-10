@@ -4,7 +4,7 @@ var finished_gen := false
 
 
 func _input(event: InputEvent) -> void:
-	if event is InputEventKey and event.is_pressed() and finished_gen:
+	if event is InputEventKey and event.is_pressed() and finished_gen and Config.config_file.get_value("debug", "console", false):
 		match event.scancode:
 			KEY_F12:
 				$Input.grab_focus()
