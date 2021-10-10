@@ -76,6 +76,9 @@ func _ready():
 
 
 func _process(delta):
+	# If the player is on fire
+	$Fire.visible = health.effects.has("onfire")
+	
 	# If the player is bleeding
 	if health.poked_holes > 0:
 		# Emit blood particles 

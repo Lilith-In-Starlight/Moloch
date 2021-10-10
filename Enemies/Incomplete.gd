@@ -29,6 +29,8 @@ func _ready():
 
 
 func _physics_process(delta):
+	$Fire.visible = health.effects.has("onfire")
+	
 	$WandRenderSprite.render_wand(wand)
 	health.process_health()
 	for i in min(health.poked_holes, 6):

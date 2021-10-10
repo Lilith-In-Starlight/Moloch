@@ -88,6 +88,7 @@ func process_health():
 			effects.erase("onfire")
 		else:
 			temp_change(2.0/60.0)
+			emit_signal("was_damaged", "heat")
 	if ((temperature > death_hypertemperature or temperature < death_hypotemperature) and weak_to_temp) or (soul <= 0.0 and has_soul) or (blood <= 0.0 and needs_blood) or poked_holes > max_holes:
 		if cause_of_death == -1:
 			if temperature > death_hypertemperature and weak_to_temp:
