@@ -64,6 +64,7 @@ func _ready():
 	health.connect("was_damaged",self, "_on_damaged")
 	health.connect("hole_poked", self, "message_send", ["Bleeding"])
 	health.connect("full_healed", self, "message_send", ["Your flesh is renewed"])
+	health.connect("effect_changed", self, "_on_effect_changes")
 	health.connect("died", self, "health_died")
 	health.is_players = true
 	Cam = get_tree().get_nodes_in_group("Camera")[0]
@@ -711,3 +712,12 @@ func _on_DamageTimer_timeout() -> void:
 
 func _on_damaged(damage_type:String) -> void:
 	Items.damage_visuals(self, $DamageTimer, damage_type)
+
+
+func _on_effect_changes(effect:String, added:bool) -> void:
+	match effect:
+		"onfire":
+			if added:
+				message_send("You are on fire")
+			else:
+				message_send("You are not on fire")

@@ -9,6 +9,7 @@ signal full_healed
 signal bled
 signal died
 signal was_damaged(type)
+signal effect_changed(effect, added)
 
 enum DEATHS {
 	BLED,
@@ -45,6 +46,8 @@ var needed_soul := 1.0
 
 var is_players := false
 
+var effects := []
+
 
 func shatter_soul(freq :float) -> void:
 	soul -= freq
@@ -79,6 +82,12 @@ func full_heal():
 
 func process_health():
 	blood -= poked_holes * (0.5+randf())*0.0005
+	if effects.has("onfire"):
+		if randf() < 0.05 or temperature < -5.0:
+			emit_signal("effect_changed", "onfire", false)
+			effects.erase("onfire")
+		else:
+			temp_change(2.0/60.0)
 	if ((temperature > death_hypertemperature or temperature < death_hypotemperature) and weak_to_temp) or (soul <= 0.0 and has_soul) or (blood <= 0.0 and needs_blood) or poked_holes > max_holes:
 		if cause_of_death == -1:
 			if temperature > death_hypertemperature and weak_to_temp:
@@ -94,5 +103,11 @@ func process_health():
 				
 		emit_signal("died")
 
+
 func _instakill_pressed():
 		emit_signal("died")
+
+
+func add_effect(effect:String):
+	effects.append(effect)
+	emit_signal("effect_changed", effect, true)
