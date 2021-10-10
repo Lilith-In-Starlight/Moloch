@@ -110,12 +110,12 @@ func _input(event: InputEvent) -> void:
 											if "cast" in tags:
 												if tags["cast"].is_valid_float():
 													new_wand.spell_recharge = tags["cast"] as float
-												elif tags["cast"] != "*":
+												else:
 													output("[color=red]cast is an invalid float[/color]")
 											if "recharge" in tags:
 												if tags["recharge"].is_valid_float():
 													new_wand.full_recharge = tags["recharge"] as float
-												elif tags["recharge"] != "*":
+												else:
 													output("[color=red]recharge is an invalid float[/color]")
 											if "spellcap" in tags:
 												if tags["spellcap"].is_valid_integer():
@@ -126,28 +126,41 @@ func _input(event: InputEvent) -> void:
 														new_wand.spell_capacity = tags["spellcap"] as int
 												elif tags["spellcap"] != "*":
 													output("[color=red]spellcap is an invalid int[/color]")
+											if "heat" in tags:
+												if tags["heat"].is_valid_float():
+													new_wand.heat_resistance = tags["heat"] as float
+												else:
+													output("[color=red]heat is an invalid float[/color]")
+											if "soul" in tags:
+												if tags["soul"].is_valid_float():
+													new_wand.soul_resistance = tags["soul"] as float
+												else:
+													output("[color=red]soul is an invalid float[/color]")
+											if "push" in tags:
+												if tags["push"].is_valid_float():
+													new_wand.push_resistance = tags["push"] as float
+												else:
+													output("[color=red]push is an invalid float[/color]")
 											if "shuffle" in tags:
 												match tags["shuffle"]:
 													"0", "1":
 														new_wand.shuffle = tags["shuffle"] == "1"
-													"*":
-														pass
 													_:
 														new_wand.shuffle = true
 											if "color1" in tags:
 												if tags["color1"].is_valid_html_color():
 													new_wand.color1 = Color(tags["color1"])
-												elif tags["color1"] != "*":
+												else:
 													output("[color=red]color1 is an invalid hex number[/color]")
 											if "color2" in tags:
 												if tags["color2"].is_valid_html_color():
 													new_wand.color2 = Color(tags["color2"])
-												elif tags["color2"] != "*":
+												else:
 													output("[color=red]color2 is an invalid hex number[/color]")
 											if "color3" in tags:
 												if tags["color3"].is_valid_html_color():
 													new_wand.color3 = Color(tags["color3"])
-												elif tags["color2"] != "*":
+												else:
 													output("[color=red]color3 is an invalid hex number[/color]")
 											var slot := Items.player_wands.find(null)
 											Items.player_wands[slot] = new_wand

@@ -7,6 +7,9 @@ signal finished_casting
 var spell_capacity :int = 1 + Items.LootRNG.randi()%5 setget set_spell_capacity
 var spell_recharge :float = Items.LootRNG.randf()*0.3
 var full_recharge :float = Items.LootRNG.randf()*1.7
+var heat_resistance :float = Items.LootRNG.randf()*0.7
+var soul_resistance :float = Items.LootRNG.randf()*0.7
+var push_resistance :float = Items.LootRNG.randf()*0.7
 var spells := []
 
 var color1 := Color(Items.LootRNG.randf(), Items.LootRNG.randf(), Items.LootRNG.randf())
@@ -92,6 +95,9 @@ func get_json() -> String:
 	string += '"cast":' + '"' + str(spell_recharge) + '",'
 	string += '"recharge":' + '"' + str(full_recharge) + '",'
 	string += '"spellcap":' + '"' + str(spell_capacity) + '",'
+	string += '"heat"' + '"' + str(heat_resistance) + '",'
+	string += '"soul"' + '"' + str(soul_resistance) + '",'
+	string += '"push"' + '"' + str(push_resistance) + '",'
 	if shuffle:
 		string += '"shuffle":"1",'
 	else:

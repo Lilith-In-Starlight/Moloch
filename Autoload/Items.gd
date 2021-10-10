@@ -296,6 +296,7 @@ func cast_spell(wand:Wand, caster:Node2D, slot_offset := 0, goal_offset := Vecto
 			spell.CastInfo.Caster = caster
 			spell.CastInfo.goal = caster.looking_at()
 			spell.CastInfo.goal_offset = goal_offset
+			spell.CastInfo.wand = wand
 			caster.get_parent().add_child(spell)
 		elif wand.current_spell + slot_offset + 1 < wand.spell_capacity and wand.spells[wand.current_spell+slot_offset+1] != null:
 			match c_spell.id:

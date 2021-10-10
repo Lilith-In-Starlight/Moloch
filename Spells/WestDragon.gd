@@ -20,7 +20,7 @@ func _process(delta):
 	var i := 0
 	if is_instance_valid(CastInfo.Caster):
 		if CastInfo.Caster.has_method("health_object"):
-			CastInfo.Caster.health_object().temp_change(-0.5)
+			CastInfo.heat_caster(-0.5)
 	for rc in get_children():
 		rc.force_raycast_update()
 		if randf()<0.3:
@@ -39,7 +39,7 @@ func _process(delta):
 				rc.get_collider().health_object().temp_change(12)
 			if rc.get_collider().get("speed"):
 				rc.get_collider().speed += rc.cast_to.normalized()*4.5
-			if rc.get_collider().get("linear_velocity"):
+			elif rc.get_collider().get("linear_velocity"):
 				rc.get_collider().linear_velocity += rc.cast_to.normalized()*4.5
 		rc.cast_to = Vector2(cos(angle+(-3+i)*0.2), sin(angle+(-3+i)*0.2))*200
 		i += 1

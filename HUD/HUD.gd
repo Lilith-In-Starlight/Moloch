@@ -198,17 +198,22 @@ func _process(delta):
 				block_cast = true 
 				# If the slot isn't empty
 				if Items.player_wands[i] != null:
+					var d_wand :Wand = Items.player_wands[i]
 					# Which information to set
 					if Input.is_key_pressed(KEY_SHIFT):
 						DescriptionBox.visible = true
 						DescriptionBoxName.text = "Wand"
-						DescriptionBoxInfo.text = "Cast Cooldown: " + str(Items.player_wands[i].spell_recharge).pad_decimals(3)
-						DescriptionBoxInfo.text += "\nRecharge Time: " + str(Items.player_wands[i].full_recharge).pad_decimals(3)
-						if Items.player_wands[i].shuffle:
+						DescriptionBoxInfo.text = "Cast Cooldown: " + str(d_wand.spell_recharge).pad_decimals(3)
+						DescriptionBoxInfo.text += "\nRecharge Time: " + str(d_wand.full_recharge).pad_decimals(3)
+						DescriptionBoxInfo.text += "\nRecharge Time: " + str(d_wand.full_recharge).pad_decimals(3)
+						DescriptionBoxInfo.text += "\nTemp. Resistance: " + str(1.0/d_wand.heat_resistance).pad_decimals(2)
+						DescriptionBoxInfo.text += "\nSoul Resistance: " + str(1.0/d_wand.soul_resistance).pad_decimals(2)
+						DescriptionBoxInfo.text += "\nPush Resistance: " + str(1.0/d_wand.push_resistance).pad_decimals(2)
+						if d_wand.shuffle:
 							DescriptionBoxInfo.text += "\nShuffle"
 					else:
 						ShortDescriptionBox.visible = true
-						ShortDescriptionBox.text =  str(Items.player_wands[i].spell_recharge).pad_decimals(2) + "/" + str(Items.player_wands[i].full_recharge).pad_decimals(2)
+						ShortDescriptionBox.text =  str(d_wand.spell_recharge).pad_decimals(2) + "/" + str(d_wand.full_recharge).pad_decimals(2)
 				break # Stop checking for if it's in a slot, we already did all this stuff
 	
 	# If the mouse is in the companions' wand area

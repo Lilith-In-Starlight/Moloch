@@ -14,8 +14,7 @@ func _ready():
 	Map = get_tree().get_nodes_in_group("World")[0] 
 	CastInfo.set_position(self)
 	CastInfo.set_goal()
-	if CastInfo.Caster.has_method("health_object"):
-		CastInfo.Caster.health_object().temp_change(3.0)
+	CastInfo.heat_caster(3.0)
 	rotate = CastInfo.goal.angle_to_point(position)
 	$TextureProgress.radial_initial_angle += rad2deg(rotate)
 	$TextureProgress2.radial_initial_angle += rad2deg(rotate)
