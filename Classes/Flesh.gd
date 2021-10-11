@@ -91,7 +91,7 @@ func process_health(delta:float) -> void:
 			effects.erase("onfire")
 		else:
 			fire_timer -= delta
-			temp_change(60*delta*2.0)
+			temp_change(60*delta*0.05)
 			emit_signal("was_damaged", "heat")
 	if ((temperature > death_hypertemperature or temperature < death_hypotemperature) and weak_to_temp) or (soul <= 0.0 and has_soul) or (blood <= 0.0 and needs_blood) or poked_holes > max_holes:
 		if cause_of_death == -1:
@@ -117,4 +117,4 @@ func add_effect(effect:String):
 	effects.append(effect)
 	emit_signal("effect_changed", effect, true)
 	if effect == "onfire":
-		fire_timer += 30 + randf()*(60*3)
+		fire_timer += 2 + randf()*10
