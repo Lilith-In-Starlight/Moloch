@@ -1,6 +1,14 @@
 extends TileMap
 signal generated_world
 
+const LAYOUT_MAXTRIES = 10
+const antidirections = {
+	"LeftDoor": "RightDoor",
+	"RightDoor": "LeftDoor",
+	"UpDoor": "DownDoor",
+	"DownDoor": "UpDoor",
+}
+
 var areas := []
 
 
@@ -11,6 +19,17 @@ var fill_x := 0
 var fill_y := 0
 var last_frame_msecs :int
 var iterations := 3
+
+var rooms := 0
+var generated_end_room := false
+var treasure_rooms := 0
+
+class _Room:
+		var scene = null
+		var is_treasure :bool = false
+		var is_end :bool = false
+		var area :Rect2 = Rect2()
+		var attachment_door
 
 func _ready():
 	print("Generating dungeon")
@@ -29,137 +48,25 @@ func _ready():
 	max_point = areas[0].position + areas[0].size
 	min_point = Vector2.ZERO
 	print("Step 1: Generating layout of the world")
-	var rooms := 0
-	var generated_end_room := false
-	var treasure_rooms := 0
+	rooms = 0
+	generated_end_room = false
+	treasure_rooms = 0
 	while not generated_end_room or rooms <= 25 or treasure_rooms < 1:
 		var children := Items.shuffle_array(get_children())
 		for room in children:
 			var el_children = Items.shuffle_array(room.get_children())
 			for element in el_children:
-				var new_room = null
-				var search_new_room := true
-				var connected_door
-				var tries := 0
-				var new_area :Rect2
-				var is_treasure := false
-				if element.is_in_group("LeftDoor") and not element.is_in_group("DontTry"):
-					var try_to_end := false
-					while search_new_room and tries < 10:
-						tries += 1
-						if new_room != null:
-							new_room.queue_free()
-						if (rooms < 25 or generated_end_room):
-							if treasure_rooms < 4 and Items.WorldRNG.randf()<0.05 and rooms > 12:
-								is_treasure = true
-								match randi()%2:
-									0:
-										new_room = preload("res://Rooms/Sacrifice/TreasureRoom1.tscn").instance()
-									1:
-										new_room = preload("res://Rooms/Sacrifice/TreasureRoom2.tscn").instance()
-							else:
-								new_room = Rooms.rooms[Items.WorldRNG.randi()%Rooms.rooms.size()].instance()
-						else:
-							try_to_end =  true
-							new_room = preload("res://Rooms/Sacrifice/End2.tscn").instance()
-						var results := search_for("RightDoor", new_room, room, element)
-						search_new_room = results[0]
-						connected_door = results[1]
-						new_area = results[2]
-					element.add_to_group("DontTry")
-					if tries < 10:
-						if try_to_end:
-							generated_end_room = true
-						if is_treasure:
+					var new_room :_Room = expand_through_door(element,room) # side action: this removes the element on success
+					if new_room:
+						rooms += 1
+						if new_room.is_treasure:
 							treasure_rooms += 1
-						connected_door.remove_from_group("RightDoor")
-						element.remove_from_group("LeftDoor")
-				
-				elif element.is_in_group("RightDoor") and not element.is_in_group("DontTry"):
-					var try_to_end := false
-					while search_new_room and tries < 10:
-						tries += 1
-						if new_room != null:
-							new_room.queue_free()
-						if (rooms < 25 or generated_end_room):
-							if treasure_rooms < 4 and Items.WorldRNG.randf()<0.05 and rooms > 12:
-								is_treasure = true
-								match randi()%2:
-									0:
-										new_room = preload("res://Rooms/Sacrifice/TreasureRoom1.tscn").instance()
-									1:
-										new_room = preload("res://Rooms/Sacrifice/TreasureRoom2.tscn").instance()
-							else:
-								new_room = Rooms.rooms[Items.WorldRNG.randi()%Rooms.rooms.size()].instance()
-						else:
-							try_to_end =  true
-							new_room = preload("res://Rooms/Sacrifice/End2.tscn").instance()
-						var results := search_for("LeftDoor", new_room, room, element)
-						search_new_room = results[0]
-						connected_door = results[1]
-						new_area = results[2]
-					element.add_to_group("DontTry")
-					if tries < 10:
-						if try_to_end:
+						if new_room.is_end:
 							generated_end_room = true
-						if is_treasure:
-							treasure_rooms += 1
-						connected_door.remove_from_group("LeftDoor")
-						element.remove_from_group("RightDoor")
-				
-				elif element.is_in_group("UpDoor") and not element.is_in_group("DontTry"):
-					var try_to_end := false
-					while search_new_room and tries < 10:
-						tries += 1
-						if new_room != null:
-							new_room.queue_free()
-						if (rooms < 25 or generated_end_room):
-							new_room = Rooms.rooms[Items.WorldRNG.randi()%Rooms.rooms.size()].instance()
-						else:
-							try_to_end =  true
-							new_room = preload("res://Rooms/Sacrifice/End.tscn").instance()
-						var results := search_for("DownDoor", new_room, room, element)
-						search_new_room = results[0]
-						connected_door = results[1]
-						new_area = results[2]
-					element.add_to_group("DontTry")
-					if tries < 10:
-						if try_to_end:
-							generated_end_room = true
-						connected_door.remove_from_group("DownDoor")
-						element.remove_from_group("UpDoor")
-				
-				elif element.is_in_group("DownDoor") and not element.is_in_group("DontTry"):
-					while search_new_room and tries < 10:
-						tries += 1
-						if new_room != null:
-							new_room.queue_free()
-						new_room = Rooms.rooms[Items.WorldRNG.randi()%Rooms.rooms.size()].instance()
-						var results := search_for("UpDoor", new_room, room, element)
-						search_new_room = results[0]
-						connected_door = results[1]
-						new_area = results[2]
-					element.add_to_group("DontTry")
-					if tries < 10:
-						connected_door.remove_from_group("UpDoor")
-						element.remove_from_group("DownDoor")
-				if not new_area == Rect2(0,0,0,0) and tries < 10:
-					rooms += 1
-					new_room.position = room.position + element.position - connected_door.position
-					add_child(new_room)
-					connected_door.queue_free()
-					element.queue_free()
-					areas.append(new_area)
-					var local_max := new_area.position + new_area.size
-					if local_max.x > max_point.x:
-						max_point.x = local_max.x
-					if local_max.y > max_point.y:
-						max_point.y = local_max.y
-					if new_area.position.x < min_point.x:
-						min_point.x = new_area.position.x
-					if new_area.position.y < min_point.y:
-						min_point.y = new_area.position.y
-	
+						add_child(new_room.scene)
+						areas.append(new_room.area)
+						stretch_global_bounds(new_room.area)
+		
 	print("Step 2: Sealing up unused doors")
 	for door in get_tree().get_nodes_in_group("LeftDoor"):
 		var door_in_map := world_to_map(door.position) + world_to_map(door.get_parent().position)
@@ -305,6 +212,91 @@ func _process(delta):
 		fill_empty_space()
 		
 
+func expand_through_door(element, room) -> _Room:
+	var res: _Room = null
+	if element.is_in_group("DontTry"):
+		return null
+
+	if is_horizontal_door(element) or element.is_in_group("UpDoor"):
+		for _i in range(LAYOUT_MAXTRIES):
+			var r_candidate: _Room
+			if rooms < 25 or generated_end_room:
+				if treasure_rooms < 4 and Items.WorldRNG.randf()<0.05 and rooms > 12 \
+					and is_horizontal_door(element):
+						r_candidate = new_treasure_room()
+				else:
+					r_candidate = new_normal_room()
+			else:
+				var endscene
+				if is_horizontal_door(element):
+					endscene = preload("res://Rooms/Sacrifice/End2.tscn")
+				else:
+					endscene = preload("res://Rooms/Sacrifice/End.tscn")
+				r_candidate = end_room_from_scene(endscene)
+			if not try_dock(r_candidate, element, room):
+				res = r_candidate
+				break
+
+	elif element.is_in_group("DownDoor"):
+		for _i in range(LAYOUT_MAXTRIES):
+			var r_candidate: _Room = new_normal_room()
+			if not try_dock(r_candidate, element, room):
+				res = r_candidate
+				break
+	
+	element.add_to_group("DontTry")
+	if res and not res.area == Rect2(0,0,0,0):
+		res.scene.position = room.position + element.position - res.attachment_door.position
+		dissolve_doorpair(element, res.attachment_door)
+		return res
+	else:
+		return null
+
+func new_normal_room() -> _Room:
+	var new_room = Rooms.rooms[Items.WorldRNG.randi()%Rooms.rooms.size()].instance()
+	var r :_Room = _Room.new()
+	r.scene = new_room
+	return r
+
+func new_treasure_room() -> _Room:
+	var r :_Room = _Room.new()
+	match randi()%2:
+		0:
+			r.scene = preload("res://Rooms/Sacrifice/TreasureRoom1.tscn").instance()
+		1:
+			r.scene = preload("res://Rooms/Sacrifice/TreasureRoom2.tscn").instance()
+	r.is_treasure = true
+	return r
+
+func end_room_from_scene(scene) -> _Room:
+	var r :_Room = _Room.new()
+	r.scene = scene.instance()
+	r.is_end = true
+	return r
+
+func get_doorgroup(element) -> String:
+	for g in element.get_groups():
+		if "Door" in g:
+			return g
+	return ''
+
+func is_horizontal_door(element) -> bool:
+		return (element.is_in_group("LeftDoor") or element.is_in_group("RightDoor"))
+
+func dissolve_doorpair(element, connected_door):
+	var direction_doorgroup = get_doorgroup(element)
+	element.remove_from_group(direction_doorgroup)
+	connected_door.remove_from_group(antidirections[direction_doorgroup])
+	connected_door.queue_free()
+	element.queue_free()
+
+func try_dock(new_room: _Room, element, room) -> bool:
+	var direction_doorgroup: String = get_doorgroup(element)
+	var search_results = search_for(antidirections[direction_doorgroup], new_room.scene, room, element)
+	new_room.attachment_door = search_results[1]
+	new_room.area = search_results[2]
+	return search_results[0]
+
 func search_for(group:String, new_room, room, element)-> Array:
 	var connected_door
 	var not_found := true
@@ -378,3 +370,14 @@ func summon_wand(wand:Wand, position: Vector2, speed: Vector2) -> void:
 	new_wand_entity.linear_velocity = speed
 	add_child(new_wand_entity)
 
+
+func stretch_global_bounds(new_area :Rect2):
+		var local_max := new_area.position + new_area.size
+		if local_max.x > max_point.x:
+				max_point.x = local_max.x
+		if local_max.y > max_point.y:
+				max_point.y = local_max.y
+		if new_area.position.x < min_point.x:
+				min_point.x = new_area.position.x
+		if new_area.position.y < min_point.y:
+				min_point.y = new_area.position.y
