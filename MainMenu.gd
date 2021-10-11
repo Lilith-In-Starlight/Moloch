@@ -12,6 +12,10 @@ func _ready():
 	$Settings/JoystickSensitivity/Text.text = "Joystick Sensitivity: " + str(Config.joystick_sensitivity)
 	$Settings/JoystickSensitivity.value = Config.joystick_sensitivity
 	Animations.play("License")
+	
+#	for i in Localization.languages:
+#		$MenuButton.add_item(Localization.languages[i]["langname"])
+#	_on_updated_language()
 
 
 func _on_NewRun_pressed():
@@ -142,7 +146,20 @@ func get_action_text(action:String):
 				9: return "Extra Click 2"
 
 
-
 func _on_Reset_pressed() -> void:
 	InputMap.load_from_globals()
 	Config.save_config()
+
+
+#func update_language(index:int) -> void:
+#	var lang = Localization.languages.keys()[index]
+#	Localization.current_language = lang
+#	_on_updated_language()
+#
+#
+#func _on_updated_language() -> void:
+#	$MainMenu/Buttons/NewRun.text = Localization.get_line("play-button")
+#	$MainMenu/Buttons/Settings.text = Localization.get_line("settings-button")
+#	$MainMenu/Buttons/Exit.text = Localization.get_line("exit-button")
+#	$MainMenu/LineEdit.placeholder_text = Localization.get_line("seed-placeholder")
+#	$Settings/JoystickSensitivity/Text.text = Localization.get_line("joystick-sensitivity") + str(Config.joystick_sensitivity)

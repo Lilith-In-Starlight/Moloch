@@ -1,0 +1,6 @@
+langname=Español
+play-button=Nueva Partida
+settings-button=Configuracion
+exit-button=Salir
+seed-placeholder=Dejar vacio para seed aleatorea
+joystick-sensitivity=Sensibilidad Del Joystick: 

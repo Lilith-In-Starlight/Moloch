@@ -1,0 +1,6 @@
+langname=English
+play-button=New Run
+settings-button=Settings
+exit-button=Exit
+seed-placeholder=Leave empty for random seed
+joystick-sensitivity=Joystick Sensitivity: 
