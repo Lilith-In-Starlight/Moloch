@@ -205,7 +205,6 @@ func _process(delta):
 						DescriptionBoxName.text = "Wand"
 						DescriptionBoxInfo.text = "Cast Cooldown: " + str(d_wand.spell_recharge).pad_decimals(3)
 						DescriptionBoxInfo.text += "\nRecharge Time: " + str(d_wand.full_recharge).pad_decimals(3)
-						DescriptionBoxInfo.text += "\nRecharge Time: " + str(d_wand.full_recharge).pad_decimals(3)
 						DescriptionBoxInfo.text += "\nTemp. Resistance: " + str(1.0/d_wand.heat_resistance).pad_decimals(2)
 						DescriptionBoxInfo.text += "\nSoul Resistance: " + str(1.0/d_wand.soul_resistance).pad_decimals(2)
 						DescriptionBoxInfo.text += "\nPush Resistance: " + str(1.0/d_wand.push_resistance).pad_decimals(2)
