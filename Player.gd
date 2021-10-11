@@ -56,6 +56,7 @@ var pole_side := false
 
 var aim := Vector2(0, 0)
 
+var can_play_walk_sound := true
 
 func _ready():
 	# Setup
@@ -288,7 +289,7 @@ func _physics_process(delta):
 		spell_cast_pos = $CastDirection.get_collision_point() - position
 	else:
 		spell_cast_pos = $CastDirection.cast_to
-	health.process_health()
+	health.process_health(delta)
 	# Platforms
 	set_collision_mask_bit(2, not Input.is_action_pressed("down"))
 	
@@ -317,8 +318,10 @@ func _physics_process(delta):
 							$Player.scale.x = 1
 							if get_local_mouse_position().x > 0:
 								$Player.play("run")
+								play_step_sfx()
 							else:
 								$Player.play("run_lookback")
+								play_step_sfx()
 						else: # Has no legs
 							if get_local_mouse_position().x > 0:
 								$Player.play("crawling")
@@ -336,8 +339,10 @@ func _physics_process(delta):
 							$Player.scale.x = -1
 							if get_local_mouse_position().x > 0:
 								$Player.play("run_lookback")
+								play_step_sfx()
 							else:
 								$Player.play("run")
+								play_step_sfx()
 						else: # Has no legs
 							if get_local_mouse_position().x > 0:
 								$Player.play("crawling")
@@ -724,3 +729,7 @@ func _on_effect_changes(effect:String, added:bool) -> void:
 				message_send("You are on fire")
 			else:
 				message_send("You are not on fire")
+
+
+func play_step_sfx():
+	pass

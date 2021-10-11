@@ -19,7 +19,7 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	health.process_health()
+	health.process_health(delta)
 	number = get_tree().get_nodes_in_group("Gluestone").find(self)
 	if Items.player_items.count("gluestone") >= number and Items.player_items.count("gluestone") > 0:
 		var angle :float = Engine.get_frames_drawn()/float(Items.player_items.count("gluestone"))*0.08

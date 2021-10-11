@@ -19,7 +19,7 @@ func _ready() -> void:
 	health.connect("died", self, "_on_dead")
 
 func _physics_process(delta: float) -> void:
-	health.process_health()
+	health.process_health(delta)
 	var joined_group := get_tree().get_nodes_in_group("egg")+get_tree().get_nodes_in_group("Companion")
 	number = joined_group.find(self)
 	if Items.companions.size() >= number and Items.companions.size() > 0 :

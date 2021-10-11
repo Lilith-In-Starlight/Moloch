@@ -25,7 +25,6 @@ func _ready() -> void:
 					lang_file.close()
 					languages[language_folder] = language
 			language_folder = languages_directory.get_next()
-	print(get_line("play-button"))
 
 
 func get_line(line_name:String) -> String:

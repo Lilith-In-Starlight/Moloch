@@ -635,7 +635,6 @@ __meta__ = {
 }
 
 [node name="Thing" type="Panel" parent="."]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 custom_styles/panel = SubResource( 13 )
@@ -644,7 +643,6 @@ __meta__ = {
 }
 
 [node name="Image" type="Control" parent="."]
-visible = false
 modulate = Color( 1, 1, 1, 0 )
 anchor_right = 1.0
 anchor_bottom = 1.0

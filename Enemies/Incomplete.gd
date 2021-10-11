@@ -32,7 +32,7 @@ func _physics_process(delta):
 	$Fire.visible = health.effects.has("onfire")
 	
 	$WandRenderSprite.render_wand(wand)
-	health.process_health()
+	health.process_health(delta)
 	for i in min(health.poked_holes, 6):
 		if randf()>0.9:
 			var n :RigidBody2D = preload("res://Particles/Blood.tscn").instance()

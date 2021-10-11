@@ -4,7 +4,7 @@
 [ext_resource path="res://Sprites/Projectiles/R.png" type="Texture" id=2]
 
 [sub_resource type="CircleShape2D" id=1]
-radius = 6.0
+radius = 3.0
 
 [sub_resource type="CircleShape2D" id=2]
 radius = 8.0
@@ -19,11 +19,11 @@ shape = SubResource( 1 )
 disabled = true
 
 [node name="Area" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 25
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="Area"]
 shape = SubResource( 2 )
 
 [node name="R" type="Sprite" parent="."]
 texture = ExtResource( 2 )
-
-[connection signal="body_entered" from="Area" to="." method="_on_body_entered"]

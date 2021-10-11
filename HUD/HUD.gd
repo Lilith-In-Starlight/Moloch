@@ -200,7 +200,7 @@ func _process(delta):
 				if Items.player_wands[i] != null:
 					var d_wand :Wand = Items.player_wands[i]
 					# Which information to set
-					if Input.is_key_pressed(KEY_SHIFT):
+					if Input.is_action_pressed("see_info"):
 						DescriptionBox.visible = true
 						DescriptionBoxName.text = "Wand"
 						DescriptionBoxInfo.text = "Cast Cooldown: " + str(d_wand.spell_recharge).pad_decimals(3)
@@ -229,7 +229,7 @@ func _process(delta):
 				# If the slot isn't empty
 				if Items.companions[i][1] != null:
 					# Which information to set
-					if Input.is_key_pressed(KEY_SHIFT):
+					if Input.is_action_pressed("see_info"):
 						DescriptionBox.visible = true
 						DescriptionBoxName.text = "Wand"
 						DescriptionBoxInfo.text = "Cast Cooldown: " + str(Items.companions[i][1].spell_recharge).pad_decimals(3)
@@ -256,7 +256,7 @@ func _process(delta):
 					slot = i
 					# Set the description accordingly
 					if wand.spells[i] != null:
-						if Input.is_key_pressed(KEY_SHIFT):
+						if Input.is_action_pressed("see_info"):
 							DescriptionBox.visible = true
 							DescriptionBoxName.text = wand.spells[i].name
 							DescriptionBoxInfo.text = wand.spells[i].description
@@ -275,7 +275,7 @@ func _process(delta):
 				slot = i
 				# Descriptions
 				if Items.player_spells[i] != null:
-					if Input.is_key_pressed(KEY_SHIFT):
+					if Input.is_action_pressed("see_info"):
 						DescriptionBox.visible = true
 						DescriptionBoxName.text = Items.player_spells[i].name
 						DescriptionBoxInfo.text = Items.player_spells[i].description
@@ -285,7 +285,7 @@ func _process(delta):
 	
 	# If the player is hovering over the last picked_up item, handle descriptions
 	elif Items.last_pickup != null and mouse.x > 4 and mouse.y > 184 and mouse.x < 20 and mouse.y < 200:
-		if Input.is_key_pressed(KEY_SHIFT):
+		if Input.is_action_pressed("see_info"):
 			DescriptionBox.visible = true
 			DescriptionBoxName.text = Items.last_pickup.name
 			DescriptionBoxInfo.text = Items.last_pickup.description
@@ -461,6 +461,7 @@ func _on_player_died():
 	var mins = (isecs / 60) % 60
 	end_times = str(mins).pad_zeros(2) + "m" + str(csecs).pad_zeros(2) + "s"
 	player_died = true
+	$HUD/DeathSFX.play()
 
 func _on_level_ended():
 	level_ended = true

@@ -48,6 +48,9 @@ var is_players := false
 
 var effects := []
 
+var fire_timer := 0.0
+
+
 
 func shatter_soul(freq :float) -> void:
 	soul -= freq
@@ -80,14 +83,15 @@ func full_heal():
 	emit_signal("full_healed")
 
 
-func process_health():
-	blood -= poked_holes * (0.5+randf())*0.0005
+func process_health(delta:float) -> void:
+	blood -= poked_holes * (0.5+randf())*0.0005 * 60*delta
 	if effects.has("onfire"):
-		if randf() < 0.05 or temperature < -5.0:
+		if fire_timer <= 0.0:
 			emit_signal("effect_changed", "onfire", false)
 			effects.erase("onfire")
 		else:
-			temp_change(2.0/60.0)
+			fire_timer -= delta
+			temp_change(60*delta*2.0)
 			emit_signal("was_damaged", "heat")
 	if ((temperature > death_hypertemperature or temperature < death_hypotemperature) and weak_to_temp) or (soul <= 0.0 and has_soul) or (blood <= 0.0 and needs_blood) or poked_holes > max_holes:
 		if cause_of_death == -1:
@@ -112,3 +116,5 @@ func _instakill_pressed():
 func add_effect(effect:String):
 	effects.append(effect)
 	emit_signal("effect_changed", effect, true)
+	if effect == "onfire":
+		fire_timer += 30 + randf()*(60*3)

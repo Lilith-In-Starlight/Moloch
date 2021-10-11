@@ -64,7 +64,6 @@ Config="*res://Autoload/Config.gd"
 Decorations="*res://Autoload/Decorations.gd"
 Rooms="*res://Autoload/Rooms.gd"
 Items="*res://Autoload/Items.gd"
-Localization="res://Autoload/Localization.gd"
 
 [display]
 

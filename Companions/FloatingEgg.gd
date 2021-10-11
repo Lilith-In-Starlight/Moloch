@@ -21,7 +21,7 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	health.process_health()
+	health.process_health(delta)
 	number = get_tree().get_nodes_in_group("Egg").find(self)
 	if Items.player_items.count("egg") >= number and Items.player_items.count("egg") > 0:
 		if Player.position.distance_to(old_player_position[0]) > 16:
