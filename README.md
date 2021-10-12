@@ -3,7 +3,7 @@
 
 *In any system optimizing for X, the opportunity arises to throw any value under the bus for optimized X.*
 
-Moloch is the roguelike of all the horrible futures. Instead of health points, the player's human (or otherwise applicable) conditions are (somewhat) simulated to make for a fleshly experience. Fell from too high? I sure hope you don't need those knees.
+Moloch is the roguelike of all the horrible futures. Instead of health points, the player's human (or otherwise applicable) conditions are (somewhat) simulated to make for a fleshly experience. Fell from too high? I sure hope you don't need those knees!
 
 You are a child who was sacrificed by your parents to the god at the top of The Ancient Tower. The tradeoff is simple: Throw away what you love most, and I can give you power. You refuse to let yourself be murdered by the people and the creatures inhabiting the tower, and in a desperate attempt to survive, you begin your ascent.
 
@@ -18,7 +18,20 @@ You are a child who was sacrificed by your parents to the god at the top of The 
 - **Display extra item information:** Shift
 - **Instantly die:** G
 - **Cover bleeding wounds:** R
+- **Pause:** Escape
 
+### Controller
+
+- **Movement:** Left Stick
+- **Jump:** L1
+- **Hold onto poles:** Xbox A, Sony X, DS B
+- **Use wand:** R1
+- **Move In Inventory:** D-PAD
+- **Select Wand/Spell:** L2
+- **Drop Item/Spell:** R2
+- **Instantly die:** Select and Pause at the same time
+- **Cover bleeding wounds:** Xbox B, Sony Circle, DS A
+- **Pause:** Pause
 
 ## Features
 ### A fleshly health system
