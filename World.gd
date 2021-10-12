@@ -82,72 +82,37 @@ func _ready():
 			fill_rect(door_rect,0)
 	
 	print("Step 3: Cloning all elements")
+	# this can be shrunk further if one makes the game load all files at res://Elements/* at the start
+	# then here one can use load(find_tscn_for_group(group)) and it will just return already loaded refs.
 	print("    - Chests")
 	for chest in get_tree().get_nodes_in_group("Chest"):
-		var new_chest :RigidBody2D = preload("res://Elements/Chest.tscn").instance()
-		add_child(new_chest)
-		new_chest.position = chest.global_position
-		chest.queue_free()
+		replace_layout_node_with_packed_scene(chest, preload("res://Elements/Chest.tscn"))
 	print("    - Platforms")
 	for plat in get_tree().get_nodes_in_group("Platform"):
-		var new_plat:Node2D = preload("res://Elements/Platform.tscn").instance()
-		new_plat.position = plat.global_position
-		new_plat.size = plat.size
-		add_child(new_plat)
-		plat.queue_free()
+		replace_layout_node_with_packed_scene(plat, preload("res://Elements/Platform.tscn"))
 	print("    - Decorations")
 	for sprite in get_tree().get_nodes_in_group("DecoSprite"):
-		var new_sprite := Sprite.new()
-		new_sprite.position = sprite.global_position
-		new_sprite.texture = sprite.texture
-		new_sprite.z_index = sprite.z_index
-		add_child(new_sprite)
-		sprite.queue_free()
+		clone_sprite_node(sprite)
 	print("    - Paintings")
 	for sprite in get_tree().get_nodes_in_group("Painting"):
-		var new_sprite := Sprite.new()
-		new_sprite.position = sprite.global_position
-		new_sprite.texture = sprite.texture
+		var new_sprite: Sprite = clone_sprite_node(sprite)
 		new_sprite.z_index = -1
-		add_child(new_sprite)
-		sprite.queue_free()
 	print("    - MolochStatue")
 	for sprite in get_tree().get_nodes_in_group("MolochStatue"):
-		var new_sprite := preload("res://Elements/MolochStatue.tscn").instance()
-		new_sprite.position = sprite.global_position
-		new_sprite.z_index = -1
-		add_child(new_sprite)
-		sprite.queue_free()
+		replace_layout_node_with_background_packed_scene(sprite, preload("res://Elements/MolochStatue.tscn"))
 	print("    - Vases")
 	for sprite in get_tree().get_nodes_in_group("Vase"):
-		var new_sprite := preload("res://Elements/Vase.tscn").instance()
-		new_sprite.position = sprite.global_position
-		new_sprite.z_index = -1
-		add_child(new_sprite)
-		sprite.queue_free()
+		replace_layout_node_with_background_packed_scene(sprite, preload("res://Elements/Vase.tscn"))
 	print("    - Elevator Door")
 	for sprite in get_tree().get_nodes_in_group("Elevator"):
-		var new_sprite := preload("res://Elements/ElevatorDoor.tscn").instance()
-		new_sprite.position = sprite.global_position
-		new_sprite.z_index = -1
+		var new_sprite : Node2D = replace_layout_node_with_background_packed_scene(sprite, preload("res://Elements/ElevatorDoor.tscn"))
 		new_sprite.came_from = sprite.came_from
-		add_child(new_sprite)
-		sprite.queue_free()
 	print("    - Poles")
 	for sprite in get_tree().get_nodes_in_group("Pole"):
-		var new_sprite := preload("res://Elements/Pole.tscn").instance()
-		new_sprite.position = sprite.global_position
-		new_sprite.z_index = -1
-		new_sprite.size = sprite.size
-		add_child(new_sprite)
-		sprite.queue_free()
+		replace_layout_node_with_background_packed_scene(sprite, preload("res://Elements/Pole.tscn"))
 	print("    - Air Conditioning Units")
 	for sprite in get_tree().get_nodes_in_group("AC"):
-		var new_sprite := preload("res://Elements/AC.tscn").instance()
-		new_sprite.position = sprite.global_position
-		new_sprite.z_index = -1
-		add_child(new_sprite)
-		sprite.queue_free()
+		replace_layout_node_with_background_packed_scene(sprite, preload("res://Elements/AC.tscn"))
 	
 	print("Step 4: Passing all the room data to the world TileMap")
 	for room in get_children():
@@ -348,6 +313,28 @@ func fill_empty_space():
 				iterations += 1
 			break
 
+func replace_layout_node_with_scene(node, scene):
+	scene.position = node.global_position
+	if has_property(scene, "size"):
+		scene.size = node.size
+	add_child(scene)
+	node.queue_free()
+
+func replace_layout_node_with_packed_scene(node, scene: PackedScene):
+	replace_layout_node_with_scene(node,scene.instance())
+
+func replace_layout_node_with_background_packed_scene(node, scene: PackedScene):
+	var unpacked = scene.instance()
+	replace_layout_node_with_scene(node, unpacked)
+	unpacked.z_index = -1
+	return unpacked
+
+func clone_sprite_node(sprite) -> Sprite:
+	var clone = Sprite.new()
+	clone.texture = sprite.texture
+	clone.z_index = sprite.z_index
+	replace_layout_node_with_scene(sprite, clone)
+	return clone
 
 func summon_item(item:Item, position: Vector2, speed: Vector2) -> void:
 	var new_item_entity := preload("res://Items/ItemEntity.tscn").instance()
@@ -372,7 +359,6 @@ func summon_wand(wand:Wand, position: Vector2, speed: Vector2) -> void:
 	new_wand_entity.linear_velocity = speed
 	add_child(new_wand_entity)
 
-
 func stretch_global_bounds(new_area :Rect2):
 		var local_max := new_area.position + new_area.size
 		if local_max.x > max_point.x:
@@ -388,3 +374,9 @@ func fill_rect(rect: Rect2, value):
 	for x in range(rect.size.x):
 		for y in range(rect.size.y):
 			set_cellv(rect.position+Vector2(x,y), value)
+
+func has_property(object: Object, property_name: String) -> bool:
+	for property in object.get_property_list():
+		if property['name'] == property_name:
+			return true
+	return false
