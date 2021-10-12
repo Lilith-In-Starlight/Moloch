@@ -46,6 +46,9 @@ func duplicate():
 	w.spell_capacity = spell_capacity
 	w.spell_recharge = spell_recharge
 	w.full_recharge = full_recharge
+	w.heat_resistance = heat_resistance
+	w.soul_resistance = soul_resistance
+	w.push_resistance = push_resistance
 	w.color1 = color1
 	w.color2 = color2
 	w.color3 = color3
@@ -95,9 +98,9 @@ func get_json() -> String:
 	string += '"cast":' + '"' + str(spell_recharge) + '",'
 	string += '"recharge":' + '"' + str(full_recharge) + '",'
 	string += '"spellcap":' + '"' + str(spell_capacity) + '",'
-	string += '"heat"' + '"' + str(heat_resistance) + '",'
-	string += '"soul"' + '"' + str(soul_resistance) + '",'
-	string += '"push"' + '"' + str(push_resistance) + '",'
+	string += '"heat":' + '"' + str(heat_resistance) + '",'
+	string += '"soul":' + '"' + str(soul_resistance) + '",'
+	string += '"push":' + '"' + str(push_resistance) + '",'
 	if shuffle:
 		string += '"shuffle":"1",'
 	else:
