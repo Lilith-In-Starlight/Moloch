@@ -6,7 +6,7 @@ var finished_gen := false
 
 
 func _ready() -> void:
-	$Settings/VisualizeDamage.connect("pressed", Items.player_health, "_instakill_pressed")
+	$Options/DieInstantly.connect("pressed", Items.player_health, "_instakill_pressed")
 	$Settings/VisualizeDamage.pressed = Config.damage_visuals
 	$Settings/InstantDeathButton.pressed = Config.instant_death_button
 	$Settings/JoystickSensitivity/Text.text = "Joystick Sensitivity: " + str(Config.joystick_sensitivity)

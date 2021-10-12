@@ -110,7 +110,7 @@ func process_health(delta:float) -> void:
 
 
 func _instakill_pressed():
-		emit_signal("died")
+	emit_signal("died")
 
 
 func add_effect(effect:String):
