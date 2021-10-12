@@ -20,7 +20,7 @@ disabled = true
 
 [node name="Area" type="Area2D" parent="."]
 collision_layer = 0
-collision_mask = 25
+collision_mask = 27
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="Area"]
 shape = SubResource( 2 )
