@@ -83,7 +83,7 @@ func full_heal():
 	emit_signal("full_healed")
 
 
-func process_health(delta:float) -> void:
+func process_health(delta:float, speed:Vector2 = Vector2(0, 0)) -> void:
 	blood -= poked_holes * (0.5+randf())*0.0005 * 60*delta
 	if effects.has("onfire"):
 		if fire_timer <= 0.0:
