@@ -28,7 +28,7 @@ You are a child who was sacrificed by your parents to the god at the top of The 
 - **Use wand:** R1
 - **Move In Inventory:** D-PAD
 - **Select Wand/Spell:** L2
-- **Drop Item/Spell:** R2
+- **Drop Wand/Spell:** R2
 - **Instantly die:** Select and Pause at the same time
 - **Cover bleeding wounds:** Xbox B, Sony Circle, DS A
 - **Pause:** Pause
