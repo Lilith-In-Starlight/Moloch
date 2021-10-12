@@ -2,6 +2,12 @@ extends TileMap
 signal generated_world
 
 const LAYOUT_MAXTRIES = 10
+
+# Need to match with scenes (not authoritative)
+const DOOR_THICKNESS = 3
+const LEFT_RIGHT_DOOR_HEIGHT = 7
+const UP_DOWN_DOOR_LENGTH = 22
+
 const antidirections = {
 	"LeftDoor": "RightDoor",
 	"RightDoor": "LeftDoor",
@@ -68,29 +74,12 @@ func _ready():
 						stretch_global_bounds(new_room.area)
 		
 	print("Step 2: Sealing up unused doors")
-	for door in get_tree().get_nodes_in_group("LeftDoor"):
-		var door_in_map := world_to_map(door.position) + world_to_map(door.get_parent().position)
-		for x in 3:
-			for y in 7:
-				set_cellv(door_in_map + Vector2(x, -y), 0)
-	
-	for door in get_tree().get_nodes_in_group("RightDoor"):
-		var door_in_map := world_to_map(door.position) + world_to_map(door.get_parent().position)
-		for x in 3:
-			for y in 7:
-				set_cellv(door_in_map + Vector2(-x-1, -y), 0)
-	
-	for door in get_tree().get_nodes_in_group("UpDoor"):
-		var door_in_map := world_to_map(door.position) + world_to_map(door.get_parent().position)
-		for x in 22:
-			for y in 3:
-				set_cellv(door_in_map + Vector2(x, y), 0)
-				
-	for door in get_tree().get_nodes_in_group("DownDoor"):
-		var door_in_map := world_to_map(door.position) + world_to_map(door.get_parent().position)
-		for x in 22:
-			for y in 3:
-				set_cellv(door_in_map + Vector2(x, -y-1), 0)
+	for group in ["LeftDoor","RightDoor","UpDoor","DownDoor"]:
+		for door in get_tree().get_nodes_in_group(group):
+			var door_in_map := world_to_map(door.position) + world_to_map(door.get_parent().position)
+			var door_rect = get_door_rect(door)
+			door_rect.position += door_in_map
+			fill_rect(door_rect,0)
 	
 	print("Step 3: Cloning all elements")
 	print("    - Chests")
@@ -283,6 +272,19 @@ func get_doorgroup(element) -> String:
 func is_horizontal_door(element) -> bool:
 		return (element.is_in_group("LeftDoor") or element.is_in_group("RightDoor"))
 
+func get_door_rect(door): # see the scenes to get a feeling
+	var rect = Rect2()
+	if is_horizontal_door(door):
+		rect.size = Vector2(DOOR_THICKNESS, LEFT_RIGHT_DOOR_HEIGHT)
+		rect.position.y = -rect.size.y # left-right doors' nodes are on the floor...
+		if get_doorgroup(door) == "RightDoor":
+				rect.position.x = -rect.size.x # ... at the very borders the room
+	else:
+		rect.size = Vector2(UP_DOWN_DOOR_LENGTH, DOOR_THICKNESS)
+		if get_doorgroup(door) == "DownDoor":
+			rect.position.y = - rect.size.y # up-downs are at the borders, too
+	return rect
+
 func dissolve_doorpair(element, connected_door):
 	var direction_doorgroup = get_doorgroup(element)
 	element.remove_from_group(direction_doorgroup)
@@ -381,3 +383,8 @@ func stretch_global_bounds(new_area :Rect2):
 				min_point.x = new_area.position.x
 		if new_area.position.y < min_point.y:
 				min_point.y = new_area.position.y
+
+func fill_rect(rect: Rect2, value):
+	for x in range(rect.size.x):
+		for y in range(rect.size.y):
+			set_cellv(rect.position+Vector2(x,y), value)
