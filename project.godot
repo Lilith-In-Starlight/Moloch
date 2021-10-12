@@ -9,6 +9,11 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "KinematicBody2D",
+"class": "Character",
+"language": "GDScript",
+"path": "res://Classes/Character.gd"
+}, {
 "base": "Reference",
 "class": "Flesh",
 "language": "GDScript",
@@ -40,6 +45,7 @@ _global_script_classes=[ {
 "path": "res://Classes/Wand.gd"
 } ]
 _global_script_class_icons={
+"Character": "",
 "Flesh": "",
 "Item": "",
 "Spell": "",
