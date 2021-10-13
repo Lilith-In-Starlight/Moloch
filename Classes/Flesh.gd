@@ -10,6 +10,7 @@ signal bled
 signal died
 signal was_damaged(type)
 signal effect_changed(effect, added)
+signal broken_leg(amount)
 
 enum DEATHS {
 	BLED,
@@ -84,6 +85,7 @@ func full_heal():
 
 
 func process_health(delta:float, speed:Vector2 = Vector2(0, 0)) -> void:
+	temperature = move_toward(temperature, normal_temperature, temp_regulation)
 	blood -= poked_holes * (0.5+randf())*0.0005 * 60*delta
 	if effects.has("onfire"):
 		if fire_timer <= 0.0:
@@ -118,3 +120,13 @@ func add_effect(effect:String):
 	emit_signal("effect_changed", effect, true)
 	if effect == "onfire":
 		fire_timer += 2 + randf()*10
+
+
+func break_legs():
+	var brkn_legs := 1
+	if randi()%3 == 0:
+		brkn_legs = 2
+	var d := max(broken_moving_appendages + brkn_legs, moving_appendages) - broken_moving_appendages
+	if d > 0:
+		emit_signal("broken_leg", d)
+	broken_moving_appendages = max(broken_moving_appendages + brkn_legs, moving_appendages)
