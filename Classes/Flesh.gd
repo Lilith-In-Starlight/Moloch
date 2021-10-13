@@ -126,7 +126,7 @@ func break_legs():
 	var brkn_legs := 1
 	if randi()%3 == 0:
 		brkn_legs = 2
-	var d := max(broken_moving_appendages + brkn_legs, moving_appendages) - broken_moving_appendages
+	var d := min(broken_moving_appendages + brkn_legs, 2) - broken_moving_appendages
 	if d > 0:
 		emit_signal("broken_leg", d)
-	broken_moving_appendages = max(broken_moving_appendages + brkn_legs, moving_appendages)
+	broken_moving_appendages = max(broken_moving_appendages + brkn_legs, 2)
