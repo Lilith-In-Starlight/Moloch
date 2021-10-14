@@ -54,5 +54,5 @@ func _ready() -> void:
 func _on_Timer_timeout() -> void:
 	for body in attack_area.get_overlapping_bodies():
 		if body.has_method("health_object"):
-			body.health_object().temp_change(1000)
+			body.health_object().temp_change(1000, CastInfo.Caster)
 	queue_free()

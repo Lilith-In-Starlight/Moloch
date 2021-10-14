@@ -37,7 +37,7 @@ func _draw():
 func _on_body_entered(body):
 	if timer > 0.32:
 		if body.has_method("health_object"):
-			body.health_object().shatter_soul(0.2)
+			body.health_object().shatter_soul(0.2, CastInfo.Caster)
 		queue_free()
 	if body.is_in_group("World"):
 		queue_free()

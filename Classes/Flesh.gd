@@ -51,28 +51,41 @@ var effects := []
 
 var fire_timer := 0.0
 
+var damaged_from_side_effect := false
+var bleeding_from_side_effect := false
+
+var last_damaged_by :Node2D
+var bleeding_by :Node2D
 
 
-func shatter_soul(freq :float) -> void:
+func shatter_soul(freq :float, from: Node2D = null, side := false) -> void:
 	soul -= freq
 	if freq > 0.0:
 		emit_signal("was_damaged", "soul")
+	damaged_from_side_effect = side
+	last_damaged_by = from
 
 
-func poke_hole(holes := 1) -> void:
+func poke_hole(holes := 1, from: Node2D = null, side := false) -> void:
 	poked_holes += holes
 	emit_signal("hole_poked")
 	emit_signal("holes_poked", holes)
 	if holes > 0:
 		emit_signal("was_damaged", "hole")
+	damaged_from_side_effect = side
+	last_damaged_by = from
+	bleeding_from_side_effect = side
+	bleeding_by = from
 
 
-func temp_change(deg :float) -> void:
+func temp_change(deg :float, from: Node2D = null, side := false) -> void:
 	temperature += deg
 	if deg > 0:
 		emit_signal("was_damaged", "heat")
 	elif deg < 0:
 		emit_signal("was_damaged", "cold")
+	damaged_from_side_effect = side
+	last_damaged_by = from
 
 
 func full_heal():

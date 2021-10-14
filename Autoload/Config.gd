@@ -1,5 +1,6 @@
 extends Node
 
+signal achievement_unlocked(achievement)
 
 var config_file:ConfigFile = ConfigFile.new()
 
@@ -10,6 +11,12 @@ var last_input_was_controller := false
 var damage_visuals := false
 var instant_death_button := false
 var joystick_sensitivity := 6
+
+# Achievements
+var achievements := {
+	"fun1":false,
+	"fun2":false,
+}
 
 
 func _ready() -> void:
@@ -45,3 +52,9 @@ func _input(event: InputEvent) -> void:
 		last_input_was_controller = false
 	elif event is InputEventJoypadButton or event is InputEventJoypadMotion:
 		last_input_was_controller = true
+
+
+func give_achievement(achievement: String) -> void:
+	if achievement in achievements and not achievements[achievement]:
+		achievements[achievement] = true
+		emit_signal("achievement_unlocked", achievement)

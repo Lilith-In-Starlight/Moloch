@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=2]
+[gd_scene load_steps=46 format=2]
 
 [ext_resource path="res://Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://EditorTileset.tres" type="TileSet" id=2]
@@ -15,6 +15,8 @@
 [ext_resource path="res://HUD/Console.gd" type="Script" id=13]
 [ext_resource path="res://HUD/Pause.gd" type="Script" id=14]
 [ext_resource path="res://Sfx/death.wav" type="AudioStream" id=15]
+[ext_resource path="res://Sprites/Achievements/OhWoahWhatsThis.png" type="Texture" id=16]
+[ext_resource path="res://HUD/Achievement.gd" type="Script" id=17]
 
 [sub_resource type="CanvasItemMaterial" id=1]
 blend_mode = 1
@@ -140,6 +142,29 @@ font_data = ExtResource( 5 )
 [sub_resource type="DynamicFont" id=25]
 size = 12
 font_data = ExtResource( 5 )
+
+[sub_resource type="DynamicFont" id=26]
+size = 11
+font_data = ExtResource( 5 )
+
+[sub_resource type="DynamicFont" id=27]
+size = 8
+font_data = ExtResource( 5 )
+
+[sub_resource type="Animation" id=28]
+resource_name = "Move"
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rect_position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 0.366021, 1 ),
+"update": 0,
+"values": [ Vector2( -128, 0 ), Vector2( 0, 0 ) ]
+}
 
 [node name="Game" type="Node2D"]
 
@@ -934,6 +959,53 @@ text = "Back"
 stream = ExtResource( 15 )
 volume_db = -10.0
 
+[node name="Achievement" type="Panel" parent="HUD/HUD"]
+margin_left = -128.0
+margin_right = -10.0
+margin_bottom = 27.0
+script = ExtResource( 17 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Image" type="TextureRect" parent="HUD/HUD/Achievement"]
+margin_left = 2.0
+margin_top = 4.0
+margin_right = 18.0
+margin_bottom = 20.0
+texture = ExtResource( 16 )
+
+[node name="Text1" type="Label" parent="HUD/HUD/Achievement"]
+margin_left = 22.0
+margin_top = 4.0
+margin_right = 116.0
+margin_bottom = 15.0
+custom_fonts/font = SubResource( 26 )
+custom_colors/font_color = Color( 0.388235, 1, 0.368627, 1 )
+text = "Achievement Unlocked!"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Name" type="Label" parent="HUD/HUD/Achievement"]
+margin_left = 22.0
+margin_top = 17.0
+margin_right = 116.0
+margin_bottom = 25.0
+custom_fonts/font = SubResource( 27 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+text = "Oh Woah Whats This"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="HUD/HUD/Achievement"]
+anims/Move = SubResource( 28 )
+
+[node name="Timer" type="Timer" parent="HUD/HUD/Achievement"]
+wait_time = 2.0
+one_shot = true
+
 [node name="Player" parent="." groups=[
 "Player",
 ] instance=ExtResource( 1 )]
@@ -965,6 +1037,7 @@ drag_margin_bottom = 0.4
 [connection signal="pressed" from="HUD/HUD/Pause/Settings/VisualizeDamage" to="HUD/HUD/Pause" method="_on_VisualizeDamage_pressed"]
 [connection signal="pressed" from="HUD/HUD/Pause/Settings/InstantDeathButton" to="HUD/HUD/Pause" method="_on_InstantDeathButton_pressed"]
 [connection signal="pressed" from="HUD/HUD/Pause/Settings/Back" to="HUD/HUD/Pause" method="_on_Back_pressed"]
+[connection signal="timeout" from="HUD/HUD/Achievement/Timer" to="HUD/HUD/Achievement" method="_on_Timer_timeout"]
 [connection signal="entity_died" from="Player" to="HUD" method="_on_player_died"]
 [connection signal="generated_world" from="World" to="HUD" method="_on_generated_world"]
 [connection signal="generated_world" from="World" to="HUD/HUD/Console" method="_on_World_generated_world"]

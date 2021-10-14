@@ -39,4 +39,4 @@ func _process(delta):
 	for i in get_overlapping_bodies():
 		if i.has_method("health_object"):
 			if randi()%3 == 1:
-				i.health_object().poke_hole(1)
+				i.health_object().poke_hole(1, CastInfo.Caster)

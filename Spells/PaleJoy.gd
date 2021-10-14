@@ -39,5 +39,5 @@ func _physics_process(delta):
 	
 	for i in get_overlapping_bodies():
 		if i.has_method("health_object"):
-			i.health_object().poke_hole(1000)
+			i.health_object().poke_hole(1000, CastInfo.Caster)
 

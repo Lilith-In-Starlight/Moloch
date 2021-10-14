@@ -5,6 +5,10 @@ var Cam:Camera2D
 var spell_cast_pos :Vector2
 
 var temp_stage := 0
+var was_dead := false
+
+var died_from_own_cast := false
+var died_from_own_spell := false
 
 func _ready() -> void:
 	health = Items.player_health
@@ -135,6 +139,23 @@ func _process(delta: float) -> void:
 			n.position = position
 			get_parent().add_child(n)
 		send_message("Your insides feel like they're melting")
+	
+	if dead and not was_dead:
+		if health.cause_of_death != health.DEATHS.BLED:
+			if health.damaged_from_side_effect:
+				died_from_own_cast = true
+				Config.give_achievement("fun1")
+			elif health.last_damaged_by == self:
+				died_from_own_spell = true
+				Config.give_achievement("fun2")
+		elif health.cause_of_death != -1:
+			if health.bleeding_from_side_effect:
+				died_from_own_cast = true
+				Config.give_achievement("fun1")
+			elif health.bleeding_by == self:
+				died_from_own_spell = true
+				Config.give_achievement("fun2")
+		was_dead = true
 
 
 func _physics_process(delta: float) -> void:

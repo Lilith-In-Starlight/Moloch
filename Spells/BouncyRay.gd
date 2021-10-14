@@ -22,7 +22,7 @@ func _physics_process(delta):
 	if is_colliding():
 		var pos := get_collision_point()
 		if get_collider().has_method("health_object") and not did:
-			get_collider().health_object().poke_hole()
+			get_collider().health_object().poke_hole(1, CastInfo.Caster)
 			did = true
 		$RayCast2D.points = [Vector2(0, 0), pos-position]
 		if times_done < 12 and timer > 0.18 and not casted:

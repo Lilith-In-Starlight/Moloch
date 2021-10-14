@@ -29,17 +29,17 @@ func get_angle(CastEntity:Node2D) -> float:
 func heat_caster(temp:float) -> void:
 	if is_instance_valid(Caster) and Caster.has_method("health_object"):
 		if wand != null:
-			Caster.health_object().temp_change(temp*wand.heat_resistance)
+			Caster.health_object().temp_change(temp*wand.heat_resistance, null, true)
 		else:
-			Caster.health_object().temp_change(temp)
+			Caster.health_object().temp_change(temp, null, true)
 
 
 func drain_caster_soul(soul:float) -> void:
 	if is_instance_valid(Caster) and Caster.has_method("health_object"):
 		if wand != null:
-			Caster.health_object().shatter_soul(soul*wand.soul_resistance)
+			Caster.health_object().shatter_soul(soul*wand.soul_resistance, null, true)
 		else:
-			Caster.health_object().shatter_soul(soul)
+			Caster.health_object().shatter_soul(soul, null, true)
 
 
 func push_caster(push:Vector2) -> void:

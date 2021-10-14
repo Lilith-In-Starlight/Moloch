@@ -21,7 +21,7 @@ func _physics_process(delta):
 		cast_to = get_collision_point() - position
 		var col := get_collider()
 		if col.has_method("health_object") and not did:
-			col.health_object().poke_hole()
+			col.health_object().poke_hole(1, CastInfo.Caster)
 			did = true
 		$Line2D.points = [Vector2(0, 0), get_collision_point()-position]
 	else:

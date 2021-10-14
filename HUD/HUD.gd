@@ -64,7 +64,7 @@ func _ready():
 	UsefulAdvice.text += "Seed: " + str(Items.using_seed)
 
 
-func _process(delta):	
+func _process(delta):
 	# Control the temperature vignettes
 	if Player.health.temperature > 30:
 		HotHUD.modulate.a = lerp(HotHUD.modulate.a, (Player.health.temperature-30)/110.0, 0.2)

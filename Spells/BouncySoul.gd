@@ -23,7 +23,7 @@ func _physics_process(delta):
 		flip = false
 	elif not flip:
 		if Ray.get_collider().has_method("health_object"):
-			Ray.get_collider().health_object().shatter_soul(0.1)
+			Ray.get_collider().health_object().shatter_soul(0.1, CastInfo.Caster)
 		position = lerp(position, Ray.get_collision_point(), 0.99)
 		if Ray.get_collision_normal() == Vector2(0, 0):
 			queue_free()

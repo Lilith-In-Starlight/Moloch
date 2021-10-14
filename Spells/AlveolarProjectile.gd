@@ -30,7 +30,7 @@ func _physics_process(delta):
 func _on_body_entered(body):
 	if timer > 0.22:
 		if body.has_method("health_object"):
-			body.health_object().poke_hole()
+			body.health_object().poke_hole(1, Caster)
 		queue_free()
 	if body.is_in_group("World"):
 		queue_free()

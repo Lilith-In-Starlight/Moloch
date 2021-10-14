@@ -23,7 +23,7 @@ func _physics_process(delta):
 			if is_instance_valid(CastInfo.Caster):
 				var shatter := min(col.health_object().soul, 0.1)
 				CastInfo.Caster.health_object().shatter_soul(-shatter)
-				col.health_object().shatter_soul(shatter)
+				col.health_object().shatter_soul(shatter, CastInfo.Caster)
 		elif not did:
 			CastInfo.drain_caster_soul(0.1)
 			did = true

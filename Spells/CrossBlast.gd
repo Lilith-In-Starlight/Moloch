@@ -34,15 +34,15 @@ func _physics_process(delta):
 			if body.has_method("health_object"):
 				var flesh : Flesh = body.health_object()
 				if body.position.distance_to(position) != 0.0:
-					flesh.temp_change(30/body.position.distance_to(position))
+					flesh.temp_change(30/body.position.distance_to(position), CastInfo.Caster)
 				else:
-					flesh.temp_change(200)
+					flesh.temp_change(200, CastInfo.Caster)
 				if body.position.distance_to(position) < 24:
-					flesh.poke_hole(2+randi()%1)
+					flesh.poke_hole(2+randi()%1, CastInfo.Caster)
 				if body.position.distance_to(position) < 12:
-					flesh.poke_hole(5+randi()%10)
+					flesh.poke_hole(5+randi()%10, CastInfo.Caster)
 				if body.position.distance_to(position) < 8:
-					flesh.poke_hole(10+randi()%20)
+					flesh.poke_hole(10+randi()%20, CastInfo.Caster)
 				if body.get("speed"):
 					if position.distance_to(body.position) != 0.0:
 						body.speed += (body.position - position)*(50/position.distance_to(body.position))

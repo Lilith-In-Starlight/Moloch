@@ -39,7 +39,7 @@ func _physics_process(delta):
 			
 			WorldMap.update_bitmask_region(pos-Vector2(2,2), pos+Vector2(2,2))
 		elif get_collider().has_method("health_object"):
-			get_collider().health_object().temp_change(5.0)
+			get_collider().health_object().temp_change(5.0, CastInfo.Caster)
 			CastInfo.heat_caster(1/60.0)
 			CastInfo.push_caster(-(pos-position).normalized()*5)
 		$Line2D.points = [Vector2(0, 0), pos2-position]

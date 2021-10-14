@@ -36,7 +36,7 @@ func _process(delta):
 			if is_instance_valid(CastInfo.Caster) and CastInfo.Caster.get("speed"):
 				CastInfo.Caster.speed -= rc.cast_to.normalized()*4.5
 			if rc.get_collider().has_method("health_object"):
-				rc.get_collider().health_object().temp_change(12)
+				rc.get_collider().health_object().temp_change(12, CastInfo.Caster)
 			if rc.get_collider().get("speed"):
 				rc.get_collider().speed += rc.cast_to.normalized()*4.5
 			elif rc.get_collider().get("linear_velocity"):

@@ -27,7 +27,7 @@ func _physics_process(delta):
 func _on_body_entered(body):
 	if body.has_method("health_object"):
 		if (is_instance_valid(CastInfo.Caster) and (body != CastInfo.Caster or frames >= 3)) or not is_instance_valid(CastInfo.Caster):
-			body.health_object().temp_change(-12.0 - randf() * 6.0)
+			body.health_object().temp_change(-12.0 - randf() * 6.0, CastInfo.Caster)
 			queue_free()
 	elif body.is_in_group("World"):
 		queue_free()
