@@ -80,52 +80,52 @@ atlas = ExtResource( 8 )
 region = Rect2( 21, 0, 7, 24 )
 
 [sub_resource type="AtlasTexture" id=16]
-atlas = ExtResource( 11 )
-region = Rect2( 0, 0, 22, 24 )
-
-[sub_resource type="AtlasTexture" id=17]
-atlas = ExtResource( 11 )
-region = Rect2( 22, 0, 22, 24 )
-
-[sub_resource type="AtlasTexture" id=18]
-atlas = ExtResource( 11 )
-region = Rect2( 44, 0, 22, 24 )
-
-[sub_resource type="AtlasTexture" id=19]
-atlas = ExtResource( 11 )
-region = Rect2( 66, 0, 22, 24 )
-
-[sub_resource type="AtlasTexture" id=20]
-atlas = ExtResource( 11 )
-region = Rect2( 88, 0, 22, 24 )
-
-[sub_resource type="AtlasTexture" id=21]
-atlas = ExtResource( 11 )
-region = Rect2( 110, 0, 22, 24 )
-
-[sub_resource type="AtlasTexture" id=22]
 atlas = ExtResource( 14 )
 region = Rect2( 0, 0, 18, 22 )
 
-[sub_resource type="AtlasTexture" id=23]
+[sub_resource type="AtlasTexture" id=17]
 atlas = ExtResource( 14 )
 region = Rect2( 18, 0, 18, 22 )
 
-[sub_resource type="AtlasTexture" id=24]
+[sub_resource type="AtlasTexture" id=18]
 atlas = ExtResource( 14 )
 region = Rect2( 36, 0, 18, 22 )
 
-[sub_resource type="AtlasTexture" id=25]
+[sub_resource type="AtlasTexture" id=19]
 atlas = ExtResource( 14 )
 region = Rect2( 54, 0, 18, 22 )
 
-[sub_resource type="AtlasTexture" id=26]
+[sub_resource type="AtlasTexture" id=20]
 atlas = ExtResource( 14 )
 region = Rect2( 72, 0, 18, 22 )
 
-[sub_resource type="AtlasTexture" id=27]
+[sub_resource type="AtlasTexture" id=21]
 atlas = ExtResource( 14 )
 region = Rect2( 90, 0, 18, 22 )
+
+[sub_resource type="AtlasTexture" id=22]
+atlas = ExtResource( 11 )
+region = Rect2( 0, 0, 22, 24 )
+
+[sub_resource type="AtlasTexture" id=23]
+atlas = ExtResource( 11 )
+region = Rect2( 22, 0, 22, 24 )
+
+[sub_resource type="AtlasTexture" id=24]
+atlas = ExtResource( 11 )
+region = Rect2( 44, 0, 22, 24 )
+
+[sub_resource type="AtlasTexture" id=25]
+atlas = ExtResource( 11 )
+region = Rect2( 66, 0, 22, 24 )
+
+[sub_resource type="AtlasTexture" id=26]
+atlas = ExtResource( 11 )
+region = Rect2( 88, 0, 22, 24 )
+
+[sub_resource type="AtlasTexture" id=27]
+atlas = ExtResource( 11 )
+region = Rect2( 110, 0, 22, 24 )
 
 [sub_resource type="SpriteFrames" id=28]
 animations = [ {
@@ -154,7 +154,27 @@ animations = [ {
 "name": "panting",
 "speed": 5.0
 }, {
+"frames": [ ExtResource( 5 ) ],
+"loop": true,
+"name": "slide2",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 9 ) ],
+"loop": true,
+"name": "oneleg_slide2",
+"speed": 5.0
+}, {
 "frames": [ SubResource( 16 ), SubResource( 17 ), SubResource( 18 ), SubResource( 19 ), SubResource( 20 ), SubResource( 21 ) ],
+"loop": true,
+"name": "run_lookback",
+"speed": 10.0
+}, {
+"frames": [ ExtResource( 6 ) ],
+"loop": true,
+"name": "down",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 22 ), SubResource( 23 ), SubResource( 24 ), SubResource( 25 ), SubResource( 26 ), SubResource( 27 ) ],
 "loop": true,
 "name": "crawling",
 "speed": 5.0
@@ -164,29 +184,9 @@ animations = [ {
 "name": "oneleg_slide",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 9 ) ],
-"loop": true,
-"name": "oneleg_slide2",
-"speed": 5.0
-}, {
-"frames": [ SubResource( 22 ), SubResource( 23 ), SubResource( 24 ), SubResource( 25 ), SubResource( 26 ), SubResource( 27 ) ],
-"loop": true,
-"name": "run_lookback",
-"speed": 10.0
-}, {
 "frames": [ ExtResource( 12 ) ],
 "loop": true,
 "name": "crawl",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 5 ) ],
-"loop": true,
-"name": "slide2",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 6 ) ],
-"loop": true,
-"name": "down",
 "speed": 5.0
 } ]
 
@@ -212,12 +212,13 @@ visible = false
 position = Vector2( 0, -9 )
 scale = Vector2( 0.75, 1 )
 frames = SubResource( 5 )
+frame = 1
 playing = true
 
 [node name="Player" type="AnimatedSprite" parent="."]
 frames = SubResource( 28 )
 animation = "run_lookback"
-frame = 4
+frame = 1
 playing = true
 
 [node name="WandRender" parent="." instance=ExtResource( 13 )]
