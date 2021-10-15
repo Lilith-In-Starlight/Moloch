@@ -81,7 +81,7 @@ func _process(delta: float) -> void:
 			get_parent().add_child(new_gluestone)
 	
 	# Control wand HUD
-	if Items.player_wands[Items.selected_wand] is Wand and Input.is_action_just_pressed("Interact1") and not Items.player_wands[Items.selected_wand].running and not get_tree().get_nodes_in_group("HUD")[0].block_cast:
+	if Items.player_wands[Items.selected_wand] is Wand and Input.is_action_pressed("Interact1") and not Items.player_wands[Items.selected_wand].running and not get_tree().get_nodes_in_group("HUD")[0].block_cast:
 		Items.player_wands[Items.selected_wand].shuffle()
 		Items.player_wands[Items.selected_wand].run(self)
 	
