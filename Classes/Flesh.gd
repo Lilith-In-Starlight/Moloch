@@ -57,6 +57,8 @@ var bleeding_from_side_effect := false
 var last_damaged_by :Node2D
 var bleeding_by :Node2D
 
+var dead := false
+
 
 func shatter_soul(freq :float, from: Node2D = null, side := false) -> void:
 	soul -= freq
@@ -109,7 +111,7 @@ func process_health(delta:float, speed:Vector2 = Vector2(0, 0)) -> void:
 			temp_change(60*delta*0.05)
 			emit_signal("was_damaged", "heat")
 	if ((temperature > death_hypertemperature or temperature < death_hypotemperature) and weak_to_temp) or (soul <= 0.0 and has_soul) or (blood <= 0.0 and needs_blood) or poked_holes > max_holes:
-		if cause_of_death == -1:
+		if not dead:
 			if temperature > death_hypertemperature and weak_to_temp:
 				cause_of_death = DEATHS.HYPER
 			elif temperature < death_hypotemperature and weak_to_temp:
@@ -121,6 +123,7 @@ func process_health(delta:float, speed:Vector2 = Vector2(0, 0)) -> void:
 			elif blood <= 0.0 and needs_blood:
 				cause_of_death = DEATHS.BLED
 				
+		dead = true
 		emit_signal("died")
 
 
@@ -142,4 +145,4 @@ func break_legs():
 	var d := min(broken_moving_appendages + brkn_legs, 2) - broken_moving_appendages
 	if d > 0:
 		emit_signal("broken_leg", d)
-	broken_moving_appendages = max(broken_moving_appendages + brkn_legs, 2)
+	broken_moving_appendages = min(broken_moving_appendages + brkn_legs, 2)
