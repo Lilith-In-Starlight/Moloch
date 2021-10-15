@@ -141,7 +141,7 @@ func _process(delta: float) -> void:
 		send_message("Your insides feel like they're melting")
 	
 	if dead and not was_dead:
-		if health.cause_of_death != health.DEATHS.BLED:
+		if health.cause_of_death != health.DEATHS.BLED and health.cause_of_death != -1:
 			if health.damaged_from_side_effect:
 				died_from_own_cast = true
 				Config.give_achievement("fun1")
