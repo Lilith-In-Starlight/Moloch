@@ -99,6 +99,7 @@ func _ready():
 	register_spell(3, "westdragon", "Dragon Of The West", "They call him that for a reason.", preload("res://Sprites/Spells/WestDragon.png"), preload("res://Spells/WestDragon.tscn"))
 	register_spell(3, "lightning", "Lightning", "Uncontrollable wrath.", preload("res://Sprites/Spells/Lightning.png"), preload("res://Spells/Lightning.tscn"))
 	register_spell(3, "relocator", "Relocator", "Relocates your body.", preload("res://Sprites/Spells/Teleport.png"), preload("res://Spells/TeleportWand.tscn"))
+	register_spell(3, "eidosanchor", "Eidos Anchor", "First cast stores, second cast recalls.", preload("res://Sprites/Spells/Return.png"), preload("res://Spells/Return.tscn"))
 	
 	register_base_mod("multiplicative", "Multiplicative Cast", "Many from alterations of one\nIterations: ", preload("res://Sprites/Spells/Modifiers/Multiplicative.png"))
 	register_base_mod("unifying", "Unifying Cast", "One from alterations of many\nAmalgamations: ", preload("res://Sprites/Spells/Modifiers/UnifyingM.png"))
