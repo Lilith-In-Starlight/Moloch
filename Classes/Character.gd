@@ -341,21 +341,32 @@ func walking() -> void:
 			speed.x += walk_accel
 			haxis = 1.0
 	
-		match health.broken_moving_appendages:
-			0:
+	match health.broken_moving_appendages:
+		0:
+			if abs(haxis)<0.5:
+				speed.x *= pow(0.8, d_unit)
+			elif sign(haxis)!=sign(speed.x):
+				speed.x *= pow(0.9, d_unit)
+			else:
+				speed.x *= pow(0.75, d_unit)
+		1:
+			if state == STATES.AIR:
 				if abs(haxis)<0.5:
 					speed.x *= pow(0.8, d_unit)
 				elif sign(haxis)!=sign(speed.x):
 					speed.x *= pow(0.9, d_unit)
 				else:
 					speed.x *= pow(0.75, d_unit)
-			2:
-				if abs(haxis)<0.5:
-					speed.x *= pow(0.3, d_unit)
-				elif sign(haxis)!=sign(speed.x):
-					speed.x *= pow(0.3, d_unit)
-				else:
-					speed.x *= pow(0.3, d_unit)
+			else:
+				speed.x *= 0
+
+		2:
+			if abs(haxis)<0.5:
+				speed.x *= pow(0.3, d_unit)
+			elif sign(haxis)!=sign(speed.x):
+				speed.x *= pow(0.3, d_unit)
+			else:
+				speed.x *= pow(0.3, d_unit)
 
 
 func jumping(x_speed := 0.0, y_speed := jump_force):
