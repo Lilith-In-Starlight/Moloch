@@ -9,7 +9,6 @@ func _ready() -> void:
 	for i in get_tree().get_nodes_in_group("ReturnCastEntities"):
 		if is_instance_valid(i.CastInfo.Caster):
 			if i.CastInfo.wand == CastInfo.wand and i.CastInfo.Caster == CastInfo.Caster:
-				print("a")
 				CastInfo.teleport_caster(i.position - CastInfo.Caster.cast_from())
 				CastInfo.drain_caster_soul(0.008)
 				queue_free()
