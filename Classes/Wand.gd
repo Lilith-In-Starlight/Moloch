@@ -6,7 +6,7 @@ signal finished_casting
 
 var spell_capacity :int = 1 + Items.LootRNG.randi()%5 setget set_spell_capacity
 var spell_recharge :float = Items.LootRNG.randf()*0.3
-var full_recharge :float = Items.LootRNG.randf()*0.6
+var full_recharge :float = Items.LootRNG.randf()*0.4
 var heat_resistance :float = Items.LootRNG.randf()*0.7
 var soul_resistance :float = Items.LootRNG.randf()*0.7
 var push_resistance :float = Items.LootRNG.randf()*0.7

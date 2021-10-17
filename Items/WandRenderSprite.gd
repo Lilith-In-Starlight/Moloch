@@ -44,7 +44,7 @@ func render_wand(wand:Wand, selected :bool = false):
 			5: $Cast.texture = preload("res://Sprites/Wands/CastSpeed/5.png")
 			6: $Cast.texture = preload("res://Sprites/Wands/CastSpeed/6.png")
 		
-		match 6-int(round((wand.full_recharge/0.6)*6)):
+		match 6-int(round((wand.full_recharge/0.4)*6)):
 			0, 1: $Recharge.texture = preload("res://Sprites/Wands/Recharge/1.png")
 			2: $Recharge.texture = preload("res://Sprites/Wands/Recharge/2.png")
 			3: $Recharge.texture = preload("res://Sprites/Wands/Recharge/3.png")
