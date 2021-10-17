@@ -130,7 +130,10 @@ func _ready():
 	fill_y = min_point.y
 	print("Step 5: Filling empty space from", min_point, " to ", max_point)
 	print("Area: ", (max_point.x - min_point.x) * (max_point.y - min_point.y))
-	fill_empty_space()
+	if (max_point.x - min_point.x) * (max_point.y - min_point.y) > 350000:
+		get_tree().change_scene("res://Game.tscn")
+	else:
+		fill_empty_space()
 
 func _process(delta):
 	if fill_x >= max_point.x:
