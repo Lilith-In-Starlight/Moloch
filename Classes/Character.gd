@@ -361,12 +361,20 @@ func walking() -> void:
 				speed.x *= 0
 
 		2:
-			if abs(haxis)<0.5:
-				speed.x *= pow(0.3, d_unit)
-			elif sign(haxis)!=sign(speed.x):
-				speed.x *= pow(0.3, d_unit)
+			if state == STATES.AIR:
+				if abs(haxis)<0.5:
+					speed.x *= pow(0.8, d_unit)
+				elif sign(haxis)!=sign(speed.x):
+					speed.x *= pow(0.9, d_unit)
+				else:
+					speed.x *= pow(0.75, d_unit)
 			else:
-				speed.x *= pow(0.3, d_unit)
+				if abs(haxis)<0.5:
+					speed.x *= pow(0.3, d_unit)
+				elif sign(haxis)!=sign(speed.x):
+					speed.x *= pow(0.3, d_unit)
+				else:
+					speed.x *= pow(0.3, d_unit)
 
 
 func jumping(x_speed := 0.0, y_speed := jump_force):
