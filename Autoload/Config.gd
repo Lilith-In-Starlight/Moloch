@@ -62,3 +62,4 @@ func give_achievement(achievement: String) -> void:
 	if achievement in achievements and not achievements[achievement]:
 		achievements[achievement] = true
 		emit_signal("achievement_unlocked", achievement)
+		save_config()

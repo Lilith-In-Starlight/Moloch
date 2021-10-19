@@ -69,6 +69,7 @@ func _on_Settings_pressed() -> void:
 func _on_Back_pressed() -> void:
 	$MainMenu.visible = true
 	$Settings.visible = false
+	$Achievements.visible = false
 
 
 func _on_Controls_pressed() -> void:
@@ -163,3 +164,10 @@ func _on_Reset_pressed() -> void:
 #	$MainMenu/Buttons/Exit.text = Localization.get_line("exit-button")
 #	$MainMenu/LineEdit.placeholder_text = Localization.get_line("seed-placeholder")
 #	$Settings/JoystickSensitivity/Text.text = Localization.get_line("joystick-sensitivity") + str(Config.joystick_sensitivity)
+
+
+func _on_Achievements_pressed() -> void:
+	$Achievements.visible = true
+	$MainMenu.visible = false
+	$Achievements/Achievos/OhHey.visible = Config.achievements["fun1"]
+	$Achievements/Achievos/OhWoah.visible = Config.achievements["fun2"]
