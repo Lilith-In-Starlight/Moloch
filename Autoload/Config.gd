@@ -30,6 +30,8 @@ func _ready() -> void:
 			InputMap.action_erase_events(i)
 			for j in obtained:
 				InputMap.action_add_event(i, j)
+		
+		achievements = config_file.get_value("achievements", "achievements", achievements)
 		config_file.save("user://config.moloch")
 	else:
 		save_config()
@@ -44,6 +46,8 @@ func save_config() -> void:
 	config_file.set_value("config", "joystick_sensitivity", joystick_sensitivity)
 	for i in InputMap.get_actions():
 		config_file.set_value("config", "keybinds_%s"%i, InputMap.get_action_list(i))
+	
+	config_file.set_value("achievements", "achievements", achievements)
 	config_file.save("user://config.moloch")
 
 

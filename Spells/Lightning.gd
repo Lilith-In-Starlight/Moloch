@@ -6,6 +6,7 @@ var angle :float
 
 var attack_area := Area2D.new()
 
+
 func _ready() -> void:
 	CastInfo.set_position(self)
 	CastInfo.set_goal()
@@ -47,8 +48,6 @@ func _ready() -> void:
 	for bit in 8:
 		attack_area.set_collision_mask_bit(bit, get_collision_mask_bit(bit))
 	$Timer.start()
-
-
 
 
 func _on_Timer_timeout() -> void:
