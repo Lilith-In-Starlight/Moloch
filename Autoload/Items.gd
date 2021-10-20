@@ -19,7 +19,7 @@ var spells := {
 }
 
 const CHANCE_TIER1 := 0.78
-const CHANCE_TIER2 := 0.18
+const CHANCE_TIER2 := 0.19
 const CHANCE_TIER3 := 0.038
 const CHANCE_TIER4 := 0.002
 
@@ -101,8 +101,8 @@ func _ready():
 	register_spell(3, "relocator", "Relocator", "Relocates your body.", preload("res://Sprites/Spells/Teleport.png"), preload("res://Spells/TeleportWand.tscn"))
 	register_spell(3, "eidosanchor", "Eidos Anchor", "First cast stores, second cast recalls.", preload("res://Sprites/Spells/Return.png"), preload("res://Spells/Return.tscn"))
 	register_spell(2, "soulwave", "Soul Wave", "Hurts things in a expanding radius.", preload("res://Sprites/Spells/SoulWave.png"), preload("res://Spells/SoulWave.tscn"))
-	register_spell(3, "internalrage", "Internal Rage", "Coming for you.", preload("res://Sprites/Spells/SoulWave.png"), preload("res://Spells/InternalRage.tscn"))
-	register_spell(4, "fuckeverything", "Fuck Everything", "Fuck all of you.", preload("res://Sprites/Spells/FuckEverything.png"), preload("res://Spells/FuckEverything.tscn"))
+	register_spell(3, "internalrage", "Internal Rage", "Coming for you.", preload("res://Sprites/Spells/InternalRage.png"), preload("res://Spells/InternalRage.tscn"))
+	register_spell(5, "fuckeverything", "Fuck Everything", "Fuck all of you.", preload("res://Sprites/Spells/FuckEverything.png"), preload("res://Spells/FuckEverything.tscn"))
 	
 	register_base_mod("multiplicative", "Multiplicative Cast", "Many from alterations of one\nIterations: ", preload("res://Sprites/Spells/Modifiers/Multiplicative.png"))
 	register_base_mod("unifying", "Unifying Cast", "One from alterations of many\nAmalgamations: ", preload("res://Sprites/Spells/Modifiers/UnifyingM.png"))
