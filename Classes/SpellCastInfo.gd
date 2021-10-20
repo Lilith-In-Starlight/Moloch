@@ -7,13 +7,18 @@ var wand :Wand = null
 var goal :Vector2
 var goal_offset := Vector2(0, 0)
 
+var spell_offset := Vector2(0, 0)
+
 
 func set_position(CastEntity:Node2D):
+	if wand != null:
+		if wand.spell_offset != Vector2(0, 0):
+			spell_offset = wand.spell_offset
 	if is_instance_valid(Caster):
 		if Caster.has_method("cast_from"):
-			CastEntity.position = Caster.cast_from()
+			CastEntity.position = Caster.cast_from() + spell_offset
 			return
-		CastEntity.position = Caster.position
+		CastEntity.position = Caster.position + spell_offset
 
 
 func set_goal():

@@ -11,6 +11,7 @@ var heat_resistance :float = Items.LootRNG.randf()*0.7
 var soul_resistance :float = Items.LootRNG.randf()*0.7
 var push_resistance :float = Items.LootRNG.randf()*0.7
 var spells := []
+var spell_offset := Vector2(0, 0)
 
 var color1 := Color(Items.LootRNG.randf(), Items.LootRNG.randf(), Items.LootRNG.randf())
 var color2 := Color(Items.LootRNG.randf(), Items.LootRNG.randf(), Items.LootRNG.randf())
@@ -70,6 +71,7 @@ func shuffle():
 
 func run(Caster:Node2D):
 	if not self.running:
+		spell_offset = Vector2(0, 0)
 		can_cast = true
 		self.running = true
 		Items.running_wands.append([self, Caster])
@@ -78,6 +80,7 @@ func run(Caster:Node2D):
 func unrun():
 	if running:
 		running = false
+		spell_offset = Vector2(0, 0)
 		emit_signal("finished_casting")
 
 

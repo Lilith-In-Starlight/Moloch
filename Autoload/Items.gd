@@ -103,6 +103,7 @@ func _ready():
 	register_spell(2, "soulwave", "Soul Wave", "Hurts things in a expanding radius.", preload("res://Sprites/Spells/SoulWave.png"), preload("res://Spells/SoulWave.tscn"))
 	register_spell(3, "internalrage", "Internal Rage", "Coming for you.", preload("res://Sprites/Spells/InternalRage.png"), preload("res://Spells/InternalRage.tscn"))
 	register_spell(5, "fuckeverything", "Fuck Everything", "Fuck all of you.", preload("res://Sprites/Spells/FuckEverything.png"), preload("res://Spells/FuckEverything.tscn"))
+	register_spell(5, "castlight", "Casting Light", "The next casts will appear halfway through this ray", preload("res://Sprites/Spells/CastingRay.png"), preload("res://Spells/CastingLight.tscn"))
 	
 	register_base_mod("multiplicative", "Multiplicative Cast", "Many from alterations of one\nIterations: ", preload("res://Sprites/Spells/Modifiers/Multiplicative.png"))
 	register_base_mod("unifying", "Unifying Cast", "One from alterations of many\nAmalgamations: ", preload("res://Sprites/Spells/Modifiers/UnifyingM.png"))
