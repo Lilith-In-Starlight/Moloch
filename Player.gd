@@ -58,6 +58,19 @@ func _process(delta: float) -> void:
 	if Items.player_items.has("dissipator"):
 		Items.player_items.erase("dissipator")
 		health.temp_regulation += 0.005
+		
+	if Items.player_items.has("shance"):
+		Items.player_items.erase("shance")
+		health.chances += 1
+		
+	if Items.player_items.has("suarantee"):
+		Items.player_items.erase("suarantee")
+		health.guarantees += 1
+	
+	if Items.player_items.has("legs"):
+		if health.broken_moving_appendages > 0:
+			health.broken_moving_appendages -= 1
+			Items.player_items.erase("legs")
 	
 	for i in Items.player_items.count("gluestone"):
 		if get_tree().get_nodes_in_group("Gluestone").size() <= i:

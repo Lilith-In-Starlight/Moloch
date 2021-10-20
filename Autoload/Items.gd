@@ -79,6 +79,9 @@ func _ready():
 	register_item(2, ".9", "Point Nine", "Displays the current state of the bearer's body.", preload("res://Sprites/Items/pointnine.png"))
 	register_item(1, "gluestone", "Gluestone", "Small entity that tries to act as a shield.", preload("res://Sprites/Items/Gluestone.png"))
 	register_item(3, "egg", "Magic Egg", "If it hatches, it will summon a surprise.", preload("res://Sprites/Items/Egg.png"))
+	register_item(3, "shance", "Second Chance", "You have a chance of coming back to life.", preload("res://Sprites/Items/SecondChance.png"))
+	register_item(3, "suarantee", "Second Guarantee", "You have a guarantee of coming back to life.", preload("res://Sprites/Items/SecondGuarantee.png"))
+	register_item(2, "legs", "Pocket Leg", "Throw the old one away.", preload("res://Sprites/Items/PocketLegs.png"))
 	
 	register_spell(4, "fuckyou", "Fuck You", "Fuck everything in that particular direction", preload("res://Sprites/Spells/FuckYou.png"), preload("res://Spells/FuckYou.tscn"))
 	register_spell(2, "evilsight", "Evil Eye", "Look at things so fiercely you tear them apart", preload("res://Sprites/Spells/EvilEye.png"), preload("res://Spells/EvilSight.tscn"))

@@ -59,6 +59,9 @@ var bleeding_by :Node2D
 
 var dead := false
 
+var chances := 0
+var guarantees := 0
+
 
 func shatter_soul(freq :float, from: Node2D = null, side := false) -> void:
 	soul -= freq
@@ -111,20 +114,31 @@ func process_health(delta:float, speed:Vector2 = Vector2(0, 0)) -> void:
 			temp_change(60*delta*0.05)
 			emit_signal("was_damaged", "heat")
 	if ((temperature > death_hypertemperature or temperature < death_hypotemperature) and weak_to_temp) or (soul <= 0.0 and has_soul) or (blood <= 0.0 and needs_blood) or poked_holes > max_holes:
-		if not dead:
-			if temperature > death_hypertemperature and weak_to_temp:
-				cause_of_death = DEATHS.HYPER
-			elif temperature < death_hypotemperature and weak_to_temp:
-				cause_of_death = DEATHS.HYPO
-			elif soul <= 0.0 and has_soul:
-				cause_of_death = DEATHS.SOUL
-			elif poked_holes > max_holes:
-				cause_of_death = DEATHS.HOLES
-			elif blood <= 0.0 and needs_blood:
-				cause_of_death = DEATHS.BLED
-				
-		dead = true
-		emit_signal("died")
+		if (guarantees == 0 and chances == 0) or (chances > 0 and randi()%3 > 0):
+			if not dead:
+				if temperature > death_hypertemperature and weak_to_temp:
+					cause_of_death = DEATHS.HYPER
+				elif temperature < death_hypotemperature and weak_to_temp:
+					cause_of_death = DEATHS.HYPO
+				elif soul <= 0.0 and has_soul:
+					cause_of_death = DEATHS.SOUL
+				elif poked_holes > max_holes:
+					cause_of_death = DEATHS.HOLES
+				elif blood <= 0.0 and needs_blood:
+					cause_of_death = DEATHS.BLED
+					
+				dead = true
+				emit_signal("died")
+		else:
+			if guarantees > 0:
+				guarantees -= 1
+			elif chances > 0:
+				chances -= 1
+			temperature = normal_temperature
+			broken_moving_appendages = 0
+			soul = 1.0
+			blood = max_blood
+			poked_holes = 0
 
 
 func _instakill_pressed():
