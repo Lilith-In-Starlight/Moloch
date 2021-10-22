@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/light_sabre2.mp3-1d8fa827961b6e0d47d0321c5e6a233a.mp3str"
+
+[deps]
+
+source_file="res://Sfx/spells/light_sabre2.mp3"
+dest_files=[ "res://.import/light_sabre2.mp3-1d8fa827961b6e0d47d0321c5e6a233a.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://Spells/Ray.gd" type="Script" id=1]
+[ext_resource path="res://Sfx/spells/laserfire01.wav" type="AudioStream" id=2]
 
 [node name="Ray" type="RayCast2D"]
 enabled = true
@@ -10,3 +11,7 @@ script = ExtResource( 1 )
 [node name="Line2D" type="Line2D" parent="."]
 width = 2.0
 default_color = Color( 0, 0.952941, 1, 1 )
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 2 )
+autoplay = true

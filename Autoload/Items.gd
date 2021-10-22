@@ -23,6 +23,10 @@ const CHANCE_TIER2 := 0.19
 const CHANCE_TIER3 := 0.038
 const CHANCE_TIER4 := 0.002
 
+const EXPLOSION_SOUNDS := [preload("res://Sfx/explosions/explosion01.wav"), preload("res://Sfx/explosions/explosion02.wav"),preload("res://Sfx/explosions/explosion08.wav")]
+
+const PIERCED_FLESH_SOUNDS := [preload("res://Sfx/pierced_flesh/piercing-1a.wav"), preload("res://Sfx/pierced_flesh/piercing-1b.wav")]
+
 var player_items := []
 
 var player_spells := [null,null,null,null,null,null]

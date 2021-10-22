@@ -10,11 +10,14 @@ var was_dead := false
 var died_from_own_cast := false
 var died_from_own_spell := false
 
+var Map :TileMap
+
 func _ready() -> void:
+	Map = get_tree().get_nodes_in_group("World")[0]
 	health = Items.player_health
 	health.connect("was_damaged", self, "_on_damaged")
 	health.connect("died", self, "health_died")
-	health.connect("hole_poked", self, "send_message", ["Bleeding"])
+	health.connect("hole_poked", self, "_on_hole_poked")
 	health.connect("full_healed", self, "send_message", ["Your flesh is renewed"])
 	health.connect("effect_changed", self, "_on_effect_changes")
 	health.connect("broken_leg", self, "_on_broken_leg")
@@ -272,20 +275,28 @@ func _on_effect_changes(effect:String, added:bool) -> void:
 
 
 func _on_broken_leg(amount:int) -> void:
-	match amount:
-		1:
-			send_message("Broken leg")
-			if Items.player_items.has("gasolineblood"):
-				var n := preload("res://Particles/Explosion.tscn").instance()
-				n.position = position
-				get_parent().add_child(n)
-		2:
-			send_message("Broken both legs")
-			if Items.player_items.has("gasolineblood"):
-				var n := preload("res://Particles/Explosion.tscn").instance()
-				n.position = position
-				get_parent().add_child(n)
+	if amount != 0:
+		Map.play_sound(preload("res://Sfx/broken_legs.wav"), position, 1.0, 0.8+randf()*0.4)
+		if Items.player_items.has("gasolineblood"):
+			var n := preload("res://Particles/Explosion.tscn").instance()
+			n.position = position
+			get_parent().add_child(n)
+		match amount:
+			1:
+				send_message("Broken leg")
+			2:
+				send_message("Broken both legs")
 
 
 func _on_DamageTimer_timeout() -> void:
 	modulate = Color("#ffffff")
+
+
+func _on_hole_poked():
+	send_message("Bleeding")
+	Map.play_sound(preload("res://Sfx/pierced_flesh/piercing-1a.wav"), position, 1.0, 0.8+randf()*0.4)
+
+
+func _on_frame_changed() -> void:
+	if $Player.animation in ["run", "run_lookback"] and $Player.frame in [0,3]:
+		Map.play_sound(preload("res://Sfx/step.wav"), position + Vector2(0, 6), 1.0, 0.8+randf()*0.4)

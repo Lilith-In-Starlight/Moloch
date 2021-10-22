@@ -15,12 +15,15 @@ var last_seen := Vector2(0, 0)
 var search_time := 0.0
 var health := Flesh.new()
 var wand := Wand.new()
+var Map :TileMap
 
 
 func _ready():
+	Map = get_tree().get_nodes_in_group("World")[0]
 	noise.seed = hash(self)
 	health.connect("died", self, "health_died")
 	health.connect("was_damaged",self, "_on_damaged")
+	health.connect("hole_poked", self, "_on_hole_poked")
 	health.blood = 0.4
 	Player = get_tree().get_nodes_in_group("Player")[0]
 	wand.full_recharge = max(wand.full_recharge, 1.5)
@@ -111,3 +114,7 @@ func _on_DamageTimer_timeout() -> void:
 
 func _on_damaged(damage_type:String) -> void:
 	Items.damage_visuals(self, $DamageTimer, damage_type)
+
+
+func _on_hole_poked() -> void:
+	Map.play_sound(preload("res://Sfx/pierced_flesh/piercing-1a.wav"), position, 1.0, 0.8+randf()*0.4)

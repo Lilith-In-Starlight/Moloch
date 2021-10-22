@@ -362,6 +362,16 @@ func summon_wand(wand:Wand, position: Vector2, speed: Vector2) -> void:
 	new_wand_entity.linear_velocity = speed
 	add_child(new_wand_entity)
 
+func play_sound(sound: AudioStream, position: Vector2, volume := 0.0, pitch := 1.0, bus := "Master") -> void:
+	var new_audio_player := AudioStreamPlayer2D.new()
+	new_audio_player.position = position
+	new_audio_player.stream = sound
+	new_audio_player.volume_db = volume
+	new_audio_player.pitch_scale = pitch
+	new_audio_player.bus = bus
+	new_audio_player.autoplay = true
+	add_child(new_audio_player)
+
 func stretch_global_bounds(new_area :Rect2):
 		var local_max := new_area.position + new_area.size
 		if local_max.x > max_point.x:

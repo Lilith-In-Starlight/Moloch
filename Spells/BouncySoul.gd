@@ -8,13 +8,16 @@ var rotate := 0.0
 var speed :Vector2
 var flip := false
 var dtimer := 0.0
+var Map :TileMap
 
 func _ready():
+	Map = get_tree().get_nodes_in_group("World")[0]
 	CastInfo.set_position(self)
 	CastInfo.set_goal()
 	rotate = CastInfo.get_angle(self)
 	speed = Vector2(cos(rotate), sin(rotate))*5.0
 	Ray.cast_to = speed
+	Map.play_sound(preload("res://Sfx/spells/laserfire01.wav"), position, 1.0, 0.8+randf()*0.4)
 
 func _physics_process(delta):
 	Ray.cast_to = speed * delta * 60
@@ -29,6 +32,7 @@ func _physics_process(delta):
 			queue_free()
 		else:
 			speed = speed.bounce(Ray.get_collision_normal().normalized())*1.02
+			Map.play_sound(preload("res://Sfx/spells/laserfire01.wav"), position, 1.0, 0.8+randf()*0.4)
 		position += speed * delta * 60
 		flip = true
 		dtimer += 0.05

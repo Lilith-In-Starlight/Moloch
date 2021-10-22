@@ -17,6 +17,13 @@ func _ready():
 	CastInfo.set_position(self)
 	CastInfo.set_goal()
 	rotate = CastInfo.goal.angle_to_point(position)
+	var sound_emitter := AudioStreamPlayer2D.new()
+	sound_emitter.stream = preload("res://Sfx/spells/laserfire01.wav")
+	sound_emitter.position = position
+	sound_emitter.pitch_scale = 0.9 + float()*0.3
+	get_parent().add_child(sound_emitter)
+	sound_emitter.play()
+	WorldMap.play_sound(preload("res://Sfx/spells/laserfire01.wav"), position, 1.0, 0.8+randf()*0.4)
 	
 
 

@@ -8,6 +8,7 @@ var area_of_effect := 10
 
 var Map
 
+
 func _ready():
 	$CollisionShape2D.shape = $CollisionShape2D.shape.duplicate(true)
 	Map = get_tree().get_nodes_in_group("World")[0]
@@ -21,6 +22,8 @@ func _ready():
 				Map.set_cellv(vec, Items.break_block(Map.get_cellv(vec), 0.5))
 	var point := Vector2(int(position.x/8), int(position.y/8))
 	Map.update_bitmask_region(point-Vector2(area_of_effect,area_of_effect), point+Vector2(area_of_effect,area_of_effect))
+	
+	Map.play_sound(Items.EXPLOSION_SOUNDS[randi()%Items.EXPLOSION_SOUNDS.size()], position, 1.0, 0.8+randf()*0.4)
 
 func _process(delta):
 	radius = clamp(lerp(radius, 0, -1.5), 0, 70*dmg_multi)

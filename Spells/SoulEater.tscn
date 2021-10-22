@@ -2,7 +2,6 @@
 
 [ext_resource path="res://Spells/SoulEater.gd" type="Script" id=1]
 
-
 [node name="SoulEater" type="RayCast2D"]
 enabled = true
 collision_mask = 75

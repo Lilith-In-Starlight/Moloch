@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/piercing-1b.wav-8cc0f905ddfc066a5f285c7c9b9f8286.sample"
+
+[deps]
+
+source_file="res://Sfx/pierced_flesh/piercing-1b.wav"
+dest_files=[ "res://.import/piercing-1b.wav-8cc0f905ddfc066a5f285c7c9b9f8286.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

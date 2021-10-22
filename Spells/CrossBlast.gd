@@ -10,6 +10,8 @@ var timer := 0.0
 
 var Map :TileMap
 
+var has_done := false
+
 func _ready():
 	Map = get_tree().get_nodes_in_group("World")[0] 
 	CastInfo.set_position(self)
@@ -18,6 +20,7 @@ func _ready():
 	rotate = CastInfo.goal.angle_to_point(position)
 	$TextureProgress.radial_initial_angle += rad2deg(rotate)
 	$TextureProgress2.radial_initial_angle += rad2deg(rotate)
+	Map.play_sound(preload("res://Sfx/spells/laserfire01.wav"), position, 1.0, 0.8+randf()*0.4)
 
 
 func _physics_process(delta):
@@ -29,6 +32,8 @@ func _physics_process(delta):
 	
 	if speed < 0.01:
 		$CrossBlastCross.modulate.a += 0.3
+		if not has_done:
+			Map.play_sound(Items.EXPLOSION_SOUNDS[randi()%Items.EXPLOSION_SOUNDS.size()], position, 1.0, 0.8+randf()*0.4)
 			
 		for body in get_overlapping_bodies():
 			if body.has_method("health_object"):

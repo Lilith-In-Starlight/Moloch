@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://Spells/BouncyRay.gd" type="Script" id=1]
+[ext_resource path="res://Sfx/spells/laserfire01.wav" type="AudioStream" id=2]
 
 [node name="BouncyRay" type="RayCast2D"]
 enabled = true
@@ -11,3 +12,7 @@ script = ExtResource( 1 )
 points = PoolVector2Array( 0, 0, 0, 0 )
 width = 1.0
 default_color = Color( 0.772549, 0.956863, 1, 1 )
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 2 )
+autoplay = true
