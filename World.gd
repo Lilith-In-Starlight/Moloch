@@ -16,6 +16,7 @@ const antidirections = {
 }
 
 var areas := []
+var doors := []
 
 
 var max_point :Vector2
@@ -29,6 +30,7 @@ var iterations := 3
 var rooms := 0
 var generated_end_room := false
 var treasure_rooms := 0
+
 
 class _Room:
 		var scene = null
@@ -203,6 +205,7 @@ func expand_through_door(element, room) -> _Room:
 	
 	element.add_to_group("DontTry")
 	if res and not res.area == Rect2(0,0,0,0):
+		doors.append(room.position + element.position)
 		res.scene.position = room.position + element.position - res.attachment_door.position
 		dissolve_doorpair(element, res.attachment_door)
 		return res
