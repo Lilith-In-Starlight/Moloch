@@ -21,7 +21,7 @@ texture = ExtResource( 1 )
 wait_time = 0.5
 
 [node name="DespawnTimer" type="Timer" parent="."]
-wait_time = 1.7
+wait_time = 4.1
 autostart = true
 
 [connection signal="timeout" from="ShootTimer" to="." method="_on_ShootTimer_timeout"]
