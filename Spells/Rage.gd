@@ -28,7 +28,7 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	scale.move_toward(Vector2(1.0, 1.0),  0.03)
+	scale.move_toward(Vector2(1.0, 1.0),  0.03 * delta * 60)
 	
 	# When the ball already collides with something, it's best to make it
 	# disappear one frame after, so that godot has time to render it as
@@ -43,6 +43,6 @@ func _process(delta: float) -> void:
 				already_collided = true
 				return
 		
-		position += speed
-		speed += Vector2(cos(angle), sin(angle)) * 5
+		position += speed * delta * 60
+		speed += Vector2(cos(angle), sin(angle)) * 5 * delta * 60
 		Raycast.cast_to = speed
