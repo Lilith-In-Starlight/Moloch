@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Sprites/Spells/Entities/FireOrb.png" type="Texture" id=1]
+[ext_resource path="res://Spells/PlasmaSprinkler.gd" type="Script" id=2]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 4.0
+
+[node name="PlasmaSprinkler" type="Area2D"]
+collision_layer = 0
+collision_mask = 89
+script = ExtResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 1 )
+
+[node name="ShootTimer" type="Timer" parent="."]
+wait_time = 0.5
+
+[node name="DespawnTimer" type="Timer" parent="."]
+wait_time = 1.7
+autostart = true
+
+[connection signal="timeout" from="ShootTimer" to="." method="_on_ShootTimer_timeout"]
+[connection signal="timeout" from="DespawnTimer" to="." method="_on_DespawnTimer_timeout"]
