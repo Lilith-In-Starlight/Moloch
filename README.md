@@ -52,4 +52,4 @@ Mostly everything can be destroyed if you have the right spells for it. Mostly. 
 Under the hood, Moloch does weird stuff with classes to keep everything tidy and separate (this kind of thing is why spells and wands can be used by entities other than the player). If you want to know how this weird stuff works, here's a hopefully-not-so-outdated documentation: https://hackmd.io/@katie-and/HJlqEQMVK/https%3A%2F%2Fhackmd.io%2F%40katie-and%2FBJ4uZQMVF
 
 ## License
-The MIT license only applies to the source code. The visual assets are licensed under [CC-BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode)
+The MIT license only applies to the source code. The visual assets are licensed under [CC-BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode). Licenses for the sound effects are stated in AUDIO-LICENSES.md.
