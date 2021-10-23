@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Sprites/Spells/Entities/BigFireball.png" type="Texture" id=1]
+[ext_resource path="res://Spells/Rage.gd" type="Script" id=2]
+
+[node name="Rage" type="Sprite"]
+scale = Vector2( 0.8, 0.8 )
+texture = ExtResource( 1 )
+script = ExtResource( 2 )
+
+[node name="Raycast" type="RayCast2D" parent="."]
+enabled = true
+collision_mask = 91
+
+[node name="Raycast2" type="RayCast2D" parent="."]
+enabled = true
+collision_mask = 91
+
+[node name="Raycast3" type="RayCast2D" parent="."]
+enabled = true
+collision_mask = 91

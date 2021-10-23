@@ -3,9 +3,11 @@ extends Node2D
 
 var thing := []
 var CastInfo := SpellCastInfo.new()
+var Map :TileMap
 
 
 func _ready() -> void:
+	Map = get_tree().get_nodes_in_group("World")[0]
 	CastInfo.set_position(self)
 	var next_distance := 500
 	for i in get_children():
@@ -25,12 +27,8 @@ func _process(delta: float) -> void:
 		if child.position.angle() - new_pos.angle() < 0.0001:
 			child.position = new_pos
 		else:
-			pass
 			queue.append([child, i])
-			var n := preload("res://Particles/Explosion.tscn").instance()
-			n.area_of_effect = 20
-			n.position = position
-			get_parent().add_child(n)
+			Map.summon_explosion(position, 20)
 	for i in queue:
 		i[0].queue_free()
 		thing.remove(i[1])

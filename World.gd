@@ -362,6 +362,12 @@ func summon_wand(wand:Wand, position: Vector2, speed: Vector2) -> void:
 	new_wand_entity.linear_velocity = speed
 	add_child(new_wand_entity)
 
+func summon_explosion(position, size := 10) -> void:
+	var new_explosion := preload("res://Particles/Explosion.tscn").instance()
+	new_explosion.area_of_effect = size
+	new_explosion.position = position
+	get_parent().add_child(new_explosion)
+
 func play_sound(sound: AudioStream, position: Vector2, volume := 0.0, pitch := 1.0, bus := "Master") -> void:
 	var new_audio_player := AudioStreamPlayer2D.new()
 	new_audio_player.position = position

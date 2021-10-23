@@ -40,7 +40,7 @@ func _physics_process(_delta):
 		for body in get_overlapping_bodies():
 			if body.has_method("health_object"):
 				var flesh : Flesh = body.health_object()
-				flesh.temp_change(500*dmg_multi/body.position.distance_to(position))
+				flesh.temp_change(500*dmg_multi/(body.position.distance_to(position) + 0.001))
 				if body.position.distance_to(position) < 24*dmg_multi:
 					flesh.poke_hole(2+randi()%1)
 				if body.position.distance_to(position) < 12*dmg_multi:
@@ -50,7 +50,7 @@ func _physics_process(_delta):
 				if body.get("speed"):
 					body.speed += (body.position - position)*100*dmg_multi
 				elif body.get("linear_velocity"):
-					body.linear_velocity += (position - body.position).normalized()*200*dmg_multi/(position.distance_squared_to(body.position))
+					body.linear_velocity += (position - body.position).normalized()*200*dmg_multi/(position.distance_squared_to(body.position) + 0.001)
 		done += 1
 	else:
 		queue_free()

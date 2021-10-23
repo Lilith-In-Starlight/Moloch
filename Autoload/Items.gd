@@ -109,6 +109,7 @@ func _ready():
 	register_spell(3, "eidosanchor", "Eidos Anchor", "First cast stores, second cast recalls.", preload("res://Sprites/Spells/Return.png"), preload("res://Spells/Return.tscn"))
 	register_spell(2, "soulwave", "Soul Wave", "Hurts things in a expanding radius.", preload("res://Sprites/Spells/SoulWave.png"), preload("res://Spells/SoulWave.tscn"))
 	register_spell(3, "internalrage", "Internal Rage", "Coming for you.", preload("res://Sprites/Spells/InternalRage.png"), preload("res://Spells/InternalRage.tscn"))
+	register_spell(2, "rage", "Rage", "Fireball summoned from anger.", preload("res://Sprites/Spells/Rage.png"), preload("res://Spells/Rage.tscn"))
 	register_spell(5, "fuckeverything", "Fuck Everything", "Fuck all of you.", preload("res://Sprites/Spells/FuckEverything.png"), preload("res://Spells/FuckEverything.tscn"))
 	register_spell(5, "castlight", "Casting Light", "The next casts will appear halfway through this ray", preload("res://Sprites/Spells/CastingRay.png"), preload("res://Spells/CastingLight.tscn"))
 	
