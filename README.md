@@ -11,6 +11,7 @@ You are a child who was sacrificed by your parents to the god at the top of The 
 
 - **Movement:** WASD
 - **Jump:** Space
+- **Open chests, pick up items:** S
 - **Hold onto poles:** W, S
 - **Use wand:** Left click
 - **Organize inventory:** Left click; right click to throw away
@@ -24,6 +25,7 @@ You are a child who was sacrificed by your parents to the god at the top of The 
 
 - **Movement:** Left Stick
 - **Jump:** L1
+- **Open chests, pick up items:** Left Stick Down
 - **Hold onto poles:** Xbox A, Sony X, DS B
 - **Use wand:** R1
 - **Move In Inventory:** D-PAD
