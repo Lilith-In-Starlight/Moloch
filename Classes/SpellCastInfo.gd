@@ -28,7 +28,7 @@ func set_goal():
 
 
 func get_angle(CastEntity:Node2D) -> float:
-	return goal.angle_to_point(CastEntity.position)
+	return (goal + goal_offset).angle_to_point(CastEntity.position)
 
 
 func heat_caster(temp:float) -> void:
