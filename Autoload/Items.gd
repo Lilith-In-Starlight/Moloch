@@ -87,6 +87,7 @@ func _ready():
 	register_item(3, "suarantee", "Second Guarantee", "You have a guarantee of coming back to life.", preload("res://Sprites/Items/SecondGuarantee.png"))
 	register_item(2, "legs", "Pocket Leg", "Throw the old one away.", preload("res://Sprites/Items/PocketLegs.png"))
 	register_item(3, "bloodless", "Bloodless", "Blood Unnecessary", preload("res://Sprites/Items/Bloodless.png"))
+	register_item(4, "soulfulengine", "Soulful Engine", "Passive Soul Generation", preload("res://Sprites/Items/SoulfulEngine.png"))
 	
 	register_spell(4, "fuckyou", "Fuck You", "Fuck everything in that particular direction", preload("res://Sprites/Spells/FuckYou.png"), preload("res://Spells/FuckYou.tscn"))
 	register_spell(2, "evilsight", "Evil Eye", "Look at things so fiercely you tear them apart", preload("res://Sprites/Spells/EvilEye.png"), preload("res://Spells/EvilSight.tscn"))

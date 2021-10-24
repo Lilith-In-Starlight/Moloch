@@ -93,6 +93,8 @@ func _process(delta: float) -> void:
 		Items.player_items.erase("bloodless")
 		health.needs_blood = false
 	
+	health.soul += 0.01 * delta * Items.player_items.count("soulfulengine")
+
 	# Companions
 	for i in Items.companions.size():
 		if get_tree().get_nodes_in_group("Companion").size() <= i:
