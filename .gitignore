@@ -9,3 +9,8 @@ export_presets.cfg
 
 # Mono-specific ignores
 .mono/
+
+# I started using Vim
+*~
+*.swp
+*.swo
