@@ -29,7 +29,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	flying = Items.player_items.has("wings")
 	# Apply items
-	if Items.player_items.has("gasolineblood") and not blood_is_gasoline:
+	if Items.player_items.has("gasolineblood") and not blood_is_gasoline and health.blood > 0.01:
 		blood_is_gasoline = true
 		send_message("Your insides become volatile")
 	
@@ -87,6 +87,10 @@ func _process(delta: float) -> void:
 			new_gluestone.position = position
 			get_parent().add_child(new_gluestone)
 	
+	if Items.player_items.has("bloodless"):
+		Items.player_items.erase("bloodless")
+		health.needs_blood = false
+	
 	# Companions
 	for i in Items.companions.size():
 		if get_tree().get_nodes_in_group("Companion").size() <= i:
@@ -142,7 +146,7 @@ func _process(delta: float) -> void:
 	elif health.temperature >= 60 and health.temperature < 100 and temp_stage != 2:
 		temp_stage = 2
 		# Player explodes on high temperatures if their blood is nitro
-		if Items.player_items.has("gasolineblood"):
+		if blood_is_gasoline and health.blood > 0.01:
 			var n := preload("res://Particles/Explosion.tscn").instance()
 			n.position = position
 			get_parent().add_child(n)
@@ -150,7 +154,7 @@ func _process(delta: float) -> void:
 	elif health.temperature >= 100 and temp_stage != 3:
 		temp_stage = 3
 		# Player explodes on high temperatures if their blood is nitro
-		if Items.player_items.has("gasolineblood"):
+		if blood_is_gasoline and health.blood > 0.01:
 			var n := preload("res://Particles/Explosion.tscn").instance()
 			n.position = position
 			get_parent().add_child(n)
@@ -277,7 +281,7 @@ func _on_effect_changes(effect:String, added:bool) -> void:
 func _on_broken_leg(amount:int) -> void:
 	if amount != 0:
 		Map.play_sound(preload("res://Sfx/broken_legs.wav"), position, 1.0, 0.8+randf()*0.4)
-		if Items.player_items.has("gasolineblood"):
+		if blood_is_gasoline and health.blood > 0.01:
 			var n := preload("res://Particles/Explosion.tscn").instance()
 			n.position = position
 			get_parent().add_child(n)

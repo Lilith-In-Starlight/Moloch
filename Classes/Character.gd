@@ -203,7 +203,7 @@ func process_movement(delta:float) -> void:
 
 func bleed() -> void:
 	# If the player is bleeding
-	if health.poked_holes > 0:
+	if health.poked_holes > 0 and health.blood > 0.01:
 		# Emit blood particles 
 		for i in min(health.poked_holes, 12):
 			if randf()>0.9:

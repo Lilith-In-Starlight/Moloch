@@ -66,10 +66,10 @@ func _ready():
 
 func _process(delta):
 	# Control the temperature vignettes
-	if Player.health.temperature > 30:
-		HotHUD.modulate.a = lerp(HotHUD.modulate.a, (Player.health.temperature-30)/110.0, 0.2)
+	if Items.player_health.temperature > 30:
+		HotHUD.modulate.a = lerp(HotHUD.modulate.a, (Items.player_health.temperature-30)/110.0, 0.2)
 	else:
-		ColdHUD.modulate.a = lerp(ColdHUD.modulate.a, (Player.health.temperature-30)/-60.0, 0.2)
+		ColdHUD.modulate.a = lerp(ColdHUD.modulate.a, (Items.player_health.temperature-30)/-60.0, 0.2)
 	if generated and not player_died and not level_ended:
 		GeneratingScreen.modulate.a = move_toward(GeneratingScreen.modulate.a, 0.0, 0.2)
 	
