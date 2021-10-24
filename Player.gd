@@ -37,6 +37,8 @@ func _process(delta: float) -> void:
 		Items.player_items.erase("thickblood")
 		health.max_blood *= 2.0
 		health.blood *= 2.0
+		health.blood += 0.5
+		health.blood = min(health.max_blood, health.blood)
 		
 	if Items.player_items.has("heal"):
 		Items.player_items.erase("heal")
