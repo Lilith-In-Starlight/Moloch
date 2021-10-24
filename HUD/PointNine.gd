@@ -4,7 +4,7 @@ var player_health :Flesh
 
 
 func _ready():
-	player_health = get_tree().get_nodes_in_group("Player")[0].health_object()
+	player_health = Items.player_health
 
 
 func _process(_delta):
@@ -26,5 +26,4 @@ func _process(_delta):
 	
 	$Border.rect_position.y = 5
 	$Border.rect_size.y = height + 2.0
-	
 	
