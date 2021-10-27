@@ -1,24 +1,108 @@
 extends Control
 
+class MenuOption:
+	var option_name := ""
+	var func_ref :FuncRef = null
+	var menu_dest := ""
+
+class MenuSetting:
+	var setting_name := ""
+	var value := 0
+	var enabled := false
+	var slider := false
+
 onready var Animations := $Animations
 onready var SeedLineEdit := $MainMenu/LineEdit
 
-var setting_control := -1
+var current_menu := "" setget set_menu
+
+
+var menus := {}
+
+var current_menu_pos := 0
 
 
 func _ready():
-	$Settings/VisualizeDamage.pressed = Config.damage_visuals
-	$Settings/InstantDeathButton.pressed = Config.instant_death_button
-	$Settings/JoystickSensitivity/Text.text = "Joystick Sensitivity: " + str(Config.joystick_sensitivity)
-	$Settings/JoystickSensitivity.value = Config.joystick_sensitivity
+	menus = {
+		"main": [
+			make_menu_option("New Run", "", funcref(self, "start_new_run")),
+			make_menu_option("Settings", "settings"),
+			make_menu_option("Exit", "", funcref(get_tree(), "quit")),
+			],
+		"settings": [
+			make_menu_setting("Death Button", Config.instant_death_button),
+			make_menu_setting("Damage Colors", Config.damage_visuals),
+			make_menu_option("Back", "main"),
+			]
+	}
+	set_menu("main")
 	Animations.play("License")
 	
-#	for i in Localization.languages:
-#		$MenuButton.add_item(Localization.languages[i]["langname"])
-#	_on_updated_language()
 
 
-func _on_NewRun_pressed():
+func _process(delta: float) -> void:
+	$Ball.rect_position = $MenuContainer.get_child(current_menu_pos).rect_global_position - Vector2(0, 12)
+	Config.instant_death_button = menus["settings"][0].enabled
+	Config.damage_visuals = menus["settings"][1].enabled
+
+
+func _input(event: InputEvent) -> void:
+	if (event is InputEventKey or event is InputEventJoypadButton) and event.is_pressed():
+		var action := ""
+		for i in ["up", "down", "left", "right", "jump"]:
+			for j in ["", "scroll", "scroll_"]:
+				if InputMap.has_action(j + i) and Input.is_action_just_pressed(j + i):
+					action = i
+		match action:
+			"left":
+				current_menu_pos -= 1
+				if current_menu_pos < 0:
+					current_menu_pos = menus[current_menu].size()-1
+			"right":
+				current_menu_pos = (current_menu_pos + 1) % menus[current_menu].size()
+			"jump", "down":
+				if menus[current_menu][current_menu_pos] is MenuOption:
+					var menu_option: MenuOption = menus[current_menu][current_menu_pos]
+					if menu_option.menu_dest != "":
+						set_menu(menu_option.menu_dest)
+						current_menu_pos = 0
+					elif menu_option.func_ref != null:
+						menu_option.func_ref.call_func()
+				else:
+					var menu_setting: MenuSetting = menus[current_menu][current_menu_pos]
+					print(menu_setting.enabled)
+					if menu_setting.slider:
+						pass
+					else:
+						menu_setting.enabled = !menu_setting.enabled
+						$MenuContainer.get_child(current_menu_pos).pressed = menu_setting.enabled
+					Config.save_config()
+	
+
+func set_menu(menu:String) -> void:
+	current_menu = menu
+	for i in $MenuContainer.get_children():
+		i.queue_free()
+	for i in menus[menu]:
+		if i is MenuOption:
+			var new_label := Label.new()
+			new_label.text = i.option_name
+			$MenuContainer.add_child(new_label)
+		elif i is MenuSetting:
+			if i.slider:
+				var new_slider := Slider.new()
+				new_slider.text = i.setting_name
+				new_slider.value = i.value
+				new_slider.max_value = 12
+				$MenuContainer.add_child(new_slider)
+			else:
+				var new_check := CheckBox.new()
+				new_check.text = i.setting_name
+				new_check.pressed = i.enabled
+				$MenuContainer.add_child(new_check)
+
+
+func start_new_run() -> void:
 	if not SeedLineEdit.text == "":
 		if SeedLineEdit.text.is_valid_integer():
 			Items.custom_seed = SeedLineEdit.text as int
@@ -36,138 +120,26 @@ func _on_NewRun_pressed():
 	Animations.play("Fadein")
 
 
-func _on_Exit_pressed():
-	get_tree().quit()
-
-
-func _on_animation_finished(anim_name):
+func _on_animation_finished(anim_name) -> void:
 	if anim_name == "Fadein":
 		get_tree().change_scene("res://Game.tscn")
 
 
-func _on_VisualizeDamage_pressed() -> void:
-	Config.damage_visuals = $Settings/VisualizeDamage.pressed
-	Config.save_config()
+func make_menu_option(n:String, m:="",f:FuncRef=null) -> MenuOption:
+	var new_option := MenuOption.new()
+	new_option.option_name = n
+	new_option.menu_dest = m
+	new_option.func_ref = f
+	return new_option
 
 
-func _on_InstantDeathButton_pressed() -> void:
-	Config.instant_death_button = $Settings/InstantDeathButton.pressed
-	Config.save_config()
-
-
-func _on_JoystickSensitivity_value_changed(value: float) -> void:
-	$Settings/JoystickSensitivity/Text.text = "Joystick Sensitivity: " + str(value)
-	Config.joystick_sensitivity = value
-	Config.save_config()
-
-
-func _on_Settings_pressed() -> void:
-	$MainMenu.visible = false
-	$Settings.visible = true
-
-
-func _on_Back_pressed() -> void:
-	$MainMenu.visible = true
-	$Settings.visible = false
-	$Achievements.visible = false
-
-
-func _on_Controls_pressed() -> void:
-	$Settings.visible = false
-	$Controls.visible = true
-
-
-func _input(event: InputEvent) -> void:
-	$Controls/Heal.text = "Heal: " + get_action_text("seal_blood")
-	$Controls/Grab.text = "Grab Poles: " + get_action_text("grab")
-	$Controls/Shoot.text = "Fire Wand/Select Item: " + get_action_text("Interact1")
-	$Controls/Drop.text = "Drop Item: " + get_action_text("Interact2")
-	$Controls/Up.text = "Up: " + get_action_text("up")
-	$Controls/Down.text = "Down: " + get_action_text("down")
-	$Controls/Left.text = "Left: " + get_action_text("left")
-	$Controls/Right.text = "Right: " + get_action_text("right")
-	$Controls/Jump.text = "Jump: " + get_action_text("jump")
-	$Controls/Info.text = "Extra Info: " + get_action_text("see_info")
-	$Controls/Death.text = "Instantly Die: " + get_action_text("instant_death")
-	for i in $Controls.get_child_count():
-		$Controls.get_child(i).modulate = ColorN("white")
-	if event is InputEventMouseButton and not event.is_pressed() and event.button_index == 1:
-		for i in $Controls.get_child_count():
-			$Controls.get_child(i).modulate = ColorN("white")
-			if $Controls.get_child(i).pressed and i < 11:
-				setting_control = i
-				break
-	if setting_control != -1:
-		$Controls.get_child(setting_control).modulate = ColorN("cyan")
-	if (event is InputEventKey or event is InputEventMouseButton) and event.is_pressed() and setting_control != -1:
-		var list := []
-		var action := ""
-		match setting_control:
-			0: action = "seal_blood"
-			1: action = "grab"
-			2: action = "Interact1"
-			3: action = "Interact2"
-			4: action = "up"
-			5: action = "down"
-			6: action = "left"
-			7: action = "right"
-			8: action = "jump"
-			9: action = "see_info"
-			10: action = "instant_death"
-		list = InputMap.get_action_list(action)
-		for i in list:
-			if i is InputEventKey or i is InputEventMouseButton:
-				InputMap.action_erase_event(action, i)
-				break
-		InputMap.action_add_event(action, event)
-		setting_control = -1
-		Config.save_config()
-
-
-func _on_BackControl_pressed() -> void:
-	setting_control = -1
-	$Settings.visible = true
-	$Controls.visible = false
-
-
-func get_action_text(action:String):
-	for i in InputMap.get_action_list(action):
-		if i is InputEventKey:
-			return OS.get_scancode_string(i.scancode)
-		if i is InputEventMouseButton:
-			match i.button_index:
-				1: return "Left Click"
-				2: return "Right Click"
-				3: return "Middle Click"
-				4: return "Scroll Up"
-				5: return "Scroll Down"
-				6: return "Scroll Left"
-				7: return "Scroll Right"
-				8: return "Extra Click 1"
-				9: return "Extra Click 2"
-
-
-func _on_Reset_pressed() -> void:
-	InputMap.load_from_globals()
-	Config.save_config()
-
-
-#func update_language(index:int) -> void:
-#	var lang = Localization.languages.keys()[index]
-#	Localization.current_language = lang
-#	_on_updated_language()
-#
-#
-#func _on_updated_language() -> void:
-#	$MainMenu/Buttons/NewRun.text = Localization.get_line("play-button")
-#	$MainMenu/Buttons/Settings.text = Localization.get_line("settings-button")
-#	$MainMenu/Buttons/Exit.text = Localization.get_line("exit-button")
-#	$MainMenu/LineEdit.placeholder_text = Localization.get_line("seed-placeholder")
-#	$Settings/JoystickSensitivity/Text.text = Localization.get_line("joystick-sensitivity") + str(Config.joystick_sensitivity)
-
-
-func _on_Achievements_pressed() -> void:
-	$Achievements.visible = true
-	$MainMenu.visible = false
-	$Achievements/Achievos/OhHey.visible = Config.achievements["fun1"]
-	$Achievements/Achievos/OhWoah.visible = Config.achievements["fun2"]
+func make_menu_setting(n:String, v) -> MenuSetting:
+	var new_option := MenuSetting.new()
+	new_option.setting_name = n
+	if v is int:
+		new_option.value = v
+		new_option.slider = true
+	elif v is bool:
+		new_option.enabled = v
+		new_option.slider = false
+	return new_option

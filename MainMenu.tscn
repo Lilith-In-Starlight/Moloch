@@ -1,10 +1,9 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Sprites/Menus/logo.png" type="Texture" id=1]
 [ext_resource path="res://dpcomic.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://MainMenu.gd" type="Script" id=3]
-[ext_resource path="res://Sprites/Achievements/OhWoahWhatsThis.png" type="Texture" id=4]
-[ext_resource path="res://Sprites/Achievements/OhHeyWhatDoesThisDo.png" type="Texture" id=5]
+[ext_resource path="res://Sprites/Spells/Entities/FireOrb.png" type="Texture" id=4]
 
 [sub_resource type="Animation" id=1]
 resource_name = "Fadein"
@@ -113,53 +112,7 @@ tracks/4/keys = {
 "values": [ true, false ]
 }
 
-[sub_resource type="StyleBoxFlat" id=4]
-bg_color = Color( 1, 0.372549, 0.341176, 1 )
-border_width_bottom = 2
-border_color = Color( 0.733333, 0.101961, 0, 1 )
-corner_radius_top_left = 2
-corner_radius_top_right = 2
-corner_radius_bottom_right = 2
-corner_radius_bottom_left = 2
-expand_margin_left = 3.0
-expand_margin_right = 3.0
-expand_margin_top = 1.0
-anti_aliasing = false
-
-[sub_resource type="StyleBoxFlat" id=5]
-bg_color = Color( 1, 0.541176, 0.266667, 1 )
-border_width_bottom = 2
-border_color = Color( 0.67451, 0.27451, 0, 1 )
-corner_radius_top_left = 2
-corner_radius_top_right = 2
-corner_radius_bottom_right = 2
-corner_radius_bottom_left = 2
-expand_margin_left = 3.0
-expand_margin_right = 3.0
-expand_margin_top = 1.0
-anti_aliasing = false
-
-[sub_resource type="StyleBoxEmpty" id=6]
-
-[sub_resource type="StyleBoxFlat" id=7]
-bg_color = Color( 0.945098, 0.219608, 0.0980392, 1 )
-border_width_bottom = 2
-border_color = Color( 0.607843, 0, 0, 1 )
-corner_radius_top_left = 2
-corner_radius_top_right = 2
-corner_radius_bottom_right = 2
-corner_radius_bottom_left = 2
-expand_margin_left = 3.0
-expand_margin_right = 3.0
-expand_margin_top = 1.0
-anti_aliasing = false
-
-[sub_resource type="DynamicFont" id=8]
-font_data = ExtResource( 2 )
-
-[sub_resource type="StyleBoxEmpty" id=9]
-
-[sub_resource type="StyleBoxFlat" id=10]
+[sub_resource type="StyleBoxFlat" id=6]
 content_margin_left = 5.0
 content_margin_right = 5.0
 content_margin_top = 5.0
@@ -176,26 +129,18 @@ corner_radius_bottom_right = 5
 corner_radius_bottom_left = 2
 anti_aliasing = false
 
-[sub_resource type="DynamicFont" id=11]
+[sub_resource type="DynamicFont" id=7]
 size = 12
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=12]
-size = 12
-font_data = ExtResource( 2 )
-
-[sub_resource type="DynamicFont" id=13]
-size = 12
-font_data = ExtResource( 2 )
-
-[sub_resource type="StyleBoxFlat" id=14]
+[sub_resource type="StyleBoxFlat" id=10]
 bg_color = Color( 0, 0, 0, 1 )
 
-[sub_resource type="DynamicFont" id=15]
+[sub_resource type="DynamicFont" id=11]
 size = 15
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=16]
+[sub_resource type="DynamicFont" id=12]
 size = 40
 font_data = ExtResource( 2 )
 
@@ -231,92 +176,6 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Buttons" type="VBoxContainer" parent="MainMenu"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -40.0
-margin_top = -0.5
-margin_right = 40.0
-margin_bottom = 77.5
-grow_horizontal = 2
-size_flags_horizontal = 0
-alignment = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="NewRun" type="Button" parent="MainMenu/Buttons"]
-margin_left = 15.0
-margin_right = 65.0
-margin_bottom = 18.0
-grow_horizontal = 2
-grow_vertical = 2
-focus_mode = 1
-size_flags_horizontal = 4
-custom_styles/hover = SubResource( 4 )
-custom_styles/pressed = SubResource( 5 )
-custom_styles/focus = SubResource( 6 )
-custom_styles/disabled = SubResource( 5 )
-custom_styles/normal = SubResource( 7 )
-custom_fonts/font = SubResource( 8 )
-text = "New run"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Settings" type="Button" parent="MainMenu/Buttons"]
-margin_top = 22.0
-margin_right = 80.0
-margin_bottom = 38.0
-grow_horizontal = 2
-grow_vertical = 2
-custom_styles/hover = SubResource( 9 )
-custom_styles/pressed = SubResource( 9 )
-custom_styles/focus = SubResource( 9 )
-custom_styles/disabled = SubResource( 9 )
-custom_styles/normal = SubResource( 9 )
-custom_fonts/font = SubResource( 8 )
-text = "Settings"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Achievements" type="Button" parent="MainMenu/Buttons"]
-margin_top = 42.0
-margin_right = 80.0
-margin_bottom = 58.0
-grow_horizontal = 2
-grow_vertical = 2
-custom_styles/hover = SubResource( 9 )
-custom_styles/pressed = SubResource( 9 )
-custom_styles/focus = SubResource( 9 )
-custom_styles/disabled = SubResource( 9 )
-custom_styles/normal = SubResource( 9 )
-custom_fonts/font = SubResource( 8 )
-text = "Achievements"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Exit" type="Button" parent="MainMenu/Buttons"]
-margin_top = 62.0
-margin_right = 80.0
-margin_bottom = 78.0
-grow_horizontal = 2
-grow_vertical = 2
-custom_styles/hover = SubResource( 9 )
-custom_styles/pressed = SubResource( 9 )
-custom_styles/focus = SubResource( 9 )
-custom_styles/disabled = SubResource( 9 )
-custom_styles/normal = SubResource( 9 )
-custom_fonts/font = SubResource( 8 )
-text = "Exit"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="LineEdit" type="LineEdit" parent="MainMenu"]
 anchor_left = 0.32
 anchor_top = 0.867
@@ -326,8 +185,8 @@ margin_left = -20.0
 margin_top = -0.0749964
 margin_right = 20.2
 margin_bottom = 0.100003
-custom_styles/normal = SubResource( 10 )
-custom_fonts/font = SubResource( 11 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 align = 1
 placeholder_text = "Leave empty for random seed"
@@ -335,445 +194,41 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Settings" type="VBoxContainer" parent="."]
-visible = false
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -59.5
-margin_top = -40.0
-margin_right = 59.5
-margin_bottom = 40.0
-custom_constants/separation = 0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="JoystickSensitivity" type="HSlider" parent="Settings"]
-margin_right = 119.0
-margin_bottom = 16.0
-min_value = 1.0
-max_value = 12.0
-value = 1.0
-
-[node name="Text" type="Label" parent="Settings/JoystickSensitivity"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -50.0
-margin_top = -22.0
-margin_right = 50.0
-margin_bottom = -8.0
-grow_horizontal = 2
-custom_fonts/font = SubResource( 12 )
-text = "Joystick Sensitivity: 12"
-align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="VisualizeDamage" type="CheckBox" parent="Settings"]
-margin_top = 16.0
-margin_right = 119.0
-margin_bottom = 40.0
-custom_fonts/font = SubResource( 12 )
-text = "Visualize Damage"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="InstantDeathButton" type="CheckBox" parent="Settings"]
-margin_top = 40.0
-margin_right = 119.0
-margin_bottom = 64.0
-custom_fonts/font = SubResource( 12 )
-text = "Instant Death Button"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Controls" type="Button" parent="Settings"]
-margin_top = 64.0
-margin_right = 119.0
-margin_bottom = 80.0
-grow_horizontal = 2
-grow_vertical = 2
-custom_styles/hover = SubResource( 9 )
-custom_styles/pressed = SubResource( 9 )
-custom_styles/focus = SubResource( 9 )
-custom_styles/disabled = SubResource( 9 )
-custom_styles/normal = SubResource( 9 )
-custom_fonts/font = SubResource( 8 )
-text = "Controls"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Back" type="Button" parent="Settings"]
-margin_top = 80.0
-margin_right = 119.0
-margin_bottom = 96.0
-grow_horizontal = 2
-grow_vertical = 2
-custom_styles/hover = SubResource( 9 )
-custom_styles/pressed = SubResource( 9 )
-custom_styles/focus = SubResource( 9 )
-custom_styles/disabled = SubResource( 9 )
-custom_styles/normal = SubResource( 9 )
-custom_fonts/font = SubResource( 8 )
-text = "Back"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Controls" type="VBoxContainer" parent="."]
-visible = false
-anchor_top = 0.5
+[node name="MenuContainer" type="HBoxContainer" parent="."]
+anchor_top = 0.68
 anchor_right = 1.0
-anchor_bottom = 0.5
-margin_top = -96.0
-margin_bottom = 96.0
+anchor_bottom = 0.764
+margin_top = -1.60933e-06
+margin_bottom = 0.0999869
 grow_horizontal = 2
-custom_constants/separation = 0
+size_flags_horizontal = 7
+custom_constants/separation = 12
+alignment = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Heal" type="Button" parent="Controls"]
-margin_right = 400.0
-margin_bottom = 16.0
-grow_horizontal = 2
-grow_vertical = 2
-custom_styles/hover = SubResource( 9 )
-custom_styles/pressed = SubResource( 9 )
-custom_styles/focus = SubResource( 9 )
-custom_styles/disabled = SubResource( 9 )
-custom_styles/normal = SubResource( 9 )
-custom_fonts/font = SubResource( 8 )
-text = "Heal"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Grab" type="Button" parent="Controls"]
-margin_top = 16.0
-margin_right = 400.0
-margin_bottom = 32.0
-grow_horizontal = 2
-grow_vertical = 2
-custom_styles/hover = SubResource( 9 )
-custom_styles/pressed = SubResource( 9 )
-custom_styles/focus = SubResource( 9 )
-custom_styles/disabled = SubResource( 9 )
-custom_styles/normal = SubResource( 9 )
-custom_fonts/font = SubResource( 8 )
-text = "Grab"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Shoot" type="Button" parent="Controls"]
-margin_top = 32.0
-margin_right = 400.0
-margin_bottom = 48.0
-grow_horizontal = 2
-grow_vertical = 2
-custom_styles/hover = SubResource( 9 )
-custom_styles/pressed = SubResource( 9 )
-custom_styles/focus = SubResource( 9 )
-custom_styles/disabled = SubResource( 9 )
-custom_styles/normal = SubResource( 9 )
-custom_fonts/font = SubResource( 8 )
-text = "Shoot"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Drop" type="Button" parent="Controls"]
-margin_top = 48.0
-margin_right = 400.0
-margin_bottom = 64.0
-grow_horizontal = 2
-grow_vertical = 2
-custom_styles/hover = SubResource( 9 )
-custom_styles/pressed = SubResource( 9 )
-custom_styles/focus = SubResource( 9 )
-custom_styles/disabled = SubResource( 9 )
-custom_styles/normal = SubResource( 9 )
-custom_fonts/font = SubResource( 8 )
-text = "Drop"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Up" type="Button" parent="Controls"]
-margin_top = 64.0
-margin_right = 400.0
-margin_bottom = 80.0
-grow_horizontal = 2
-grow_vertical = 2
-custom_styles/hover = SubResource( 9 )
-custom_styles/pressed = SubResource( 9 )
-custom_styles/focus = SubResource( 9 )
-custom_styles/disabled = SubResource( 9 )
-custom_styles/normal = SubResource( 9 )
-custom_fonts/font = SubResource( 8 )
-text = "Up"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Down" type="Button" parent="Controls"]
-margin_top = 80.0
-margin_right = 400.0
-margin_bottom = 96.0
-grow_horizontal = 2
-grow_vertical = 2
-custom_styles/hover = SubResource( 9 )
-custom_styles/pressed = SubResource( 9 )
-custom_styles/focus = SubResource( 9 )
-custom_styles/disabled = SubResource( 9 )
-custom_styles/normal = SubResource( 9 )
-custom_fonts/font = SubResource( 8 )
-text = "Down"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Left" type="Button" parent="Controls"]
-margin_top = 96.0
-margin_right = 400.0
-margin_bottom = 112.0
-grow_horizontal = 2
-grow_vertical = 2
-custom_styles/hover = SubResource( 9 )
-custom_styles/pressed = SubResource( 9 )
-custom_styles/focus = SubResource( 9 )
-custom_styles/disabled = SubResource( 9 )
-custom_styles/normal = SubResource( 9 )
-custom_fonts/font = SubResource( 8 )
-text = "Left"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Right" type="Button" parent="Controls"]
-margin_top = 112.0
-margin_right = 400.0
-margin_bottom = 128.0
-grow_horizontal = 2
-grow_vertical = 2
-custom_styles/hover = SubResource( 9 )
-custom_styles/pressed = SubResource( 9 )
-custom_styles/focus = SubResource( 9 )
-custom_styles/disabled = SubResource( 9 )
-custom_styles/normal = SubResource( 9 )
-custom_fonts/font = SubResource( 8 )
-text = "Right"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Jump" type="Button" parent="Controls"]
-margin_top = 128.0
-margin_right = 400.0
-margin_bottom = 144.0
-grow_horizontal = 2
-grow_vertical = 2
-custom_styles/hover = SubResource( 9 )
-custom_styles/pressed = SubResource( 9 )
-custom_styles/focus = SubResource( 9 )
-custom_styles/disabled = SubResource( 9 )
-custom_styles/normal = SubResource( 9 )
-custom_fonts/font = SubResource( 8 )
-text = "Jump"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Info" type="Button" parent="Controls"]
-margin_top = 144.0
-margin_right = 400.0
-margin_bottom = 160.0
-grow_horizontal = 2
-grow_vertical = 2
-custom_styles/hover = SubResource( 9 )
-custom_styles/pressed = SubResource( 9 )
-custom_styles/focus = SubResource( 9 )
-custom_styles/disabled = SubResource( 9 )
-custom_styles/normal = SubResource( 9 )
-custom_fonts/font = SubResource( 8 )
-text = "Extra Info"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Death" type="Button" parent="Controls"]
-margin_top = 160.0
-margin_right = 400.0
-margin_bottom = 176.0
-grow_horizontal = 2
-grow_vertical = 2
-custom_styles/hover = SubResource( 9 )
-custom_styles/pressed = SubResource( 9 )
-custom_styles/focus = SubResource( 9 )
-custom_styles/disabled = SubResource( 9 )
-custom_styles/normal = SubResource( 9 )
-custom_fonts/font = SubResource( 8 )
-text = "Instant Death"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Reset" type="Button" parent="Controls"]
-margin_top = 176.0
-margin_right = 400.0
-margin_bottom = 192.0
-grow_horizontal = 2
-grow_vertical = 2
-custom_styles/hover = SubResource( 9 )
-custom_styles/pressed = SubResource( 9 )
-custom_styles/focus = SubResource( 9 )
-custom_styles/disabled = SubResource( 9 )
-custom_styles/normal = SubResource( 9 )
-custom_fonts/font = SubResource( 8 )
-text = "Reset To Default"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Back" type="Button" parent="Controls"]
-margin_top = 192.0
-margin_right = 400.0
-margin_bottom = 208.0
-grow_horizontal = 2
-grow_vertical = 2
-custom_styles/hover = SubResource( 9 )
-custom_styles/pressed = SubResource( 9 )
-custom_styles/focus = SubResource( 9 )
-custom_styles/disabled = SubResource( 9 )
-custom_styles/normal = SubResource( 9 )
-custom_fonts/font = SubResource( 8 )
-text = "Back"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Achievements" type="Control" parent="."]
-visible = false
-anchor_left = 0.042
-anchor_top = 0.078
-anchor_right = 0.957
-anchor_bottom = 0.922
-margin_left = 0.199999
-margin_top = -0.0500004
-margin_right = 0.199993
-margin_bottom = 0.0499886
-grow_horizontal = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Back" type="Button" parent="Achievements"]
-margin_left = -17.0
-margin_top = 180.0
-margin_right = 383.0
-margin_bottom = 196.0
-grow_horizontal = 2
-grow_vertical = 2
-custom_styles/hover = SubResource( 9 )
-custom_styles/pressed = SubResource( 9 )
-custom_styles/focus = SubResource( 9 )
-custom_styles/disabled = SubResource( 9 )
-custom_styles/normal = SubResource( 9 )
-custom_fonts/font = SubResource( 8 )
-text = "Back"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Achievos" type="VBoxContainer" parent="Achievements"]
-anchor_right = 1.0
-anchor_bottom = 0.889
-margin_bottom = 0.0900022
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="OhWoah" type="HBoxContainer" parent="Achievements/Achievos"]
-margin_right = 366.0
-margin_bottom = 32.0
-
-[node name="TextureRect" type="TextureRect" parent="Achievements/Achievos/OhWoah"]
-margin_right = 32.0
-margin_bottom = 32.0
-rect_min_size = Vector2( 32, 32 )
-size_flags_horizontal = 0
-size_flags_vertical = 0
+[node name="Ball" type="TextureRect" parent="."]
+margin_left = 250.0
+margin_top = 137.0
+margin_right = 258.0
+margin_bottom = 145.0
 texture = ExtResource( 4 )
-expand = true
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Achievements/Achievos/OhWoah"]
-margin_left = 36.0
-margin_right = 167.0
-margin_bottom = 32.0
-
-[node name="Label" type="Label" parent="Achievements/Achievos/OhWoah/VBoxContainer"]
-margin_right = 131.0
-margin_bottom = 16.0
-custom_fonts/font = SubResource( 8 )
-text = "Oh Woah Whats This?"
-
-[node name="Label2" type="Label" parent="Achievements/Achievos/OhWoah/VBoxContainer"]
-margin_top = 20.0
-margin_right = 131.0
-margin_bottom = 32.0
-custom_fonts/font = SubResource( 13 )
-text = "Be killed by your own spell"
-
-[node name="OhHey" type="HBoxContainer" parent="Achievements/Achievos"]
-margin_top = 36.0
-margin_right = 366.0
-margin_bottom = 68.0
-
-[node name="TextureRect" type="TextureRect" parent="Achievements/Achievos/OhHey"]
-margin_right = 32.0
-margin_bottom = 32.0
-rect_min_size = Vector2( 32, 32 )
-size_flags_horizontal = 0
-size_flags_vertical = 0
-texture = ExtResource( 5 )
-expand = true
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Achievements/Achievos/OhHey"]
-margin_left = 36.0
-margin_right = 215.0
-margin_bottom = 32.0
-
-[node name="Label" type="Label" parent="Achievements/Achievos/OhHey/VBoxContainer"]
-margin_right = 179.0
-margin_bottom = 16.0
-custom_fonts/font = SubResource( 8 )
-text = "Oh Hey What Does This Do"
-
-[node name="Label2" type="Label" parent="Achievements/Achievos/OhHey/VBoxContainer"]
-margin_top = 20.0
-margin_right = 179.0
-margin_bottom = 32.0
-custom_fonts/font = SubResource( 13 )
-text = "Be killed by your own spell's side effects"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Thing" type="Panel" parent="."]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_styles/panel = SubResource( 14 )
+custom_styles/panel = SubResource( 10 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Image" type="Control" parent="."]
+visible = false
 modulate = Color( 1, 1, 1, 0 )
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -789,7 +244,7 @@ margin_left = -49.0
 margin_top = 203.0
 margin_right = 50.0
 margin_bottom = -8.0
-custom_fonts/font = SubResource( 15 )
+custom_fonts/font = SubResource( 11 )
 text = "Made With Godot"
 align = 1
 __meta__ = {
@@ -805,7 +260,7 @@ margin_left = -212.0
 margin_top = -18.5
 margin_right = 212.0
 margin_bottom = 18.5
-custom_fonts/font = SubResource( 16 )
+custom_fonts/font = SubResource( 12 )
 text = "SadBlockGames"
 align = 1
 autowrap = true
@@ -814,15 +269,3 @@ __meta__ = {
 }
 
 [connection signal="animation_finished" from="Animations" to="." method="_on_animation_finished"]
-[connection signal="pressed" from="MainMenu/Buttons/NewRun" to="." method="_on_NewRun_pressed"]
-[connection signal="pressed" from="MainMenu/Buttons/Settings" to="." method="_on_Settings_pressed"]
-[connection signal="pressed" from="MainMenu/Buttons/Achievements" to="." method="_on_Achievements_pressed"]
-[connection signal="pressed" from="MainMenu/Buttons/Exit" to="." method="_on_Exit_pressed"]
-[connection signal="value_changed" from="Settings/JoystickSensitivity" to="." method="_on_JoystickSensitivity_value_changed"]
-[connection signal="pressed" from="Settings/VisualizeDamage" to="." method="_on_VisualizeDamage_pressed"]
-[connection signal="pressed" from="Settings/InstantDeathButton" to="." method="_on_InstantDeathButton_pressed"]
-[connection signal="pressed" from="Settings/Controls" to="." method="_on_Controls_pressed"]
-[connection signal="pressed" from="Settings/Back" to="." method="_on_Back_pressed"]
-[connection signal="pressed" from="Controls/Reset" to="." method="_on_Reset_pressed"]
-[connection signal="pressed" from="Controls/Back" to="." method="_on_BackControl_pressed"]
-[connection signal="pressed" from="Achievements/Back" to="." method="_on_Back_pressed"]
