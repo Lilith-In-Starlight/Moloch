@@ -169,5 +169,3 @@ func _on_Reset_pressed() -> void:
 func _on_Achievements_pressed() -> void:
 	$Achievements.visible = true
 	$MainMenu.visible = false
-	$Achievements/Achievos/OhHey.visible = Config.achievements["fun1"]
-	$Achievements/Achievos/OhWoah.visible = Config.achievements["fun2"]

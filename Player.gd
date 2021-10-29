@@ -164,7 +164,9 @@ func _process(delta: float) -> void:
 			get_parent().add_child(n)
 		send_message("Your insides feel like they're melting")
 	
+	# Achievements
 	if dead and not was_dead:
+		Config.give_achievement("first_of_many")
 		if health.cause_of_death != health.DEATHS.BLED and health.cause_of_death != -1:
 			if health.damaged_from_side_effect:
 				died_from_own_cast = true
@@ -180,6 +182,9 @@ func _process(delta: float) -> void:
 				died_from_own_spell = true
 				Config.give_achievement("fun2")
 		was_dead = true
+	
+	if health.total_broken_appendages >= 4:
+		Config.give_achievement("oof_ouch")
 
 
 func _physics_process(delta: float) -> void:

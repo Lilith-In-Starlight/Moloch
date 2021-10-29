@@ -22,6 +22,7 @@ enum DEATHS {
 
 var moving_appendages := 2
 var broken_moving_appendages := 0
+var total_broken_appendages := 0
 
 var needs_blood := true
 var max_blood := 1.0
@@ -159,4 +160,5 @@ func break_legs():
 	var d := min(broken_moving_appendages + brkn_legs, 2) - broken_moving_appendages
 	if d > 0:
 		emit_signal("broken_leg", d)
+		total_broken_appendages += d
 	broken_moving_appendages = min(broken_moving_appendages + brkn_legs, 2)

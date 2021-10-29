@@ -1,10 +1,9 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://Sprites/Menus/logo.png" type="Texture" id=1]
 [ext_resource path="res://dpcomic.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://MainMenu.gd" type="Script" id=3]
-[ext_resource path="res://Sprites/Achievements/OhWoahWhatsThis.png" type="Texture" id=4]
-[ext_resource path="res://Sprites/Achievements/OhHeyWhatDoesThisDo.png" type="Texture" id=5]
+[ext_resource path="res://HUD/AchievementListElement.tscn" type="PackedScene" id=4]
 
 [sub_resource type="Animation" id=1]
 resource_name = "Fadein"
@@ -184,18 +183,14 @@ font_data = ExtResource( 2 )
 size = 12
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=13]
-size = 12
-font_data = ExtResource( 2 )
-
-[sub_resource type="StyleBoxFlat" id=14]
+[sub_resource type="StyleBoxFlat" id=13]
 bg_color = Color( 0, 0, 0, 1 )
 
-[sub_resource type="DynamicFont" id=15]
+[sub_resource type="DynamicFont" id=14]
 size = 15
 font_data = ExtResource( 2 )
 
-[sub_resource type="DynamicFont" id=16]
+[sub_resource type="DynamicFont" id=15]
 size = 40
 font_data = ExtResource( 2 )
 
@@ -702,73 +697,29 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="OhWoah" type="HBoxContainer" parent="Achievements/Achievos"]
-margin_right = 366.0
-margin_bottom = 32.0
+[node name="OhWoah" parent="Achievements/Achievos" instance=ExtResource( 4 )]
+achievement = "fun1"
 
-[node name="TextureRect" type="TextureRect" parent="Achievements/Achievos/OhWoah"]
-margin_right = 32.0
-margin_bottom = 32.0
-rect_min_size = Vector2( 32, 32 )
-size_flags_horizontal = 0
-size_flags_vertical = 0
-texture = ExtResource( 4 )
-expand = true
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Achievements/Achievos/OhWoah"]
-margin_left = 36.0
-margin_right = 167.0
-margin_bottom = 32.0
-
-[node name="Label" type="Label" parent="Achievements/Achievos/OhWoah/VBoxContainer"]
-margin_right = 131.0
-margin_bottom = 16.0
-custom_fonts/font = SubResource( 8 )
-text = "Oh Woah Whats This?"
-
-[node name="Label2" type="Label" parent="Achievements/Achievos/OhWoah/VBoxContainer"]
-margin_top = 20.0
-margin_right = 131.0
-margin_bottom = 32.0
-custom_fonts/font = SubResource( 13 )
-text = "Be killed by your own spell"
-
-[node name="OhHey" type="HBoxContainer" parent="Achievements/Achievos"]
+[node name="OhWoah2" parent="Achievements/Achievos" instance=ExtResource( 4 )]
 margin_top = 36.0
-margin_right = 366.0
 margin_bottom = 68.0
+achievement = "fun2"
 
-[node name="TextureRect" type="TextureRect" parent="Achievements/Achievos/OhHey"]
-margin_right = 32.0
-margin_bottom = 32.0
-rect_min_size = Vector2( 32, 32 )
-size_flags_horizontal = 0
-size_flags_vertical = 0
-texture = ExtResource( 5 )
-expand = true
+[node name="OhWoah3" parent="Achievements/Achievos" instance=ExtResource( 4 )]
+margin_top = 72.0
+margin_bottom = 104.0
+achievement = "oof_ouch"
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Achievements/Achievos/OhHey"]
-margin_left = 36.0
-margin_right = 215.0
-margin_bottom = 32.0
-
-[node name="Label" type="Label" parent="Achievements/Achievos/OhHey/VBoxContainer"]
-margin_right = 179.0
-margin_bottom = 16.0
-custom_fonts/font = SubResource( 8 )
-text = "Oh Hey What Does This Do"
-
-[node name="Label2" type="Label" parent="Achievements/Achievos/OhHey/VBoxContainer"]
-margin_top = 20.0
-margin_right = 179.0
-margin_bottom = 32.0
-custom_fonts/font = SubResource( 13 )
-text = "Be killed by your own spell's side effects"
+[node name="OhWoah4" parent="Achievements/Achievos" instance=ExtResource( 4 )]
+margin_top = 108.0
+margin_bottom = 140.0
+achievement = "first_of_many"
 
 [node name="Thing" type="Panel" parent="."]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_styles/panel = SubResource( 14 )
+custom_styles/panel = SubResource( 13 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -789,7 +740,7 @@ margin_left = -49.0
 margin_top = 203.0
 margin_right = 50.0
 margin_bottom = -8.0
-custom_fonts/font = SubResource( 15 )
+custom_fonts/font = SubResource( 14 )
 text = "Made With Godot"
 align = 1
 __meta__ = {
@@ -805,7 +756,7 @@ margin_left = -212.0
 margin_top = -18.5
 margin_right = 212.0
 margin_bottom = 18.5
-custom_fonts/font = SubResource( 16 )
+custom_fonts/font = SubResource( 15 )
 text = "SadBlockGames"
 align = 1
 autowrap = true
