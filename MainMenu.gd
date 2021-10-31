@@ -10,6 +10,10 @@ class MenuSetting:
 	var value := 0
 	var enabled := false
 	var slider := false
+	var config := ""
+
+
+const MolochTheme := preload("res://Themes/Theme.tres")
 
 onready var Animations := $Animations
 onready var SeedLineEdit := $MainMenu/LineEdit
@@ -21,6 +25,8 @@ var menus := {}
 
 var current_menu_pos := 0
 
+var viewing_achievements := false
+
 
 func _ready():
 	menus = {
@@ -30,54 +36,60 @@ func _ready():
 			make_menu_option("Exit", "", funcref(get_tree(), "quit")),
 			],
 		"settings": [
-			make_menu_setting("Death Button", Config.instant_death_button),
-			make_menu_setting("Damage Colors", Config.damage_visuals),
+			make_menu_setting("Death Button", Config.instant_death_button, "idb"),
+			make_menu_setting("Damage Colors", Config.damage_visuals, "dv"),
+			make_menu_setting("Joystick Sensitivity", Config.joystick_sensitivity, "joys"),
 			make_menu_option("Back", "main"),
 			]
 	}
 	set_menu("main")
 	Animations.play("License")
-	
 
 
 func _process(delta: float) -> void:
-	$Ball.rect_position = $MenuContainer.get_child(current_menu_pos).rect_global_position - Vector2(0, 12)
+	$Ball.rect_position = $MenuContainer.get_child(current_menu_pos).rect_global_position - Vector2(12, -2)
 	Config.instant_death_button = menus["settings"][0].enabled
 	Config.damage_visuals = menus["settings"][1].enabled
+	
+	$GridContainer.visible = viewing_achievements
+	$MainMenu.visible = !viewing_achievements
+	$MenuContainer.visible = !viewing_achievements
+	$Ball.visible = !viewing_achievements
 
 
 func _input(event: InputEvent) -> void:
 	if (event is InputEventKey or event is InputEventJoypadButton) and event.is_pressed():
+		var current_selection = menus[current_menu][current_menu_pos]
 		var action := ""
 		for i in ["up", "down", "left", "right", "jump"]:
 			for j in ["", "scroll", "scroll_"]:
 				if InputMap.has_action(j + i) and Input.is_action_just_pressed(j + i):
 					action = i
 		match action:
-			"left":
+			"up":
 				current_menu_pos -= 1
 				if current_menu_pos < 0:
 					current_menu_pos = menus[current_menu].size()-1
-			"right":
+			"down":
 				current_menu_pos = (current_menu_pos + 1) % menus[current_menu].size()
-			"jump", "down":
-				if menus[current_menu][current_menu_pos] is MenuOption:
-					var menu_option: MenuOption = menus[current_menu][current_menu_pos]
-					if menu_option.menu_dest != "":
-						set_menu(menu_option.menu_dest)
+			"jump":
+				if current_selection is MenuOption:
+					if current_selection.menu_dest != "":
+						set_menu(current_selection.menu_dest)
 						current_menu_pos = 0
-					elif menu_option.func_ref != null:
-						menu_option.func_ref.call_func()
+					elif current_selection.func_ref != null:
+						current_selection.func_ref.call_func()
 				else:
-					var menu_setting: MenuSetting = menus[current_menu][current_menu_pos]
-					print(menu_setting.enabled)
-					if menu_setting.slider:
-						pass
-					else:
-						menu_setting.enabled = !menu_setting.enabled
-						$MenuContainer.get_child(current_menu_pos).pressed = menu_setting.enabled
-					Config.save_config()
-	
+					if not current_selection.slider:
+						current_selection.enabled = !current_selection.enabled
+						$MenuContainer.get_child(current_menu_pos).pressed = current_selection.enabled
+						change_config_setting(current_selection.config, current_selection)
+			"left":
+				if current_selection is MenuSetting:
+					slide($MenuContainer.get_child(current_menu_pos), current_selection, -1)
+			"right":
+				if current_selection is MenuSetting:
+					slide($MenuContainer.get_child(current_menu_pos), current_selection, 1)
 
 func set_menu(menu:String) -> void:
 	current_menu = menu
@@ -87,18 +99,21 @@ func set_menu(menu:String) -> void:
 		if i is MenuOption:
 			var new_label := Label.new()
 			new_label.text = i.option_name
+			new_label.theme = MolochTheme
 			$MenuContainer.add_child(new_label)
+			new_label.align = Label.ALIGN_CENTER
 		elif i is MenuSetting:
 			if i.slider:
-				var new_slider := Slider.new()
-				new_slider.text = i.setting_name
-				new_slider.value = i.value
-				new_slider.max_value = 12
-				$MenuContainer.add_child(new_slider)
+				var new_label := Label.new()
+				new_label.text = i.setting_name + ": " + str(i.value)
+				new_label.theme = MolochTheme
+				$MenuContainer.add_child(new_label)
+				new_label.align = Label.ALIGN_CENTER
 			else:
 				var new_check := CheckBox.new()
 				new_check.text = i.setting_name
 				new_check.pressed = i.enabled
+				new_check.theme = MolochTheme
 				$MenuContainer.add_child(new_check)
 
 
@@ -133,9 +148,10 @@ func make_menu_option(n:String, m:="",f:FuncRef=null) -> MenuOption:
 	return new_option
 
 
-func make_menu_setting(n:String, v) -> MenuSetting:
+func make_menu_setting(n:String, v, config:String) -> MenuSetting:
 	var new_option := MenuSetting.new()
 	new_option.setting_name = n
+	new_option.config = config
 	if v is int:
 		new_option.value = v
 		new_option.slider = true
@@ -143,3 +159,21 @@ func make_menu_setting(n:String, v) -> MenuSetting:
 		new_option.enabled = v
 		new_option.slider = false
 	return new_option
+
+
+func slide(Child:Label, menu_setting:MenuSetting, amount:int) -> void:
+	if menu_setting.slider:
+		menu_setting.value = clamp(menu_setting.value + amount, 0, 12)
+		Child.text = menu_setting.setting_name + ": " + str(menu_setting.value)
+		change_config_setting(menu_setting.config, menu_setting)
+
+
+func change_config_setting(config_setting:String, setting:MenuSetting):
+	match config_setting:
+		"idb":
+			Config.instant_death_button = setting.enabled
+		"dv":
+			Config.damage_visuals = setting.enabled
+		"joys":
+			Config.joystick_sensitivity = setting.value
+	Config.save_config()
