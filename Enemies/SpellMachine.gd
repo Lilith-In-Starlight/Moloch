@@ -8,6 +8,7 @@ enum STATES {
 }
 
 var Player :KinematicBody2D
+var Map :TileMap
 
 var state :int = STATES.IDLE
 var speed := Vector2(0, 0)
@@ -29,6 +30,7 @@ func _ready():
 	noise.seed = randi()
 	health.connect("holes_poked", self, "_on_holes_poked")
 	health.connect("was_damaged",self, "_on_damaged")
+	Map = get_tree().get_nodes_in_group("World")[0]
 	Player = get_tree().get_nodes_in_group("Player")[0]
 	if Player.position.distance_to(position) < 500:
 		queue_free()
@@ -47,11 +49,14 @@ func _physics_process(delta):
 	var primordial_termor := Vector2(noise.get_noise_2d(position.x, OS.get_ticks_msec()/300.0), noise.get_noise_2d(position.y, OS.get_ticks_msec()/300.0))*30
 	if (health.temperature > 45.0 and health.temperature <= 60.0) or health.soul < 0.5:
 		primordial_termor = Vector2(noise.get_noise_2d(position.x, OS.get_ticks_msec()/3.0), noise.get_noise_2d(position.y, OS.get_ticks_msec()/3.0))*30
+	# Death
 	if health.temperature > 60.0 or health.soul <= 0.0 or health.poked_holes > 3:
 		if health.poked_holes > 3 or health.temperature > 60.0:
 			var n:Area2D = preload("res://Particles/Explosion.tscn").instance()
 			n.position = position
 			get_parent().add_child(n)
+		if randf() < 0.1:
+			Map.summon_spell(spell, position, speed)
 		queue_free()
 	match state:
 		STATES.IDLE:

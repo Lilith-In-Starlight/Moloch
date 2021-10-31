@@ -97,6 +97,8 @@ func health_object() -> Flesh:
 
 
 func health_died():
+	if randf() < 0.1:
+		Map.summon_wand(wand, position, speed)
 	queue_free()
 
 
