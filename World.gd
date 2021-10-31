@@ -140,28 +140,7 @@ func _ready():
 func _process(delta):
 	if fill_x >= max_point.x:
 		print("Step 6: Adding enemies")
-		var added := 0
-		for a in areas:
-			for i in Items.WorldRNG.randi()%3:
-				if Items.WorldRNG.randf()<0.6:
-					var pos :Vector2 = (a.position + Vector2(Items.WorldRNG.randf(), Items.WorldRNG.randf())*a.size)
-					var n := preload("res://Enemies/MagicDrone.tscn").instance()
-					n.position = pos
-					add_child(n)
-					added += 1
-				if Items.WorldRNG.randf()<0.3:
-					var pos :Vector2 = (a.position + Vector2(Items.WorldRNG.randf(), Items.WorldRNG.randf())*a.size)
-					var n := preload("res://Enemies/SpellMachine.tscn").instance()
-					n.position = pos
-					add_child(n)
-					added += 1
-				if Items.WorldRNG.randf()<0.1:
-					var pos :Vector2 = (a.position + Vector2(Items.WorldRNG.randf(), Items.WorldRNG.randf())*a.size)
-					var n := preload("res://Enemies/Incomplete.tscn").instance()
-					n.position = pos
-					add_child(n)
-					added += 1
-		print("Added ", added, " enemies")
+		add_enemies()
 		emit_signal("generated_world")
 		if Items.level == 1:
 			Items.run_start_time = OS.get_ticks_msec()
@@ -169,7 +148,34 @@ func _process(delta):
 		set_process(false)
 	else:
 		fill_empty_space()
-		
+
+func add_enemies():
+	var enemies = []
+	for area in areas:
+		for i in Items.WorldRNG.randi()%3:
+			enemies.append(add_enemy_with_chance(area, preload("res://Enemies/MagicDrone.tscn"), 0.6))
+			enemies.append(add_enemy_with_chance(area, preload("res://Enemies/SpellMachine.tscn"), 0.3))
+			enemies.append(add_enemy_with_chance(area, preload("res://Enemies/Incomplete.tscn"), 0.1))
+	remove_nulls(enemies)
+	print("Added ", len(enemies), " enemies")
+
+# Needs to be moved to utils or somewhere
+func remove_nulls(array: Array):
+	for i in array.count(null):
+		array.erase(null)
+
+# Also these 2 are obviously area's or room's methods
+func add_enemy_with_chance(area: Rect2, packed_scene: PackedScene, chance: float) -> Node2D:
+	if Items.WorldRNG.randf() < chance:
+		return add_enemy(area,packed_scene)
+	return null
+
+func add_enemy(area: Rect2, packed_scene: PackedScene) -> Node2D:
+	var pos :Vector2 = (area.position + Vector2(Items.WorldRNG.randf(), Items.WorldRNG.randf())*area.size)
+	var node:Node2D = packed_scene.instance()
+	node.position = pos
+	call_deferred("add_child",node)
+	return node
 
 func expand_through_door(element, room) -> _Room:
 	var res: _Room = null
