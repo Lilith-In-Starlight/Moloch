@@ -48,7 +48,8 @@ func _ready():
 
 
 func _process(delta: float) -> void:
-	$Ball.rect_position = $MenuContainer.get_child(current_menu_pos).rect_global_position - Vector2(12, -2)
+	var menu_element:Control = $MenuContainer.get_child(current_menu_pos)
+	$Ball.rect_position = menu_element.rect_global_position - Vector2(12,  -menu_element.rect_size.y / 4.0)
 	Config.instant_death_button = menus["settings"][0].enabled
 	Config.damage_visuals = menus["settings"][1].enabled
 	
@@ -84,9 +85,7 @@ func _input(event: InputEvent) -> void:
 							current_selection.func_ref.call_func()
 					else:
 						if not current_selection.slider:
-							current_selection.enabled = !current_selection.enabled
-							$MenuContainer.get_child(current_menu_pos).pressed = current_selection.enabled
-							change_config_setting(current_selection.config, current_selection)
+							toggle($MenuContainer.get_child(current_menu_pos), current_selection)
 				"left":
 					if current_selection is MenuSetting:
 						slide($MenuContainer.get_child(current_menu_pos), current_selection, -1)
@@ -97,29 +96,41 @@ func _input(event: InputEvent) -> void:
 			viewing_achievements = false
 
 func set_menu(menu:String) -> void:
+	current_menu_pos = 0
 	current_menu = menu
 	for i in $MenuContainer.get_children():
 		i.queue_free()
+	var count := -1
 	for i in menus[menu]:
+		count += 1
 		if i is MenuOption:
-			var new_label := Label.new()
-			new_label.text = i.option_name
-			new_label.theme = MolochTheme
-			$MenuContainer.add_child(new_label)
-			new_label.align = Label.ALIGN_CENTER
+			var new_button := ToolButton.new()
+			new_button.text = i.option_name
+			new_button.theme = MolochTheme
+			$MenuContainer.add_child(new_button)
+			new_button.align = ToolButton.ALIGN_CENTER
+			new_button.connect("mouse_entered", self, "set_selection_to", [count])
+			if i.menu_dest != "":
+				new_button.connect("pressed", self, "set_menu", [i.menu_dest])
+			else:
+				new_button.connect("pressed", i.func_ref, "call_func")
 		elif i is MenuSetting:
 			if i.slider:
-				var new_label := Label.new()
-				new_label.text = i.setting_name + ": " + str(i.value)
-				new_label.theme = MolochTheme
-				$MenuContainer.add_child(new_label)
-				new_label.align = Label.ALIGN_CENTER
+				var new_button := ToolButton.new()
+				new_button.text = i.setting_name + ": " + str(i.value)
+				new_button.theme = MolochTheme
+				$MenuContainer.add_child(new_button)
+				new_button.align = ToolButton.ALIGN_CENTER
+				new_button.connect("mouse_entered", self, "set_selection_to", [count])
+				new_button.connect("pressed", self, "slide", [new_button, i, 1])
 			else:
 				var new_check := CheckBox.new()
 				new_check.text = i.setting_name
 				new_check.pressed = i.enabled
 				new_check.theme = MolochTheme
 				$MenuContainer.add_child(new_check)
+				new_check.connect("mouse_entered", self, "set_selection_to", [count])
+				new_check.connect("pressed", self, "toggle", [new_check, i])
 
 
 func start_new_run() -> void:
@@ -166,9 +177,18 @@ func make_menu_setting(n:String, v, config:String) -> MenuSetting:
 	return new_option
 
 
-func slide(Child:Label, menu_setting:MenuSetting, amount:int) -> void:
+func toggle(Child:CheckBox, menu_setting:MenuSetting):
+	menu_setting.enabled = !menu_setting.enabled
+	Child.pressed = menu_setting.enabled
+	change_config_setting(menu_setting.config, menu_setting)
+
+
+func slide(Child:ToolButton, menu_setting:MenuSetting, amount:int) -> void:
 	if menu_setting.slider:
-		menu_setting.value = clamp(menu_setting.value + amount, 0, 12)
+		menu_setting.value = menu_setting.value + amount
+		if menu_setting.value < 0:
+			menu_setting.value = 12
+		menu_setting.value %= 13
 		Child.text = menu_setting.setting_name + ": " + str(menu_setting.value)
 		change_config_setting(menu_setting.config, menu_setting)
 
@@ -186,3 +206,7 @@ func change_config_setting(config_setting:String, setting:MenuSetting):
 
 func show_achievements():
 	viewing_achievements = true
+
+
+func set_selection_to(value:int) -> void:
+	current_menu_pos = value
