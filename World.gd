@@ -23,14 +23,14 @@ var max_point :Vector2
 var min_point :Vector2
 
 var fill_x := 0
-var x_fill_step := 3
-var filling_done = false
-
+var fill_y := 0
 var last_frame_msecs :int
+var iterations := 3
 
 var rooms := 0
 var generated_end_room := false
 var treasure_rooms := 0
+
 
 class _Room:
 		var scene = null
@@ -129,56 +129,25 @@ func _ready():
 	min_point /= 8.0
 	min_point -= Vector2(64, 32)
 	fill_x = min_point.x
+	fill_y = min_point.y
 	print("Step 5: Filling empty space from", min_point, " to ", max_point)
 	print("Area: ", (max_point.x - min_point.x) * (max_point.y - min_point.y))
 	if (max_point.x - min_point.x) * (max_point.y - min_point.y) > 350000:
 		get_tree().change_scene("res://Game.tscn")
 	else:
-		fill_empty_space_chunk()
+		fill_empty_space()
 
 func _process(delta):
-	if filling_done:
-		finalize_world()
+	if fill_x >= max_point.x:
+		print("Step 6: Adding enemies")
+		add_enemies()
+		emit_signal("generated_world")
+		if Items.level == 1:
+			Items.run_start_time = OS.get_ticks_msec()
+		print("Finished generation!")
 		set_process(false)
 	else:
-		fill_empty_space_chunk()
-
-func fill_empty_space_chunk():
-	var chunk_end = min(fill_x+x_fill_step, max_point.x)
-	
-	var start := OS.get_ticks_msec()
-	for x in range(fill_x, chunk_end):
-		for y in range(min_point.y, max_point.y):
-			if not is_in_room(x, y):
-				set_cell(x, y, 0)
-	x_fill_step = readjust_chunk_size(x_fill_step, start, OS.get_ticks_msec(), 200)
-	
-	fill_x = chunk_end
-	if chunk_end == max_point.x:
-		filling_done = true
-
-func readjust_chunk_size(chunk_size: int, start: int, end: int, desired_chunk_ms: int) -> int:
-			var msec :int = end - start
-			var new_size_f :float = float(desired_chunk_ms)/float(msec) * float(chunk_size)
-			if new_size_f <= 1:
-				new_size_f = 1
-			return int(new_size_f)
-
-func is_in_room(x: int, y: int) -> bool:
-	for a in areas:
-		if a.has_point(Vector2(x, y)*cell_size.x):
-			return true
-	return false
-
-func finalize_world():
-	print("Step 6: Autotiling so it's pretty")
-	update_bitmask_region(min_point, max_point)
-	print("Step 7: Adding enemies")
-	add_enemies()
-	emit_signal("generated_world")
-	if Items.level == 1:
-		Items.run_start_time = OS.get_ticks_msec()
-	print("Finished generation!")
+		fill_empty_space()
 
 func add_enemies():
 	var enemies = []
@@ -326,6 +295,35 @@ func search_for(group:String, new_room, room, element)-> Array:
 			if not dont_break:
 				break
 	return [not_found, connected_door, new_rect]
+
+func fill_empty_space():
+	var start := OS.get_ticks_msec()
+	var i := 0
+	while fill_x < max_point.x:
+		while fill_y < max_point.y:
+			var set := true
+			for a in areas:
+				if a.has_point(Vector2(fill_x, fill_y)*8.0):
+					set = false
+					break
+			if set:
+				set_cell(fill_x, fill_y, 0)
+			fill_y += 1
+		if fill_y >= max_point.y:
+			fill_y = min_point.y
+			fill_x += 1
+			i += 1
+		
+		if i > iterations:
+			update_bitmask_region(Vector2(fill_x-i, min_point.y), Vector2(fill_x, max_point.y))
+			var msec :int = OS.get_ticks_msec() - start
+			if msec > 200:
+				iterations -= 1
+				if iterations <= 0:
+					iterations = 1
+			elif msec < 200:
+				iterations += 1
+			break
 
 func replace_layout_node_with_scene(node, scene):
 	scene.position = node.global_position
