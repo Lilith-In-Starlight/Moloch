@@ -80,6 +80,10 @@ func _process(delta: float) -> void:
 		$MenuContainer.rect_position.y = lerp($MenuContainer.rect_position.y, 8, 0.2)
 		if $MainMenu.modulate.a < 0.01:
 			$MainMenu.visible = false
+		if changed_keys.empty():
+			$MenuContainer.get_child(menus["controls"].size() - 2).modulate = ColorN("gray")
+		else:
+			$MenuContainer.get_child(menus["controls"].size() - 2).modulate = ColorN("white")
 		for i in menus["controls"].size() - 2:
 			var Child := $MenuContainer.get_child(i)
 			Child.text = menus["controls"][i].option_name + " " + get_action_text(menus["controls"][i].func_args[0])
@@ -108,6 +112,7 @@ func _input(event: InputEvent) -> void:
 				for j in ["", "scroll", "scroll_"]:
 					if InputMap.has_action(j + i) and Input.is_action_just_pressed(j + i):
 						action = i
+						break
 			
 			if not viewing_achievements:
 				match action:
@@ -123,7 +128,10 @@ func _input(event: InputEvent) -> void:
 								set_menu(current_selection.menu_dest)
 								current_menu_pos = 0
 							elif current_selection.func_ref != null:
-								current_selection.func_ref.call_func(current_selection.func_args)
+								if current_selection.func_args.empty():
+									current_selection.func_ref.call_func()
+								else:
+									current_selection.func_ref.call_func(current_selection.func_args)
 						else:
 							if not current_selection.slider:
 								toggle($MenuContainer.get_child(current_menu_pos), current_selection)
@@ -150,6 +158,7 @@ func proceed_keybinds():
 				InputMap.action_erase_event(action, event)
 				break
 		InputMap.action_add_event(action, new_event)
+	changed_keys = {}
 	Config.save_config()
 
 
@@ -173,7 +182,7 @@ func set_menu(menu:String) -> void:
 			if i.menu_dest != "":
 				new_button.connect("pressed", self, "set_menu", [i.menu_dest])
 			else:
-				new_button.connect("pressed", i.func_ref, "call_func", [i.func_args])
+				new_button.connect("pressed", i.func_ref, "call_func", i.func_args)
 		elif i is MenuSetting:
 			if i.slider:
 				var new_button := ToolButton.new()
@@ -267,7 +276,7 @@ func change_config_setting(config_setting:String, setting:MenuSetting):
 	Config.save_config()
 
 
-func show_achievements(foo):
+func show_achievements():
 	viewing_achievements = true
 
 
@@ -276,7 +285,7 @@ func set_selection_to(value:int) -> void:
 
 
 func start_changing_key(key) -> void:
-	changing_key = key[0]
+	changing_key = key
 
 
 func get_action_text(action:String):
