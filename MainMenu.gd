@@ -24,7 +24,7 @@ var current_menu := "" setget set_menu
 
 var menus := {}
 
-var current_menu_pos := 0
+var menu_positions := {}
 
 var viewing_achievements := false
 
@@ -68,8 +68,8 @@ func _ready():
 
 
 func _process(delta: float) -> void:
-	var menu_element:Control = $MenuContainer.get_child(current_menu_pos)
-	$Ball.rect_position = menu_element.rect_global_position - Vector2(12,  -menu_element.rect_size.y / 2.0 + 6)
+	var menu_element:Control = $MenuContainer.get_child(current_menu_pos())
+	$Ball.rect_position = lerp($Ball.rect_position, menu_element.rect_global_position - Vector2(12,  -menu_element.rect_size.y / 2.0 + 6), 0.5)
 	Config.instant_death_button = menus["settings"][0].enabled
 	Config.damage_visuals = menus["settings"][1].enabled
 	
@@ -106,7 +106,7 @@ func _process(delta: float) -> void:
 func _input(event: InputEvent) -> void:
 	if changing_key == "":
 		if (event is InputEventKey or event is InputEventJoypadButton) and event.is_pressed():
-			var current_selection = menus[current_menu][current_menu_pos]
+			var current_selection = menus[current_menu][current_menu_pos()]
 			var action := ""
 			for i in ["up", "down", "left", "right", "jump"]:
 				for j in ["", "scroll", "scroll_"]:
@@ -117,16 +117,16 @@ func _input(event: InputEvent) -> void:
 			if not viewing_achievements:
 				match action:
 					"up":
-						current_menu_pos -= 1
-						if current_menu_pos < 0:
-							current_menu_pos = menus[current_menu].size()-1
+						set_current_pos(current_menu_pos() - 1)
+						if current_menu_pos() < 0:
+							set_current_pos(menus[current_menu].size()-1)
 					"down":
-						current_menu_pos = (current_menu_pos + 1) % menus[current_menu].size()
+						set_current_pos((current_menu_pos() + 1) % menus[current_menu].size())
 					"jump":
 						if current_selection is MenuOption:
 							if current_selection.menu_dest != "":
 								set_menu(current_selection.menu_dest)
-								current_menu_pos = 0
+								current_menu_pos()
 							elif current_selection.func_ref != null:
 								if current_selection.func_args.empty():
 									current_selection.func_ref.call_func()
@@ -134,15 +134,16 @@ func _input(event: InputEvent) -> void:
 									current_selection.func_ref.call_funcv(current_selection.func_args)
 						else:
 							if not current_selection.slider:
-								toggle($MenuContainer.get_child(current_menu_pos), current_selection)
+								toggle($MenuContainer.get_child(current_menu_pos()), current_selection)
 					"left":
 						if current_selection is MenuSetting:
-							slide($MenuContainer.get_child(current_menu_pos), current_selection, -1)
+							slide($MenuContainer.get_child(current_menu_pos()), current_selection, -1)
 					"right":
 						if current_selection is MenuSetting:
-							slide($MenuContainer.get_child(current_menu_pos), current_selection, 1)
+							slide($MenuContainer.get_child(current_menu_pos()), current_selection, 1)
 			else:
-				viewing_achievements = false
+				if (event is InputEventKey and not event.scancode in [KEY_ALT, KEY_SUPER_L, KEY_MASK_META, KEY_SHIFT, KEY_S, KEY_W]) or event is InputEventJoypadButton:
+					viewing_achievements = false
 	else:
 		if (event is InputEventKey or event is InputEventMouseButton) and event.is_pressed():
 			changed_keys[changing_key] = event
@@ -163,7 +164,6 @@ func proceed_keybinds():
 
 
 func set_menu(menu:String) -> void:
-	current_menu_pos = 0
 	current_menu = menu
 	changed_keys = {}
 	for i in $MenuContainer.get_children():
@@ -281,7 +281,7 @@ func show_achievements():
 
 
 func set_selection_to(value:int) -> void:
-	current_menu_pos = value
+	set_current_pos(value)
 
 
 func start_changing_key(key) -> void:
@@ -323,3 +323,14 @@ func get_action_text(action:String):
 
 func reset_focus(Child:Control) -> void:
 	Child.release_focus()
+
+
+func current_menu_pos():
+	if not current_menu in menu_positions:
+		menu_positions[current_menu] = 0
+	return menu_positions[current_menu]
+
+
+func set_current_pos(new_pos:int) -> void:
+	current_menu_pos()
+	menu_positions[current_menu] = new_pos

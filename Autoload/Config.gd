@@ -18,6 +18,7 @@ var achievements := {
 	"fun2":false,
 	"oof_ouch":false,
 	"first_of_many":false,
+	"test":false,
 }
 
 var ach_info := {
@@ -40,6 +41,11 @@ var ach_info := {
 		"text" : "First Of Many",
 		"texture" : preload("res://Sprites/Achievements/FirstDeath.png"),
 		"desc" : "You will die thousands of times"
+	},
+	"test": {
+		"text" : "Blood Thirst",
+		"texture" : preload("res://Sprites/Achievements/Trophy.png"),
+		"desc" : "This is a test achievement and cannot be obtained"
 	},
 	
 }

@@ -14,8 +14,9 @@ func _ready() -> void:
 		scramble_label($Name)
 		scramble_label($Description)
 	
-	var texmat :ShaderMaterial = $Icon.get_material()
+	var texmat :ShaderMaterial = $Icon.get_material().duplicate(true)
 	texmat.set_shader_param("achieved", won)
+	$Icon.material = texmat
 
 func scramble_label(Child:Label):
 	for letter in Child.text.length():
