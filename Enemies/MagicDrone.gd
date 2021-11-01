@@ -45,7 +45,7 @@ func _physics_process(delta):
 	var primordial_termor := Vector2(noise.get_noise_2d(position.x, OS.get_ticks_msec()/300.0), noise.get_noise_2d(position.y, OS.get_ticks_msec()/300.0))*30
 	if (health.temperature > 45.0 and health.temperature <= 60.0) or health.soul < 0.5:
 		primordial_termor = Vector2(noise.get_noise_2d(position.x, OS.get_ticks_msec()/3.0), noise.get_noise_2d(position.y, OS.get_ticks_msec()/3.0))*30
-	if health.temperature > 60.0 or health.soul <= 0.0 or health.poked_holes > 7:
+	if health.temperature > 60.0 or health.soul <= 0.0 or health.poked_holes > 4:
 		if health.poked_holes > 0 or health.temperature > 60.0:
 			var n:Area2D = preload("res://Particles/Explosion.tscn").instance()
 			n.position = position
