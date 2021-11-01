@@ -83,6 +83,10 @@ func _process(delta: float) -> void:
 		for i in menus["controls"].size() - 2:
 			var Child := $MenuContainer.get_child(i)
 			Child.text = menus["controls"][i].option_name + " " + get_action_text(menus["controls"][i].func_args[0])
+			if changing_key == menus["controls"][i].func_args[0]:
+				Child.modulate = "#0055ff"
+			else:
+				Child.modulate = "#ffffff"
 	else:
 		$MainMenu.modulate.a = lerp($MainMenu.modulate.a, 1.0, 0.2)
 		$MainMenu.rect_scale = lerp($MainMenu.rect_scale, Vector2(1.0, 1.0), 0.2)
@@ -271,8 +275,8 @@ func set_selection_to(value:int) -> void:
 	current_menu_pos = value
 
 
-func start_changing_key(key:String) -> void:
-	changing_key = key
+func start_changing_key(key) -> void:
+	changing_key = key[0]
 
 
 func get_action_text(action:String):
