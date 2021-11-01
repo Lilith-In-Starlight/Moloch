@@ -221,13 +221,21 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Achievement" parent="Achievements" instance=ExtResource( 5 )]
-achievement = "fun1"
-
 [node name="Achievement2" parent="Achievements" instance=ExtResource( 5 )]
 margin_top = 34.0
 margin_bottom = 34.0
 achievement = "fun2"
+
+[node name="Achievement3" parent="Achievements" instance=ExtResource( 5 )]
+achievement = "first_of_many"
+
+[node name="Achievement" parent="Achievements" instance=ExtResource( 5 )]
+achievement = "fun1"
+
+[node name="Achievement4" parent="Achievements" instance=ExtResource( 5 )]
+margin_top = 34.0
+margin_bottom = 34.0
+achievement = "oof_ouch"
 
 [node name="ControlSettings" type="VBoxContainer" parent="."]
 visible = false
