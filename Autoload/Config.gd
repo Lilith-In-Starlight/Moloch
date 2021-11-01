@@ -44,7 +44,6 @@ var ach_info := {
 	
 }
 
-
 func _ready() -> void:
 	var err := config_file.load("user://config.moloch")
 	if err == OK:
