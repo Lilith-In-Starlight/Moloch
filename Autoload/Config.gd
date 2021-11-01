@@ -16,8 +16,23 @@ var joystick_sensitivity := 6
 var achievements := {
 	"fun1":false,
 	"fun2":false,
+	"oof_ouch":false,
+	"first_of_many":false,
 }
 
+var ach_info := {
+	"fun1": {
+		"text" : "Oh Hey What Does This Do",
+		"texture" : preload("res://Sprites/Achievements/OhHeyWhatDoesThisDo.png"),
+		"desc" : "Be killed by the side effects of one of your spells"
+	},
+	"fun2": {
+		"text" : "Oh Woah Whats This",
+		"texture" : preload("res://Sprites/Achievements/OhWoahWhatsThis.png"),
+		"desc" : "Be killed by one of your spells"
+	},
+	
+}
 
 func _ready() -> void:
 	var err := config_file.load("user://config.moloch")
@@ -31,7 +46,9 @@ func _ready() -> void:
 			for j in obtained:
 				InputMap.action_add_event(i, j)
 		
-		achievements = config_file.get_value("achievements", "achievements", achievements)
+		var new_achievements = config_file.get_value("achievements", "achievements", achievements)
+		for i in new_achievements:
+			achievements[i] = new_achievements[i]
 		config_file.save("user://config.moloch")
 	else:
 		save_config()

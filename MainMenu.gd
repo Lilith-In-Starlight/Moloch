@@ -32,6 +32,7 @@ func _ready():
 	menus = {
 		"main": [
 			make_menu_option("New Run", "", funcref(self, "start_new_run")),
+			make_menu_option("Achievements", "", funcref(self, "show_achievements")),
 			make_menu_option("Settings", "settings"),
 			make_menu_option("Exit", "", funcref(get_tree(), "quit")),
 			],
@@ -51,7 +52,7 @@ func _process(delta: float) -> void:
 	Config.instant_death_button = menus["settings"][0].enabled
 	Config.damage_visuals = menus["settings"][1].enabled
 	
-	$GridContainer.visible = viewing_achievements
+	$Achievements.visible = viewing_achievements
 	$MainMenu.visible = !viewing_achievements
 	$MenuContainer.visible = !viewing_achievements
 	$Ball.visible = !viewing_achievements
@@ -65,31 +66,35 @@ func _input(event: InputEvent) -> void:
 			for j in ["", "scroll", "scroll_"]:
 				if InputMap.has_action(j + i) and Input.is_action_just_pressed(j + i):
 					action = i
-		match action:
-			"up":
-				current_menu_pos -= 1
-				if current_menu_pos < 0:
-					current_menu_pos = menus[current_menu].size()-1
-			"down":
-				current_menu_pos = (current_menu_pos + 1) % menus[current_menu].size()
-			"jump":
-				if current_selection is MenuOption:
-					if current_selection.menu_dest != "":
-						set_menu(current_selection.menu_dest)
-						current_menu_pos = 0
-					elif current_selection.func_ref != null:
-						current_selection.func_ref.call_func()
-				else:
-					if not current_selection.slider:
-						current_selection.enabled = !current_selection.enabled
-						$MenuContainer.get_child(current_menu_pos).pressed = current_selection.enabled
-						change_config_setting(current_selection.config, current_selection)
-			"left":
-				if current_selection is MenuSetting:
-					slide($MenuContainer.get_child(current_menu_pos), current_selection, -1)
-			"right":
-				if current_selection is MenuSetting:
-					slide($MenuContainer.get_child(current_menu_pos), current_selection, 1)
+		
+		if not viewing_achievements:
+			match action:
+				"up":
+					current_menu_pos -= 1
+					if current_menu_pos < 0:
+						current_menu_pos = menus[current_menu].size()-1
+				"down":
+					current_menu_pos = (current_menu_pos + 1) % menus[current_menu].size()
+				"jump":
+					if current_selection is MenuOption:
+						if current_selection.menu_dest != "":
+							set_menu(current_selection.menu_dest)
+							current_menu_pos = 0
+						elif current_selection.func_ref != null:
+							current_selection.func_ref.call_func()
+					else:
+						if not current_selection.slider:
+							current_selection.enabled = !current_selection.enabled
+							$MenuContainer.get_child(current_menu_pos).pressed = current_selection.enabled
+							change_config_setting(current_selection.config, current_selection)
+				"left":
+					if current_selection is MenuSetting:
+						slide($MenuContainer.get_child(current_menu_pos), current_selection, -1)
+				"right":
+					if current_selection is MenuSetting:
+						slide($MenuContainer.get_child(current_menu_pos), current_selection, 1)
+		else:
+			viewing_achievements = false
 
 func set_menu(menu:String) -> void:
 	current_menu = menu
@@ -177,3 +182,7 @@ func change_config_setting(config_setting:String, setting:MenuSetting):
 		"joys":
 			Config.joystick_sensitivity = setting.value
 	Config.save_config()
+
+
+func show_achievements():
+	viewing_achievements = true
