@@ -131,7 +131,7 @@ func _input(event: InputEvent) -> void:
 								if current_selection.func_args.empty():
 									current_selection.func_ref.call_func()
 								else:
-									current_selection.func_ref.call_func(current_selection.func_args)
+									current_selection.func_ref.call_funcv(current_selection.func_args)
 						else:
 							if not current_selection.slider:
 								toggle($MenuContainer.get_child(current_menu_pos), current_selection)
