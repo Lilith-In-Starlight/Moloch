@@ -4,6 +4,9 @@ var been_to := []
 var drawn_edge_to := []
 var edges := []
 
+func _ready() -> void:
+	set_process(false)
+
 func _process(_delta):
 	update()
 
@@ -44,3 +47,7 @@ func _draw():
 		for i in get_tree().get_nodes_in_group("Chest"):
 			draw_circle(i.position/16.0/4.0-get_tree().get_nodes_in_group("Player")[0].position/16.0/4.0, 1.0, ColorN("green"))
 	draw_circle(Vector2(0, 0), 1.0, ColorN("black"))
+
+
+func _on_generated_world() -> void:
+	set_process(true)
