@@ -288,6 +288,9 @@ func _on_effect_changes(effect:String, added:bool) -> void:
 
 
 func _on_broken_leg(amount:int) -> void:
+	if "ironknees" in Items.player_items:
+		health.broken_moving_appendages -= amount
+		return
 	if amount != 0:
 		Map.play_sound(preload("res://Sfx/broken_legs.wav"), position, 1.0, 0.8+randf()*0.4)
 		if blood_is_gasoline and health.blood > 0.01:
