@@ -74,6 +74,17 @@ func _ready():
 						add_child(new_room.scene)
 						areas.append(new_room.area)
 						stretch_global_bounds(new_room.area)
+	
+	for group in ["LeftDoor","RightDoor"]:
+		for element in get_tree().get_nodes_in_group(group):
+			var room = element.get_parent()
+			var new_room :_Room = expand_through_door_with_treasure(element, room)
+			if new_room:
+				rooms += 1
+				treasure_rooms += 1
+				add_child(new_room.scene)
+				areas.append(new_room.area)
+				stretch_global_bounds(new_room.area)
 		
 	print("Step 2: Sealing up unused doors")
 	for group in ["LeftDoor","RightDoor","UpDoor","DownDoor"]:
@@ -136,12 +147,14 @@ func _ready():
 	else:
 		fill_empty_space_chunk()
 
+
 func _process(delta):
 	if filling_done:
 		finalize_world()
 		set_process(false)
 	else:
 		fill_empty_space_chunk()
+
 
 func fill_empty_space_chunk():
 	var chunk_end = min(fill_x+x_fill_step, max_point.x)
@@ -217,7 +230,7 @@ func expand_through_door(element, room) -> _Room:
 		for _i in range(LAYOUT_MAXTRIES):
 			var r_candidate: _Room
 			if rooms < 25 or generated_end_room:
-				if treasure_rooms < 4 and Items.WorldRNG.randf()<0.05 and rooms > 12 \
+				if treasure_rooms < 4 and Items.WorldRNG.randf()<0.02 and rooms > 12 \
 					and is_horizontal_door(element):
 						r_candidate = new_treasure_room()
 				else:
@@ -236,6 +249,29 @@ func expand_through_door(element, room) -> _Room:
 	elif element.is_in_group("DownDoor"):
 		for _i in range(LAYOUT_MAXTRIES):
 			var r_candidate: _Room = new_normal_room()
+			if not try_dock(r_candidate, element, room):
+				res = r_candidate
+				break
+	
+	element.add_to_group("DontTry")
+	if res and not res.area == Rect2(0,0,0,0):
+		doors.append(room.position + element.position)
+		res.scene.position = room.position + element.position - res.attachment_door.position
+		dissolve_doorpair(element, res.attachment_door)
+		return res
+	else:
+		return null
+
+
+func expand_through_door_with_treasure(element, room) -> _Room:
+	var res: _Room = null
+	if element.is_in_group("DontTry"):
+		return null
+
+	if is_horizontal_door(element):
+		for _i in range(LAYOUT_MAXTRIES):
+			var r_candidate: _Room
+			r_candidate = new_treasure_room()
 			if not try_dock(r_candidate, element, room):
 				res = r_candidate
 				break
