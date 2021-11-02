@@ -20,6 +20,8 @@ var noise := OpenSimplexNoise.new()
 
 var health := Flesh.new()
 
+var Map :TileMap
+
 var first_check := false
 
 # Called when the node enters the scene tree for the first time.
@@ -28,6 +30,7 @@ func _ready():
 	health.connect("holes_poked", self, "_on_holes_poked")
 	health.connect("was_damaged",self, "_on_damaged")
 	Player = get_tree().get_nodes_in_group("Player")[0]
+	Map = get_tree().get_nodes_in_group("World")[0]
 	if Player.position.distance_to(position) < 500:
 		queue_free()
 	
@@ -50,6 +53,11 @@ func _physics_process(delta):
 			var n:Area2D = preload("res://Particles/Explosion.tscn").instance()
 			n.position = position
 			get_parent().add_child(n)
+		if randf() < 0.2:
+			var item :Item = Items.all_items["soulfulpill"]
+			if randf() < 0.02:
+				item = Items.all_items["soulfulengine"]
+			Map.summon_item(item, position, speed)
 		queue_free()
 	match state:
 		STATES.IDLE:
