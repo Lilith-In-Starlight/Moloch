@@ -59,7 +59,7 @@ func _ready():
 	rooms = 0
 	generated_end_room = false
 	treasure_rooms = 0
-	while not generated_end_room or rooms <= 25 or treasure_rooms < 1:
+	while not generated_end_room or rooms <= 25:
 		var children := Items.shuffle_array(get_children())
 		for room in children:
 			var el_children = Items.shuffle_array(room.get_children())
