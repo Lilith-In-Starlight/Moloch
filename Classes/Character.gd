@@ -162,7 +162,7 @@ func process_movement(delta:float) -> void:
 			# Vertical movement
 			var vaxis := 0.0
 			if Input.is_action_pressed("up"):
-				speed.y -= walk_accel * d_unit
+				speed.y -= walk_accel * d_unit * 1.5
 				vaxis = -1.0
 			elif Input.is_action_pressed("down"):
 				speed.y += walk_accel * d_unit
