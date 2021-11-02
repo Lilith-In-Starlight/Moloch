@@ -196,7 +196,7 @@ func process_movement(delta:float) -> void:
 		var n := preload("res://Particles/Soul.tscn").instance()
 		n.position = position
 		get_parent().add_child(n)
-		move_and_collide(Vector2(-1+randf()*2, -1+randf()*2)*((health.needed_soul-health.soul/10.0))*5.0)
+		move_and_collide(Vector2(-1+randf()*2, -1+randf()*2)*((health.needed_soul-health.soul/10.0))*10.0)
 
 	last_speed_before_collision = speed
 	speed = move_and_slide(speed, Vector2(0, -1))
