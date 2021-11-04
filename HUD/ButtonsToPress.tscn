@@ -1,0 +1,61 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Themes/Theme.tres" type="Theme" id=1]
+[ext_resource path="res://Sprites/Menus/DownArrow.png" type="Texture" id=2]
+[ext_resource path="res://HUD/ButtonsToPress.gd" type="Script" id=3]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 85.0529
+
+[sub_resource type="Animation" id=2]
+resource_name = "FadeIn"
+length = 0.65
+step = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath("Control:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0.1, 0.6 ),
+"transitions": PoolRealArray( 2.54912, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+
+[node name="ButtonsToPress" type="Area2D"]
+script = ExtResource( 3 )
+
+[node name="Control" type="HSplitContainer" parent="."]
+modulate = Color( 1, 1, 1, 0 )
+margin_left = -35.0
+margin_top = -41.0
+margin_right = 37.0
+margin_bottom = -25.0
+custom_constants/separation = 0
+dragger_visibility = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="DownArrow" type="TextureRect" parent="Control"]
+margin_right = 16.0
+margin_bottom = 16.0
+texture = ExtResource( 2 )
+
+[node name="Label" type="Label" parent="Control"]
+margin_left = 24.0
+margin_right = 72.0
+margin_bottom = 16.0
+theme = ExtResource( 1 )
+text = "Interact"
+
+[node name="CollisionShape" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+
+[node name="Animations" type="AnimationPlayer" parent="."]
+anims/FadeIn = SubResource( 2 )
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]
