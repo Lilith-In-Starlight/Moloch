@@ -22,8 +22,11 @@ var uses := 0
 
 var cost := 0.1
 
+var Player :Character
+
 
 func _ready() -> void:
+	Player = get_tree().get_nodes_in_group("Player")[0]
 	swap = Items.LootRNG.randi() % PROPERTIES.size()
 	$Control/ButtonsToPress/Control/Label.text = "Swap " + PROPERTIES[swap]
 	$PillarL/WandRenderSprite.visible = false
@@ -73,6 +76,8 @@ func _input(event: InputEvent) -> void:
 							right_wand.push_resistance = k
 					swap = Items.LootRNG.randi() % PROPERTIES.size()
 					$Control/ButtonsToPress/Control/Label.text = "Swap " + PROPERTIES[swap]
+					if randf() < 0.4:
+						Player.health.poke_hole(1)
 			elif uses == 4:
 				var n := SWAPPING_DENIAL.instance()
 				n.position = position + $Control.position + Vector2(0, -10)
