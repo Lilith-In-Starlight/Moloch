@@ -1,13 +1,20 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Items/WandRenderSprite.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Sprites/Elements/WandMixer/wand_pillar.png" type="Texture" id=2]
 [ext_resource path="res://Elements/WandMixer.gd" type="Script" id=3]
 [ext_resource path="res://Sprites/Elements/WandMixer/control_panel.png" type="Texture" id=4]
 [ext_resource path="res://HUD/ButtonsToPress.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Sprites/Blocks/SafetyPlatforms.png" type="Texture" id=6]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 21.0238
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 183, 10 )
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 29, 10 )
 
 [node name="WandMixer" type="Node2D" groups=[
 "WandMixer",
@@ -63,6 +70,30 @@ shape = SubResource( 1 )
 texture = ExtResource( 4 )
 
 [node name="ButtonsToPress" parent="Control" instance=ExtResource( 5 )]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2( 0, 18 )
+shape = SubResource( 2 )
+one_way_collision = true
+
+[node name="CollisionShape2" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2( 0, -14 )
+shape = SubResource( 3 )
+one_way_collision = true
+
+[node name="SafetyPlatforms" type="Sprite" parent="StaticBody2D"]
+position = Vector2( 0, 16 )
+scale = Vector2( 22.8438, 1 )
+texture = ExtResource( 6 )
+
+[node name="SafetyPlatforms2" type="Sprite" parent="StaticBody2D"]
+position = Vector2( 0, -16 )
+scale = Vector2( 3.60938, 1 )
+texture = ExtResource( 6 )
 
 [connection signal="body_entered" from="PillarL" to="." method="_on_PillarL_body_entered"]
 [connection signal="body_exited" from="PillarL" to="." method="_on_Pillar_body_exited"]

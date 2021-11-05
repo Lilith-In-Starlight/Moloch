@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Sprites/Elements/DoorLock.png" type="Texture" id=1]
 [ext_resource path="res://Sprites/Elements/DoorSide.png" type="Texture" id=2]
 [ext_resource path="res://Elements/ElevatorDoor.gd" type="Script" id=3]
+[ext_resource path="res://Sprites/Blocks/SafetyPlatforms.png" type="Texture" id=4]
 
 [sub_resource type="Animation" id=1]
 resource_name = "Open"
@@ -80,6 +81,9 @@ tracks/5/keys = {
 "values": [ Vector2( 0.9, 1 ), Vector2( 0.9, 1 ), Vector2( 1, 1 ) ]
 }
 
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 183, 10 )
+
 [node name="ElevatorDoor" type="Node2D"]
 script = ExtResource( 3 )
 
@@ -114,5 +118,19 @@ rotation = 3.14159
 scale = Vector2( 1, -1 )
 texture = ExtResource( 1 )
 offset = Vector2( -7, 14 )
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2( 0, 10 )
+shape = SubResource( 2 )
+one_way_collision = true
+
+[node name="SafetyPlatforms" type="Sprite" parent="StaticBody2D"]
+position = Vector2( 0, 8 )
+scale = Vector2( 22.8438, 1 )
+texture = ExtResource( 4 )
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_finished"]
