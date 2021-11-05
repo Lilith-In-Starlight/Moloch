@@ -126,6 +126,8 @@ func _ready():
 	print("    - Air Conditioning Units")
 	for sprite in get_tree().get_nodes_in_group("AC"):
 		replace_layout_node_with_background_packed_scene(sprite, preload("res://Elements/AC.tscn"))
+	for sprite in get_tree().get_nodes_in_group("WandMixer"):
+		replace_layout_node_with_background_packed_scene(sprite, preload("res://Elements/WandMixer.tscn"))
 	
 	print("Step 4: Passing all the room data to the world TileMap")
 	for room in get_children():
@@ -293,11 +295,13 @@ func new_normal_room() -> _Room:
 
 func new_treasure_room() -> _Room:
 	var r :_Room = _Room.new()
-	match randi()%2:
+	match randi()%3:
 		0:
 			r.scene = preload("res://Rooms/Sacrifice/TreasureRoom1.tscn").instance()
 		1:
 			r.scene = preload("res://Rooms/Sacrifice/TreasureRoom2.tscn").instance()
+		2:
+			r.scene = preload("res://Rooms/Sacrifice/TreasureRoom3.tscn").instance()
 	r.is_treasure = true
 	return r
 

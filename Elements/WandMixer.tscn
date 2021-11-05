@@ -1,0 +1,72 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://Items/WandRenderSprite.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Sprites/Elements/WandMixer/wand_pillar.png" type="Texture" id=2]
+[ext_resource path="res://Elements/WandMixer.gd" type="Script" id=3]
+[ext_resource path="res://Sprites/Elements/WandMixer/control_panel.png" type="Texture" id=4]
+[ext_resource path="res://HUD/ButtonsToPress.tscn" type="PackedScene" id=5]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 21.0238
+
+[node name="WandMixer" type="Node2D" groups=[
+"WandMixer",
+]]
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_horizontal_guides_": [ 8.0 ]
+}
+
+[node name="PillarL" type="Area2D" parent="."]
+position = Vector2( -160, 0 )
+collision_layer = 0
+
+[node name="WandRenderSprite" parent="PillarL" instance=ExtResource( 1 )]
+position = Vector2( 1, -1 )
+
+[node name="wand_pillar" type="Sprite" parent="PillarL"]
+position = Vector2( 1, -1 )
+texture = ExtResource( 2 )
+offset = Vector2( -2, 2 )
+
+[node name="CollisionShape" type="CollisionShape2D" parent="PillarL"]
+shape = SubResource( 1 )
+
+[node name="ButtonsToPress2" parent="PillarL" instance=ExtResource( 5 )]
+
+[node name="PillarR" type="Area2D" parent="."]
+position = Vector2( 160, 0 )
+collision_layer = 0
+
+[node name="WandRenderSprite" parent="PillarR" instance=ExtResource( 1 )]
+position = Vector2( -1, -1 )
+rotation = -1.5708
+
+[node name="wand_pillar" type="Sprite" parent="PillarR"]
+position = Vector2( -1, -1 )
+rotation = -1.5708
+texture = ExtResource( 2 )
+offset = Vector2( -2, 2 )
+
+[node name="CollisionShape" type="CollisionShape2D" parent="PillarR"]
+shape = SubResource( 1 )
+
+[node name="ButtonsToPress3" parent="PillarR" instance=ExtResource( 5 )]
+
+[node name="Control" type="Area2D" parent="."]
+position = Vector2( 0, -32 )
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Control"]
+shape = SubResource( 1 )
+
+[node name="control_panel" type="Sprite" parent="Control"]
+texture = ExtResource( 4 )
+
+[node name="ButtonsToPress" parent="Control" instance=ExtResource( 5 )]
+
+[connection signal="body_entered" from="PillarL" to="." method="_on_PillarL_body_entered"]
+[connection signal="body_exited" from="PillarL" to="." method="_on_Pillar_body_exited"]
+[connection signal="body_entered" from="PillarR" to="." method="_on_PillarR_body_entered"]
+[connection signal="body_exited" from="PillarR" to="." method="_on_Pillar_body_exited"]
+[connection signal="body_entered" from="Control" to="." method="_on_Control_body_entered"]
+[connection signal="body_exited" from="Control" to="." method="_on_Pillar_body_exited"]

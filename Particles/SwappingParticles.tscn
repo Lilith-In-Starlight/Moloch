@@ -1,0 +1,55 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Particles/SwappingParticles.gd" type="Script" id=1]
+[ext_resource path="res://Particles/MagicDust.tscn" type="PackedScene" id=2]
+
+[node name="SwappingParticles" type="Node2D"]
+modulate = Color( 1, 0.701961, 0, 1 )
+script = ExtResource( 1 )
+
+[node name="MagicDust" parent="." instance=ExtResource( 2 )]
+
+[node name="MagicDust2" parent="." instance=ExtResource( 2 )]
+position = Vector2( 0, 8 )
+
+[node name="MagicDust3" parent="." instance=ExtResource( 2 )]
+position = Vector2( -1, 12 )
+
+[node name="MagicDust9" parent="." instance=ExtResource( 2 )]
+position = Vector2( -4, 15 )
+
+[node name="MagicDust10" parent="." instance=ExtResource( 2 )]
+position = Vector2( -8, 15 )
+
+[node name="MagicDust11" parent="." instance=ExtResource( 2 )]
+position = Vector2( -12, 13 )
+
+[node name="MagicDust12" parent="." instance=ExtResource( 2 )]
+position = Vector2( -6, 7 )
+
+[node name="MagicDust13" parent="." instance=ExtResource( 2 )]
+position = Vector2( -6, 3 )
+
+[node name="MagicDust14" parent="." instance=ExtResource( 2 )]
+position = Vector2( -6, -1 )
+
+[node name="MagicDust15" parent="." instance=ExtResource( 2 )]
+position = Vector2( -6, -5 )
+
+[node name="MagicDust16" parent="." instance=ExtResource( 2 )]
+position = Vector2( -6, -9 )
+
+[node name="MagicDust4" parent="." instance=ExtResource( 2 )]
+position = Vector2( 0, -8 )
+
+[node name="MagicDust5" parent="." instance=ExtResource( 2 )]
+position = Vector2( 0, -16 )
+
+[node name="MagicDust6" parent="." instance=ExtResource( 2 )]
+position = Vector2( 0, -12 )
+
+[node name="MagicDust7" parent="." instance=ExtResource( 2 )]
+position = Vector2( 0, -4 )
+
+[node name="MagicDust8" parent="." instance=ExtResource( 2 )]
+position = Vector2( 0, 4 )
