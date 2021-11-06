@@ -119,15 +119,20 @@ func _process(delta):
 		# when the scene change begins
 	
 	# If there are messages to read, show them
+	MessageHUD.bbcode_text = ""
+	MessageHUD.margin_top = lerp(MessageHUD.margin_top, 19, 0.2)
 	if not messages.empty():
-		MessageHUD.visible = true
+		MessageHUD.modulate.a = lerp(MessageHUD.modulate.a, 1.0, 0.2)
 		message_timer += delta
-		MessageHUD.bbcode_text = "[center]" + messages[0] + "[/center]"
+		for i in messages.size():
+			if i != 0:
+				MessageHUD.bbcode_text += "\n"
+			MessageHUD.bbcode_text += "[center]" + messages[i] + "[/center]"
 		if message_timer > messages[0].length()*0.2:
 			message_timer = 0.0
 			messages.pop_front()
 	else:
-		MessageHUD.visible = false
+		MessageHUD.modulate.a = lerp(MessageHUD.modulate.a, 0.0, 0.2)
 	
 	# Inventory and items in HUD
 	# Control the thing that displays the last picked up item

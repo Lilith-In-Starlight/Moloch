@@ -301,10 +301,7 @@ func new_treasure_room() -> _Room:
 		1:
 			r.scene = preload("res://Rooms/Sacrifice/TreasureRoom2.tscn").instance()
 		2:
-			if Items.WorldRNG.randf() < 0.5:
-				r.scene = preload("res://Rooms/Sacrifice/TreasureRoom3.tscn").instance()
-			else:
-				r.scene = new_treasure_room()
+			r.scene = preload("res://Rooms/Sacrifice/TreasureRoom3.tscn").instance()
 	r.is_treasure = true
 	return r
 

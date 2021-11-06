@@ -30,18 +30,18 @@ bg_color = Color( 0.180392, 0.694118, 1, 0.478431 )
 
 [sub_resource type="StyleBoxFlat" id=4]
 content_margin_top = 3.0
-bg_color = Color( 1, 0.74902, 0.12549, 1 )
+content_margin_bottom = 0.0
+bg_color = Color( 1, 0.529412, 0.85098, 0.466667 )
 border_width_left = 1
 border_width_top = 1
-border_width_bottom = 2
-border_color = Color( 0, 0, 0, 1 )
+border_width_right = 1
+border_color = Color( 0.552941, 0.160784, 0.647059, 0.541176 )
 corner_radius_top_left = 10
 corner_radius_top_right = 2
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 2
+anti_aliasing = false
 
-[sub_resource type="DynamicFont" id=5]
-size = 12
+[sub_resource type="DynamicFont" id=29]
+size = 10
 font_data = ExtResource( 5 )
 
 [sub_resource type="DynamicFont" id=6]
@@ -332,17 +332,18 @@ __meta__ = {
 }
 
 [node name="Messages" type="RichTextLabel" parent="HUD/HUD"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -148.0
-margin_top = 87.5
-margin_right = 148.0
-margin_bottom = 103.5
+anchor_left = 0.09
+anchor_top = 0.85
+anchor_right = 0.91
+anchor_bottom = 1.0
+margin_left = 12.0
+margin_top = 19.75
+margin_right = -12.0
+grow_vertical = 0
+size_flags_vertical = 14
 custom_styles/normal = SubResource( 4 )
-custom_fonts/normal_font = SubResource( 5 )
-custom_colors/default_color = Color( 0, 0, 0, 1 )
+custom_fonts/normal_font = SubResource( 29 )
+custom_colors/default_color = Color( 1, 1, 1, 1 )
 bbcode_enabled = true
 bbcode_text = "[center]broken leg[/center]"
 text = "broken leg"
@@ -654,8 +655,10 @@ __meta__ = {
 }
 
 [node name="PointNine" type="Control" parent="HUD/HUD"]
+anchor_left = 0.937
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = 0.199986
 script = ExtResource( 12 )
 __meta__ = {
 "_edit_use_anchors_": false
