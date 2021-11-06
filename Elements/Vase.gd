@@ -32,3 +32,8 @@ func _on_screen_entered():
 func _on_screen_exited():
 	sleeping = true
 	force_process = false
+
+
+func _on_body_entered(body: Node) -> void:
+	if frames > 0.2 and linear_velocity.length() > 0.3 and (body.is_in_group("World") or body.is_in_group("Platform")):
+		queue_free()

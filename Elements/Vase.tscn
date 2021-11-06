@@ -12,9 +12,11 @@ extents = Vector2( 7, 1 )
 [node name="Vase" type="RigidBody2D" groups=[
 "Vase",
 ]]
-collision_layer = 0
-collision_mask = 70
+collision_layer = 128
+collision_mask = 6
 gravity_scale = 4.0
+contacts_reported = 4
+contact_monitor = true
 sleeping = true
 script = ExtResource( 2 )
 
@@ -34,5 +36,6 @@ rect = Rect2( 0, 0, 533.333, 300 )
 process_parent = true
 physics_process_parent = true
 
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="screen_entered" from="VisibilityEnabler2D" to="." method="_on_screen_entered"]
 [connection signal="screen_exited" from="VisibilityEnabler2D" to="." method="_on_screen_exited"]
