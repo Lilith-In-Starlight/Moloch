@@ -40,7 +40,7 @@ corner_radius_top_left = 10
 corner_radius_top_right = 2
 anti_aliasing = false
 
-[sub_resource type="DynamicFont" id=29]
+[sub_resource type="DynamicFont" id=5]
 size = 10
 font_data = ExtResource( 5 )
 
@@ -342,8 +342,8 @@ margin_right = -12.0
 grow_vertical = 0
 size_flags_vertical = 14
 custom_styles/normal = SubResource( 4 )
-custom_fonts/normal_font = SubResource( 29 )
-custom_colors/default_color = Color( 1, 1, 1, 1 )
+custom_fonts/normal_font = SubResource( 5 )
+custom_colors/default_color = Color( 0.984314, 0.92549, 1, 1 )
 bbcode_enabled = true
 bbcode_text = "[center]broken leg[/center]"
 text = "broken leg"

@@ -124,7 +124,7 @@ func _process(delta):
 	if not messages.empty():
 		MessageHUD.modulate.a = lerp(MessageHUD.modulate.a, 1.0, 0.2)
 		message_timer += delta
-		for i in messages.size():
+		for i in min(messages.size(), 3):
 			if i != 0:
 				MessageHUD.bbcode_text += "\n"
 			MessageHUD.bbcode_text += "[center]" + messages[i] + "[/center]"
