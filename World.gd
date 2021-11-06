@@ -295,13 +295,16 @@ func new_normal_room() -> _Room:
 
 func new_treasure_room() -> _Room:
 	var r :_Room = _Room.new()
-	match randi()%3:
+	match Items.WorldRNG.randi()%3:
 		0:
 			r.scene = preload("res://Rooms/Sacrifice/TreasureRoom1.tscn").instance()
 		1:
 			r.scene = preload("res://Rooms/Sacrifice/TreasureRoom2.tscn").instance()
 		2:
-			r.scene = preload("res://Rooms/Sacrifice/TreasureRoom3.tscn").instance()
+			if Items.WorldRNG.randf() < 0.5:
+				r.scene = preload("res://Rooms/Sacrifice/TreasureRoom3.tscn").instance()
+			else:
+				r.scene = new_treasure_room()
 	r.is_treasure = true
 	return r
 
