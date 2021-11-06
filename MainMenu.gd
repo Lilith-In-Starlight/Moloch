@@ -104,16 +104,21 @@ func _process(delta: float) -> void:
 
 
 func _input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.is_pressed():
+		SeedLineEdit.release_focus()
 	if changing_key == "":
 		if (event is InputEventKey or event is InputEventJoypadButton) and event.is_pressed():
 			var current_selection = menus[current_menu][current_menu_pos()]
 			var action := ""
-			for i in ["up", "down", "left", "right", "jump"]:
-				for j in ["", "scroll", "scroll_"]:
-					if InputMap.has_action(j + i) and Input.is_action_just_pressed(j + i):
-						action = i
-						break
-			
+			if not SeedLineEdit.has_focus() or event is InputEventJoypadButton:
+				for i in ["up", "down", "left", "right", "jump"]:
+					for j in ["", "scroll", "scroll_"]:
+						if InputMap.has_action(j + i) and Input.is_action_just_pressed(j + i):
+							action = i
+							break
+			else:
+				if event is InputEventKey and event.scancode == KEY_ESCAPE:
+					SeedLineEdit.release_focus()
 			if not viewing_achievements:
 				match action:
 					"up":
