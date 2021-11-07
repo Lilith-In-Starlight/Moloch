@@ -252,9 +252,9 @@ func _process(delta):
 				break # Stop checking for if it's in a slot, we already did all this stuff
 	
 	# If the mouse is in the wands' spells area and is holding a wand
-	elif mouse.x < 116 and mouse.y > 25 and mouse.y < 25+16 and Items.player_wands[Items.selected_wand] != null:
+	elif mouse.x < 240 and mouse.y > 25 and mouse.y < 25+16 and Items.player_wands[Items.selected_wand] != null:
 		var wand :Wand = Items.player_wands[Items.selected_wand]
-		for i in 6:
+		for i in Wand.MAX_CAPACITY:
 			# If it's in a slot
 			if mouse.x >= 4+i*(16+4) and mouse.x < 4+(i+1)*(16+4):
 				# Don't let the player cast spells

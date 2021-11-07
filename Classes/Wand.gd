@@ -4,7 +4,9 @@ class_name Wand
 
 signal finished_casting
 
-var spell_capacity :int = 1 + Items.LootRNG.randi()%5 setget set_spell_capacity
+const MAX_CAPACITY := 12
+
+var spell_capacity :int = 1 + Items.LootRNG.randi()%(MAX_CAPACITY-1) setget set_spell_capacity
 var spell_recharge :float = Items.LootRNG.randf()*0.3
 var full_recharge :float = Items.LootRNG.randf()*0.4
 var heat_resistance :float = Items.LootRNG.randf()*0.7
@@ -79,15 +81,12 @@ func run(Caster:Node2D):
 		var count := true
 		for i in spells:
 			if i is SpellMod:
-				print(i.id)
-				print(i.level)
 				if i.id == "fasterw":
 					speed_mult /= float(i.level)
 			if i == null:
 				count = false
 			if count:
 				last += 1
-		print(speed_mult)
 		Items.running_wands.append([self, Caster, spell_recharge, full_recharge * speed_mult, last])
 
 
