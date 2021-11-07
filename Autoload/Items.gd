@@ -162,7 +162,6 @@ func _process(delta):
 					var cast_result := cast_spell(wand, caster)
 					wand.current_spell += cast_result[0]
 					run[2] *= cast_result[1]
-					print(cast_result[1])
 				if (wand.current_spell >= wand.spell_capacity-1 or wand.spells[wand.current_spell] == null) and wand.recharge >= run[3]:
 					wand.recharge = 0.0
 					wand.can_cast = true
@@ -171,7 +170,7 @@ func _process(delta):
 					running_wands.erase(run)
 					continue
 				# Recharge
-				elif (wand.recharge >= run[2] or wand.current_spell == run[4] - 1) and (wand.current_spell < wand.spell_capacity and wand.spells[wand.current_spell] != null):
+				elif (wand.recharge >= run[2] or wand.current_spell >= run[4] - 1) and (wand.current_spell < wand.spell_capacity and wand.spells[wand.current_spell] != null):
 					wand.recharge = 0.0
 					wand.current_spell += 1
 					wand.can_cast = true
@@ -334,7 +333,8 @@ func reset_player():
 		player_spells[0] = pick_random_modifier()
 	player_wands = [null,null,null,null,null,null]
 	player_wands[0] = Wand.new()
-	player_wands[1] = Wand.new()
+	for i in player_wands[0].spells.size():
+		player_wands[0].spells[i] = null
 
 
 func shuffle_array(array: Array) -> Array:
@@ -415,7 +415,6 @@ func cast_spell(wand:Wand, caster:Node2D, slot_offset := 0, goal_offset := Vecto
 				"faster":
 					away += 1
 					new_cast_speed = cast_speed_mult / float(c_spell.level)
-					print(float(c_spell.level))
 					if slot_offset + 1 < wand.spell_capacity:
 						away = max(cast_spell(wand, caster, slot_offset + 1, Vector2.ZERO, modifiers, new_cast_speed)[0], away)
 				"slower":
