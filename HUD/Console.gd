@@ -170,7 +170,6 @@ func _input(event: InputEvent) -> void:
 							if Items.player_wands[Items.selected_wand] != null:
 								OS.set_clipboard(Items.player_wands[Items.selected_wand].get_json())
 						"givemod":
-							print(Items.base_spell_mods)
 							if cmd.size() == 3:
 								if Items.base_spell_mods.has(cmd[1]):
 									if cmd[2].is_valid_integer():

@@ -520,6 +520,48 @@ margin_bottom = 16.0
 rect_min_size = Vector2( 16, 16 )
 texture = ExtResource( 8 )
 
+[node name="Slot7" type="TextureRect" parent="HUD/HUD/Spells"]
+margin_left = 120.0
+margin_right = 136.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 16, 16 )
+texture = ExtResource( 8 )
+
+[node name="Slot8" type="TextureRect" parent="HUD/HUD/Spells"]
+margin_left = 140.0
+margin_right = 156.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 16, 16 )
+texture = ExtResource( 8 )
+
+[node name="Slot9" type="TextureRect" parent="HUD/HUD/Spells"]
+margin_left = 160.0
+margin_right = 176.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 16, 16 )
+texture = ExtResource( 8 )
+
+[node name="Slot10" type="TextureRect" parent="HUD/HUD/Spells"]
+margin_left = 180.0
+margin_right = 196.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 16, 16 )
+texture = ExtResource( 8 )
+
+[node name="Slot11" type="TextureRect" parent="HUD/HUD/Spells"]
+margin_left = 200.0
+margin_right = 216.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 16, 16 )
+texture = ExtResource( 8 )
+
+[node name="Slot12" type="TextureRect" parent="HUD/HUD/Spells"]
+margin_left = 220.0
+margin_right = 236.0
+margin_bottom = 16.0
+rect_min_size = Vector2( 16, 16 )
+texture = ExtResource( 8 )
+
 [node name="SpellBag" type="VBoxContainer" parent="HUD/HUD"]
 margin_left = 4.0
 margin_top = 62.0

@@ -83,7 +83,6 @@ func _input(event: InputEvent) -> void:
 				n.position = position + $Control.position + Vector2(0, -10)
 				get_parent().add_child(n)
 			uses += 1
-			print(uses)
 	
 	$PillarL/WandRenderSprite.render_wand(left_wand)
 	$PillarR/WandRenderSprite.render_wand(right_wand)

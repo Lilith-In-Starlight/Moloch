@@ -39,7 +39,6 @@ func _on_Back_pressed() -> void:
 
 func _on_VisualizeDamage_pressed() -> void:
 	Config.damage_visuals = $Settings/VisualizeDamage.pressed
-	print(Config.damage_visuals)
 	Config.save_config()
 
 

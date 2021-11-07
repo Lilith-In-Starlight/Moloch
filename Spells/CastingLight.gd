@@ -20,7 +20,6 @@ func _ready() -> void:
 	
 	$Line2D.points[1] = rel_dist
 	CastInfo.wand.spell_offset = rel_dist * 0.5
-	print(rel_dist * 0.5)
 
 
 func _on_Timer_timeout() -> void:
