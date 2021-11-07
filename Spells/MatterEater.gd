@@ -6,6 +6,10 @@ var CastInfo := SpellCastInfo.new()
 var Map :TileMap	
 
 func _ready() -> void:
+	if randf() > 0.5:
+		scale.x = -1
+	if randf() > 0.5:
+		scale.y = -1
 	Map = get_tree().get_nodes_in_group("World")[0]
 	CastInfo.set_position(self)
 	for x in range(-AREA,AREA+1):
