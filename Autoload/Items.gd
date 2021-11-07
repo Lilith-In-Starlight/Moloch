@@ -108,7 +108,7 @@ func _ready():
 	register_spell(2, "spinsword", "Haunted Sword", "Summons a sword that cuts everything around you", preload("res://Sprites/Spells/SpinSword.png"), preload("res://Spells/SpinSword.tscn"))
 	register_spell(1, "windsetter", "Windsetter", "Summons a gust of wind", preload("res://Sprites/Spells/Windsetter.png"), preload("res://Spells/Windsetter.tscn"))
 	register_spell(3, "westdragon", "Dragon Of The West", "They call him that for a reason.", preload("res://Sprites/Spells/WestDragon.png"), preload("res://Spells/WestDragon.tscn"))
-	register_spell(3, "lightning", "Lightning", "Uncontrollable wrath.", preload("res://Sprites/Spells/Lightning.png"), preload("res://Spells/Lightning.tscn"))
+	register_spell(4, "lightning", "Lightning", "Uncontrollable wrath.", preload("res://Sprites/Spells/Lightning.png"), preload("res://Spells/Lightning.tscn"))
 	register_spell(3, "relocator", "Relocator", "Relocates your body.", preload("res://Sprites/Spells/Teleport.png"), preload("res://Spells/TeleportWand.tscn"))
 	register_spell(3, "eidosanchor", "Eidos Anchor", "First cast stores, second cast recalls.", preload("res://Sprites/Spells/Return.png"), preload("res://Spells/Return.tscn"))
 	register_spell(2, "soulwave", "Soul Wave", "Hurts things in a expanding radius.", preload("res://Sprites/Spells/SoulWave.png"), preload("res://Spells/SoulWave.tscn"))
