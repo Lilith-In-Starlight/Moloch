@@ -181,7 +181,9 @@ func _input(event: InputEvent) -> void:
 											new_spell.name = base.name
 											new_spell.id = base.id
 											new_spell.texture = base.texture
-											new_spell.description = base.description + cmd[2]
+											new_spell.description = base.description
+											if "%s" in new_spell.description:
+												new_spell.description = base.description % cmd[2]
 											new_spell.level = clamp(2,5,cmd[2] as int)
 											Items.player_spells[slot] = new_spell
 											Items.spell_mods.append(new_spell)

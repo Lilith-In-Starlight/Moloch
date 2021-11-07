@@ -74,7 +74,7 @@ func run(Caster:Node2D):
 		spell_offset = Vector2(0, 0)
 		can_cast = true
 		self.running = true
-		Items.running_wands.append([self, Caster])
+		Items.running_wands.append([self, Caster, spell_recharge])
 
 
 func unrun():

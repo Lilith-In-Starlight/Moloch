@@ -120,11 +120,13 @@ func _ready():
 	register_spell(1, "plasmasprinkler", "Plasma Sprinkler", "Balls of heat ejected from a single point", preload("res://Sprites/Spells/PlasmaSprinkler.png"), preload("res://Spells/PlasmaSprinkler.tscn"))
 	register_spell(1, "shortray", "Short Ray", "A shortlived ray with a chance of piercing", preload("res://Sprites/Spells/Shortray.png"), preload("res://Spells/Shortray.tscn"))
 	
-	register_base_mod("multiplicative", "Multiplicative Cast", "Many from alterations of one\nIterations: ", preload("res://Sprites/Spells/Modifiers/Multiplicative.png"))
-	register_base_mod("unifying", "Unifying Cast", "One from alterations of many\nAmalgamations: ", preload("res://Sprites/Spells/Modifiers/UnifyingM.png"))
-	register_base_mod("grenade", "Grenade Cast", "Copies spells into a grenade wand\nCopied Spells: ", preload("res://Sprites/Spells/Modifiers/Grenade.png"))
-	register_base_mod("landmine", "Landmine Cast", "Copies spells into a landmine wand\nCopied Spells: ", preload("res://Sprites/Spells/Modifiers/Landmine.png"))
+	register_base_mod("multiplicative", "Multiplicative Cast", "Many from alterations of one\nIterations: %s", preload("res://Sprites/Spells/Modifiers/Multiplicative.png"))
+	register_base_mod("unifying", "Unifying Cast", "One from alterations of many\nAmalgamations: %s", preload("res://Sprites/Spells/Modifiers/UnifyingM.png"))
+	register_base_mod("grenade", "Grenade Cast", "Copies spells into a grenade wand\nCopied Spells: %s", preload("res://Sprites/Spells/Modifiers/Grenade.png"))
+	register_base_mod("landmine", "Landmine Cast", "Copies spells into a landmine wand\nCopied Spells: %s", preload("res://Sprites/Spells/Modifiers/Landmine.png"))
 	register_base_mod("limited", "Limited Cast", "Some casts will only have effect at the end of the wand", preload("res://Sprites/Spells/Modifiers/Limited.png"))
+	register_base_mod("faster", "Faster Cast", "The following spells will be cast %s times faster", preload("res://Sprites/Spells/Modifiers/Faster.png"))
+	register_base_mod("slower", "Slower Cast", "The following spells will be cast %s times slower", preload("res://Sprites/Spells/Modifiers/Slower.png"))
 	
 	# If the player is in the tree, set the Player variable of this node to it
 	if not get_tree().get_nodes_in_group("Player").empty():
@@ -156,8 +158,9 @@ func _process(delta):
 				# It can't cast if it's on cooldown
 				if wand.can_cast:
 					wand.can_cast = false
-					wand.current_spell += cast_spell(wand, caster)
-				# Cast cooldown
+					var cast_result := cast_spell(wand, caster)
+					wand.current_spell += cast_result[0]
+					run[2] *= cast_result[1]
 				if (wand.current_spell >= wand.spell_capacity-1 or wand.spells[wand.current_spell] == null) and wand.recharge >= wand.full_recharge:
 					wand.recharge = 0.0
 					wand.can_cast = true
@@ -166,7 +169,7 @@ func _process(delta):
 					running_wands.erase(run)
 					continue
 				# Recharge
-				elif wand.recharge >= wand.spell_recharge and (wand.current_spell < wand.spell_capacity and wand.spells[wand.current_spell] != null):
+				elif wand.recharge >= run[2] and (wand.current_spell < wand.spell_capacity and wand.spells[wand.current_spell] != null):
 					wand.recharge = 0.0
 					wand.current_spell += 1
 					wand.can_cast = true
@@ -253,7 +256,7 @@ func pick_random_item(rng:RandomNumberGenerator = LootRNG) -> Item:
 
 func pick_random_modifier(rng:RandomNumberGenerator = LootRNG) -> SpellMod:
 	var mod := SpellMod.new()
-	match rng.randi()%4:
+	match rng.randi()%7:
 		0:
 			mod.level = 2 + rng.randi() % 4
 			mod.id = "multiplicative"
@@ -284,6 +287,18 @@ func pick_random_modifier(rng:RandomNumberGenerator = LootRNG) -> SpellMod:
 			mod.name = "Limited Cast"
 			mod.description = "Some casts will only have effect at the end of the wand"
 			mod.texture = preload("res://Sprites/Spells/Modifiers/Limited.png")
+		5:
+			mod.level = 2 + rng.randi() % 4
+			mod.id = "faster"
+			mod.name = "Faster Cast"
+			mod.description = "The following spells will be cast %s times faster" % str(mod.level)
+			mod.texture = preload("res://Sprites/Spells/Modifiers/Faster.png")
+		6:
+			mod.level = 2 + rng.randi() % 4
+			mod.id = "slower"
+			mod.name = "Slower Cast"
+			mod.description = "The following spells will be cast %s times faster" % str(mod.level)
+			mod.texture = preload("res://Sprites/Spells/Modifiers/Slower.png")
 	spell_mods.append(mod)
 	return mod
 
@@ -325,8 +340,9 @@ func shuffle_array(array: Array) -> Array:
 	return r
 
 
-func cast_spell(wand:Wand, caster:Node2D, slot_offset := 0, goal_offset := Vector2(0, 0), modifiers := []):
+func cast_spell(wand:Wand, caster:Node2D, slot_offset := 0, goal_offset := Vector2(0, 0), modifiers := [], cast_speed_mult := 1.0) -> Array:
 	var away := 0
+	var new_cast_speed := cast_speed_mult
 	if wand.current_spell+slot_offset < wand.spell_capacity and wand.spells[wand.current_spell+slot_offset] != null:
 		var c_spell :Spell = wand.spells[wand.current_spell+slot_offset] 
 		if not c_spell is SpellMod:
@@ -347,13 +363,13 @@ func cast_spell(wand:Wand, caster:Node2D, slot_offset := 0, goal_offset := Vecto
 						var offset :Vector2 = (caster.looking_at()-caster.position).rotated(-2+randf()*4)
 						if i == 0:
 							offset *= 0
-						away = max(cast_spell(wand, caster, slot_offset + 1, offset, ["limited"]), away)
+						away = max(cast_spell(wand, caster, slot_offset + 1, offset, ["limited"], cast_speed_mult)[0], away)
 				"unifying":
 					away += c_spell.level
 					for i in c_spell.level:
 						if i + slot_offset + 1 >= wand.spell_capacity:
 							break
-						away = max(cast_spell(wand, caster, slot_offset + i + 1, goal_offset, ["limited"]), away)
+						away = max(cast_spell(wand, caster, slot_offset + i + 1, goal_offset, ["limited"], cast_speed_mult)[0], away)
 				"grenade":
 					away += c_spell.level
 					var spell :Node2D = preload("res://Spells/CastGrenade.tscn").instance()
@@ -387,9 +403,19 @@ func cast_spell(wand:Wand, caster:Node2D, slot_offset := 0, goal_offset := Vecto
 				"limited":
 					away += 1
 					if slot_offset + 1 < wand.spell_capacity:
-						away = max(cast_spell(wand, caster, slot_offset + 1, Vector2.ZERO, modifiers + ["limited"]), away)
+						away = max(cast_spell(wand, caster, slot_offset + 1, Vector2.ZERO, modifiers + ["limited"], cast_speed_mult)[0], away)
+				"faster":
+					away += 1
+					new_cast_speed = cast_speed_mult / float(c_spell.level)
+					if slot_offset + 1 < wand.spell_capacity:
+						away = max(cast_spell(wand, caster, slot_offset + 1, Vector2.ZERO, modifiers, new_cast_speed)[0], away)
+				"slower":
+					away += 1
+					new_cast_speed = cast_speed_mult * float(c_spell.level)
+					if slot_offset + 1 < wand.spell_capacity:
+						away = max(cast_spell(wand, caster, slot_offset + 1, Vector2.ZERO, modifiers, new_cast_speed)[0], away)
 					
-	return away + slot_offset
+	return [away + slot_offset, new_cast_speed]
 
 
 func break_block(block: int, strength: float) -> int:
