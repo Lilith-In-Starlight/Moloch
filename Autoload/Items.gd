@@ -124,6 +124,7 @@ func _ready():
 	register_base_mod("unifying", "Unifying Cast", "One from alterations of many\nAmalgamations: ", preload("res://Sprites/Spells/Modifiers/UnifyingM.png"))
 	register_base_mod("grenade", "Grenade Cast", "Copies spells into a grenade wand\nCopied Spells: ", preload("res://Sprites/Spells/Modifiers/Grenade.png"))
 	register_base_mod("landmine", "Landmine Cast", "Copies spells into a landmine wand\nCopied Spells: ", preload("res://Sprites/Spells/Modifiers/Landmine.png"))
+	register_base_mod("limited", "Limited Cast", "Some casts will only have effect at the end of the wand", preload("res://Sprites/Spells/Modifiers/Limited.png"))
 	
 	# If the player is in the tree, set the Player variable of this node to it
 	if not get_tree().get_nodes_in_group("Player").empty():
@@ -277,6 +278,12 @@ func pick_random_modifier(rng:RandomNumberGenerator = LootRNG) -> SpellMod:
 			mod.name = "Landmine Cast"
 			mod.description = "Copies spells into a landmine wand\nCopied Spells: " + str(mod.level)
 			mod.texture = preload("res://Sprites/Spells/Modifiers/Landmine.png")
+		4:
+			mod.level = 1
+			mod.id = "limited"
+			mod.name = "Limited Cast"
+			mod.description = "Some casts will only have effect at the end of the wand"
+			mod.texture = preload("res://Sprites/Spells/Modifiers/Limited.png")
 	spell_mods.append(mod)
 	return mod
 
@@ -318,7 +325,7 @@ func shuffle_array(array: Array) -> Array:
 	return r
 
 
-func cast_spell(wand:Wand, caster:Node2D, slot_offset := 0, goal_offset := Vector2(0, 0)):
+func cast_spell(wand:Wand, caster:Node2D, slot_offset := 0, goal_offset := Vector2(0, 0), modifiers := []):
 	var away := 0
 	if wand.current_spell+slot_offset < wand.spell_capacity and wand.spells[wand.current_spell+slot_offset] != null:
 		var c_spell :Spell = wand.spells[wand.current_spell+slot_offset] 
@@ -328,6 +335,7 @@ func cast_spell(wand:Wand, caster:Node2D, slot_offset := 0, goal_offset := Vecto
 			spell.CastInfo.goal = caster.looking_at()
 			spell.CastInfo.goal_offset = goal_offset
 			spell.CastInfo.wand = wand
+			spell.CastInfo.modifiers = modifiers
 			caster.get_parent().add_child(spell)
 		elif wand.current_spell + slot_offset + 1 < wand.spell_capacity and wand.spells[wand.current_spell+slot_offset+1] != null:
 			match c_spell.id:
@@ -339,13 +347,13 @@ func cast_spell(wand:Wand, caster:Node2D, slot_offset := 0, goal_offset := Vecto
 						var offset :Vector2 = (caster.looking_at()-caster.position).rotated(-2+randf()*4)
 						if i == 0:
 							offset *= 0
-						away = max(cast_spell(wand, caster, slot_offset + 1, offset), away)
+						away = max(cast_spell(wand, caster, slot_offset + 1, offset, ["limited"]), away)
 				"unifying":
 					away += c_spell.level
 					for i in c_spell.level:
 						if i + slot_offset + 1 >= wand.spell_capacity:
 							break
-						away = max(cast_spell(wand, caster, slot_offset + i + 1, goal_offset), away)
+						away = max(cast_spell(wand, caster, slot_offset + i + 1, goal_offset, ["limited"]), away)
 				"grenade":
 					away += c_spell.level
 					var spell :Node2D = preload("res://Spells/CastGrenade.tscn").instance()
@@ -376,6 +384,10 @@ func cast_spell(wand:Wand, caster:Node2D, slot_offset := 0, goal_offset := Vecto
 					spell.wand.spells = spells_to_cast
 					spell.wand.spell_capacity = c_spell.level
 					caster.get_parent().add_child(spell)
+				"limited":
+					away += 1
+					if slot_offset + 1 < wand.spell_capacity:
+						away = max(cast_spell(wand, caster, slot_offset + 1, Vector2.ZERO, modifiers + ["limited"]), away)
 					
 	return away + slot_offset
 

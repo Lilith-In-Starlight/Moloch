@@ -6,20 +6,25 @@ var CastInfo := SpellCastInfo.new()
 var frames := 0
 var rotate := 0.0
 
+var time := 0.0
+
 func _ready():
 	CastInfo.set_position(self)
 	CastInfo.set_goal()
 	rotate = CastInfo.goal.angle_to_point(position)
 	CastInfo.heat_caster((-12.0 - randf() * 6.0) * 0.2)
 
-func _physics_process(_delta):
+func _physics_process(delta):
 	for body in $Area.get_overlapping_bodies():
 		if not body == self:
 			_on_body_entered(body)
 	
 	
-	move_and_slide(Vector2(cos(rotate), sin(rotate))*200)
+	move_and_slide(CastInfo.vector_from_angle(rotate, 200))
 	frames += 1
+	time += delta
+	if time > 12.0:
+		queue_free()
 
 func _on_body_entered(body):
 	if body.has_method("health_object"):

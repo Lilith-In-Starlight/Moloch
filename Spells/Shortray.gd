@@ -15,7 +15,7 @@ func _ready() -> void:
 	angle = CastInfo.get_angle(self)
 	Map.play_sound(preload("res://Sfx/spells/laserfire01.wav"), position, 1.0, 0.8+randf()*0.4)
 	 
-	var point := Vector2(cos(angle), sin(angle))*100.0
+	var point := CastInfo.vector_from_angle(angle, 100)
 	Ray.cast_to = point
 	Ray.force_raycast_update()
 	if Ray.is_colliding():

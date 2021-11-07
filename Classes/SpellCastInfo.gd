@@ -9,6 +9,8 @@ var goal_offset := Vector2(0, 0)
 
 var spell_offset := Vector2(0, 0)
 
+var modifiers := []
+
 
 func set_position(CastEntity:Node2D):
 	if wand != null:
@@ -65,3 +67,9 @@ func teleport_caster(relpos:Vector2) -> void:
 			Caster.speed = Vector2(0, 0)
 		elif Caster.get("linear_velocity"):
 			Caster.linear_velocity = Vector2(0, 0)
+
+
+func vector_from_angle(angle:float, length:float) -> Vector2:
+	if "limited" in modifiers:
+		return Vector2(cos(angle), sin(angle))
+	return Vector2(cos(angle), sin(angle)) * length

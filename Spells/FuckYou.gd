@@ -14,14 +14,14 @@ func _ready():
 	CastInfo.set_position(self)
 	CastInfo.set_goal()
 	rotate = CastInfo.goal.angle_to_point(position)
-	cast_to = Vector2(cos(rotate), sin(rotate))*1000
+	cast_to = CastInfo.vector_from_angle(rotate, 30000)
 
 
 func _physics_process(delta):
 	CastInfo.set_position(self)
 	CastInfo.set_goal()
 	rotate = CastInfo.goal.angle_to_point(position)
-	cast_to = Vector2(cos(rotate), sin(rotate))*30000
+	cast_to = CastInfo.vector_from_angle(rotate, 30000)
 	CastInfo.heat_caster(1/60.0)
 	if is_colliding():
 		var pos := get_collision_point()

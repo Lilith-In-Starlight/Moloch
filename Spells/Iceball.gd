@@ -8,6 +8,7 @@ var gravity := 0.0
 var CastInfo := SpellCastInfo.new()
 
 func _ready():
+	print("a")
 	CastInfo.set_position(self)
 	CastInfo.set_goal()
 	rotate = CastInfo.goal.angle_to_point(position)

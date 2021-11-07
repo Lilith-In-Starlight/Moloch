@@ -10,7 +10,7 @@ func _ready():
 	CastInfo.set_position(self)
 	CastInfo.set_goal()
 	angle = CastInfo.get_angle(self)
-	cast_to = Vector2(cos(angle), sin(angle))*1000
+	cast_to = CastInfo.vector_from_angle(angle, 1000)
 	enabled = true
 	var Map :TileMap = get_tree().get_nodes_in_group("World")[0]
 	Map.play_sound(preload("res://Sfx/spells/laserfire01.wav"), position, 1.0, 0.8+randf()*0.4)

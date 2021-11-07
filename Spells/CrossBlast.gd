@@ -26,7 +26,7 @@ func _ready():
 func _physics_process(delta):
 	$TextureProgress.value += delta*60*0.08*(360/3.0)
 	$TextureProgress2.value += delta*60*0.08*(360/3.0)
-	position += Vector2(cos(rotate), sin(rotate))*speed*delta*60
+	position += CastInfo.vector_from_angle(rotate, speed*delta*60)
 	speed = move_toward(speed, 0, delta*60*0.08)
 	timer += delta
 	
