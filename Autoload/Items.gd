@@ -127,6 +127,7 @@ func _ready():
 	register_base_mod("limited", "Limited Cast", "Some casts will only have effect at the end of the wand", preload("res://Sprites/Spells/Modifiers/Limited.png"))
 	register_base_mod("faster", "Faster Cast", "The following spells will be cast %s times faster", preload("res://Sprites/Spells/Modifiers/Faster.png"))
 	register_base_mod("slower", "Slower Cast", "The following spells will be cast %s times slower", preload("res://Sprites/Spells/Modifiers/Slower.png"))
+	register_base_mod("fasterw", "Faster Recharge Time", "The wand will recharge %s times faster", preload("res://Sprites/Spells/Modifiers/FastWand.png"))
 	
 	# If the player is in the tree, set the Player variable of this node to it
 	if not get_tree().get_nodes_in_group("Player").empty():
@@ -161,7 +162,8 @@ func _process(delta):
 					var cast_result := cast_spell(wand, caster)
 					wand.current_spell += cast_result[0]
 					run[2] *= cast_result[1]
-				if (wand.current_spell >= wand.spell_capacity-1 or wand.spells[wand.current_spell] == null) and wand.recharge >= wand.full_recharge:
+					print(cast_result[1])
+				if (wand.current_spell >= wand.spell_capacity-1 or wand.spells[wand.current_spell] == null) and wand.recharge >= run[3]:
 					wand.recharge = 0.0
 					wand.can_cast = true
 					wand.current_spell = 0
@@ -169,7 +171,7 @@ func _process(delta):
 					running_wands.erase(run)
 					continue
 				# Recharge
-				elif wand.recharge >= run[2] and (wand.current_spell < wand.spell_capacity and wand.spells[wand.current_spell] != null):
+				elif (wand.recharge >= run[2] or wand.current_spell == run[4] - 1) and (wand.current_spell < wand.spell_capacity and wand.spells[wand.current_spell] != null):
 					wand.recharge = 0.0
 					wand.current_spell += 1
 					wand.can_cast = true
@@ -256,7 +258,7 @@ func pick_random_item(rng:RandomNumberGenerator = LootRNG) -> Item:
 
 func pick_random_modifier(rng:RandomNumberGenerator = LootRNG) -> SpellMod:
 	var mod := SpellMod.new()
-	match rng.randi()%7:
+	match rng.randi()%8:
 		0:
 			mod.level = 2 + rng.randi() % 4
 			mod.id = "multiplicative"
@@ -297,8 +299,14 @@ func pick_random_modifier(rng:RandomNumberGenerator = LootRNG) -> SpellMod:
 			mod.level = 2 + rng.randi() % 4
 			mod.id = "slower"
 			mod.name = "Slower Cast"
-			mod.description = "The following spells will be cast %s times faster" % str(mod.level)
+			mod.description = "The following spells will be cast %s times slower" % str(mod.level)
 			mod.texture = preload("res://Sprites/Spells/Modifiers/Slower.png")
+		7:
+			mod.level = 2 + rng.randi() % 4
+			mod.id = "fasterw"
+			mod.name = "Faster Recharge Time"
+			mod.description = "The wand will recharge %s times faster" % str(mod.level)
+			mod.texture = preload("res://Sprites/Spells/Modifiers/FastWand.png")
 	spell_mods.append(mod)
 	return mod
 
@@ -363,13 +371,13 @@ func cast_spell(wand:Wand, caster:Node2D, slot_offset := 0, goal_offset := Vecto
 						var offset :Vector2 = (caster.looking_at()-caster.position).rotated(-2+randf()*4)
 						if i == 0:
 							offset *= 0
-						away = max(cast_spell(wand, caster, slot_offset + 1, offset, ["limited"], cast_speed_mult)[0], away)
+						away = max(cast_spell(wand, caster, slot_offset + 1, offset, modifiers, cast_speed_mult)[0], away)
 				"unifying":
 					away += c_spell.level
 					for i in c_spell.level:
 						if i + slot_offset + 1 >= wand.spell_capacity:
 							break
-						away = max(cast_spell(wand, caster, slot_offset + i + 1, goal_offset, ["limited"], cast_speed_mult)[0], away)
+						away = max(cast_spell(wand, caster, slot_offset + i + 1, goal_offset, modifiers, cast_speed_mult)[0], away)
 				"grenade":
 					away += c_spell.level
 					var spell :Node2D = preload("res://Spells/CastGrenade.tscn").instance()
@@ -407,6 +415,7 @@ func cast_spell(wand:Wand, caster:Node2D, slot_offset := 0, goal_offset := Vecto
 				"faster":
 					away += 1
 					new_cast_speed = cast_speed_mult / float(c_spell.level)
+					print(float(c_spell.level))
 					if slot_offset + 1 < wand.spell_capacity:
 						away = max(cast_spell(wand, caster, slot_offset + 1, Vector2.ZERO, modifiers, new_cast_speed)[0], away)
 				"slower":
@@ -414,6 +423,10 @@ func cast_spell(wand:Wand, caster:Node2D, slot_offset := 0, goal_offset := Vecto
 					new_cast_speed = cast_speed_mult * float(c_spell.level)
 					if slot_offset + 1 < wand.spell_capacity:
 						away = max(cast_spell(wand, caster, slot_offset + 1, Vector2.ZERO, modifiers, new_cast_speed)[0], away)
+				_:
+					away += 1
+					if slot_offset + 1 < wand.spell_capacity:
+						away = max(cast_spell(wand, caster, slot_offset + 1, Vector2.ZERO, modifiers, cast_speed_mult)[0], away)
 					
 	return [away + slot_offset, new_cast_speed]
 

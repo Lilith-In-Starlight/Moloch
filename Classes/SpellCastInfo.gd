@@ -71,5 +71,5 @@ func teleport_caster(relpos:Vector2) -> void:
 
 func vector_from_angle(angle:float, length:float) -> Vector2:
 	if "limited" in modifiers:
-		return Vector2(cos(angle), sin(angle))
+		return Vector2(cos(angle), sin(angle)) * 2.0
 	return Vector2(cos(angle), sin(angle)) * length

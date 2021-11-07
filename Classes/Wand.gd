@@ -74,7 +74,21 @@ func run(Caster:Node2D):
 		spell_offset = Vector2(0, 0)
 		can_cast = true
 		self.running = true
-		Items.running_wands.append([self, Caster, spell_recharge])
+		var speed_mult := 1.0
+		var last := 0
+		var count := true
+		for i in spells:
+			if i is SpellMod:
+				print(i.id)
+				print(i.level)
+				if i.id == "fasterw":
+					speed_mult /= float(i.level)
+			if i == null:
+				count = false
+			if count:
+				last += 1
+		print(speed_mult)
+		Items.running_wands.append([self, Caster, spell_recharge, full_recharge * speed_mult, last])
 
 
 func unrun():
