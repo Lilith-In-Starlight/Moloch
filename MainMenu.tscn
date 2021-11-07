@@ -113,6 +113,10 @@ tracks/4/keys = {
 "values": [ true, false ]
 }
 
+[sub_resource type="DynamicFont" id=5]
+size = 12
+font_data = ExtResource( 2 )
+
 [sub_resource type="StyleBoxFlat" id=4]
 content_margin_left = 5.0
 content_margin_right = 5.0
@@ -129,10 +133,6 @@ corner_radius_top_right = 2
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 2
 anti_aliasing = false
-
-[sub_resource type="DynamicFont" id=5]
-size = 12
-font_data = ExtResource( 2 )
 
 [sub_resource type="StyleBoxFlat" id=6]
 bg_color = Color( 0, 0, 0, 1 )
@@ -190,9 +190,9 @@ margin_top = -0.0749964
 margin_right = 20.2
 margin_bottom = 0.100003
 focus_mode = 1
-custom_styles/normal = SubResource( 4 )
-custom_fonts/font = SubResource( 5 )
 custom_colors/font_color = Color( 0.458824, 0.215686, 0, 1 )
+custom_fonts/font = SubResource( 5 )
+custom_styles/normal = SubResource( 4 )
 align = 1
 placeholder_text = "Leave empty for random seed"
 __meta__ = {
