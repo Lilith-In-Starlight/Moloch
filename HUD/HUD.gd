@@ -256,12 +256,12 @@ func _process(delta):
 		var wand :Wand = Items.player_wands[Items.selected_wand]
 		for i in Wand.MAX_CAPACITY:
 			# If it's in a slot
-			if mouse.x >= 4+i*(16+4) and mouse.x < 4+(i+1)*(16+4):
-				# Don't let the player cast spells
-				block_cast = true
-				clicked = 1
+			if mouse.x >= 4+i*(16+4) and mouse.x < (i+1)*(16+4):
 				# If this slot is had by the wand
 				if i < wand.spell_capacity:
+					# Don't let the player cast spells
+					block_cast = true
+					clicked = 1
 					# Then this is the slot that was clicked (aka I didn't click an empty area)
 					slot = i
 					# Set the description accordingly
