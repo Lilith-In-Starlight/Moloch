@@ -183,8 +183,7 @@ __meta__ = {
 [node name="Bg1" type="TextureRect" parent="Background/Following"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = 400.0
-margin_bottom = 225.0
+margin_bottom = -1.0
 texture = ExtResource( 4 )
 stretch_mode = 2
 __meta__ = {
@@ -194,8 +193,7 @@ __meta__ = {
 [node name="Bg2" type="TextureRect" parent="Background/Following"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = 400.0
-margin_bottom = 225.0
+margin_bottom = -1.0
 texture = ExtResource( 4 )
 stretch_mode = 2
 __meta__ = {
@@ -205,8 +203,7 @@ __meta__ = {
 [node name="Bg3" type="TextureRect" parent="Background/Following"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = 400.0
-margin_bottom = 225.0
+margin_bottom = -1.0
 texture = ExtResource( 4 )
 stretch_mode = 2
 __meta__ = {
@@ -216,8 +213,7 @@ __meta__ = {
 [node name="Bg4" type="TextureRect" parent="Background/Following"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = 400.0
-margin_bottom = 225.0
+margin_bottom = -1.0
 texture = ExtResource( 4 )
 stretch_mode = 2
 __meta__ = {
@@ -227,8 +223,7 @@ __meta__ = {
 [node name="Bg5" type="TextureRect" parent="Background/Following"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = 400.0
-margin_bottom = 225.0
+margin_bottom = -1.0
 texture = ExtResource( 4 )
 stretch_mode = 2
 __meta__ = {
@@ -238,8 +233,7 @@ __meta__ = {
 [node name="Bg6" type="TextureRect" parent="Background/Following"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = 400.0
-margin_bottom = 225.0
+margin_bottom = -1.0
 texture = ExtResource( 4 )
 stretch_mode = 2
 __meta__ = {
@@ -249,8 +243,7 @@ __meta__ = {
 [node name="Bg7" type="TextureRect" parent="Background/Following"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = 400.0
-margin_bottom = 225.0
+margin_bottom = -1.0
 texture = ExtResource( 4 )
 stretch_mode = 2
 __meta__ = {
@@ -260,8 +253,7 @@ __meta__ = {
 [node name="Bg8" type="TextureRect" parent="Background/Following"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = 400.0
-margin_bottom = 225.0
+margin_bottom = -1.0
 texture = ExtResource( 4 )
 stretch_mode = 2
 __meta__ = {
@@ -271,8 +263,7 @@ __meta__ = {
 [node name="Bg9" type="TextureRect" parent="Background/Following"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = 400.0
-margin_bottom = 225.0
+margin_bottom = -1.0
 texture = ExtResource( 4 )
 stretch_mode = 2
 __meta__ = {
@@ -1074,6 +1065,7 @@ drag_margin_bottom = 0.4
 [connection signal="pressed" from="HUD/HUD/Pause/Settings/Back" to="HUD/HUD/Pause" method="_on_Back_pressed"]
 [connection signal="timeout" from="HUD/HUD/Achievement/Timer" to="HUD/HUD/Achievement" method="_on_Timer_timeout"]
 [connection signal="entity_died" from="Player" to="HUD" method="_on_player_died"]
+[connection signal="entity_died" from="Player" to="HUD/HUD/Pause" method="_on_Player_died"]
 [connection signal="generated_world" from="World" to="HUD" method="_on_generated_world"]
 [connection signal="generated_world" from="World" to="HUD/HUD/Minimap" method="_on_generated_world"]
 [connection signal="generated_world" from="World" to="HUD/HUD/Console" method="_on_World_generated_world"]
