@@ -42,8 +42,8 @@ class _Room:
 		var attachment_door
 
 func _ready():
-	if Items.level > 2:
-		level_tile = 1
+#	if Items.level > 2:
+#		level_tile = 1
 	print("Generating dungeon")
 	position = Vector2(0, 0)
 	print("Step 0: Generating first room")
