@@ -39,6 +39,6 @@ func _process(_delta):
 						Map.summon_wand(wand, position, Vector2(-120 + randf()*240, -100))
 					TYPES.SPELL:
 						var spell := Items.pick_random_spell()
-						if Items.LootRNG.randf() < 0.2:
+						if Items.LootRNG.randf() < 0.4:
 							spell = Items.pick_random_modifier()
 						Map.summon_spell(spell, position, Vector2(-120 + randf()*240, -100))
