@@ -55,3 +55,10 @@ func _on_JoystickSensitivity_value_changed(value: float) -> void:
 
 func _on_World_generated_world() -> void:
 	finished_gen = true
+
+
+func _on_Player_died() -> void:
+	get_tree().paused = false
+	visible = get_tree().paused
+	$Settings.visible = false
+	$Options.visible = true
