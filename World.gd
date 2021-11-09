@@ -32,6 +32,8 @@ var rooms := 0
 var generated_end_room := false
 var treasure_rooms := 0
 
+var level_tile := 0
+
 class _Room:
 		var scene = null
 		var is_treasure :bool = false
@@ -40,6 +42,8 @@ class _Room:
 		var attachment_door
 
 func _ready():
+	if Items.level > 2:
+		level_tile = 1
 	print("Generating dungeon")
 	position = Vector2(0, 0)
 	print("Step 0: Generating first room")
@@ -92,7 +96,7 @@ func _ready():
 			var door_in_map := world_to_map(door.position) + world_to_map(door.get_parent().position)
 			var door_rect = get_door_rect(door)
 			door_rect.position += door_in_map
-			fill_rect(door_rect,0)
+			fill_rect(door_rect, level_tile)
 	
 	print("Step 3: Cloning all elements")
 	# this can be shrunk further if one makes the game load all files at res://Elements/* at the start
@@ -134,7 +138,7 @@ func _ready():
 		if room is TileMap:
 			var room_in_map := world_to_map(room.position)
 			for cell in room.get_used_cells():
-				set_cellv(room_in_map + cell, room.get_cellv(cell))
+				set_cellv(room_in_map + cell, level_tile)
 			room.queue_free()
 	
 	max_point /= 8.0
@@ -165,7 +169,7 @@ func fill_empty_space_chunk():
 	for x in range(fill_x, chunk_end):
 		for y in range(min_point.y, max_point.y):
 			if not is_in_room(x, y):
-				set_cell(x, y, 0)
+				set_cell(x, y, level_tile)
 	x_fill_step = readjust_chunk_size(x_fill_step, start, OS.get_ticks_msec(), 200)
 	
 	fill_x = chunk_end
