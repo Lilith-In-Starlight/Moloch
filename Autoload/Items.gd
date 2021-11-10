@@ -61,8 +61,8 @@ var all_spells := {}
 
 var base_spell_mods := {}
 
-var last_category := 1
-var last_category_times := 1
+var last_items := []
+var last_spells := []
 
 func _ready():
 	var generator_seed := hash(OS.get_time())
@@ -224,13 +224,15 @@ func pick_random_spell(rng:RandomNumberGenerator = LootRNG) -> Spell:
 		tier = 3
 	elif random < CHANCE_TIER1 + CHANCE_TIER2 + CHANCE_TIER3 + CHANCE_TIER4:
 		tier = 4
-	if tier == last_category:
-		last_category_times += 1
-	if spells[tier].empty() or (tier == last_category and rng.randf() < 1.0 / float(last_category_times)):
-		if tier != last_category:
-			last_category = tier
-			last_category_times = 0
-		return pick_random_spell(rng)
+	if spells[tier].empty():
+		var ret := pick_random_spell(rng)
+		if ret.id in last_spells:
+			return pick_random_spell(rng)
+		else:
+			last_spells.append(ret.id)
+			if last_spells.size() > 6:
+				last_spells.pop_front()
+			return ret
 	return spells[tier].values()[rng.randi()%spells[tier].values().size()]
 
 
@@ -245,13 +247,15 @@ func pick_random_item(rng:RandomNumberGenerator = LootRNG) -> Item:
 		tier = 3
 	elif random < CHANCE_TIER1 + CHANCE_TIER2 + CHANCE_TIER3 + CHANCE_TIER4:
 		tier = 4
-	if tier == last_category:
-		last_category_times += 1
-	if items[tier].empty() or (tier == last_category and rng.randf() < 1.0 / float(last_category_times)):
-		if tier != last_category:
-			last_category = tier
-			last_category_times = 0
-		return pick_random_item(rng)
+	if items[tier].empty():
+		var ret := pick_random_item(rng)
+		if ret.id in last_items:
+			return pick_random_item(rng)
+		else:
+			last_items.append(ret.id)
+			if last_items.size() > 6:
+				last_items.pop_front()
+			return ret
 	return items[tier].values()[rng.randi()%items[tier].values().size()]
 
 
