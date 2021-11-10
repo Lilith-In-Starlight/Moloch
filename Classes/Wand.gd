@@ -31,12 +31,18 @@ var can_cast := true
 func _init():
 	if Items.LootRNG.randf() < 0.15:
 		shuffle = true
-	var randspell = Items.pick_random_spell()
-	spells.append(randspell)
 	
-	if Items.LootRNG.randi()%100 > 85 and spell_capacity > 1:
-		randspell = Items.pick_random_spell()
-		spells.append(randspell)
+	# Basically, you want an amount of spells that is most likely to be 2
+	# randfn can return negatives, you dont want that
+	# you round it, you only want integers
+	# you dont want the amount of spells to be larger than the spell capacity
+	# you dont want it to be zero, that's only for the starting wand
+	var spells_to_give := clamp(min(spell_capacity, round(abs(Items.LootRNG.randfn(2.0, 3.0)))), 1, 12)
+	for i in spells_to_give:
+		if randf() < 0.3 and not (i == 0 and spells_to_give == 1):
+			spells.append(Items.pick_random_modifier())
+			continue
+		spells.append(Items.pick_random_spell())
 	
 	fix_spells()
 
