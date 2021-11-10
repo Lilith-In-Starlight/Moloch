@@ -315,6 +315,8 @@ func pick_random_modifier(rng:RandomNumberGenerator = LootRNG) -> SpellMod:
 
 
 func reset_player():
+	last_items = []
+	last_spells = []
 	last_pickup = null
 	level = 1
 	var generator_seed := hash(OS.get_time())
