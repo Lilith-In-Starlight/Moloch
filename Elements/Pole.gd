@@ -13,6 +13,8 @@ func _ready():
 		$Area/KinematicBody2D.position = Vector2(0, 4 * size)
 		$VisibilityEnabler2D.rect = Rect2(-6,0,12,8*size)
 		Map = get_tree().get_nodes_in_group("World")[0]
+		if Map.level_tile == 1:
+			$Poles.texture = preload("res://Sprites/Elements/BrownPole.png")
 
 func _process(_delta):
 	if Engine.editor_hint:

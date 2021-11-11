@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://Sprites/Elements/Poles.png" type="Texture" id=1]
+[ext_resource path="res://Elements/Falling/FallingPole.gd" type="Script" id=2]
 
 [sub_resource type="RectangleShape2D" id=1]
 
@@ -8,6 +9,7 @@
 collision_layer = 0
 collision_mask = 2
 gravity_scale = 3.4
+script = ExtResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 1 )
