@@ -60,6 +60,9 @@ var end_times : String # How long did the run last
 var which_inventory := 2
 var which_slot := 0
 
+var has_healed := false
+var has_seen_info := false
+
 
 func _ready():
 	Player = get_tree().get_nodes_in_group("Player")[0]
@@ -71,6 +74,14 @@ func _ready():
 
 
 func _process(delta):
+	# Control the tutorial
+	if Items.player_health.poked_holes > 0 and not Config.tutorial["healed"]:
+		$HUD/HealTutorial.visible = true
+	elif $HUD/HealTutorial.visible and not Config.tutorial["healed"] and Items.player_health.poked_holes == 0 and not has_healed:
+		Config.tutorial["healed"] = true
+		$HUD/HealTutorial.visible = false
+		Config.save_config()
+		has_healed = true
 	# Control the temperature vignettes
 	if Items.player_health.temperature > 30:
 		HotHUD.modulate.a = lerp(HotHUD.modulate.a, (Items.player_health.temperature-30)/110.0, 0.2)
@@ -189,7 +200,6 @@ func _process(delta):
 	# Reset the description boxes' visibility
 	DescriptionBox.visible = false
 	ShortDescriptionBox.visible = false
-	ShortDescriptionBox.rect_size.x = 0
 	# Variables for which inventory the player click and what slot
 	var clicked := -1
 	var slot := -1
@@ -213,17 +223,17 @@ func _process(delta):
 					# Which information to set
 					if Input.is_action_pressed("see_info"):
 						DescriptionBox.visible = true
-						DescriptionBoxName.text = "Wand"
-						DescriptionBoxInfo.text = "Cast Cooldown: " + str(d_wand.spell_recharge).pad_decimals(3)
-						DescriptionBoxInfo.text += "\nRecharge Time: " + str(d_wand.full_recharge).pad_decimals(3)
-						DescriptionBoxInfo.text += "\nTemp. Resistance: " + str(1.0/d_wand.heat_resistance).pad_decimals(2)
-						DescriptionBoxInfo.text += "\nSoul Resistance: " + str(1.0/d_wand.soul_resistance).pad_decimals(2)
-						DescriptionBoxInfo.text += "\nPush Resistance: " + str(1.0/d_wand.push_resistance).pad_decimals(2)
+						DescriptionBoxName.bbcode_text = "[img]res://Sprites/Menus/WandIcon.png[/img] Wand"
+						DescriptionBoxInfo.bbcode_text = "[img]res://Sprites/Menus/CastDelayIcon.png[/img] Cast Cooldown: " + str(d_wand.spell_recharge).pad_decimals(3) + "s"
+						DescriptionBoxInfo.bbcode_text += "\n[img]res://Sprites/Menus/CooldownIcon.png[/img] Recharge Time: " + str(d_wand.full_recharge).pad_decimals(3) + "s"
+						DescriptionBoxInfo.bbcode_text += "\nTemp. Resistance: " + str(1.0/d_wand.heat_resistance).pad_decimals(2)
+						DescriptionBoxInfo.bbcode_text += "\nSoul Resistance: " + str(1.0/d_wand.soul_resistance).pad_decimals(2)
+						DescriptionBoxInfo.bbcode_text += "\nPush Resistance: " + str(1.0/d_wand.push_resistance).pad_decimals(2)
 						if d_wand.shuffle:
-							DescriptionBoxInfo.text += "\nShuffle"
+							DescriptionBoxInfo.bbcode_text += "\nShuffle"
 					else:
 						ShortDescriptionBox.visible = true
-						ShortDescriptionBox.text =  str(d_wand.spell_recharge).pad_decimals(2) + "/" + str(d_wand.full_recharge).pad_decimals(2)
+						ShortDescriptionBox.bbcode_text = "[img]res://Sprites/Menus/CastDelayIcon.png[/img] " + str(d_wand.spell_recharge).pad_decimals(2) + "s [img]res://Sprites/Menus/CooldownIcon.png[/img] " + str(d_wand.full_recharge).pad_decimals(2) + "s"
 				break # Stop checking for if it's in a slot, we already did all this stuff
 	
 	# If the mouse is in the companions' wand area
@@ -242,8 +252,8 @@ func _process(delta):
 					if Input.is_action_pressed("see_info"):
 						DescriptionBox.visible = true
 						DescriptionBoxName.text = "Wand"
-						DescriptionBoxInfo.text = "Cast Cooldown: " + str(Items.companions[i][1].spell_recharge).pad_decimals(3)
-						DescriptionBoxInfo.text += "\nRecharge Time: " + str(Items.companions[i][1].full_recharge).pad_decimals(3)
+						DescriptionBoxInfo.text = "Spell Cooldown: " + str(Items.companions[i][1].spell_recharge).pad_decimals(3)
+						DescriptionBoxInfo.text += "\nUsage Cooldown: " + str(Items.companions[i][1].full_recharge).pad_decimals(3)
 						if Items.companions[i][1].shuffle:
 							DescriptionBoxInfo.text += "\nShuffle"
 					else:
@@ -451,6 +461,7 @@ func _process(delta):
 	else:
 		DescriptionBox.rect_position = mouse
 	ShortDescriptionBox.rect_position = mouse
+	
 
 
 func add_message(message:String):

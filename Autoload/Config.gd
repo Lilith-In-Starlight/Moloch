@@ -12,6 +12,13 @@ var damage_visuals := false
 var instant_death_button := false
 var joystick_sensitivity := 6
 
+# Tutorial
+
+var tutorial := {
+	"healed" : false,
+	"seen_info" : false,
+}
+
 # Achievements
 var achievements := {
 	"fun1":false,
@@ -62,9 +69,13 @@ func _ready() -> void:
 			for j in obtained:
 				InputMap.action_add_event(i, j)
 		
-		var new_achievements = config_file.get_value("achievements", "achievements", achievements)
-		for i in new_achievements:
-			achievements[i] = new_achievements[i]
+		var new_dict = config_file.get_value("achievements", "achievements", achievements)
+		for i in new_dict:
+			achievements[i] = new_dict[i]
+		
+		new_dict = config_file.get_value("tutorial", "tutorial", tutorial)
+		for i in new_dict:
+			tutorial[i] = new_dict[i]
 		config_file.save("user://config.moloch")
 	else:
 		save_config()
@@ -81,6 +92,7 @@ func save_config() -> void:
 		config_file.set_value("config", "keybinds_%s"%i, InputMap.get_action_list(i))
 	
 	config_file.set_value("achievements", "achievements", achievements)
+	config_file.set_value("tutorial", "tutorial", tutorial)
 	config_file.save("user://config.moloch")
 
 

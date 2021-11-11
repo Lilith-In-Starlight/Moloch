@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=2]
+[gd_scene load_steps=50 format=2]
 
 [ext_resource path="res://Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://EditorTileset.tres" type="TileSet" id=2]
@@ -17,6 +17,7 @@
 [ext_resource path="res://Sfx/death.wav" type="AudioStream" id=15]
 [ext_resource path="res://Sprites/Achievements/OhWoahWhatsThis.png" type="Texture" id=16]
 [ext_resource path="res://HUD/Achievement.gd" type="Script" id=17]
+[ext_resource path="res://Themes/Theme.tres" type="Theme" id=18]
 
 [sub_resource type="CanvasItemMaterial" id=1]
 blend_mode = 1
@@ -43,6 +44,23 @@ border_color = Color( 0.552941, 0.160784, 0.647059, 0.541176 )
 corner_radius_top_left = 10
 corner_radius_top_right = 2
 anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id=29]
+bg_color = Color( 0.509804, 0.929412, 1, 0.298039 )
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color( 0.290196, 0.537255, 0.654902, 1 )
+corner_radius_top_left = 12
+corner_radius_top_right = 6
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 6
+anti_aliasing = false
+
+[sub_resource type="DynamicFont" id=30]
+size = 13
+font_data = ExtResource( 5 )
 
 [sub_resource type="DynamicFont" id=6]
 size = 12
@@ -74,6 +92,10 @@ font_data = ExtResource( 5 )
 [sub_resource type="DynamicFont" id=10]
 size = 10
 use_mipmaps = true
+font_data = ExtResource( 5 )
+
+[sub_resource type="DynamicFont" id=31]
+size = 12
 font_data = ExtResource( 5 )
 
 [sub_resource type="StyleBoxFlat" id=11]
@@ -337,6 +359,41 @@ bbcode_enabled = true
 bbcode_text = "[center]broken leg[/center]"
 text = "broken leg"
 fit_content_height = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HealTutorial" type="Label" parent="HUD/HUD"]
+visible = false
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = 65.0
+margin_top = -62.5
+margin_right = -65.0
+margin_bottom = -42.5
+theme = ExtResource( 18 )
+custom_styles/normal = SubResource( 29 )
+text = "Press R to seal bleeding wounds"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="InfoTutorial" type="Label" parent="HUD/HUD"]
+visible = false
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = 52.0
+margin_top = -62.5
+margin_right = -52.0
+margin_bottom = -45.5
+theme = ExtResource( 18 )
+custom_fonts/font = SubResource( 30 )
+custom_styles/normal = SubResource( 29 )
+text = "Hover on any item in your inventory while pressing SHIFT"
+align = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -649,41 +706,36 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Name" type="Label" parent="HUD/HUD/Description"]
+[node name="Name" type="RichTextLabel" parent="HUD/HUD/Description"]
 margin_left = 8.0
 margin_top = 8.0
 margin_right = 136.0
 margin_bottom = 20.0
 size_flags_horizontal = 5
-custom_fonts/font = SubResource( 9 )
-text = "Name"
-autowrap = true
+custom_fonts/normal_font = SubResource( 9 )
+bbcode_enabled = true
 
-[node name="Description" type="Label" parent="HUD/HUD/Description"]
+[node name="Description" type="RichTextLabel" parent="HUD/HUD/Description"]
 margin_left = 8.0
 margin_top = 18.0
 margin_right = 136.0
 margin_bottom = 30.0
 size_flags_horizontal = 5
-custom_fonts/font = SubResource( 10 )
-text = "Information"
-autowrap = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
+custom_fonts/normal_font = SubResource( 10 )
+bbcode_enabled = true
+fit_content_height = true
 
-[node name="ShortDesc" type="Label" parent="HUD/HUD"]
+[node name="ShortDesc" type="RichTextLabel" parent="HUD/HUD"]
 margin_left = 37.0
 margin_top = 40.0
-margin_right = 71.0
-margin_bottom = 59.0
-size_flags_horizontal = 5
-custom_fonts/font = SubResource( 9 )
+margin_right = 128.0
+margin_bottom = 60.0
+size_flags_horizontal = 7
+size_flags_vertical = 4
+custom_fonts/normal_font = SubResource( 31 )
 custom_styles/normal = SubResource( 11 )
-text = "Name"
-__meta__ = {
-"_edit_use_anchors_": false
-}
+bbcode_enabled = true
+fit_content_height = true
 
 [node name="PointNine" type="Control" parent="HUD/HUD"]
 anchor_left = 0.937
@@ -837,6 +889,7 @@ __meta__ = {
 }
 
 [node name="Generating" type="Panel" parent="HUD/HUD"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 custom_styles/panel = SubResource( 20 )
