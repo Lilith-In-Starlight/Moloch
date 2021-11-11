@@ -120,7 +120,7 @@ func _input(event: InputEvent) -> void:
 											if "spellcap" in tags:
 												if tags["spellcap"].is_valid_integer():
 													var scap := tags["spellcap"] as int
-													if scap != clamp(scap, 1, 6):
+													if scap != clamp(scap, 1, 12):
 														output("[color=red]Invalid Spell Capacity[/color]")
 													else:
 														new_wand.spell_capacity = tags["spellcap"] as int
