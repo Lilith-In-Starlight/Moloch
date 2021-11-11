@@ -354,9 +354,10 @@ func shuffle_array(array: Array) -> Array:
 	return r
 
 
-func cast_spell(wand:Wand, caster:Node2D, slot_offset := 0, goal_offset := Vector2(0, 0), modifiers := [], cast_speed_mult := 1.0) -> Array:
+func cast_spell(wand:Wand, caster:Node2D, slot_offset := 0, goal_offset := Vector2(0, 0), modifiers := [], cast_speed_mult := 1.0, layer := 0) -> Array:
 	var away := 0
 	var new_cast_speed := cast_speed_mult
+	var largest_layer := layer
 	if wand.current_spell+slot_offset < wand.spell_capacity and wand.spells[wand.current_spell+slot_offset] != null:
 		var c_spell :Spell = wand.spells[wand.current_spell+slot_offset] 
 		if not c_spell is SpellMod:
@@ -377,13 +378,17 @@ func cast_spell(wand:Wand, caster:Node2D, slot_offset := 0, goal_offset := Vecto
 						var offset :Vector2 = (caster.looking_at()-caster.position).rotated(-2+randf()*4)
 						if i == 0:
 							offset *= 0
-						away = max(cast_spell(wand, caster, slot_offset + 1, offset, modifiers, cast_speed_mult)[0], away)
+						var cast := cast_spell(wand, caster, slot_offset + 1, offset, modifiers, cast_speed_mult, layer + 1)
+						away = max(cast[0], away)
+						largest_layer = max(layer, cast[2])
 				"unifying":
 					away += c_spell.level
 					for i in c_spell.level:
 						if i + slot_offset + 1 >= wand.spell_capacity:
 							break
-						away = max(cast_spell(wand, caster, slot_offset + i + 1, goal_offset, modifiers, cast_speed_mult)[0], away)
+						var cast := cast_spell(wand, caster, slot_offset + i + 1, goal_offset, modifiers, cast_speed_mult, layer + 1)
+						away = max(cast[0], away)
+						largest_layer = max(layer, cast[2])
 				"grenade":
 					away += c_spell.level
 					var spell :Node2D = preload("res://Spells/CastGrenade.tscn").instance()
@@ -417,23 +422,33 @@ func cast_spell(wand:Wand, caster:Node2D, slot_offset := 0, goal_offset := Vecto
 				"limited":
 					away += 1
 					if slot_offset + 1 < wand.spell_capacity:
-						away = max(cast_spell(wand, caster, slot_offset + 1, Vector2.ZERO, modifiers + ["limited"], cast_speed_mult)[0], away)
+						var cast := cast_spell(wand, caster, slot_offset + 1, Vector2.ZERO, modifiers + ["limited"], cast_speed_mult, layer + 1)
+						away = max(cast[0], away)
+						largest_layer = max(layer, cast[2])
 				"faster":
 					away += 1
 					new_cast_speed = cast_speed_mult / float(c_spell.level)
 					if slot_offset + 1 < wand.spell_capacity:
-						away = max(cast_spell(wand, caster, slot_offset + 1, Vector2.ZERO, modifiers, new_cast_speed)[0], away)
+						var cast := cast_spell(wand, caster, slot_offset + 1, Vector2.ZERO, modifiers, new_cast_speed, layer + 1)
+						away = max(cast[0], away)
+						largest_layer = max(layer, cast[2])
 				"slower":
 					away += 1
 					new_cast_speed = cast_speed_mult * float(c_spell.level)
 					if slot_offset + 1 < wand.spell_capacity:
-						away = max(cast_spell(wand, caster, slot_offset + 1, Vector2.ZERO, modifiers, new_cast_speed)[0], away)
+						var cast := cast_spell(wand, caster, slot_offset + 1, Vector2.ZERO, modifiers, new_cast_speed, layer + 1)
+						away = max(cast[0], away)
+						largest_layer = max(layer, cast[2])
 				_:
 					away += 1
 					if slot_offset + 1 < wand.spell_capacity:
-						away = max(cast_spell(wand, caster, slot_offset + 1, Vector2.ZERO, modifiers, cast_speed_mult)[0], away)
-					
-	return [away + slot_offset, new_cast_speed]
+						var cast := cast_spell(wand, caster, slot_offset + 1, Vector2.ZERO, modifiers, cast_speed_mult, layer + 1)
+						away = max(cast[0], away)
+						largest_layer = max(layer, cast[2])
+	if layer == largest_layer:
+		return [away + slot_offset, new_cast_speed, layer]
+	
+	return [away, new_cast_speed, layer]
 
 
 func break_block(block: int, strength: float) -> int:
