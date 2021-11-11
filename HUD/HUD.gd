@@ -223,14 +223,18 @@ func _process(delta):
 					# Which information to set
 					if Input.is_action_pressed("see_info"):
 						DescriptionBox.visible = true
-						DescriptionBoxName.bbcode_text = "[img]res://Sprites/Menus/WandIcon.png[/img] Wand"
-						DescriptionBoxInfo.bbcode_text = "[img]res://Sprites/Menus/CastDelayIcon.png[/img] Cast Cooldown: " + str(d_wand.spell_recharge).pad_decimals(3) + "s"
-						DescriptionBoxInfo.bbcode_text += "\n[img]res://Sprites/Menus/CooldownIcon.png[/img] Recharge Time: " + str(d_wand.full_recharge).pad_decimals(3) + "s"
-						DescriptionBoxInfo.bbcode_text += "\nTemp. Resistance: " + str(1.0/d_wand.heat_resistance).pad_decimals(2)
-						DescriptionBoxInfo.bbcode_text += "\nSoul Resistance: " + str(1.0/d_wand.soul_resistance).pad_decimals(2)
-						DescriptionBoxInfo.bbcode_text += "\nPush Resistance: " + str(1.0/d_wand.push_resistance).pad_decimals(2)
+						var new_text := "[img]res://Sprites/Menus/WandIcon.png[/img] Wand"
+						if new_text != DescriptionBoxName.bbcode_text:
+							DescriptionBoxName.bbcode_text = new_text
+						new_text = "[img]res://Sprites/Menus/CastDelayIcon.png[/img] Cast Cooldown: " + str(d_wand.spell_recharge).pad_decimals(3) + "s"
+						new_text += "\n[img]res://Sprites/Menus/CooldownIcon.png[/img] Recharge Time: " + str(d_wand.full_recharge).pad_decimals(3) + "s"
+						new_text += "\nTemp. Resistance: " + str(1.0/d_wand.heat_resistance).pad_decimals(2)
+						new_text += "\nSoul Resistance: " + str(1.0/d_wand.soul_resistance).pad_decimals(2)
+						new_text += "\nPush Resistance: " + str(1.0/d_wand.push_resistance).pad_decimals(2)
 						if d_wand.shuffle:
 							DescriptionBoxInfo.bbcode_text += "\nShuffle"
+						if DescriptionBoxInfo.bbcode_text != new_text:
+							DescriptionBoxInfo.bbcode_text = new_text
 					else:
 						ShortDescriptionBox.visible = true
 						ShortDescriptionBox.bbcode_text = "[img]res://Sprites/Menus/CastDelayIcon.png[/img] " + str(d_wand.spell_recharge).pad_decimals(2) + "s [img]res://Sprites/Menus/CooldownIcon.png[/img] " + str(d_wand.full_recharge).pad_decimals(2) + "s"
@@ -454,6 +458,7 @@ func _process(delta):
 	
 	# Set the size of the description box
 	DescriptionBox.rect_size = Vector2(144, 18+DescriptionBoxInfo.rect_size.y+4)
+	ShortDescriptionBox.rect_size.y = 0
 	
 	# Move the description box up if it's offscreen
 	if mouse.y + DescriptionBox.rect_size.y > 225:
@@ -461,6 +466,8 @@ func _process(delta):
 	else:
 		DescriptionBox.rect_position = mouse
 	ShortDescriptionBox.rect_position = mouse
+	$HUD/ShiftButton.rect_position = ShortDescriptionBox.rect_position + ShortDescriptionBox.rect_size - Vector2(19, 4)
+	$HUD/ShiftButton.visible = ShortDescriptionBox.visible
 	
 
 
