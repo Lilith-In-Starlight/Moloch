@@ -149,6 +149,13 @@ func _process(delta):
 	for run in running_wands.duplicate():
 		var wand :Wand = run[0]
 		var caster :Node2D = run[1]
+		var spell_cooldown_time :float = run[2]
+		var usage_cooldown_time :float = run[3]
+		var last_spell_to_cast :float = run[4] - 1 # The wand gives position
+		#											 starting from 1, not 0
+		
+		# Stop casting the wand if the entity that was casting it stops
+		# existing
 		if not is_instance_valid(caster):
 			wand.unrun()
 			running_wands.erase(run)
@@ -162,18 +169,28 @@ func _process(delta):
 					var cast_result := cast_spell(wand, caster)
 					wand.current_spell += cast_result[0]
 					run[2] *= cast_result[1]
-				if (wand.current_spell >= wand.spell_capacity-1 or wand.spells[wand.current_spell] == null) and wand.recharge >= run[3]:
+					spell_cooldown_time = run[2]
+				
+				# Usage coolodown happens if the wandr eaches the last spell
+				# that it can execute, the last spell on the wand, or if
+				# the current spell is null
+				if (wand.current_spell >= wand.spell_capacity - 1 or wand.spells[wand.current_spell] == null) and wand.recharge >= usage_cooldown_time:
 					wand.recharge = 0.0
 					wand.can_cast = true
 					wand.current_spell = 0
 					wand.unrun()
 					running_wands.erase(run)
 					continue
-				# Recharge
-				elif (wand.recharge >= run[2] or wand.current_spell >= run[4] - 1) and (wand.current_spell < wand.spell_capacity and wand.spells[wand.current_spell] != null):
+				
+				# Spell cooldown happens in cases opposite to the previous ones
+				# aditionally, this is executed instantly if this is the last
+				# spell that will be cast, so that there's no extra delay
+				elif (wand.recharge >= spell_cooldown_time or wand.current_spell >= last_spell_to_cast) and (wand.current_spell < wand.spell_capacity and wand.spells[wand.current_spell] != null):
 					wand.recharge = 0.0
 					wand.current_spell += 1
 					wand.can_cast = true
+				
+				# If neither of this is the case, the timer just hasn't reached any
 				else:
 					wand.recharge += delta
 			else: # If the wand isn't being cast
@@ -355,100 +372,115 @@ func shuffle_array(array: Array) -> Array:
 
 
 func cast_spell(wand:Wand, caster:Node2D, slot_offset := 0, goal_offset := Vector2(0, 0), modifiers := [], cast_speed_mult := 1.0, layer := 0) -> Array:
-	var away := 0
+	# slot_offset is the starting slot for this cast
+	# goal_offset is used for messing with the player's aim
+	# modifiers are used for things the spells are supposed to react to
+	# cast_speed_mult is used for changing the cast speed through modifiers
+	# layer is the current layer of recursion
+	
+	var spells_to_skip := 0
 	var new_cast_speed := cast_speed_mult
 	var largest_layer := layer
-	if wand.current_spell+slot_offset < wand.spell_capacity and wand.spells[wand.current_spell+slot_offset] != null:
-		var c_spell :Spell = wand.spells[wand.current_spell+slot_offset] 
+	
+	var current_offset_spell := wand.current_spell + slot_offset
+	
+	if current_offset_spell < wand.spell_capacity and wand.spells[current_offset_spell] != null:
+		var c_spell :Spell = wand.spells[current_offset_spell] 
 		if not c_spell is SpellMod:
-			var spell :Node2D = wand.spells[wand.current_spell+slot_offset].entity.instance()
-			spell.CastInfo.Caster = caster
-			spell.CastInfo.goal = caster.looking_at()
-			spell.CastInfo.goal_offset = goal_offset
-			spell.CastInfo.wand = wand
-			spell.CastInfo.modifiers = modifiers
-			caster.get_parent().add_child(spell)
-		elif wand.current_spell + slot_offset + 1 < wand.spell_capacity and wand.spells[wand.current_spell+slot_offset+1] != null:
+			summon_cast(wand, caster, current_offset_spell, goal_offset, modifiers)
+		
+		elif current_offset_spell + 1 < wand.spell_capacity and wand.spells[current_offset_spell + 1] != null:
 			match c_spell.id:
 				"multiplicative":
-					away += 1
-					for i in c_spell.level:
+					spells_to_skip += 1
+					for iteration in c_spell.level:
 						if slot_offset + 1 >= wand.spell_capacity:
 							break
 						var offset :Vector2 = (caster.looking_at()-caster.position).rotated(-2+randf()*4)
-						if i == 0:
+						if iteration == 0:
 							offset *= 0
 						var cast := cast_spell(wand, caster, slot_offset + 1, offset, modifiers, cast_speed_mult, layer + 1)
-						away = max(cast[0], away)
+						spells_to_skip = max(cast[0], spells_to_skip)
 						largest_layer = max(layer, cast[2])
+				
 				"unifying":
-					away += c_spell.level
-					for i in c_spell.level:
-						if i + slot_offset + 1 >= wand.spell_capacity:
+					spells_to_skip += c_spell.level
+					for next_spell in c_spell.level:
+						if next_spell + slot_offset + 1 >= wand.spell_capacity:
 							break
-						var cast := cast_spell(wand, caster, slot_offset + i + 1, goal_offset, modifiers, cast_speed_mult, layer + 1)
-						away = max(cast[0], away)
+						var cast := cast_spell(wand, caster, slot_offset + next_spell + 1, goal_offset, modifiers, cast_speed_mult, layer + 1)
+						spells_to_skip = max(cast[0], spells_to_skip)
 						largest_layer = max(layer, cast[2])
+				
 				"grenade":
-					away += c_spell.level
-					var spell :Node2D = preload("res://Spells/CastGrenade.tscn").instance()
-					spell.CastInfo.Caster = caster
-					spell.CastInfo.goal = caster.looking_at()
-					spell.CastInfo.goal_offset = goal_offset
-					spell.wand = wand.duplicate()
-					var spells_to_cast := []
-					for i in c_spell.level:
-						if wand.current_spell+slot_offset+1+i >= wand.spell_capacity:
-							break
-						spells_to_cast.append(wand.spells[wand.current_spell+slot_offset+1+i])
-					spell.wand.spells = spells_to_cast
-					spell.wand.spell_capacity = c_spell.level
-					caster.get_parent().add_child(spell)
+					spells_to_skip += c_spell.level
+					summon_special_wand(preload("res://Spells/CastGrenade.tscn"), wand, caster, current_offset_spell, goal_offset, modifiers)
+				
 				"landmine":
-					away += c_spell.level
-					var spell :Node2D = preload("res://Spells/CastLandmine.tscn").instance()
-					spell.CastInfo.Caster = caster
-					spell.CastInfo.goal = caster.looking_at()
-					spell.CastInfo.goal_offset = goal_offset
-					spell.wand = wand.duplicate()
-					var spells_to_cast := []
-					for i in c_spell.level:
-						if wand.current_spell+slot_offset+1+i >= wand.spell_capacity:
-							break
-						spells_to_cast.append(wand.spells[wand.current_spell+slot_offset+1+i])
-					spell.wand.spells = spells_to_cast
-					spell.wand.spell_capacity = c_spell.level
-					caster.get_parent().add_child(spell)
+					spells_to_skip += c_spell.level
+					summon_special_wand(preload("res://Spells/CastLandmine.tscn"), wand, caster, current_offset_spell, goal_offset, modifiers)
+				
 				"limited":
-					away += 1
+					spells_to_skip += 1
 					if slot_offset + 1 < wand.spell_capacity:
 						var cast := cast_spell(wand, caster, slot_offset + 1, Vector2.ZERO, modifiers + ["limited"], cast_speed_mult, layer + 1)
-						away = max(cast[0], away)
+						spells_to_skip = max(cast[0], spells_to_skip)
 						largest_layer = max(layer, cast[2])
+				
 				"faster":
-					away += 1
+					spells_to_skip += 1
 					new_cast_speed = cast_speed_mult / float(c_spell.level)
 					if slot_offset + 1 < wand.spell_capacity:
 						var cast := cast_spell(wand, caster, slot_offset + 1, Vector2.ZERO, modifiers, new_cast_speed, layer + 1)
-						away = max(cast[0], away)
+						spells_to_skip = max(cast[0], spells_to_skip)
 						largest_layer = max(layer, cast[2])
+				
 				"slower":
-					away += 1
+					spells_to_skip += 1
 					new_cast_speed = cast_speed_mult * float(c_spell.level)
 					if slot_offset + 1 < wand.spell_capacity:
 						var cast := cast_spell(wand, caster, slot_offset + 1, Vector2.ZERO, modifiers, new_cast_speed, layer + 1)
-						away = max(cast[0], away)
+						spells_to_skip = max(cast[0], spells_to_skip)
 						largest_layer = max(layer, cast[2])
+				
 				_:
-					away += 1
+					spells_to_skip += 1
 					if slot_offset + 1 < wand.spell_capacity:
 						var cast := cast_spell(wand, caster, slot_offset + 1, Vector2.ZERO, modifiers, cast_speed_mult, layer + 1)
-						away = max(cast[0], away)
+						spells_to_skip = max(cast[0], spells_to_skip)
 						largest_layer = max(layer, cast[2])
 	if layer == largest_layer:
-		return [away + slot_offset, new_cast_speed, layer]
+		return [spells_to_skip + slot_offset, new_cast_speed, layer]
 	
-	return [away, new_cast_speed, layer]
+	return [spells_to_skip, new_cast_speed, layer]
+
+
+func summon_cast(wand:Wand, caster:Node2D, current_offset_spell:int, goal_offset: Vector2, modifiers: Array) -> void:
+	var spell :Node2D = wand.spells[current_offset_spell].entity.instance()
+	spell.CastInfo.Caster = caster
+	spell.CastInfo.goal = caster.looking_at()
+	spell.CastInfo.goal_offset = goal_offset
+	spell.CastInfo.wand = wand
+	spell.CastInfo.modifiers = modifiers
+	caster.get_parent().add_child(spell)
+
+
+func summon_special_wand(special_wand:PackedScene, wand:Wand, caster:Node2D, current_offset_spell:int, goal_offset: Vector2, modifiers: Array) -> void:
+	var c_spell :Spell = wand.spells[current_offset_spell] 
+	var spells_in_wand := []
+	for next_spell in c_spell.level:
+		if current_offset_spell + 1 + next_spell >= wand.spell_capacity:
+			break
+		spells_in_wand.append(wand.spells[current_offset_spell + 1 + next_spell])
+	
+	var spell :Node2D = special_wand.instance()
+	spell.CastInfo.Caster = caster
+	spell.CastInfo.goal = caster.looking_at()
+	spell.CastInfo.goal_offset = goal_offset
+	spell.wand = wand.duplicate()
+	spell.wand.spells = spells_in_wand
+	spell.wand.spell_capacity = c_spell.level
+	caster.get_parent().add_child(spell)
 
 
 func break_block(block: int, strength: float) -> int:
