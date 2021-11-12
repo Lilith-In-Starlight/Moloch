@@ -120,14 +120,14 @@ func _ready():
 	register_spell(1, "plasmasprinkler", "Plasma Sprinkler", "Balls of heat ejected from a single point", preload("res://Sprites/Spells/PlasmaSprinkler.png"), preload("res://Spells/PlasmaSprinkler.tscn"))
 	register_spell(1, "shortray", "Short Ray", "A shortlived ray with a chance of piercing", preload("res://Sprites/Spells/Shortray.png"), preload("res://Spells/Shortray.tscn"))
 	
-	register_base_mod("multiplicative", "Multiplicative Cast", "Many casts from one\nIterations: %s", preload("res://Sprites/Spells/Modifiers/Multiplicative.png"))
-	register_base_mod("unifying", "Unifying Cast", "One cast from many\nAmalgamations: %s", preload("res://Sprites/Spells/Modifiers/UnifyingM.png"))
-	register_base_mod("grenade", "Grenade Cast", "Copies spells into a grenade wand\nCopied Spells: %s", preload("res://Sprites/Spells/Modifiers/Grenade.png"))
-	register_base_mod("landmine", "Landmine Cast", "Copies spells into a landmine wand\nCopied Spells: %s", preload("res://Sprites/Spells/Modifiers/Landmine.png"))
-	register_base_mod("limited", "Limited Cast", "When applicable, casts will only have effect at the end of the wand", preload("res://Sprites/Spells/Modifiers/Limited.png"))
-	register_base_mod("faster", "Faster Cast", "The following spells will be cast %s times faster", preload("res://Sprites/Spells/Modifiers/Faster.png"))
-	register_base_mod("slower", "Slower Cast", "The following spells will be cast %s times slower", preload("res://Sprites/Spells/Modifiers/Slower.png"))
-	register_base_mod("fasterw", "Faster Recharge Time", "The wand will recharge %s times faster", preload("res://Sprites/Spells/Modifiers/FastWand.png"))
+	register_base_mod("multiplicative", "Multiplicative Cast", "Many casts from one\nIterations: %s", preload("res://Sprites/Spells/Modifiers/Multiplicative.png"), [2, 6])
+	register_base_mod("unifying", "Unifying Cast", "One cast from many\nAmalgamations: %s", preload("res://Sprites/Spells/Modifiers/UnifyingM.png"), [2, 6])
+	register_base_mod("grenade", "Grenade Cast", "Copies spells into a grenade wand\nCopied Spells: %s", preload("res://Sprites/Spells/Modifiers/Grenade.png"), [1, 6])
+	register_base_mod("landmine", "Landmine Cast", "Copies spells into a landmine wand\nCopied Spells: %s", preload("res://Sprites/Spells/Modifiers/Landmine.png"), [1, 6])
+	register_base_mod("limited", "Limited Cast", "When applicable, casts will only have effect at the end of the wand", preload("res://Sprites/Spells/Modifiers/Limited.png"), [1, 1])
+	register_base_mod("faster", "Faster Cast", "The following spells will be cast %s times faster", preload("res://Sprites/Spells/Modifiers/Faster.png"), [2, 6])
+	register_base_mod("slower", "Slower Cast", "The following spells will be cast %s times slower", preload("res://Sprites/Spells/Modifiers/Slower.png"), [2, 6])
+	register_base_mod("fasterw", "Faster Recharge Time", "The wand will recharge %s times faster", preload("res://Sprites/Spells/Modifiers/FastWand.png"), [2, 6])
 	
 	# If the player is in the tree, set the Player variable of this node to it
 	if not get_tree().get_nodes_in_group("Player").empty():
@@ -221,12 +221,14 @@ func register_spell(tier:int, name_id:String, name:String, desc:String, texture 
 	all_spells[name_id] = new
 
 
-func register_base_mod(name_id:String, name:String, desc:String, texture:Texture) -> void:
+func register_base_mod(name_id:String, name:String, desc:String, texture:Texture, level_range := [1, 6]) -> void:
 	var mod := SpellMod.new()
 	mod.id = name_id
 	mod.name = name
 	mod.description = desc
 	mod.texture = texture
+	mod.minimum_level = level_range[0]
+	mod.maximum_level = level_range[1]
 	base_spell_mods[name_id] = mod
 
 
@@ -278,55 +280,16 @@ func pick_random_item(rng:RandomNumberGenerator = LootRNG) -> Item:
 
 func pick_random_modifier(rng:RandomNumberGenerator = LootRNG) -> SpellMod:
 	var mod := SpellMod.new()
-	match rng.randi()%8:
-		0:
-			mod.level = 2 + rng.randi() % 4
-			mod.id = "multiplicative"
-			mod.name = "Multiplicative Cast"
-			mod.description = "Many from alterations of one\nIterations: " + str(mod.level)
-			mod.texture = preload("res://Sprites/Spells/Modifiers/Multiplicative.png")
-		1:
-			mod.level = 2 + rng.randi() % 4
-			mod.id = "unifying"
-			mod.name = "Unifying Cast"
-			mod.description = "One from alterations of many\nAmalgamations: " + str(mod.level)
-			mod.texture = preload("res://Sprites/Spells/Modifiers/UnifyingM.png")
-		2:
-			mod.level = 1 + rng.randi() % 5
-			mod.id = "grenade"
-			mod.name = "Grenade Cast"
-			mod.description = "Copies spells into a grenade wand\nCopied Spells: " + str(mod.level)
-			mod.texture = preload("res://Sprites/Spells/Modifiers/Grenade.png")
-		3:
-			mod.level = 1 + rng.randi() % 5
-			mod.id = "landmine"
-			mod.name = "Landmine Cast"
-			mod.description = "Copies spells into a landmine wand\nCopied Spells: " + str(mod.level)
-			mod.texture = preload("res://Sprites/Spells/Modifiers/Landmine.png")
-		4:
-			mod.level = 1
-			mod.id = "limited"
-			mod.name = "Limited Cast"
-			mod.description = "Some casts will only have effect at the end of the wand"
-			mod.texture = preload("res://Sprites/Spells/Modifiers/Limited.png")
-		5:
-			mod.level = 2 + rng.randi() % 4
-			mod.id = "faster"
-			mod.name = "Faster Cast"
-			mod.description = "The following spells will be cast %s times faster" % str(mod.level)
-			mod.texture = preload("res://Sprites/Spells/Modifiers/Faster.png")
-		6:
-			mod.level = 2 + rng.randi() % 4
-			mod.id = "slower"
-			mod.name = "Slower Cast"
-			mod.description = "The following spells will be cast %s times slower" % str(mod.level)
-			mod.texture = preload("res://Sprites/Spells/Modifiers/Slower.png")
-		7:
-			mod.level = 2 + rng.randi() % 4
-			mod.id = "fasterw"
-			mod.name = "Faster Recharge Time"
-			mod.description = "The wand will recharge %s times faster" % str(mod.level)
-			mod.texture = preload("res://Sprites/Spells/Modifiers/FastWand.png")
+	var mod_templade :SpellMod = base_spell_mods.values()[rng.randi() % base_spell_mods.size()]
+	mod.id = mod_templade.id
+	mod.name = mod_templade.name
+	mod.description = mod_templade.description
+	mod.texture = mod_templade.texture
+	mod.level = rng.randi_range(mod.minimum_level, mod.maximum_level)
+	
+	if "%s" in mod.description:
+		mod.description %= str(mod.level)
+	
 	spell_mods.append(mod)
 	return mod
 
