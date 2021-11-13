@@ -12,6 +12,13 @@ var spell_offset := Vector2(0, 0)
 var modifiers := []
 
 
+func _physics_process(delta: float) -> void:
+	if get_parent().get("speed"):
+		var parent_vel :Vector2 = get_parent().speed
+		get_parent().speed = Vector2(1.0, 0.0).rotated(stepify(parent_vel.angle(), PI/4.0)) * parent_vel.length()
+		
+
+
 func set_position(CastEntity:Node2D):
 	if wand != null:
 		if wand.spell_offset != Vector2(0, 0):
@@ -30,6 +37,9 @@ func set_goal():
 
 
 func get_angle(CastEntity:Node2D) -> float:
+	var ret := (goal + goal_offset).angle_to_point(CastEntity.position)
+	if "orthogonal" in modifiers:
+		ret = stepify(ret, PI/4.0)
 	return (goal + goal_offset).angle_to_point(CastEntity.position)
 
 
@@ -70,6 +80,10 @@ func teleport_caster(relpos:Vector2) -> void:
 
 
 func vector_from_angle(angle:float, length:float) -> Vector2:
+	var ret := Vector2(cos(angle), sin(angle)) * length
 	if "limited" in modifiers:
-		return Vector2(cos(angle), sin(angle)) * 2.0
-	return Vector2(cos(angle), sin(angle)) * length
+		ret = ret.normalized() * 2.0
+	if "orthogonal" in modifiers:
+		ret = Vector2(1.0, 0.0).rotated(stepify(ret.angle(), PI/4.0)) * ret.length()
+	return ret
+

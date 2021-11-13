@@ -27,7 +27,7 @@ func _ready():
 	
 
 
-func _physics_process(delta):
+func _physics_process(delta: float) -> void:
 	timer += 0.1
 	position += CastInfo.vector_from_angle(rotate, 7.0*60*delta)
 	rotate += noise.get_noise_3d(position.x, position.y, timer)*(timer/60.0)
