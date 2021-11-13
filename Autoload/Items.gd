@@ -285,7 +285,7 @@ func pick_random_modifier(rng:RandomNumberGenerator = LootRNG) -> SpellMod:
 	mod.name = mod_templade.name
 	mod.description = mod_templade.description
 	mod.texture = mod_templade.texture
-	mod.level = rng.randi_range(mod.minimum_level, mod.maximum_level)
+	mod.level = rng.randi_range(mod_templade.minimum_level, mod_templade.maximum_level)
 	
 	if "%s" in mod.description:
 		mod.description %= str(mod.level)
