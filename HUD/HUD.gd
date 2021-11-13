@@ -232,7 +232,7 @@ func _process(delta):
 						new_text += "\nSoul Resistance: " + str(1.0/d_wand.soul_resistance).pad_decimals(2)
 						new_text += "\nPush Resistance: " + str(1.0/d_wand.push_resistance).pad_decimals(2)
 						if d_wand.shuffle:
-							DescriptionBoxInfo.bbcode_text += "\nShuffle"
+							new_text += "\nShuffle"
 						if DescriptionBoxInfo.bbcode_text != new_text:
 							DescriptionBoxInfo.bbcode_text = new_text
 					else:
