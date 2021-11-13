@@ -31,6 +31,7 @@ func _physics_process(delta):
 			casted = true
 			var new = load("res://Spells/BouncyRay.tscn").instance()
 			new.CastInfo.Caster = self
+			new.add_child(new.CastInfo)
 			get_parent().add_child(new)
 			enabled = false
 			new.times_done = times_done + 1

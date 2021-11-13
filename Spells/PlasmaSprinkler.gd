@@ -39,7 +39,8 @@ func _on_ShootTimer_timeout() -> void:
 	new_cast.sprinkler = false
 	new_cast.position = position
 	new_cast.angle = next_shoot_angle
-	new_cast.CastInfo = CastInfo
+	new_cast.CastInfo = CastInfo.duplicate(7)
+	new_cast.add_child(new_cast.CastInfo)
 	next_shoot_angle += TAU / 12.0
 	get_parent().add_child(new_cast)
 

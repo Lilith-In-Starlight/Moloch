@@ -22,6 +22,8 @@ func _process(delta):
 		if CastInfo.Caster.has_method("health_object"):
 			CastInfo.heat_caster(-0.5)
 	for rc in get_children():
+		if not rc is RayCast2D:
+			continue
 		rc.force_raycast_update()
 		if randf()<0.3:
 			var n := preload("res://Particles/RoundParticles.tscn").instance()

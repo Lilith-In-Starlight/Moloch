@@ -90,6 +90,7 @@ func _physics_process(delta):
 				position_timer = 0.0
 				speed = -(last_seen-position).normalized()*30
 				var orb := preload("res://Spells/ShatteringOrb.tscn").instance()
+				orb.add_child(orb.CastInfo)
 				orb.CastInfo.goal = Player.position
 				orb.CastInfo.Caster = self
 				get_parent().add_child(orb)

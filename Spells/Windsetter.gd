@@ -19,6 +19,8 @@ func _process(delta):
 	angle = CastInfo.get_angle(self)
 	var i := 0
 	for rc in get_children():
+		if rc is SpellCastInfo:
+			continue
 		rc.force_raycast_update()
 		if randf()<0.3:
 			var n := preload("res://Particles/RoundParticles.tscn").instance()

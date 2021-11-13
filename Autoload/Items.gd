@@ -420,6 +420,7 @@ func cast_spell(wand:Wand, caster:Node2D, slot_offset := 0, goal_offset := Vecto
 
 func summon_cast(wand:Wand, caster:Node2D, current_offset_spell:int, goal_offset: Vector2, modifiers: Array) -> void:
 	var spell :Node2D = wand.spells[current_offset_spell].entity.instance()
+	spell.add_child(spell.CastInfo)
 	spell.CastInfo.Caster = caster
 	spell.CastInfo.goal = caster.looking_at()
 	spell.CastInfo.goal_offset = goal_offset
@@ -437,6 +438,7 @@ func summon_special_wand(special_wand:PackedScene, wand:Wand, caster:Node2D, cur
 		spells_in_wand.append(wand.spells[current_offset_spell + 1 + next_spell])
 	
 	var spell :Node2D = special_wand.instance()
+	spell.add_child(spell.CastInfo)
 	spell.CastInfo.Caster = caster
 	spell.CastInfo.goal = caster.looking_at()
 	spell.CastInfo.goal_offset = goal_offset

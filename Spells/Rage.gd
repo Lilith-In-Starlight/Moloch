@@ -38,6 +38,8 @@ func _process(delta: float) -> void:
 		queue_free()
 	else:
 		for i in get_children():
+			if i is SpellCastInfo:
+				continue
 			if i.is_colliding():
 				position = i.get_collision_point() - i.position
 				already_collided = true

@@ -11,6 +11,8 @@ func _ready() -> void:
 	CastInfo.set_position(self)
 	var next_distance := 500
 	for i in get_children():
+		if i is SpellCastInfo:
+			continue
 		var angle := randf()*TAU
 		i.position = Vector2(cos(angle), sin(angle))*next_distance
 		thing.append([0, i.position.angle()])
