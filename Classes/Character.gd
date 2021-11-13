@@ -378,7 +378,7 @@ func walking() -> void:
 
 
 func jumping(x_speed := 0.0, y_speed := jump_force):
-	if health.broken_moving_appendages != health.moving_appendages:
+	if health.broken_moving_appendages != health.moving_appendages or state == STATES.POLE:
 		if input_just_pressed("jump") or ground_jump_buffer > 0.0:
 			if ground_coyote_time > 0.0:
 				speed.y = y_speed
