@@ -448,7 +448,7 @@ func summon_special_wand(special_wand:PackedScene, wand:Wand, caster:Node2D, cur
 
 func break_block(block: int, strength: float) -> int:
 	match block:
-		0:
+		0, 1:
 			if strength > 0.2:
 				return -1
 	return block
