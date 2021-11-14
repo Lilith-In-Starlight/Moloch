@@ -128,6 +128,7 @@ func _ready():
 	register_base_mod("faster", "Faster Cast", "The following spells will be cast %s times faster", preload("res://Sprites/Spells/Modifiers/Faster.png"), [2, 6])
 	register_base_mod("slower", "Slower Cast", "The following spells will be cast %s times slower", preload("res://Sprites/Spells/Modifiers/Slower.png"), [2, 6])
 	register_base_mod("fasterw", "Faster Recharge Time", "The wand will recharge %s times faster", preload("res://Sprites/Spells/Modifiers/FastWand.png"), [2, 6])
+	register_base_mod("orthogonal", "Orthogonal Cast", "Some spells will only be cast in orthogonal directions", preload("res://Sprites/Spells/Modifiers/Orthogonal.png"), [1, 1])
 	
 	# If the player is in the tree, set the Player variable of this node to it
 	if not get_tree().get_nodes_in_group("Player").empty():
@@ -387,6 +388,12 @@ func cast_spell(wand:Wand, caster:Node2D, slot_offset := 0, goal_offset := Vecto
 					spells_to_skip += 1
 					if slot_offset + 1 < wand.spell_capacity:
 						var cast := cast_spell(wand, caster, slot_offset + 1, Vector2.ZERO, modifiers + ["limited"], cast_speed_mult, layer + 1)
+						spells_to_skip = max(cast[0], spells_to_skip)
+						largest_layer = max(layer, cast[2])
+				"orthogonal":
+					spells_to_skip += 1
+					if slot_offset + 1 < wand.spell_capacity:
+						var cast := cast_spell(wand, caster, slot_offset + 1, Vector2.ZERO, modifiers + ["orthogonal"], cast_speed_mult, layer + 1)
 						spells_to_skip = max(cast[0], spells_to_skip)
 						largest_layer = max(layer, cast[2])
 				

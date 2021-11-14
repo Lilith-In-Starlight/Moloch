@@ -13,7 +13,7 @@ var modifiers := []
 
 
 func _physics_process(delta: float) -> void:
-	if get_parent().get("speed"):
+	if get_parent().get("speed") and get_parent().speed is Vector2:
 		var parent_vel :Vector2 = get_parent().speed
 		get_parent().speed = Vector2(1.0, 0.0).rotated(stepify(parent_vel.angle(), PI/4.0)) * parent_vel.length()
 		
