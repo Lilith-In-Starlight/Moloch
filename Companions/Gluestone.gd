@@ -21,9 +21,9 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	health.process_health(delta)
 	number = get_tree().get_nodes_in_group("Gluestone").find(self)
-	if Items.player_items.count("gluestone") >= number and Items.player_items.count("gluestone") > 0:
-		var angle :float = Engine.get_frames_drawn()/float(Items.player_items.count("gluestone"))*0.08
-		var extra :float = TAU/float(Items.player_items.count("gluestone")) * number
+	if Items.count_player_items("gluestone") >= number and Items.count_player_items("gluestone") > 0:
+		var angle :float = Engine.get_frames_drawn()/float(Items.count_player_items("gluestone"))*0.08
+		var extra :float = TAU/float(Items.count_player_items("gluestone")) * number
 		var goal := Player.position + Vector2(cos(angle+extra), sin(angle+extra)) * 50.0
 		position = lerp(position, goal, 0.5)
 	else:
@@ -32,7 +32,7 @@ func _process(delta: float) -> void:
 
 func _on_broken_gluestone():
 	queue_free()
-	Items.player_items.erase("gluestone")
+	Items.player_items["gluestone"] -= 1
 
 
 func health_object():

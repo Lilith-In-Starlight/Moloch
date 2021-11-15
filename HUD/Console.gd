@@ -23,7 +23,7 @@ func _input(event: InputEvent) -> void:
 									output("[color=red]Expected structure:[/color] giveitem <itemname> <amount = 1>")
 								2:
 									if cmd[1] in Items.all_items:
-										Items.player_items.append(cmd[1])
+										Items.add_item(cmd[1])
 										output("Given 1 unit of " + Items.all_items[cmd[1]].name)
 										Items.last_pickup = Items.all_items[cmd[1]]
 									else:
@@ -32,7 +32,7 @@ func _input(event: InputEvent) -> void:
 									if cmd[1] in Items.all_items:
 										if cmd[2].is_valid_integer():
 											for i in cmd[2] as int:
-												Items.player_items.append(cmd[1])
+												Items.add_item(cmd[1])
 											output("Given " + cmd[2] + " units of " + Items.all_items[cmd[1]].name)
 											Items.last_pickup = Items.all_items[cmd[1]]
 										else:
@@ -44,19 +44,19 @@ func _input(event: InputEvent) -> void:
 								1:
 									output("[color=red]Expected structure:[/color] tkitem <itemname> <amount = 1>")
 								2:
-									if cmd[1] in Items.player_items:
-										Items.player_items.erase(cmd[1])
+									if Items.count_player_items(cmd[1]) > 0:
+										Items.player_items[cmd[1]] -= 1
 										output("Taken 1 unit of " + Items.all_items[cmd[1]].name)
 									else:
 										output("[color=red]Name doesn't match any item in the inventory[/color]")
 								3:
-									if cmd[1] in Items.player_items:
+									if Items.count_player_items(cmd[1]) > 0:
 										if cmd[2].is_valid_integer():
 											var rm := 0
 											for i in cmd[2] as int:
 												rm += 1
-												Items.player_items.erase(cmd[1])
-												if not cmd[1] in Items.player_items:
+												Items.player_items[cmd[1]] -= 1
+												if Items.count_player_items(cmd[1]) <= 0:
 													break
 											output("Taken " + str(rm) + " units of " + Items.all_items[cmd[1]].name)
 											Items.last_pickup = Items.all_items[cmd[1]]

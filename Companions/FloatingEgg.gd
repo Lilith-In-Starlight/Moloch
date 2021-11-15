@@ -23,7 +23,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	health.process_health(delta)
 	number = get_tree().get_nodes_in_group("Egg").find(self)
-	if Items.player_items.count("egg") >= number and Items.player_items.count("egg") > 0:
+	if Items.count_player_items("egg") >= number and Items.count_player_items("egg") > 0:
 		if Player.position.distance_to(old_player_position[0]) > 16:
 			 old_player_position.push_front(Player.position)
 		while old_player_position.size() > number + 1:
@@ -36,7 +36,7 @@ func _process(delta: float) -> void:
 
 func _on_broken_egg() -> void:
 	queue_free()
-	Items.player_items.erase("egg")
+	Items.player_items["egg"] -= 1
 
 
 func health_object() -> Flesh:
@@ -44,7 +44,7 @@ func health_object() -> Flesh:
 
 
 func _on_hatch() -> void:
-	Items.player_items.erase("egg")
+	Items.player_items["egg"] -= 1
 	if randf()<0.4 and Items.companions.size() <= 6:
 		Items.companions.append([Flesh.new(), null])
 	queue_free()

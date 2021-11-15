@@ -27,7 +27,7 @@ const EXPLOSION_SOUNDS := [preload("res://Sfx/explosions/explosion01.wav"), prel
 
 const PIERCED_FLESH_SOUNDS := [preload("res://Sfx/pierced_flesh/piercing-1a.wav"), preload("res://Sfx/pierced_flesh/piercing-1b.wav")]
 
-var player_items := []
+var player_items := {}
 
 var player_spells := [null,null,null,null,null,null]
 var player_wands := [null,null,null,null,null,null]
@@ -313,7 +313,7 @@ func reset_player():
 	LootRNG.seed = generator_seed*2
 	player_health = Flesh.new()
 	cloth_scraps = 3
-	player_items = []
+	player_items = {}
 	player_spells = [null,null,null,null,null,null]
 	if LootRNG.randf() < 0.2:
 		player_spells[0] = pick_random_modifier()
@@ -466,3 +466,16 @@ func damage_visuals(entity:Node2D, timer:Timer, damage_type: String) -> void:
 				entity.modulate = Color("#00ffff")
 			"soul":
 				entity.modulate = Color("#00ff80")
+
+
+func count_player_items(name:String) -> int:
+	if name in player_items:
+		return player_items[name]
+	return 0
+
+
+func add_item(name:String) -> void:
+	if name in player_items:
+		player_items[name] += 1
+	else:
+		player_items[name] = 1

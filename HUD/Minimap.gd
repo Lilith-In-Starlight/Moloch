@@ -43,7 +43,7 @@ func _draw():
 	
 	for pos in door_points:
 		draw_circle(pos, 1, ColorN("cadetblue"))
-	if Items.player_items.has("monocle"):
+	if Items.count_player_items("monocle") > 0:
 		for i in get_tree().get_nodes_in_group("Chest"):
 			draw_circle(i.position/16.0/4.0-get_tree().get_nodes_in_group("Player")[0].position/16.0/4.0, 1.0, ColorN("green"))
 	draw_circle(Vector2(0, 0), 1.0, ColorN("black"))

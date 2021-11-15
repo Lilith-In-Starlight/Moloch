@@ -27,73 +27,73 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	flying = Items.player_items.has("wings")
+	flying = Items.count_player_items("wings") > 0
 	# Apply items
 	if Items.player_items.has("gasolineblood") and not blood_is_gasoline and health.blood > 0.01:
 		blood_is_gasoline = true
 		send_message("Your insides become volatile")
 	
-	if Items.player_items.has("thickblood"):
-		Items.player_items.erase("thickblood")
+	if Items.count_player_items("thickblood") > 0:
+		Items.player_items["thickblood"] -= 1
 		health.max_blood *= 2.0
 		health.blood *= 2.0
 		health.blood += 0.5
 		health.blood = min(health.max_blood, health.blood)
 		
-	if Items.player_items.has("heal"):
-		Items.player_items.erase("heal")
+	if Items.count_player_items("heal") > 0:
+		Items.player_items["heal"] -= 1
 		health.full_heal()
 		
-	if Items.player_items.has("scraps"):
-		Items.player_items.erase("scraps")
+	if Items.count_player_items("scraps") > 0:
+		Items.player_items["scraps"] -= 1
 		Items.cloth_scraps += 1
 		
-	if Items.player_items.has("soulfulpill"):
-		Items.player_items.erase("soulfulpill")
+	if Items.count_player_items("soulfulpill") > 0:
+		Items.player_items["soulfulpill"] -= 1
 		health.soul += 0.3+randf()*0.2
 		
-	if Items.player_items.has("icecube"):
-		Items.player_items.erase("icecube")
+	if Items.count_player_items("icecube") > 0:
+		Items.player_items["icecube"] -= 1
 		health.temp_change(-5.0)
 		
-	if Items.player_items.has("heatadapt"):
-		Items.player_items.erase("heatadapt")
+	if Items.count_player_items("heatadapt") > 0:
+		Items.player_items["heatadapt"] -= 1
 		health.death_hypertemperature += 20
 		
-	if Items.player_items.has("dissipator"):
-		Items.player_items.erase("dissipator")
+	if Items.count_player_items("dissipator") > 0:
+		Items.player_items["dissipator"] -= 1
 		health.temp_regulation += 0.005
 		
-	if Items.player_items.has("shance"):
-		Items.player_items.erase("shance")
+	if Items.count_player_items("shance") > 0:
+		Items.player_items["shance"] -= 1
 		health.chances += 1
 		
-	if Items.player_items.has("suarantee"):
-		Items.player_items.erase("suarantee")
+	if Items.count_player_items("suarantee") > 0:
+		Items.player_items["suarantee"] -= 1
 		health.guarantees += 1
 	
-	if Items.player_items.has("legs"):
+	if Items.count_player_items("legs") > 0:
 		if health.broken_moving_appendages > 0:
 			health.broken_moving_appendages -= 1
-			Items.player_items.erase("legs")
+			Items.player_items["legs"] -= 1
 	
-	for i in Items.player_items.count("gluestone"):
+	for i in Items.count_player_items("gluestone"):
 		if get_tree().get_nodes_in_group("Gluestone").size() <= i:
 			var new_gluestone := preload("res://Companions/Gluestone.tscn").instance()
 			new_gluestone.position = position
 			get_parent().add_child(new_gluestone)
 	
-	for i in Items.player_items.count("egg"):
+	for i in Items.count_player_items("egg"):
 		if get_tree().get_nodes_in_group("Egg").size() <= i:
 			var new_gluestone := preload("res://Companions/FloatingEgg.tscn").instance()
 			new_gluestone.position = position
 			get_parent().add_child(new_gluestone)
 	
-	if Items.player_items.has("bloodless"):
-		Items.player_items.erase("bloodless")
+	if Items.count_player_items("bloodless") > 0:
+		Items.player_items["bloodless"] -= 1
 		health.needs_blood = false
 	
-	health.soul += 0.01 * delta * Items.player_items.count("soulfulengine")
+	health.soul += 0.01 * delta * Items.count_player_items("soulfulengine")
 
 	# Companions
 	for i in Items.companions.size():
@@ -256,7 +256,7 @@ func _physics_process(delta: float) -> void:
 	# The wounds can cicatrize on their own
 	# Bandaids help
 	if health.poked_holes > 0:
-		var plus := 0.0008 * 0.0008*Items.player_items.count("bandaid")
+		var plus := 0.0008 * 0.0008*Items.count_player_items("bandaid")
 		if randf() < 0.0005 + plus:
 			health.poked_holes -= 1
 			if health.poked_holes < 0:
@@ -288,7 +288,7 @@ func _on_effect_changes(effect:String, added:bool) -> void:
 
 
 func _on_broken_leg(amount:int) -> void:
-	if "ironknees" in Items.player_items:
+	if Items.count_player_items("ironknees") > 0:
 		health.broken_moving_appendages -= amount
 		return
 	if amount != 0:

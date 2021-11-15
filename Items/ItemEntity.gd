@@ -13,6 +13,6 @@ func _process(_delta):
 	
 	if Player.position.distance_to(position) < 50:
 		if Input.is_action_just_pressed("down"):
-			Items.player_items.append(item.id)
+			Items.add_item(item.id)
 			Items.last_pickup = item
 			queue_free()
