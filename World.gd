@@ -167,9 +167,14 @@ func fill_empty_space_chunk():
 	
 	var start := OS.get_ticks_msec()
 	for x in range(fill_x, chunk_end):
-		for y in range(min_point.y, max_point.y):
-			if not is_in_room(x, y):
+		var y := min_point.y
+		while y < max_point.y:
+			var room := is_in_room(x, y)
+			if room == Rect2(0,0,0,0):
 				set_cell(x, y, level_tile)
+			else:
+				y += room.size.y / 8 - 1
+			y += 1
 	x_fill_step = readjust_chunk_size(x_fill_step, start, OS.get_ticks_msec(), 200)
 	
 	fill_x = chunk_end
@@ -183,11 +188,11 @@ func readjust_chunk_size(chunk_size: int, start: int, end: int, desired_chunk_ms
 				new_size_f = 1
 			return int(new_size_f)
 
-func is_in_room(x: int, y: int) -> bool:
+func is_in_room(x: int, y: int) -> Rect2:
 	for a in areas:
 		if a.has_point(Vector2(x, y)*cell_size.x):
-			return true
-	return false
+			return a
+	return Rect2(0,0,0,0)
 
 func finalize_world():
 	print("Step 6: Autotiling so it's pretty")
