@@ -32,6 +32,8 @@ var changing_key := ""
 
 var changed_keys := {}
 
+var random_noise := OpenSimplexNoise.new()
+
 
 func _ready():
 	menus = {
@@ -68,7 +70,13 @@ func _ready():
 
 
 func _process(delta: float) -> void:
+	$Symbol2.modulate.a = 0.1 + random_noise.get_noise_1d(Engine.get_frames_drawn() * 3.0) * 0.05
+	$Symbol.material.set_shader_param("var", 1.0 + random_noise.get_noise_1d(Engine.get_frames_drawn() * 3.0) * 0.05)
 	var menu_element:Control = $MenuContainer.get_child(current_menu_pos())
+	$Symbol/TextureRect.texture.noise_offset.y += 0.5
+	$Symbol/TextureRect.texture.noise.persistence = 0.6 + sin(Engine.get_frames_drawn() * 0.0001) * 0.1
+	$Symbol/TextureRect.texture.noise.lacunarity = 1.9 + sin(Engine.get_frames_drawn() * 0.0001) * 0.2
+	
 	$Ball.rect_position = lerp($Ball.rect_position, menu_element.rect_global_position - Vector2(12,  -menu_element.rect_size.y / 2.0 + 6), 0.5)
 	Config.instant_death_button = menus["settings"][0].enabled
 	Config.damage_visuals = menus["settings"][1].enabled
