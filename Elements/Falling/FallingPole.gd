@@ -10,4 +10,4 @@ extends RigidBody2D
 func _ready() -> void:
 	var Map = get_tree().get_nodes_in_group("World")[0]
 	if Map.level_tile == 1:
-		$Poles.texture = preload("res://Sprites/Elements/BrownPole.png")
+		$Sprite.texture = preload("res://Sprites/Elements/BrownPole.png")
