@@ -5,6 +5,8 @@ onready var Tiles := $Following
 var Cam :Camera2D
 var Map :TileMap
 
+var TileRNG := RandomNumberGenerator.new()
+
 const TILE_SIZE := Vector2(400, 224)
 
 func _ready():
@@ -24,6 +26,27 @@ func _process(_delta):
 			i += 1
 			x = -1
 			y += 1
+		TileRNG.seed = Tile.rect_position.x * Tile.rect_position.y
+		if Map.level_tile == 0:
+			match TileRNG.randi()%2:
+				0:
+					Tile.texture = preload("res://Sprites/Blocks/RedBackgroundTiles/Tile2.png")
+				1:
+					Tile.texture = preload("res://Sprites/Blocks/RedBackgroundTiles/Tile3.png")
+				2:
+					Tile.texture = preload("res://Sprites/Blocks/RedBackgrounTile.png")
+		else:
+			match TileRNG.randi()%5:
+				0:
+					Tile.texture = preload("res://Sprites/Blocks/BrownBackgroundTiles/Tile2.png")
+				1:
+					Tile.texture = preload("res://Sprites/Blocks/BrownBackgroundTiles/Tile3.png")
+				2:
+					Tile.texture = preload("res://Sprites/Blocks/BrownBackgroundTiles/Tile4.png")
+				3:
+					Tile.texture = preload("res://Sprites/Blocks/BrownBackgroundTiles/Tile5.png")
+				4:
+					Tile.texture = preload("res://Sprites/Blocks/BrownBackgroundTile.png")
 
 
 func _on_generated_world() -> void:
