@@ -209,6 +209,7 @@ func _process(delta):
 	# Navigate inventory with keyboard
 	# If the mouse is in the wands' area
 	if mouse.x < 116 and mouse.y > 4 and mouse.y < 20:
+		block_cast = true 
 		for i in 6:
 			# If a slot is selected
 			if mouse.x >= 4+i*(16+4) and mouse.x < 4+(i+1)*(16+4):
@@ -216,7 +217,6 @@ func _process(delta):
 				# player cast spells
 				clicked = 2
 				slot = i
-				block_cast = true 
 				# If the slot isn't empty
 				if Items.player_wands[i] != null:
 					var d_wand :Wand = Items.player_wands[i]
@@ -242,6 +242,7 @@ func _process(delta):
 	
 	# If the mouse is in the companions' wand area
 	elif mouse.x > 140 and mouse.y > 4 and mouse.y < 20 and mouse.x < 140 + 20*Items.companions.size():
+		block_cast = true 
 		for i in Items.companions.size():
 			# If a slot is selected
 			if mouse.x >= 140+i*(16+4) and mouse.x < 140+(i+1)*(16+4):
@@ -249,7 +250,6 @@ func _process(delta):
 				# player cast spells
 				clicked = 3
 				slot = i
-				block_cast = true 
 				# If the slot isn't empty
 				if Items.companions[i][1] != null:
 					# Which information to set
@@ -267,14 +267,14 @@ func _process(delta):
 	
 	# If the mouse is in the wands' spells area and is holding a wand
 	elif mouse.x < 240 and mouse.y > 25 and mouse.y < 25+16 and Items.player_wands[Items.selected_wand] != null:
+		# Don't let the player cast spells
+		block_cast = true
 		var wand :Wand = Items.player_wands[Items.selected_wand]
 		for i in Wand.MAX_CAPACITY:
 			# If it's in a slot
 			if mouse.x >= 4+i*(16+4) and mouse.x < (i+1)*(16+4):
 				# If this slot is had by the wand
 				if i < wand.spell_capacity:
-					# Don't let the player cast spells
-					block_cast = true
 					clicked = 1
 					# Then this is the slot that was clicked (aka I didn't click an empty area)
 					slot = i
@@ -290,11 +290,11 @@ func _process(delta):
 	
 	# If the mouse is in the spells bag's area and is holding a wand
 	elif mouse.x < 16 + 4 and mouse.y > 62 and mouse.y < 178 and mouse.x > 4:
+		block_cast = true
 		for i in 6:
 			# If it's in a slot
 			if mouse.y >= 62+i*(16+4) and mouse.y < 62+(i+1)*(16+4):
 				# Set what inventory and slot was clicked, block spell casts
-				block_cast = true
 				clicked = 0
 				slot = i
 				# Descriptions
