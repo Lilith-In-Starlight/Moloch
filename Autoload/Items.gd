@@ -298,7 +298,7 @@ func reset_player():
 	last_items = []
 	last_spells = []
 	last_pickup = null
-	level = 3
+	level = 1
 	var generator_seed := hash(OS.get_time())
 	print(Items.custom_seed)
 	if Items.custom_seed != 0:
