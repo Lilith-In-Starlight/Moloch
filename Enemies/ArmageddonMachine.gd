@@ -16,6 +16,7 @@ func _ready() -> void:
 	health.death_hypertemperature = 900.0
 	Noise.seed = hash(self)
 	health.connect("was_damaged", self, "_on_damaged")
+	health.connect("died", self, "_death")
 
 
 func _process(delta: float) -> void:
@@ -51,10 +52,15 @@ func _on_damaged(damage_type:String) -> void:
 
 func looking_at() -> Vector2:
 	return eye_dir
-	
+
+
 func cast_from() -> Vector2:
 	return position + eye_dir.normalized() * 18
 
 
 func health_object() -> Flesh:
 	return health
+
+
+func _death() -> void:
+	Config.give_achievement("armageddont")

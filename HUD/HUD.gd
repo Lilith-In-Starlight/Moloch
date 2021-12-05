@@ -267,14 +267,14 @@ func _process(delta):
 	
 	# If the mouse is in the wands' spells area and is holding a wand
 	elif mouse.x < 240 and mouse.y > 25 and mouse.y < 25+16 and Items.player_wands[Items.selected_wand] != null:
-		# Don't let the player cast spells
-		block_cast = true
 		var wand :Wand = Items.player_wands[Items.selected_wand]
 		for i in Wand.MAX_CAPACITY:
 			# If it's in a slot
 			if mouse.x >= 4+i*(16+4) and mouse.x < (i+1)*(16+4):
 				# If this slot is had by the wand
 				if i < wand.spell_capacity:
+					# Don't let the player cast spells
+					block_cast = true
 					clicked = 1
 					# Then this is the slot that was clicked (aka I didn't click an empty area)
 					slot = i

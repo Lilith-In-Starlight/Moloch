@@ -342,6 +342,11 @@ margin_top = 102.0
 margin_bottom = 102.0
 achievement = "oof_ouch"
 
+[node name="Achievement6" parent="Achievements" instance=ExtResource( 5 )]
+margin_top = 102.0
+margin_bottom = 102.0
+achievement = "armageddont"
+
 [node name="Achievement5" parent="Achievements" instance=ExtResource( 5 )]
 margin_top = 102.0
 margin_bottom = 102.0

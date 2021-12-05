@@ -25,6 +25,7 @@ var achievements := {
 	"fun2":false,
 	"oof_ouch":false,
 	"first_of_many":false,
+	"armageddont":false,
 	"test":false,
 }
 
@@ -48,6 +49,11 @@ var ach_info := {
 		"text" : "First Of Many",
 		"texture" : preload("res://Sprites/Achievements/FirstDeath.png"),
 		"desc" : "You will die thousands of times"
+	},
+	"armageddont": {
+		"text" : "Armageddon't",
+		"texture" : preload("res://Sprites/Achievements/Armageddont.png"),
+		"desc" : "Kill an Armageddon Machine"
 	},
 	"test": {
 		"text" : "Blood Thirst",
