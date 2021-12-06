@@ -487,7 +487,8 @@ func _on_player_died():
 	var csecs =  isecs % 60
 	var cmsecs = secs - isecs
 	var mins = (isecs / 60) % 60
-	end_times = str(mins).pad_zeros(2) + "m" + str(csecs).pad_zeros(2) + "s"
+	var hours = (isecs / 60 / 60)
+	end_times = str(hours).pad_zeros(2) + "h" + str(mins).pad_zeros(2) + "m" + str(csecs).pad_zeros(2) + "s"
 	player_died = true
 	$HUD/DeathSFX.play()
 
