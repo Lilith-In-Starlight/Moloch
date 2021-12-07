@@ -7,6 +7,8 @@ Moloch is the roguelike of all the horrible futures. Instead of health points, t
 
 You are a child who was sacrificed by your parents to the god at the top of The Ancient Tower. The tradeoff is simple: Throw away what you love most, and I can give you power. You refuse to let yourself be murdered by the people and the creatures inhabiting the tower, and in a desperate attempt to survive, you begin your ascent.
 
+If you like this project you can join it's [Discord Server](discord.com/invite/aYZ3K5FDQ3)
+
 ## Controls
 
 - **Movement:** WASD
