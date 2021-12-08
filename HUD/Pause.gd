@@ -26,10 +26,11 @@ func _input(event: InputEvent) -> void:
 		if event is InputEventKey:
 			match event.scancode:
 				KEY_ESCAPE:
-					get_tree().paused = !get_tree().paused
-					visible = get_tree().paused
+					get_tree().paused = !get_tree().paused and !Items.player_health.dead
+					visible = get_tree().paused and !Items.player_health.dead
 					$Settings.visible = false
 					$Options.visible = true
+						
 
 
 func _on_Back_pressed() -> void:
