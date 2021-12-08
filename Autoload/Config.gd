@@ -119,7 +119,8 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	discord.run_callbacks()
+	if not discord == null:
+		discord.run_callbacks()
 
 
 func save_config() -> void:
