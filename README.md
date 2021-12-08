@@ -9,6 +9,8 @@ You are a child who was sacrificed by your parents to the god at the top of The 
 
 If you like this project you can join it's [Discord Server](discord.com/invite/aYZ3K5FDQ3)
 
+Please scroll to the bottom if you're a Mac user and you're getting the "file is broken you should throw it to the bin" error
+
 ## Controls
 
 - **Movement:** WASD
@@ -57,3 +59,6 @@ Under the hood, Moloch does weird stuff with classes to keep everything tidy and
 
 ## License
 The MIT license only applies to the source code. The visual assets are licensed under [CC-BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode). Licenses for the sound effects are stated in AUDIO-LICENSES.md.
+
+## Help, I'm having this weird issue on Mac
+So, since apple sucks, it'll flag apps downloaded form the internet with an extended attribute so it can ask you if you trust the file you're about to run. And then fail to ask you if you want to run it. Simply run `xattr -cr [path to moloch]` in the command line and that should do the trick.
