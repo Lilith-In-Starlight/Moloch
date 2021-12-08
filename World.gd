@@ -200,6 +200,13 @@ func finalize_world():
 	print("Step 7: Adding enemies")
 	add_enemies()
 	emit_signal("generated_world")
+	var act = Discord.Activity.new()
+	act.state = "Level %s" % str(Items.level)
+	act.details = "Just entered level"
+	act.assets.large_image = "logoimage"
+	act.assets.large_text = "Optimizing for X"
+	act.timestamps.start = Config.app_start_time
+	Config.discord.get_activity_manager().update_activity(act)
 	if Items.level == 1:
 		Items.run_start_time = OS.get_ticks_msec()
 	print("Finished generation!")
