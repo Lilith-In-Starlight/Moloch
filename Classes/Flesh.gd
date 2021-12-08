@@ -51,6 +51,7 @@ var is_players := false
 var effects := []
 
 var fire_timer := 0.0
+var confusion_timer := 0.0
 
 var damaged_from_side_effect := false
 var bleeding_from_side_effect := false
@@ -114,6 +115,13 @@ func process_health(delta:float, speed:Vector2 = Vector2(0, 0)) -> void:
 			fire_timer -= delta
 			temp_change(60*delta*0.05)
 			emit_signal("was_damaged", "heat")
+	if confusion_timer <= 0.0:
+		emit_signal("effect_changed", "confused", false)
+		effects.erase("confused")
+	else:
+		confusion_timer -= delta
+	if weak_to_temp and temperature > death_hypertemperature * 0.8 and not "confused" in effects:
+		add_effect("confused")
 	if ((temperature > death_hypertemperature or temperature < death_hypotemperature) and weak_to_temp) or (soul <= 0.0 and has_soul) or (blood <= 0.0 and needs_blood) or poked_holes > max_holes:
 		if (guarantees == 0 and chances == 0) or (chances > 0 and randi()%3 > 0):
 			if not dead:
@@ -151,6 +159,8 @@ func add_effect(effect:String):
 	emit_signal("effect_changed", effect, true)
 	if effect == "onfire":
 		fire_timer += 2 + randf()*10
+	elif effect == "confused":
+		confusion_timer += 2 + randf()*10
 
 
 func break_legs():

@@ -191,13 +191,22 @@ func _physics_process(delta: float) -> void:
 	$Fire.visible = health.effects.has("onfire")
 	looking_at = get_local_mouse_position()
 	wand = Items.player_wands[Items.selected_wand]
-	inputs = {
-		"left":Input.is_action_pressed("left"),
-		"right":Input.is_action_pressed("right"),
-		"up":Input.is_action_pressed("up"),
-		"down":Input.is_action_pressed("down"),
-		"jump":Input.is_action_pressed("jump"),
-	}
+	if not "confused" in health.effects:
+		inputs = {
+			"left":Input.is_action_pressed("left"),
+			"right":Input.is_action_pressed("right"),
+			"up":Input.is_action_pressed("up"),
+			"down":Input.is_action_pressed("down"),
+			"jump":Input.is_action_pressed("jump"),
+		}
+	else:
+		inputs = {
+			"left":Input.is_action_pressed("right"),
+			"right":Input.is_action_pressed("left"),
+			"up":Input.is_action_pressed("down"),
+			"down":Input.is_action_pressed("up"),
+			"jump":Input.is_action_pressed("jump"),
+		}
 	if Input.is_action_just_pressed("seal_blood") and health.poked_holes > 0 and Items.cloth_scraps > 0:
 		health.poked_holes -= 1
 		Items.cloth_scraps -= 1
