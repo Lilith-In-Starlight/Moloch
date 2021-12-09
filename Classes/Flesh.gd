@@ -151,6 +151,7 @@ func process_health(delta:float, speed:Vector2 = Vector2(0, 0)) -> void:
 
 
 func _instakill_pressed():
+	dead = true
 	emit_signal("died")
 
 
