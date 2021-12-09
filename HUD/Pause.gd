@@ -30,7 +30,15 @@ func _input(event: InputEvent) -> void:
 					visible = get_tree().paused and !Items.player_health.dead
 					$Settings.visible = false
 					$Options.visible = true
-						
+					if get_tree().paused and Config.discord != null:
+						var act = Discord.Activity.new()
+						act.state = "Level %s, %s" % [str(Items.level), str(Items.using_seed)]
+						act.details = "Paused"
+						act.assets.large_image = "logoimage"
+						act.assets.large_text = "Optimizing for X"
+						act.timestamps.start = Config.app_start_time
+						Config.discord.get_activity_manager().update_activity(act)
+					
 
 
 func _on_Back_pressed() -> void:

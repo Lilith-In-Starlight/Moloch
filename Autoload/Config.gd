@@ -12,6 +12,8 @@ var damage_visuals := false
 var instant_death_button := false
 var joystick_sensitivity := 6
 
+var app_start_time = OS.get_unix_time()
+
 # Tutorial
 
 var tutorial := {
@@ -63,6 +65,8 @@ var ach_info := {
 	
 }
 
+var discord : Discord.Core
+
 func _ready() -> void:
 	var err := config_file.load("user://config.moloch")
 	if err == OK:
@@ -88,6 +92,35 @@ func _ready() -> void:
 	
 	if Input.get_connected_joypads().size() > 0:
 		last_input_was_controller = true
+	
+	# Eh??
+	discord = Discord.Core.new()
+	var result: int = discord.create(
+		918003339264938035,
+		Discord.CreateFlags.NO_REQUIRE_DISCORD
+	)
+
+	if result != Discord.Result.OK:
+		print(
+			"Failed to initialise Discord Core: ",
+			result
+		)
+		discord = null
+		return
+	print("Initialised core successfully.")
+	var act = Discord.Activity.new()
+	act.state = "In Menu"
+	act.details = "Suffering"
+	act.assets.large_image = "logoimage"
+	act.assets.large_text = "Optimizing for X"
+	act.timestamps.start = app_start_time
+	
+	discord.get_activity_manager().update_activity(act)
+
+
+func _process(delta: float) -> void:
+	if not discord == null:
+		discord.run_callbacks()
 
 
 func save_config() -> void:

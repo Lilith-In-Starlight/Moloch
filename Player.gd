@@ -272,7 +272,44 @@ func _physics_process(delta: float) -> void:
 				health.poked_holes = 0
 			if health.poked_holes == 0:
 				send_message("Bleeding has ceased")
-
+	
+	if Config.discord != null:
+		var detail := ""
+		if health.needs_blood and health.poked_holes > 0:
+			detail += "Bleeding, "
+		if health.broken_moving_appendages == 1:
+			detail += "Broken leg, "
+		elif health.broken_moving_appendages == 2:
+			detail += "Broken legs, "
+		if temp_stage == 1:
+			detail += "Too hot, "
+		elif temp_stage == 2:
+			detail += "Heat stroke, "
+		elif temp_stage == -1:
+			detail += "Too cold, "
+		elif temp_stage == -2:
+			detail += "Hypothermia, "
+		if health.soul > health.needed_soul:
+			detail += "Soulful, "
+		elif health.soul < 0.43:
+			detail += "Soulless, "
+		if blood_is_gasoline:
+			detail += "Volatile, "
+		if health.effects.has("onfire"):
+			detail += "On fire, "
+		detail = detail.rstrip(", ")
+		if detail == "":
+			detail = "All seems fine"
+		if health.dead:
+			detail = "Dead"
+		if Config.discord != null:
+			var act = Discord.Activity.new()
+			act.state = "Level %s, %s" % [str(Items.level), str(Items.using_seed)]
+			act.details = detail
+			act.assets.large_image = "logoimage"
+			act.assets.large_text = "Optimizing for X"
+			act.timestamps.start = Config.app_start_time
+			Config.discord.get_activity_manager().update_activity(act)
 
 func _on_generated_world() -> void:
 	set_physics_process(true)
