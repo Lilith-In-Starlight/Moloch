@@ -298,6 +298,8 @@ func _physics_process(delta: float) -> void:
 			detail += "Soulless, "
 		if health.blood_substance == "nitroglycerine":
 			detail += "Volatile, "
+		elif health.blood_substance == "water":
+			detail += "Water Blood, "
 		if health.effects.has("onfire"):
 			detail += "On fire, "
 		detail = detail.rstrip(", ")
