@@ -204,16 +204,19 @@ func process_movement(delta:float) -> void:
 func bleed() -> void:
 	# If the player is bleeding
 	if health.poked_holes > 0 and health.blood > 0.01:
+		if health.blood_substance == "water" and "onfire" in health.effects:
+			health.effects.erase("onfire")
 		# Emit blood particles 
 		for i in min(health.poked_holes, 12):
 			if randf()>0.9:
 				var n :RigidBody2D = preload("res://Particles/Blood.tscn").instance()
 				n.position = position + Vector2(0, 6)
 				n.linear_velocity = Vector2(-200 + randf()*400, -80 + randf()*120)
-				if not blood_is_gasoline:
-					n.modulate = ColorN("red")
-				else:
-					n.modulate = ColorN("green")
+				match health.blood_substance:
+					"blood" : n.modulate = ColorN("red")
+					"nitroglycerine" : n.modulate = ColorN("green")
+					"water" : n.modulate = ColorN("blue")
+					_ : n.modulate = ColorN("red")
 				get_parent().add_child(n)
 
 

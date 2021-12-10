@@ -75,6 +75,7 @@ func _ready():
 	register_item(1, "thickblood", "Thick Blood", "Higher amounts of blood", preload("res://Sprites/Items/ThickBlood.png"))
 	register_item(3, "wings", "Butterfly Wings", "Defy gravitational attraction", preload("res://Sprites/Items/Wings.png"))
 	register_item(1, "gasolineblood", "Blood To Nitroglycerine", "Your insides become volatile", preload("res://Sprites/Items/BloodToGasoline.png"))
+	register_item(1, "waterblood", "Blood To Water", "Your insides become water", preload("res://Sprites/Items/BloodToWater.png"))
 	register_item(1, "scraps", "Cloth Scraps", "Seal your wounds, somewhat", preload("res://Sprites/Items/Scraps.png"))
 	register_item(1, "soulfulpill", "Soulful Pill", "Heals the mind and soul", preload("res://Sprites/Items/SoulfulPill.png"))
 	register_item(2, "monocle", "Pig's Monocle", "See all the shinies", preload("res://Sprites/Items/PigsMonocle.png"))
