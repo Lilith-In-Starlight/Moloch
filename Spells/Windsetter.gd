@@ -20,7 +20,7 @@ func _process(delta):
 	var i := 0
 	for rc in get_children():
 		rc.force_raycast_update()
-		if randf()<0.3:
+		if randf()<0.2:
 			var n := preload("res://Particles/RoundParticles.tscn").instance()
 			n.position = position
 			n.rotation = angle+(-3+i)*0.2
