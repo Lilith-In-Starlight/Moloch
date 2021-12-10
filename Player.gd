@@ -29,9 +29,12 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	flying = Items.count_player_items("wings") > 0
 	# Apply items
-	if Items.player_items.has("gasolineblood") and not blood_is_gasoline and health.blood > 0.01:
-		blood_is_gasoline = true
+	if Items.player_items.has("gasolineblood") and not health.blood_substance == "nitroglycerine" and health.blood > 0.01:
+		health.blood_substance = "nitroglycerine"
 		send_message("Your insides become volatile")
+	elif Items.player_items.has("waterblood") and not health.blood_substance == "water" and health.blood > 0.01:
+		health.blood_substance = "water"
+		send_message("Your insides become drinkable")
 	
 	if Items.count_player_items("thickblood") > 0:
 		Items.player_items["thickblood"] -= 1
@@ -150,7 +153,7 @@ func _process(delta: float) -> void:
 	elif health.temperature >= 60 and health.temperature < 100 and temp_stage != 2:
 		temp_stage = 2
 		# Player explodes on high temperatures if their blood is nitro
-		if blood_is_gasoline and health.blood > 0.01:
+		if health.blood_substance == "nitroglycerine" and health.blood > 0.01:
 			var n := preload("res://Particles/Explosion.tscn").instance()
 			n.position = position
 			get_parent().add_child(n)
@@ -158,7 +161,7 @@ func _process(delta: float) -> void:
 	elif health.temperature >= 100 and temp_stage != 3:
 		temp_stage = 3
 		# Player explodes on high temperatures if their blood is nitro
-		if blood_is_gasoline and health.blood > 0.01:
+		if health.blood_substance == "nitroglycerine" and health.blood > 0.01:
 			var n := preload("res://Particles/Explosion.tscn").instance()
 			n.position = position
 			get_parent().add_child(n)
@@ -293,7 +296,7 @@ func _physics_process(delta: float) -> void:
 			detail += "Soulful, "
 		elif health.soul < 0.43:
 			detail += "Soulless, "
-		if blood_is_gasoline:
+		if health.blood_substance == "nitroglycerine":
 			detail += "Volatile, "
 		if health.effects.has("onfire"):
 			detail += "On fire, "
@@ -339,7 +342,7 @@ func _on_broken_leg(amount:int) -> void:
 		return
 	if amount != 0:
 		Map.play_sound(preload("res://Sfx/broken_legs.wav"), position, 1.0, 0.8+randf()*0.4)
-		if blood_is_gasoline and health.blood > 0.01:
+		if health.blood_substance == "nitroglycerine" and health.blood > 0.01:
 			var n := preload("res://Particles/Explosion.tscn").instance()
 			n.position = position
 			get_parent().add_child(n)

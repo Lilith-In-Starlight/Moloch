@@ -29,6 +29,7 @@ var max_blood := 1.0
 var poked_holes := 0
 var max_holes := 200
 var blood := 1.0
+var blood_substance := "blood"
 
 var weak_to_temp := true
 var temperature := 30.0
