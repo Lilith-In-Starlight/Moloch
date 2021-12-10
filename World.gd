@@ -222,7 +222,7 @@ func add_enemies():
 			if Items.level > 1:
 				enemies.append(add_enemy_with_chance(area, preload("res://Enemies/ArmageddonMachine.tscn"), 0.001))
 			if Items.level > 2:
-				enemies.append(add_enemy_with_chance(area, preload("res://Enemies/Citizen.tscn"), 0.3))
+				enemies.append(add_enemy_with_chance(area, preload("res://Enemies/Citizen.tscn"), 0.25))
 	remove_nulls(enemies)
 	print("Added ", len(enemies), " enemies")
 

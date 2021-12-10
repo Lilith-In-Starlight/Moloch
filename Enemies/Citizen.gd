@@ -19,10 +19,10 @@ func _ready() -> void:
 	for i in wand.spells.size():
 		wand.spells[i] = null
 	wand.spells[0] = Items.pick_random_spell()
-	wand.full_recharge *= 5.0
+	wand.full_recharge = 1.5 + randf()*2.0
+	wand.spell_recharge = 0.5 + randf()*1.3
 	Map = get_tree().get_nodes_in_group("World")[0]
 	Player = get_tree().get_nodes_in_group("Player")[0]
-	health.connect("died", self, "health_died")
 	health.connect("died", self, "health_died_second")
 	health.connect("hole_poked", self, "_on_hole_poked")
 
@@ -39,7 +39,7 @@ func _physics_process(delta: float) -> void:
 	walk_accel = 50.0
 	$RayCast2D.position.x = speed.x * delta
 	$RayCast2D2.cast_to.x = speed.x * delta
-	$PlayerFinder.cast_to = Player.position - position
+	$PlayerFinder.cast_to = (Player.position - position).normalized() * 250
 	$AimRay.cast_to = (aim - position).normalized() * 350
 	var aa :Vector2 = aim
 	if $AimRay.is_colliding():
