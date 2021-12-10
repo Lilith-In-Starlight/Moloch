@@ -223,6 +223,16 @@ func add_enemies():
 				enemies.append(add_enemy_with_chance(area, preload("res://Enemies/ArmageddonMachine.tscn"), 0.001))
 			if Items.level > 2:
 				enemies.append(add_enemy_with_chance(area, preload("res://Enemies/Citizen.tscn"), 0.25))
+			if Items.level == 1:
+				enemies.append(add_enemy_with_chance(area, preload("res://Enemies/SoulWaveMachine.tscn"), 0.001))
+			elif Items.level == 2:
+				enemies.append(add_enemy_with_chance(area, preload("res://Enemies/SoulWaveMachine.tscn"), 0.005))
+			elif Items.level <= 6:
+				enemies.append(add_enemy_with_chance(area, preload("res://Enemies/SoulWaveMachine.tscn"), 0.009))
+			elif Items.level <= 12:
+				enemies.append(add_enemy_with_chance(area, preload("res://Enemies/SoulWaveMachine.tscn"), 0.1))
+			else:
+				enemies.append(add_enemy_with_chance(area, preload("res://Enemies/SoulWaveMachine.tscn"), 0.2))
 	remove_nulls(enemies)
 	print("Added ", len(enemies), " enemies")
 
