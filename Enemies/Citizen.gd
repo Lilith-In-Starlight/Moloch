@@ -28,6 +28,7 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	$Fire.visible = health.effects.has("onfire")
 	if not first_check:
 		if Player.position.distance_to(position) < 500:
 			queue_free()
