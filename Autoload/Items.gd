@@ -85,7 +85,7 @@ func _ready():
 	register_item(2, "heatadapt", "Heat Adaptation", "Adapt to greater temperatures", preload("res://Sprites/Items/SurviveHeat.png"))
 	register_item(2, ".9", "Point Nine", "Displays the current state of the bearer's body", preload("res://Sprites/Items/pointnine.png"))
 	register_item(1, "gluestone", "Gluestone", "Small entity that tries to act as a shield", preload("res://Sprites/Items/Gluestone.png"))
-	register_item(3, "egg", "Magic Egg", "If it hatches, it will summon a surprise", preload("res://Sprites/Items/Egg.png"))
+#	register_item(3, "egg", "Magic Egg", "If it hatches, it will summon a surprise", preload("res://Sprites/Items/Egg.png"))
 	register_item(3, "shance", "Second Chance", "Provides a chance of being revived", preload("res://Sprites/Items/SecondChance.png"))
 	register_item(3, "suarantee", "Second Guarantee", "Provides a guarantee of being revived", preload("res://Sprites/Items/SecondGuarantee.png"))
 	register_item(2, "legs", "Pocket Leg", "Put these on if you lose the old ones", preload("res://Sprites/Items/PocketLegs.png"))
@@ -218,6 +218,7 @@ func register_spell(tier:int, name_id:String, name:String, desc:String, texture 
 	new.id = name_id
 	new.texture = texture
 	new.entity = entity
+	new.tier = tier
 	spells[tier][name_id] = new
 	all_spells[name_id] = new
 

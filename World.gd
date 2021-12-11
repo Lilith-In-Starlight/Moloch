@@ -132,6 +132,8 @@ func _ready():
 		replace_layout_node_with_background_packed_scene(sprite, preload("res://Elements/AC.tscn"))
 	for sprite in get_tree().get_nodes_in_group("WandMixer"):
 		replace_layout_node_with_background_packed_scene(sprite, preload("res://Elements/WandMixer.tscn"))
+	for sprite in get_tree().get_nodes_in_group("Shop"):
+		replace_layout_node_with_background_packed_scene(sprite, preload("res://Elements/Shop.tscn"))
 	
 	print("Step 4: Passing all the room data to the world TileMap")
 	for room in get_children():
@@ -326,13 +328,15 @@ func new_normal_room() -> _Room:
 
 func new_treasure_room() -> _Room:
 	var r :_Room = _Room.new()
-	match Items.WorldRNG.randi()%3:
+	match Items.WorldRNG.randi()%4:
 		0:
 			r.scene = preload("res://Rooms/Sacrifice/TreasureRoom1.tscn").instance()
 		1:
 			r.scene = preload("res://Rooms/Sacrifice/TreasureRoom2.tscn").instance()
 		2:
 			r.scene = preload("res://Rooms/Sacrifice/TreasureRoom3.tscn").instance()
+		3:
+			r.scene = preload("res://Rooms/Sacrifice/TreasureRoom4.tscn").instance()
 	r.is_treasure = true
 	return r
 

@@ -1,0 +1,101 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://Themes/Theme.tres" type="Theme" id=1]
+[ext_resource path="res://Elements/Shop.gd" type="Script" id=2]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.6, 0.6, 0.6, 0 )
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color( 1, 0.556863, 0.556863, 1 )
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 1, 0.556863, 0.556863, 1 )
+
+[sub_resource type="Theme" id=3]
+ProgressBar/styles/bg = SubResource( 1 )
+ProgressBar/styles/fg = SubResource( 2 )
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 72, 4 )
+
+[node name="Shop" type="Node2D" groups=["Shop"]]
+script = ExtResource( 2 )
+
+[node name="Items" type="Node2D" parent="."]
+
+[node name="Item1" type="Position2D" parent="Items"]
+position = Vector2( 139, 96 )
+
+[node name="Item2" type="Position2D" parent="Items"]
+position = Vector2( 203, 96 )
+
+[node name="Item3" type="Position2D" parent="Items"]
+position = Vector2( 267, 96 )
+
+[node name="Item4" type="Position2D" parent="Items"]
+position = Vector2( 331, 96 )
+
+[node name="Item5" type="Position2D" parent="Items"]
+position = Vector2( 395, 96 )
+
+[node name="Item6" type="Position2D" parent="Items"]
+position = Vector2( 139, 168 )
+
+[node name="Item7" type="Position2D" parent="Items"]
+position = Vector2( 203, 168 )
+
+[node name="Item8" type="Position2D" parent="Items"]
+position = Vector2( 267, 168 )
+
+[node name="Item9" type="Position2D" parent="Items"]
+position = Vector2( 331, 168 )
+
+[node name="Item10" type="Position2D" parent="Items"]
+position = Vector2( 395, 168 )
+
+[node name="BloodBar" type="ProgressBar" parent="."]
+margin_left = 176.0
+margin_top = 208.0
+margin_right = 352.0
+margin_bottom = 222.0
+theme = SubResource( 3 )
+value = 100.0
+percent_visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="BloodBar"]
+modulate = Color( 1, 0.556863, 0.556863, 1 )
+margin_left = 69.0
+margin_top = -16.0
+margin_right = 108.0
+theme = ExtResource( 1 )
+text = "BLOOD"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CostBar" type="ProgressBar" parent="."]
+modulate = Color( 0.588235, 0, 0, 1 )
+margin_left = 176.0
+margin_top = 208.0
+margin_right = 352.0
+margin_bottom = 222.0
+theme = SubResource( 3 )
+value = 100.0
+percent_visible = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Sacrifice" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 128
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sacrifice"]
+position = Vector2( 264, 244 )
+shape = SubResource( 4 )

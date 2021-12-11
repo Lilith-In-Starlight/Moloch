@@ -7,3 +7,4 @@ var id :String
 var description :String
 var texture: Texture
 var entity :PackedScene
+var tier :int
