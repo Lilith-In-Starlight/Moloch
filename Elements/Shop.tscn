@@ -56,7 +56,9 @@ position = Vector2( 331, 168 )
 [node name="Item10" type="Position2D" parent="Items"]
 position = Vector2( 395, 168 )
 
-[node name="BloodBar" type="ProgressBar" parent="."]
+[node name="BloodBar" type="Node2D" parent="."]
+
+[node name="BloodBar" type="ProgressBar" parent="BloodBar"]
 margin_left = 176.0
 margin_top = 208.0
 margin_right = 352.0
@@ -68,7 +70,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="BloodBar"]
+[node name="Label" type="Label" parent="BloodBar/BloodBar"]
 modulate = Color( 1, 0.556863, 0.556863, 1 )
 margin_left = 69.0
 margin_top = -16.0
@@ -79,7 +81,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="CostBar" type="ProgressBar" parent="."]
+[node name="CostBar" type="ProgressBar" parent="BloodBar"]
 modulate = Color( 0.588235, 0, 0, 1 )
 margin_left = 176.0
 margin_top = 208.0

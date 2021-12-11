@@ -22,10 +22,10 @@ func _process(delta: float) -> void:
 		if prices.empty():
 			for i in spells.size():
 				prices.append(assign_price(spells[i]))
-		$BloodBar.max_value = Items.player_health.max_blood
-		$BloodBar.value = Items.player_health.blood
-		$CostBar.max_value = Items.player_health.max_blood
-		$CostBar.visible = false
+		$BloodBar/BloodBar.max_value = Items.player_health.max_blood
+		$BloodBar/BloodBar.value = Items.player_health.blood
+		$BloodBar/CostBar.max_value = Items.player_health.max_blood
+		$BloodBar/CostBar.visible = false
 		var selected := -1
 		var j := 0
 		for i in $Sacrifice.get_overlapping_bodies():
@@ -37,8 +37,8 @@ func _process(delta: float) -> void:
 			var mult := 6.0
 			if Player.position.distance_to(i.position + position) < 30.0:
 				mult = 12.0
-				$CostBar.value = Items.player_health.blood - prices[j]
-				$CostBar.visible = true
+				$BloodBar/CostBar.value = Items.player_health.blood - prices[j]
+				$BloodBar/CostBar.visible = true
 				selected = j
 			i.rotation = lerp_angle(i.rotation, sin(time*mult+j*0.1)*0.3, 0.1)
 			j += 1
@@ -47,6 +47,7 @@ func _process(delta: float) -> void:
 				$Items.get_child(selected).visible = false
 				Items.player_spells[Items.player_spells.find(null)] = Items.all_spells[spells[selected]]
 				Items.player_health.blood -= prices[selected]
+
 
 func get_item_in_tier(tier:int = 1) -> Item:
 	var k :Array = Items.spells[tier].keys()
