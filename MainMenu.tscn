@@ -249,7 +249,7 @@ margin_right = 40.0
 margin_bottom = 14.0
 theme = ExtResource( 6 )
 custom_fonts/font = SubResource( 9 )
-text = "0.11.0-alpha3"
+text = "0.11.0-alpha3b"
 __meta__ = {
 "_edit_use_anchors_": false
 }
