@@ -25,7 +25,6 @@ func _process(delta: float) -> void:
 	speed_n = abs(speed_n)
 	$Wings.rotation = lerp_angle($Wings.rotation, 0.01 * (speed_n * direction.x), 0.3)
 	
-	print(speed_n)
 	if direction == Vector2(0, 0):
 		direction = Vector2(0, 1)
 	
@@ -58,6 +57,3 @@ func cast_from() -> Vector2:
 func health_object() -> Flesh:
 	return health
 
-
-func _death() -> void:
-	Config.give_achievement("armageddont")
