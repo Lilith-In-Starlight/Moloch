@@ -59,12 +59,14 @@ position = Vector2( 395, 168 )
 [node name="BloodBar" type="Node2D" parent="."]
 
 [node name="BloodBar" type="ProgressBar" parent="BloodBar"]
-margin_left = 176.0
+margin_left = 152.0
 margin_top = 208.0
-margin_right = 352.0
+margin_right = 376.0
 margin_bottom = 222.0
 theme = SubResource( 3 )
-value = 100.0
+max_value = 1.0
+step = 0.0
+value = 1.0
 percent_visible = false
 __meta__ = {
 "_edit_use_anchors_": false
@@ -72,9 +74,9 @@ __meta__ = {
 
 [node name="Label" type="Label" parent="BloodBar/BloodBar"]
 modulate = Color( 1, 0.556863, 0.556863, 1 )
-margin_left = 69.0
+margin_left = 93.0
 margin_top = -16.0
-margin_right = 108.0
+margin_right = 132.0
 theme = ExtResource( 1 )
 text = "BLOOD"
 __meta__ = {
@@ -83,12 +85,14 @@ __meta__ = {
 
 [node name="CostBar" type="ProgressBar" parent="BloodBar"]
 modulate = Color( 0.588235, 0, 0, 1 )
-margin_left = 176.0
+margin_left = 152.0
 margin_top = 208.0
-margin_right = 352.0
+margin_right = 376.0
 margin_bottom = 222.0
 theme = SubResource( 3 )
-value = 100.0
+max_value = 1.0
+step = 0.0
+value = 1.0
 percent_visible = false
 __meta__ = {
 "_edit_use_anchors_": false

@@ -31,8 +31,7 @@ func _process(delta: float) -> void:
 		for i in $Sacrifice.get_overlapping_bodies():
 			if not i.spell is SpellMod:
 				if i.is_in_group("SpellItemEntity"):
-					Items.player_health.blood += assign_price(i.spell.id) * 0.7
-					Items.player_health.blood = min(Items.player_health.blood, Items.player_health.max_blood)
+					Items.player_health.blood = clamp(Items.player_health.blood + assign_price(i.spell.id) * 0.7, 0.0, Items.player_health.max_blood)
 					i.queue_free()
 		for i in $Items.get_children():
 			var mult := 6.0
