@@ -39,7 +39,7 @@ func _init():
 	# you dont want it to be zero, that's only for the starting wand
 	var spells_to_give := clamp(min(spell_capacity, round(abs(Items.LootRNG.randfn(2.0, 3.0)))), 1, 12)
 	for i in spells_to_give:
-		if randf() < 0.3 and not (i == 0 and spells_to_give == 1):
+		if Items.LootRNG.randf() < 0.3 and not (i == 0 and spells_to_give == 1):
 			spells.append(Items.pick_random_modifier())
 			continue
 		spells.append(Items.pick_random_spell())

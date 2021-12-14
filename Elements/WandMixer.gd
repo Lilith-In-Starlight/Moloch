@@ -74,7 +74,7 @@ func _input(event: InputEvent) -> void:
 							var k := left_wand.push_resistance
 							left_wand.push_resistance = right_wand.push_resistance
 							right_wand.push_resistance = k
-					swap = Items.LootRNG.randi() % PROPERTIES.size()
+					swap = randi() % PROPERTIES.size()
 					$Control/ButtonsToPress/Control/Label.text = "Swap " + PROPERTIES[swap]
 					if randf() < 0.4:
 						Player.health.poke_hole(1)
