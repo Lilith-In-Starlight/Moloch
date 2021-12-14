@@ -121,8 +121,6 @@ func process_health(delta:float, speed:Vector2 = Vector2(0, 0)) -> void:
 		effects.erase("confused")
 	else:
 		confusion_timer -= delta
-	if weak_to_temp and temperature > death_hypertemperature * 0.8 and not "confused" in effects:
-		add_effect("confused")
 	if ((temperature > death_hypertemperature or temperature < death_hypotemperature) and weak_to_temp) or (soul <= 0.0 and has_soul) or (blood <= 0.0 and needs_blood) or poked_holes > max_holes:
 		if (guarantees == 0 and chances == 0) or (chances > 0 and randi()%3 > 0):
 			if not dead:
