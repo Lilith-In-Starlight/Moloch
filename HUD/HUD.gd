@@ -51,6 +51,10 @@ var advice := [
 	"Try your best to not be set on fire",
 	"Try your best to have good luck",
 	"Permanence is unachievable",
+	"Some items are bad, try to not get them in chests",
+	"It says gullible on the ceiling",
+	"Take your time, but not enough time for an enemy to shoot you",
+	"It is a mystery",
 ]
 var player_died := false
 var end_times : String # How long did the run last
