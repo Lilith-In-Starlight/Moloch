@@ -15,6 +15,7 @@ var aim := last_seen
 
 
 func _ready() -> void:
+	last_seen = position
 	wand = Wand.new()
 	for i in wand.spells.size():
 		wand.spells[i] = null
