@@ -55,6 +55,7 @@ var advice := [
 	"It says gullible on the ceiling",
 	"Take your time, but not enough time for an enemy to shoot you",
 	"It is a mystery",
+	"Look after your soul. You need that.",
 ]
 var player_died := false
 var end_times : String # How long did the run last
