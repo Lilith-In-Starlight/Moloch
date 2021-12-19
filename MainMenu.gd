@@ -46,6 +46,7 @@ func _ready():
 		"settings": [
 			make_menu_setting("Death Button", Config.instant_death_button, "idb"),
 			make_menu_setting("Damage Colors", Config.damage_visuals, "dv"),
+			make_menu_setting("Accessible Font", Config.use_accessible_font, "uaf"),
 			make_menu_setting("Joystick Sensitivity", Config.joystick_sensitivity, "joys"),
 			make_menu_option("Controls", "controls"),
 			make_menu_option("Back", "main"),
@@ -80,6 +81,8 @@ func _process(delta: float) -> void:
 	$Ball.rect_position = lerp($Ball.rect_position, menu_element.rect_global_position - Vector2(12,  -menu_element.rect_size.y / 2.0 + 6), 0.5)
 	Config.instant_death_button = menus["settings"][0].enabled
 	Config.damage_visuals = menus["settings"][1].enabled
+	
+	$MainMenu/LineEdit.visible = current_menu == "main"
 	
 	if current_menu == "controls":
 		$MainMenu.modulate.a = lerp($MainMenu.modulate.a, 0.0, 0.2)
@@ -286,6 +289,8 @@ func change_config_setting(config_setting:String, setting:MenuSetting):
 			Config.damage_visuals = setting.enabled
 		"joys":
 			Config.joystick_sensitivity = setting.value
+		"uaf":
+			Config.use_accessible_font = setting.enabled
 	Config.save_config()
 
 

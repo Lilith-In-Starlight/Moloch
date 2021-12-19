@@ -11,8 +11,19 @@ var last_input_was_controller := false
 var damage_visuals := false
 var instant_death_button := false
 var joystick_sensitivity := 6
+var use_accessible_font := false setget set_font
 
 var app_start_time = OS.get_unix_time()
+
+var default_font = preload("res://dpcomic.ttf")
+var accessible_font = preload("res://OpenSans-Regular.ttf")
+var menu_theme = preload("res://Themes/Theme.tres")
+var version_theme = preload("res://Themes/VersionTheme.tres")
+var seed_theme = preload("res://Themes/SeedTheme.tres")
+var achievo_theme = preload("res://Themes/AchievoTextTheme.tres")
+var bigdesctext_theme = preload("res://Themes/BigDescTextTheme.tres")
+var smoldesctext_theme = preload("res://Themes/SmolDescTextTheme.tres")
+var tooltip_theme = preload("res://Themes/TooltipTheme.tres")
 
 # Tutorial
 
@@ -147,3 +158,43 @@ func give_achievement(achievement: String) -> void:
 		achievements[achievement] = true
 		emit_signal("achievement_unlocked", achievement)
 		save_config()
+
+
+func set_font(value):
+	if value:
+		menu_theme.default_font.font_data = accessible_font
+		menu_theme.default_font.size = 12
+		menu_theme.default_font.outline_size = 1.2
+		menu_theme.default_font.extra_spacing_top = -2
+		achievo_theme.default_font.size = 8
+	else:
+		menu_theme.default_font.font_data = default_font
+		menu_theme.default_font.size = 16
+		menu_theme.default_font.outline_size = 2
+		menu_theme.default_font.extra_spacing_top = 0
+		achievo_theme.default_font.size = 10
+	
+	version_theme.default_font.font_data = menu_theme.default_font.font_data
+	version_theme.default_font.size = menu_theme.default_font.size - 3
+	version_theme.default_font.extra_spacing_top = menu_theme.default_font.extra_spacing_top
+	
+	seed_theme.default_font.font_data = menu_theme.default_font.font_data
+	seed_theme.default_font.size = menu_theme.default_font.size - 3
+	seed_theme.default_font.extra_spacing_top = seed_theme.default_font.extra_spacing_top
+	
+	achievo_theme.default_font.font_data = menu_theme.default_font.font_data
+	achievo_theme.default_font.extra_spacing_top = menu_theme.default_font.extra_spacing_top
+	
+	bigdesctext_theme.default_font.font_data = menu_theme.default_font.font_data
+	bigdesctext_theme.default_font.extra_spacing_top = menu_theme.default_font.extra_spacing_top
+	bigdesctext_theme.default_font.size = menu_theme.default_font.size - 4
+	
+	smoldesctext_theme.default_font.font_data = menu_theme.default_font.font_data
+	smoldesctext_theme.default_font.extra_spacing_top = menu_theme.default_font.extra_spacing_top
+	smoldesctext_theme.default_font.size = achievo_theme.default_font.size
+	
+	tooltip_theme.default_font.font_data = menu_theme.default_font.font_data
+	tooltip_theme.default_font.extra_spacing_top = menu_theme.default_font.extra_spacing_top
+	tooltip_theme.default_font.size = achievo_theme.default_font.size + 1
+	
+	use_accessible_font = value

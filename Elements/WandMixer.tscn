@@ -16,9 +16,7 @@ extents = Vector2( 183, 10 )
 [sub_resource type="RectangleShape2D" id=3]
 extents = Vector2( 29, 10 )
 
-[node name="WandMixer" type="Node2D" groups=[
-"WandMixer",
-]]
+[node name="WandMixer" type="Node2D" groups=["WandMixer"]]
 script = ExtResource( 3 )
 __meta__ = {
 "_edit_horizontal_guides_": [ 8.0 ]

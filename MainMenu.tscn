@@ -1,13 +1,14 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://Sprites/Menus/logo.png" type="Texture" id=1]
 [ext_resource path="res://dpcomic.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://MainMenu.gd" type="Script" id=3]
 [ext_resource path="res://Sprites/Spells/Entities/FireOrb.png" type="Texture" id=4]
 [ext_resource path="res://HUD/AchievementListElement.tscn" type="PackedScene" id=5]
-[ext_resource path="res://Themes/Theme.tres" type="Theme" id=6]
+[ext_resource path="res://Themes/VersionTheme.tres" type="Theme" id=6]
 [ext_resource path="res://Sprites/Menus/MenuBGSymbol.png" type="Texture" id=7]
 [ext_resource path="res://Sprites/Menus/MenuBGLight.png" type="Texture" id=8]
+[ext_resource path="res://Themes/SeedTheme.tres" type="Theme" id=9]
 
 [sub_resource type="Shader" id=13]
 code = "shader_type canvas_item;
@@ -41,10 +42,6 @@ void fragment() {
 
 [sub_resource type="ShaderMaterial" id=11]
 shader = SubResource( 10 )
-
-[sub_resource type="DynamicFont" id=9]
-size = 13
-font_data = ExtResource( 2 )
 
 [sub_resource type="Animation" id=1]
 resource_name = "Fadein"
@@ -153,27 +150,6 @@ tracks/4/keys = {
 "values": [ true, false ]
 }
 
-[sub_resource type="DynamicFont" id=5]
-size = 12
-font_data = ExtResource( 2 )
-
-[sub_resource type="StyleBoxFlat" id=4]
-content_margin_left = 5.0
-content_margin_right = 5.0
-content_margin_top = 5.0
-content_margin_bottom = 5.0
-bg_color = Color( 1, 0.627451, 0, 1 )
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color( 0.458824, 0.215686, 0, 1 )
-corner_radius_top_left = 5
-corner_radius_top_right = 2
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 2
-anti_aliasing = false
-
 [sub_resource type="StyleBoxFlat" id=6]
 bg_color = Color( 0, 0, 0, 1 )
 
@@ -248,7 +224,6 @@ __meta__ = {
 margin_right = 40.0
 margin_bottom = 14.0
 theme = ExtResource( 6 )
-custom_fonts/font = SubResource( 9 )
 text = "0.12.0"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -292,9 +267,7 @@ margin_top = -0.0749964
 margin_right = 20.2
 margin_bottom = 0.100003
 focus_mode = 1
-custom_colors/font_color = Color( 0.458824, 0.215686, 0, 1 )
-custom_fonts/font = SubResource( 5 )
-custom_styles/normal = SubResource( 4 )
+theme = ExtResource( 9 )
 align = 1
 placeholder_text = "Leave empty for random seed"
 __meta__ = {
@@ -381,6 +354,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 custom_styles/panel = SubResource( 6 )
 __meta__ = {
+"_edit_lock_": true,
 "_edit_use_anchors_": false
 }
 
