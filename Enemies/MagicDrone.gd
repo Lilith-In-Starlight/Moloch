@@ -54,10 +54,11 @@ func _physics_process(delta):
 			n.position = position
 			get_parent().add_child(n)
 		if randf() < 0.2:
-			var item :Item = Items.all_items["soulfulpill"]
-			if randf() < 0.02:
-				item = Items.all_items["soulfulengine"]
-			Map.summon_item(item, position, speed)
+			if Items.player_health.soul <= Items.player_health.needed_soul or (Items.player_health.soul > Items.player_health.needed_soul and randf() < 0.2):
+				var item :Item = Items.all_items["soulfulpill"]
+				if randf() < 0.02:
+					item = Items.all_items["soulfulengine"]
+				Map.summon_item(item, position, speed)
 		queue_free()
 	match state:
 		STATES.IDLE:
