@@ -260,14 +260,14 @@ func _process(delta):
 					# Which information to set
 					if Input.is_action_pressed("see_info"):
 						DescriptionBox.visible = true
-						DescriptionBoxName.text = "Wand"
-						DescriptionBoxInfo.text = "Spell Cooldown: " + str(Items.companions[i][1].spell_recharge).pad_decimals(3)
-						DescriptionBoxInfo.text += "\nUsage Cooldown: " + str(Items.companions[i][1].full_recharge).pad_decimals(3)
+						DescriptionBoxName.bbcode_text = "Wand"
+						DescriptionBoxInfo.bbcode_text = "Spell Cooldown: " + str(Items.companions[i][1].spell_recharge).pad_decimals(3)
+						DescriptionBoxInfo.bbcode_text += "\nUsage Cooldown: " + str(Items.companions[i][1].full_recharge).pad_decimals(3)
 						if Items.companions[i][1].shuffle:
-							DescriptionBoxInfo.text += "\nShuffle"
+							DescriptionBoxInfo.bbcode_text += "\nShuffle"
 					else:
 						ShortDescriptionBox.visible = true
-						ShortDescriptionBox.text =  str(Items.companions[i][1].spell_recharge).pad_decimals(2) + "/" + str(Items.companions[i][1].full_recharge).pad_decimals(2)
+						ShortDescriptionBox.bbcode_text =  str(Items.companions[i][1].spell_recharge).pad_decimals(2) + "/" + str(Items.companions[i][1].full_recharge).pad_decimals(2)
 				break # Stop checking for if it's in a slot, we already did all this stuff
 	
 	# If the mouse is in the wands' spells area and is holding a wand
@@ -287,8 +287,8 @@ func _process(delta):
 					if wand.spells[i] != null:
 						if Input.is_action_pressed("see_info"):
 							DescriptionBox.visible = true
-							DescriptionBoxName.text = wand.spells[i].name
-							DescriptionBoxInfo.text = wand.spells[i].description
+							DescriptionBoxName.bbcode_text = wand.spells[i].name
+							DescriptionBoxInfo.bbcode_text = wand.spells[i].description
 						else:
 							ShortDescriptionBox.visible = true
 							ShortDescriptionBox.text =  wand.spells[i].name
@@ -306,8 +306,8 @@ func _process(delta):
 				if Items.player_spells[i] != null:
 					if Input.is_action_pressed("see_info"):
 						DescriptionBox.visible = true
-						DescriptionBoxName.text = Items.player_spells[i].name
-						DescriptionBoxInfo.text = Items.player_spells[i].description
+						DescriptionBoxName.bbcode_text = Items.player_spells[i].name
+						DescriptionBoxInfo.bbcode_text = Items.player_spells[i].description
 					else:
 						ShortDescriptionBox.visible = true
 						ShortDescriptionBox.text =  Items.player_spells[i].name
@@ -316,11 +316,11 @@ func _process(delta):
 	elif Items.last_pickup != null and mouse.x > 4 and mouse.y > 184 and mouse.x < 20 and mouse.y < 200:
 		if Input.is_action_pressed("see_info"):
 			DescriptionBox.visible = true
-			DescriptionBoxName.text = Items.last_pickup.name
-			DescriptionBoxInfo.text = Items.last_pickup.description
+			DescriptionBoxName.bbcode_text = "[color=#ffaa00]" + Items.last_pickup.name + "[/color]"
+			DescriptionBoxInfo.bbcode_text = Items.last_pickup.description
 		else:
 			ShortDescriptionBox.visible = true
-			ShortDescriptionBox.text = Items.last_pickup.name
+			ShortDescriptionBox.bbcode_text = Items.last_pickup.name
 	
 	# Navigate inventory with controller
 	if Config.last_input_was_controller:
