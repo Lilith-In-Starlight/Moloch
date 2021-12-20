@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Themes/Theme.tres" type="Theme" id=1]
 [ext_resource path="res://Elements/Shop.gd" type="Script" id=2]
+[ext_resource path="res://Sprites/Particles/soul.png" type="Texture" id=3]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 0.6, 0.6, 0.6, 0 )
@@ -12,7 +13,7 @@ border_width_bottom = 2
 border_color = Color( 1, 0.556863, 0.556863, 1 )
 
 [sub_resource type="StyleBoxFlat" id=2]
-bg_color = Color( 1, 0.556863, 0.556863, 1 )
+bg_color = Color( 1, 1, 1, 1 )
 
 [sub_resource type="Theme" id=3]
 ProgressBar/styles/bg = SubResource( 1 )
@@ -23,6 +24,15 @@ extents = Vector2( 72, 4 )
 
 [node name="Shop" type="Node2D" groups=["Shop"]]
 script = ExtResource( 2 )
+
+[node name="SoulParticles" type="CPUParticles2D" parent="."]
+position = Vector2( 387, 168 )
+emitting = false
+texture = ExtResource( 3 )
+emission_shape = 1
+emission_sphere_radius = 8.0
+direction = Vector2( 0, -1 )
+gravity = Vector2( 0, -98 )
 
 [node name="Items" type="Node2D" parent="."]
 
@@ -59,6 +69,7 @@ position = Vector2( 395, 168 )
 [node name="BloodBar" type="Node2D" parent="."]
 
 [node name="BloodBar" type="ProgressBar" parent="BloodBar"]
+modulate = Color( 1, 0.678431, 0.678431, 1 )
 margin_left = 152.0
 margin_top = 208.0
 margin_right = 376.0
@@ -73,12 +84,12 @@ __meta__ = {
 }
 
 [node name="Label" type="Label" parent="BloodBar/BloodBar"]
-modulate = Color( 1, 0.556863, 0.556863, 1 )
-margin_left = 93.0
 margin_top = -16.0
-margin_right = 132.0
+margin_right = 224.0
 theme = ExtResource( 1 )
 text = "BLOOD"
+align = 1
+valign = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -92,7 +103,7 @@ margin_bottom = 222.0
 theme = SubResource( 3 )
 max_value = 1.0
 step = 0.0
-value = 1.0
+value = 0.1
 percent_visible = false
 __meta__ = {
 "_edit_use_anchors_": false
