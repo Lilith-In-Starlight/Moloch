@@ -81,10 +81,10 @@ var discord : Discord.Core
 func _ready() -> void:
 	var err := config_file.load("user://config.moloch")
 	if err == OK:
-		damage_visuals = config_file.get_value("config", "damage_visuals", false)
-		instant_death_button = config_file.get_value("config", "instant_death_button", false)
-		joystick_sensitivity = config_file.get_value("config", "joystick_sensitivity", 6)
-		use_accessible_font = config_file.get_value("config", "accessible_font", false)
+		self.damage_visuals = config_file.get_value("config", "damage_visuals", false)
+		self.instant_death_button = config_file.get_value("config", "instant_death_button", false)
+		self.joystick_sensitivity = config_file.get_value("config", "joystick_sensitivity", 6)
+		self.use_accessible_font = config_file.get_value("config", "accessible_font", false)
 		for i in InputMap.get_actions():
 			var obtained = config_file.get_value("config", "keybinds_%s"%i, InputMap.get_action_list(i))
 			InputMap.action_erase_events(i)
