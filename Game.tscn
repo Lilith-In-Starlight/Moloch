@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=2]
+[gd_scene load_steps=48 format=2]
 
 [ext_resource path="res://Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://EditorTileset.tres" type="TileSet" id=2]
@@ -134,20 +134,8 @@ bg_color = Color( 0, 0, 0, 1 )
 use_mipmaps = true
 font_data = ExtResource( 5 )
 
-[sub_resource type="DynamicFont" id=22]
-size = 11
-use_mipmaps = true
-font_data = ExtResource( 5 )
-
 [sub_resource type="StyleBoxFlat" id=23]
 bg_color = Color( 0, 0, 0, 0.423529 )
-
-[sub_resource type="DynamicFont" id=24]
-font_data = ExtResource( 5 )
-
-[sub_resource type="DynamicFont" id=25]
-size = 12
-font_data = ExtResource( 5 )
 
 [sub_resource type="DynamicFont" id=26]
 size = 11
@@ -882,7 +870,7 @@ margin_left = -132.0
 margin_top = -40.0
 margin_right = 132.0
 margin_bottom = 56.0
-custom_fonts/font = SubResource( 22 )
+theme = ExtResource( 21 )
 text = "Cause of Death:
 Run Length:
 Seed:
@@ -964,20 +952,20 @@ __meta__ = {
 [node name="Settings" type="ToolButton" parent="HUD/HUD/Pause/Options"]
 margin_right = 95.0
 margin_bottom = 24.0
+theme = ExtResource( 18 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_colors/font_color_hover = Color( 0.737255, 1, 0.968627, 1 )
 custom_colors/font_color_pressed = Color( 1, 0.596078, 0.929412, 1 )
-custom_fonts/font = SubResource( 24 )
 text = "Settings"
 
 [node name="DieInstantly" type="ToolButton" parent="HUD/HUD/Pause/Options"]
 margin_top = 28.0
 margin_right = 95.0
 margin_bottom = 52.0
+theme = ExtResource( 18 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_colors/font_color_hover = Color( 0.737255, 1, 0.968627, 1 )
 custom_colors/font_color_pressed = Color( 1, 0.596078, 0.929412, 1 )
-custom_fonts/font = SubResource( 24 )
 text = "Die Instantly"
 
 [node name="Settings" type="VBoxContainer" parent="HUD/HUD/Pause"]
@@ -996,6 +984,7 @@ __meta__ = {
 [node name="JoystickSensitivity" type="HSlider" parent="HUD/HUD/Pause/Settings"]
 margin_right = 119.0
 margin_bottom = 16.0
+theme = ExtResource( 18 )
 min_value = 1.0
 max_value = 12.0
 value = 1.0
@@ -1010,7 +999,7 @@ margin_top = -22.0
 margin_right = 50.0
 margin_bottom = -8.0
 grow_horizontal = 2
-custom_fonts/font = SubResource( 25 )
+theme = ExtResource( 18 )
 text = "Joystick Sensitivity: 12"
 align = 1
 __meta__ = {
@@ -1021,7 +1010,7 @@ __meta__ = {
 margin_top = 20.0
 margin_right = 119.0
 margin_bottom = 44.0
-custom_fonts/font = SubResource( 6 )
+theme = ExtResource( 18 )
 text = "Visualize Damage"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -1031,7 +1020,7 @@ __meta__ = {
 margin_top = 48.0
 margin_right = 119.0
 margin_bottom = 72.0
-custom_fonts/font = SubResource( 6 )
+theme = ExtResource( 18 )
 text = "Instant Death Button"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -1041,10 +1030,10 @@ __meta__ = {
 margin_top = 76.0
 margin_right = 119.0
 margin_bottom = 100.0
+theme = ExtResource( 18 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_colors/font_color_hover = Color( 0.737255, 1, 0.968627, 1 )
 custom_colors/font_color_pressed = Color( 1, 0.596078, 0.929412, 1 )
-custom_fonts/font = SubResource( 24 )
 text = "Back"
 
 [node name="DeathSFX" type="AudioStreamPlayer" parent="HUD/HUD"]
