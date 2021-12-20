@@ -45,12 +45,15 @@ uniform vec2 soul_offset_blue = vec2(0.0);
 uniform vec2 soul_offset_green = vec2(0.0);
 
 void fragment() {
+	vec2 center = vec2(0.5, 0.5);
+	float d = length(UV - center);
 	vec4 color = textureLod(SCREEN_TEXTURE, SCREEN_UV + SCREEN_PIXEL_SIZE * soul_offset_green, 0.0);
 	vec4 color2 = textureLod(SCREEN_TEXTURE, SCREEN_UV + SCREEN_PIXEL_SIZE * soul_offset_red, 0.0);
 	vec4 color3 = textureLod(SCREEN_TEXTURE, SCREEN_UV + SCREEN_PIXEL_SIZE * soul_offset_blue, 0.0);
 	COLOR.b = color.b;
 	COLOR.g = color2.g;
 	COLOR.r = color3.r;
+	COLOR.rgb -= 0.2*pow(d, 2);
 }"
 
 [sub_resource type="ShaderMaterial" id=31]
