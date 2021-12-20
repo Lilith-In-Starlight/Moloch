@@ -29,12 +29,15 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	flying = Items.count_player_items("wings") > 0
 	# Apply items
-	if Items.player_items.has("gasolineblood") and not health.blood_substance == "nitroglycerine" and health.blood > 0.01:
+	if Items.count_player_items("gasolineblood") and not health.blood_substance == "nitroglycerine" and health.blood > 0.01:
 		health.blood_substance = "nitroglycerine"
 		send_message("Your insides become volatile")
-	elif Items.player_items.has("waterblood") and not health.blood_substance == "water" and health.blood > 0.01:
+		Items.player_items["gasolineblood"] -= 1
+	
+	elif Items.count_player_items("waterblood") and not health.blood_substance == "water" and health.blood > 0.01:
 		health.blood_substance = "water"
 		send_message("Your insides become drinkable")
+		Items.player_items["waterblood"] -= 1
 	
 	if Items.count_player_items("thickblood") > 0:
 		Items.player_items["thickblood"] -= 1
