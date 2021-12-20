@@ -5,6 +5,7 @@ var Cam:Camera2D
 var spell_cast_pos :Vector2
 
 var temp_stage := 0
+var soul_stage := 0
 var was_dead := false
 
 var died_from_own_cast := false
@@ -169,6 +170,25 @@ func _process(delta: float) -> void:
 			n.position = position
 			get_parent().add_child(n)
 		send_message("Your insides feel like they're melting")
+	
+	
+	# Soullessness and soulfulness
+	if health.soul >= 0.001 and health.soul <= 0.3 and soul_stage != -2:
+		soul_stage = -2
+		send_message("Your soul is dying")
+	elif health.soul >= 0.3 and health.soul <= 0.6 and soul_stage != -1:
+		soul_stage = -1
+		send_message("Your soul is weakened")
+	elif health.soul > 0.6 and health.soul <= 1.0 and soul_stage != 0:
+		soul_stage = 0
+		send_message("Your soul is alive")
+	elif health.soul > 1.0 and health.soul <= 2.0 and soul_stage != 1:
+		soul_stage = 1
+		send_message("Your soul is resilient")
+	elif health.soul > 2.0 and soul_stage != 2:
+		soul_stage = 2
+		send_message("Your soul is undying")
+	
 	
 	# Achievements
 	if dead and not was_dead:
