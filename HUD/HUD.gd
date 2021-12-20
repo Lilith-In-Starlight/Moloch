@@ -228,7 +228,7 @@ func _process(delta):
 					# Which information to set
 					if Input.is_action_pressed("see_info"):
 						DescriptionBox.visible = true
-						var new_text := "[img]res://Sprites/Menus/WandIcon.png[/img] Wand"
+						var new_text := "[img]res://Sprites/Menus/WandIcon.png[/img] [color=#ffbd00]Wand[/color]"
 						if new_text != DescriptionBoxName.bbcode_text:
 							DescriptionBoxName.bbcode_text = new_text
 						new_text = "[img]res://Sprites/Menus/CastDelayIcon.png[/img] Cast Cooldown: " + str(d_wand.spell_recharge).pad_decimals(3) + "s"
@@ -246,6 +246,7 @@ func _process(delta):
 				break # Stop checking for if it's in a slot, we already did all this stuff
 	
 	# If the mouse is in the companions' wand area
+	# DEPRECATED
 	elif mouse.x > 140 and mouse.y > 4 and mouse.y < 20 and mouse.x < 140 + 20*Items.companions.size():
 		block_cast = true 
 		for i in Items.companions.size():
@@ -260,7 +261,7 @@ func _process(delta):
 					# Which information to set
 					if Input.is_action_pressed("see_info"):
 						DescriptionBox.visible = true
-						DescriptionBoxName.bbcode_text = "Wand"
+						DescriptionBoxName.bbcode_text = "[color=#ffbd00]Wand[/color]"
 						DescriptionBoxInfo.bbcode_text = "Spell Cooldown: " + str(Items.companions[i][1].spell_recharge).pad_decimals(3)
 						DescriptionBoxInfo.bbcode_text += "\nUsage Cooldown: " + str(Items.companions[i][1].full_recharge).pad_decimals(3)
 						if Items.companions[i][1].shuffle:
@@ -287,7 +288,7 @@ func _process(delta):
 					if wand.spells[i] != null:
 						if Input.is_action_pressed("see_info"):
 							DescriptionBox.visible = true
-							DescriptionBoxName.bbcode_text = wand.spells[i].name
+							DescriptionBoxName.bbcode_text = "[color=#ffbd00]" + wand.spells[i].name + "[/color]"
 							DescriptionBoxInfo.bbcode_text = wand.spells[i].description
 						else:
 							ShortDescriptionBox.visible = true
@@ -306,7 +307,7 @@ func _process(delta):
 				if Items.player_spells[i] != null:
 					if Input.is_action_pressed("see_info"):
 						DescriptionBox.visible = true
-						DescriptionBoxName.bbcode_text = Items.player_spells[i].name
+						DescriptionBoxName.bbcode_text = "[color=#ffbd00]" + Items.player_spells[i].name + "[/color]"
 						DescriptionBoxInfo.bbcode_text = Items.player_spells[i].description
 					else:
 						ShortDescriptionBox.visible = true
@@ -316,7 +317,7 @@ func _process(delta):
 	elif Items.last_pickup != null and mouse.x > 4 and mouse.y > 184 and mouse.x < 20 and mouse.y < 200:
 		if Input.is_action_pressed("see_info"):
 			DescriptionBox.visible = true
-			DescriptionBoxName.bbcode_text = "[color=#ffaa00]" + Items.last_pickup.name + "[/color]"
+			DescriptionBoxName.bbcode_text = "[color=#ffbd00]" + Items.last_pickup.name + "[/color]"
 			DescriptionBoxInfo.bbcode_text = Items.last_pickup.description
 		else:
 			ShortDescriptionBox.visible = true
