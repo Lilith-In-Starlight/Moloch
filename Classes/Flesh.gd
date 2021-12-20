@@ -106,7 +106,7 @@ func full_heal():
 
 
 func process_health(delta:float, speed:Vector2 = Vector2(0, 0)) -> void:
-	temperature = move_toward(temperature, normal_temperature, temp_regulation)
+	temperature = move_toward(temperature, normal_temperature, temp_regulation * delta*60)
 	blood -= poked_holes * (0.5+randf())*0.0005 * 60*delta
 	if effects.has("onfire"):
 		if fire_timer <= 0.0:
