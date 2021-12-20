@@ -15,7 +15,6 @@ func _ready() -> void:
 	health.death_hypertemperature = 900.0
 	Noise.seed = hash(self)
 	health.connect("was_damaged", self, "_on_damaged")
-	health.connect("died", self, "_death")
 
 
 func _process(delta: float) -> void:
