@@ -91,7 +91,7 @@ func _ready():
 	register_item(2, "legs", "Pocket Leg", "Put these on if you lose the old ones", preload("res://Sprites/Items/PocketLegs.png"))
 	register_item(3, "bloodless", "Bloodless", "Blood Unnecessary", preload("res://Sprites/Items/Bloodless.png"))
 	register_item(4, "soulfulengine", "Soulful Engine", "Passive Soul Generation", preload("res://Sprites/Items/SoulfulEngine.png"))
-	register_item(3, "DE4L", "D3AL W1TH THE D3VIL", "IRRESIT1BLE DE4L$ that will FUCK1NG KILL Y0U", preload("res://Sprites/Items/DEAL.png"))
+	register_item(3, "DE4L", "DE4L W1TH THE D3VIL", "IRRESIT1BLE DE4L$ that will FUCK1NG KILL Y0U", preload("res://Sprites/Items/DEAL.png"))
 	
 	register_spell(4, "fuckyou", "Fuck You", "Fuck everything in that particular direction", preload("res://Sprites/Spells/FuckYou.png"), preload("res://Spells/FuckYou.tscn"))
 	register_spell(2, "evilsight", "Evil Eye", "Casts a shortlived ray that tears things apart", preload("res://Sprites/Spells/EvilEye.png"), preload("res://Spells/EvilSight.tscn"))
