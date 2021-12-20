@@ -64,3 +64,6 @@ func health_object() -> Flesh:
 
 func _death() -> void:
 	Config.give_achievement("armageddont")
+
+
+
