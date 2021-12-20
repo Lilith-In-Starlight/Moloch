@@ -16,6 +16,8 @@ func _physics_process(delta):
 		for body in get_overlapping_bodies():
 			if body.get("speed"):
 				body.speed += (body.position-position).normalized()*((strength*1000)/(position.distance_to(body.position)+0.001))
+			elif body.get("linear_velocity"):
+				body.linear_velocity += (body.position-position).normalized()*((strength*1000)/(position.distance_to(body.position)+0.001))
 	
 	if randf()*10 < strength:
 		particles.append([Vector2(-1+randf()*2, -1+randf()*2).normalized()*2.0,0.0])
