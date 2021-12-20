@@ -57,7 +57,7 @@ frames = SubResource( 7 )
 shape = SubResource( 8 )
 
 [node name="AttackingTimer" type="Timer" parent="."]
-wait_time = 1.5
+wait_time = 2.0
 
 [node name="RayCast" type="RayCast2D" parent="."]
 enabled = true
