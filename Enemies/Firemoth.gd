@@ -13,6 +13,7 @@ var timer := 0.0
 
 
 func _ready() -> void:
+	health.blood_substance = "lava"
 	health.death_hypertemperature = 10000000.0
 	health.temp_regulation = 0.1
 	Noise.seed = hash(self)
@@ -55,7 +56,9 @@ func _physics_process(delta: float) -> void:
 		$Animations.scale.x = 1
 	else:
 		$Animations.scale.x = -1
-		
+	
+	bleed()
+	health.process_health(delta)
 
 
 func looking_at() -> Vector2:
@@ -86,3 +89,24 @@ func _on_animation_finished() -> void:
 		n.CastInfo.goal = Player.position
 		n.CastInfo.Caster = self
 		get_parent().add_child(n)
+
+
+func bleed() -> void:
+	# If the player is bleeding
+	if health.poked_holes > 0 and health.blood > 0.01:
+		if health.blood_substance == "water" and "onfire" in health.effects:
+			health.effects.erase("onfire")
+		# Emit blood particles 
+		for i in min(health.poked_holes, 12):
+			if randf()>0.9:
+				var n :RigidBody2D = preload("res://Particles/Blood.tscn").instance()
+				n.substance = "lava"
+				n.position = position + Vector2(0, 6)
+				n.linear_velocity = Vector2(-200 + randf()*400, -80 + randf()*120)
+				match health.blood_substance:
+					"blood" : n.modulate = ColorN("red")
+					"nitroglycerine" : n.modulate = ColorN("green")
+					"water" : n.modulate = ColorN("blue")
+					"lava" : n.modulate = ColorN("orange")
+					_ : n.modulate = ColorN("red")
+				get_parent().add_child(n)
