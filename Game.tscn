@@ -1026,6 +1026,16 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="AccessibleFont" type="CheckBox" parent="HUD/HUD/Pause/Settings"]
+margin_top = 48.0
+margin_right = 119.0
+margin_bottom = 72.0
+theme = ExtResource( 18 )
+text = "Accessible Font"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="Back" type="ToolButton" parent="HUD/HUD/Pause/Settings"]
 margin_top = 76.0
 margin_right = 119.0
@@ -1111,6 +1121,7 @@ drag_margin_bottom = 0.4
 [connection signal="value_changed" from="HUD/HUD/Pause/Settings/JoystickSensitivity" to="HUD/HUD/Pause" method="_on_JoystickSensitivity_value_changed"]
 [connection signal="pressed" from="HUD/HUD/Pause/Settings/VisualizeDamage" to="HUD/HUD/Pause" method="_on_VisualizeDamage_pressed"]
 [connection signal="pressed" from="HUD/HUD/Pause/Settings/InstantDeathButton" to="HUD/HUD/Pause" method="_on_InstantDeathButton_pressed"]
+[connection signal="pressed" from="HUD/HUD/Pause/Settings/AccessibleFont" to="HUD/HUD/Pause" method="_on_AccessibleFont_pressed"]
 [connection signal="pressed" from="HUD/HUD/Pause/Settings/Back" to="HUD/HUD/Pause" method="_on_Back_pressed"]
 [connection signal="timeout" from="HUD/HUD/Achievement/Timer" to="HUD/HUD/Achievement" method="_on_Timer_timeout"]
 [connection signal="entity_died" from="Player" to="HUD" method="_on_player_died"]
