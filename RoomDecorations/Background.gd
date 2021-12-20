@@ -19,14 +19,14 @@ func _process(_delta):
 	var y := -1
 	var i := 0
 	for Tile in Tiles.get_children():
-		Tile.position.x = stepify(cam_pos.x, TILE_SIZE.x)+TILE_SIZE.x*x
-		Tile.position.y = stepify(cam_pos.y, TILE_SIZE.y-8)+(TILE_SIZE.y-8)*y
+		Tile.rect_position.x = stepify(cam_pos.x, TILE_SIZE.x)+TILE_SIZE.x*x
+		Tile.rect_position.y = stepify(cam_pos.y, TILE_SIZE.y)+TILE_SIZE.y*y
 		x += 1
 		if x > 1:
 			i += 1
 			x = -1
 			y += 1
-		TileRNG.seed = Tile.position.x * Tile.position.y
+		TileRNG.seed = Tile.rect_position.x * Tile.rect_position.y
 		if Map.level_tile == 0:
 			match TileRNG.randi()%2:
 				0:
