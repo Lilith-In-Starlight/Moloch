@@ -194,102 +194,43 @@ layer = -24
 follow_viewport_enable = true
 script = ExtResource( 11 )
 
-[node name="Following" type="Control" parent="Background"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="Following" type="Node2D" parent="Background"]
 
-[node name="Bg1" type="TextureRect" parent="Background/Following"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_bottom = -1.0
+[node name="Bg1" type="Sprite" parent="Background/Following"]
 texture = ExtResource( 4 )
-stretch_mode = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
+centered = false
 
-[node name="Bg2" type="TextureRect" parent="Background/Following"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_bottom = -1.0
+[node name="Bg2" type="Sprite" parent="Background/Following"]
 texture = ExtResource( 4 )
-stretch_mode = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
+centered = false
 
-[node name="Bg3" type="TextureRect" parent="Background/Following"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_bottom = -1.0
+[node name="Bg3" type="Sprite" parent="Background/Following"]
 texture = ExtResource( 4 )
-stretch_mode = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
+centered = false
 
-[node name="Bg4" type="TextureRect" parent="Background/Following"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_bottom = -1.0
+[node name="Bg4" type="Sprite" parent="Background/Following"]
 texture = ExtResource( 4 )
-stretch_mode = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
+centered = false
 
-[node name="Bg5" type="TextureRect" parent="Background/Following"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_bottom = -1.0
+[node name="Bg5" type="Sprite" parent="Background/Following"]
 texture = ExtResource( 4 )
-stretch_mode = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
+centered = false
 
-[node name="Bg6" type="TextureRect" parent="Background/Following"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_bottom = -1.0
+[node name="Bg6" type="Sprite" parent="Background/Following"]
 texture = ExtResource( 4 )
-stretch_mode = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
+centered = false
 
-[node name="Bg7" type="TextureRect" parent="Background/Following"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_bottom = -1.0
+[node name="Bg7" type="Sprite" parent="Background/Following"]
 texture = ExtResource( 4 )
-stretch_mode = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
+centered = false
 
-[node name="Bg8" type="TextureRect" parent="Background/Following"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_bottom = -1.0
+[node name="Bg8" type="Sprite" parent="Background/Following"]
 texture = ExtResource( 4 )
-stretch_mode = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
+centered = false
 
-[node name="Bg9" type="TextureRect" parent="Background/Following"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_bottom = -1.0
+[node name="Bg9" type="Sprite" parent="Background/Following"]
 texture = ExtResource( 4 )
-stretch_mode = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
+centered = false
 
 [node name="HUD" type="CanvasLayer" parent="." groups=["HUD"]]
 pause_mode = 2
