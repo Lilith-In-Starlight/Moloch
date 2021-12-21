@@ -27,7 +27,7 @@ func _physics_process(delta):
 				CastInfo.Caster.health_object().shatter_soul(-shatter)
 				col.health_object().shatter_soul(shatter, CastInfo.Caster)
 		elif not did:
-			CastInfo.drain_caster_soul(0.1)
+			CastInfo.drain_caster_soul(0.05)
 			did = true
 		$Line2D.points = [Vector2(0, 0), get_collision_point()-position]
 	else:
