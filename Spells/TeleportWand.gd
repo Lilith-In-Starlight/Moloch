@@ -12,6 +12,7 @@ func _ready() -> void:
 	var goal := cast_to
 	if is_colliding():
 		goal = (get_collision_point() - position) + get_collision_normal()*Vector2(3,10.5)
+		CastInfo.drain_caster_soul(0.01)
 	CastInfo.teleport_caster(goal)
 	queue_free()
 	
