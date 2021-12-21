@@ -18,8 +18,8 @@ func _physics_process(delta):
 	timer += delta
 	if modulate.a <= 0.0:
 		queue_free()
-	if timer > 0.5:
-		modulate.a -= 0.05
+	if timer > 1.0:
+		modulate.a -= 0.02
 	$Polygon2D.rotation = linear_velocity.angle()
 	
 	if substance == "lava":
