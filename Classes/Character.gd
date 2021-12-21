@@ -212,11 +212,7 @@ func bleed() -> void:
 				var n :RigidBody2D = preload("res://Particles/Blood.tscn").instance()
 				n.position = position + Vector2(0, 6)
 				n.linear_velocity = Vector2(-200 + randf()*400, -80 + randf()*120)
-				match health.blood_substance:
-					"blood" : n.modulate = ColorN("red")
-					"nitroglycerine" : n.modulate = ColorN("green")
-					"water" : n.modulate = ColorN("blue")
-					_ : n.modulate = ColorN("red")
+				n.substance = health.blood_substance
 				get_parent().add_child(n)
 
 

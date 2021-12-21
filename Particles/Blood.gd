@@ -3,6 +3,17 @@ extends RigidBody2D
 var timer := 0.0
 var substance := "blood"
 
+
+func _ready() -> void:
+	if modulate == Color("#ffffff"):
+		match substance:
+			"blood" : modulate = ColorN("red")
+			"nitroglycerine" : modulate = ColorN("green")
+			"water" : modulate = ColorN("blue")
+			"lava" : modulate = ColorN("orange")
+			_ : modulate = ColorN("red")
+
+
 func _physics_process(delta):
 	timer += delta
 	if modulate.a <= 0.0:
