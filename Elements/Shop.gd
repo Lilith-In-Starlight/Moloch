@@ -42,10 +42,11 @@ func _process(delta: float) -> void:
 		var selected := -1
 		var j := 0
 		for i in $Sacrifice.get_overlapping_bodies():
-			if not i.spell is SpellMod:
-				if i.is_in_group("SpellItemEntity"):
-					Items.player_health.blood = clamp(Items.player_health.blood + assign_price(i.spell.id) * 0.7, 0.0, Items.player_health.max_blood)
-					i.queue_free()
+			if i.get("spell"):
+				if not i.spell is SpellMod:
+					if i.is_in_group("SpellItemEntity"):
+						Items.player_health.blood = clamp(Items.player_health.blood + assign_price(i.spell.id) * 0.7, 0.0, Items.player_health.max_blood)
+						i.queue_free()
 		for i in $Items.get_children():
 			var mult := 6.0
 			if Player.position.distance_to(i.position + position) < 30.0:
@@ -107,4 +108,4 @@ func assign_price(spell_name:String):
 	match Items.player_health.blood_substance:
 		"water": cost_of_blood = 1.4
 		"nitroglycerine": cost_of_blood = 0.7
-	return (0.08 + randf()*0.04)*Items.all_spells[spell_name].tier*cost_of_blood
+	return (0.1 + randf()*0.1)*Items.all_spells[spell_name].tier*cost_of_blood
