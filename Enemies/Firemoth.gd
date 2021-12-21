@@ -56,9 +56,9 @@ func _physics_process(delta: float) -> void:
 		speed_n = abs(speed_n)
 	
 	if Player.position.x > position.x:
-		$Animations.scale.x = 1
+		$Animations.scale.x = 1.5
 	else:
-		$Animations.scale.x = -1
+		$Animations.scale.x = -1.5
 	
 	bleed()
 	health.process_health(delta)
