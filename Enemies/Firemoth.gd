@@ -13,6 +13,9 @@ var timer := 0.0
 
 
 func _ready() -> void:
+	health.max_blood = 5.0
+	health.blood = 5.0
+	health.needs_blood = true
 	health.blood_substance = "lava"
 	health.death_hypertemperature = 10000000.0
 	health.temp_regulation = 0.1
