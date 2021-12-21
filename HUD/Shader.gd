@@ -15,7 +15,7 @@ func _process(delta: float) -> void:
 			offset_blue = Vector2(0, 0)
 			offset_green = Vector2(0, 0)
 		else:
-			var aa := (Items.player_health.soul / Items.player_health.needed_soul)
+			var aa := pow(Items.player_health.soul / Items.player_health.needed_soul, 2)
 			offset_red = aa * Vector2(noise.get_noise_2d(Engine.get_frames_drawn() * 0.9, 500), noise.get_noise_2d(Engine.get_frames_drawn() * 0.9, 0))
 			offset_blue = aa * Vector2(noise.get_noise_2d(Engine.get_frames_drawn() * 0.9, 1000), noise.get_noise_2d(Engine.get_frames_drawn() * 0.9, 1500))
 			offset_green = aa * Vector2(noise.get_noise_2d(Engine.get_frames_drawn() * .0, 2000), noise.get_noise_2d(Engine.get_frames_drawn() * 0.9, 2500))
