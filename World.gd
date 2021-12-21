@@ -68,16 +68,16 @@ func _ready():
 		for room in children:
 			var el_children = Items.shuffle_array(room.get_children())
 			for element in el_children:
-					var new_room :_Room = expand_through_door(element,room) # side action: this removes the element on success
-					if new_room:
-						rooms += 1
-						if new_room.is_treasure:
-							treasure_rooms += 1
-						if new_room.is_end:
-							generated_end_room = true
-						add_child(new_room.scene)
-						areas.append(new_room.area)
-						stretch_global_bounds(new_room.area)
+				var new_room :_Room = expand_through_door(element,room) # side action: this removes the element on success
+				if new_room:
+					rooms += 1
+					if new_room.is_treasure:
+						treasure_rooms += 1
+					if new_room.is_end:
+						generated_end_room = true
+					add_child(new_room.scene)
+					areas.append(new_room.area)
+					stretch_global_bounds(new_room.area)
 	
 	for group in ["LeftDoor","RightDoor"]:
 		for element in get_tree().get_nodes_in_group(group):
