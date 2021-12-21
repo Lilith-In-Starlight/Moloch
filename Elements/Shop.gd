@@ -78,6 +78,8 @@ func _process(delta: float) -> void:
 					$Items.get_child(selected).visible = false
 					Items.player_spells[Items.player_spells.find(null)] = Items.all_spells[spells[selected]]
 					Items.player_health.soul -= soul_cost
+					if randf() < 0.25:
+						Items.player_health.poke_hole()
 			else:
 				if Input.is_action_just_pressed("down") and $Items.get_child(selected).visible and null in Items.player_spells and Items.player_health.blood - prices[selected] > 0.0:
 					$Items.get_child(selected).visible = false
