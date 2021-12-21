@@ -91,6 +91,7 @@ func _process(delta: float) -> void:
 	else:
 		$SoulParticles.emitting = false
 
+
 func get_item_in_tier(tier:int = 1) -> Item:
 	var k :Array = Items.spells[tier].keys()
 	var spell = k[Items.LootRNG.randi()%k.size()]
@@ -108,4 +109,4 @@ func assign_price(spell_name:String):
 	match Items.player_health.blood_substance:
 		"water": cost_of_blood = 1.4
 		"nitroglycerine": cost_of_blood = 0.7
-	return (0.1 + randf()*0.1)*Items.all_spells[spell_name].tier*cost_of_blood
+	return (0.15 + randf()*0.1)*Items.all_spells[spell_name].tier*cost_of_blood
