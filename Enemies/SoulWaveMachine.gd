@@ -14,7 +14,7 @@ var timer := 0.0
 func _ready() -> void:
 	health.death_hypertemperature = 900.0
 	Noise.seed = hash(self)
-	health.connect("was_damaged", self, "_on_damaged")
+	health.connect("was_damaged", self, "_on_damaged_2")
 
 
 func _process(delta: float) -> void:
@@ -39,7 +39,7 @@ func _process(delta: float) -> void:
 			timer -= 0.5
 	
 
-func _on_damaged(damage_type:String) -> void:
+func _on_damaged_2(damage_type:String) -> void:
 	attacking = true
 	$VisibilityEnabler2D.process_parent = false
 	$VisibilityEnabler2D.physics_process_parent = false
