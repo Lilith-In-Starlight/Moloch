@@ -97,7 +97,9 @@ func _process(delta: float) -> void:
 func get_item_in_tier(tier:int = 1) -> Item:
 	var k :Array = Items.spells[tier].keys()
 	var spell = k[Items.LootRNG.randi()%k.size()]
-	while spell in spells:
+	var tries := 0
+	while spell in spells and tries < 100:
+		tries += 1
 		spell = k[Items.LootRNG.randi()%k.size()]
 		if not spell in spells: # This loop doesn't end if I don't do this
 			# fuck if i kknow why

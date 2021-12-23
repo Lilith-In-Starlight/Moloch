@@ -63,7 +63,12 @@ func _ready():
 	rooms = 0
 	generated_end_room = false
 	treasure_rooms = 0
+	var iterations := 0
 	while not generated_end_room or rooms <= 25:
+		iterations += 1
+		if iterations > 200:
+			get_tree().change_scene("res://Game.tscn")
+			break
 		var children := Items.shuffle_array(get_children())
 		for room in children:
 			var el_children = Items.shuffle_array(room.get_children())
@@ -79,6 +84,7 @@ func _ready():
 					areas.append(new_room.area)
 					stretch_global_bounds(new_room.area)
 	
+	print(iterations)
 	for group in ["LeftDoor","RightDoor"]:
 		for element in get_tree().get_nodes_in_group(group):
 			var room = element.get_parent()
