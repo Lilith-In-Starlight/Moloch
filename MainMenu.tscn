@@ -224,7 +224,7 @@ __meta__ = {
 margin_right = 40.0
 margin_bottom = 14.0
 theme = ExtResource( 6 )
-text = "0.12.0-alpha2"
+text = "0.12.0-alpha2-1"
 __meta__ = {
 "_edit_use_anchors_": false
 }
