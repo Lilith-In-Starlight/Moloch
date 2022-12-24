@@ -115,7 +115,7 @@ func _process(delta: float) -> void:
 	if !Items.player_wands.empty():
 		if Items.player_wands[Items.selected_wand] is Wand and Input.is_action_pressed("Interact1") and not get_tree().get_nodes_in_group("HUD")[0].block_cast:
 			Items.player_wands[Items.selected_wand].shuffle()
-			Items.player_wands[Items.selected_wand].run()
+			Items.player_wands[Items.selected_wand].run(self)
 	
 	if not Config.last_input_was_controller and not Items.player_wands.empty():
 		if Input.is_action_just_released("scrollup"):

@@ -6,18 +6,20 @@ func _ready() -> void:
 		i.connect("casting_spell", self, "_on_casting_spell")
 
 
-func _on_casting_spell(spell: Spell, wand: Wand):
+func _on_casting_spell(spell: Spell, wand: Wand, caster: Node2D):
 	if !spell.is_cast_mod:
-		print(spell.name)
-		# TODO: Make this cast the spell
-		return
+		var spell_instance = spell.entity.instance()
+		spell_instance.CastInfo.Caster = caster
+		spell_instance.CastInfo.goal = caster.looking_at()
+		spell_instance.CastInfo.wand = wand
+		add_child(spell_instance)
 	
 	match spell.name:
 		"multiply":
 			for i in spell.level:
-				_on_casting_spell(spell.input_contents[0], wand)
+				_on_casting_spell(spell.input_contents[0], wand, caster)
 		"unify":
-			_on_casting_spell(spell.input_contents[0], wand)
-			_on_casting_spell(spell.input_contents[1], wand)
+			_on_casting_spell(spell.input_contents[0], wand, caster)
+			_on_casting_spell(spell.input_contents[1], wand, caster)
 
 

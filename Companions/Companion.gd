@@ -41,7 +41,7 @@ func _physics_process(delta: float) -> void:
 				$RayCast2D.force_raycast_update()
 				if $RayCast2D.is_colliding():
 					if $RayCast2D.get_collider().is_in_group("Enemy"):
-						wand.run()
+						wand.run(self)
 	else:
 		queue_free()
 

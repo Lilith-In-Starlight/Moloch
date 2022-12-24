@@ -3,7 +3,7 @@ extends Node
 class_name Wand
 
 signal finished_casting
-signal casting_spell(spell, wand)
+signal casting_spell(spell, wand, caster)
 
 const MAX_CAPACITY := 12
 
@@ -70,7 +70,7 @@ func shuffle():
 		spells.shuffle()
 
 
-func run():
+func run(caster: Node2D):
 	if self.running:
 		return
 	
@@ -80,7 +80,7 @@ func run():
 	self.running = true
 	
 	while current_spell >= 0:
-		emit_signal("casting_spell", spell_stack[current_spell], self)
+		emit_signal("casting_spell", spell_stack[current_spell], self, caster)
 			
 		current_spell -= 1
 		yield(get_tree().create_timer(cast_cooldown), "timeout")

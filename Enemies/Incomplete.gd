@@ -64,7 +64,7 @@ func _physics_process(delta):
 				last_seen = Player.position
 				$WandRenderSprite.rotation = lerp_angle($WandRenderSprite.rotation, Player.position.angle_to_point(position) + PI/4.0, 0.05)
 				$WandRenderSprite.position = lerp($WandRenderSprite.position, Vector2(cos(Player.position.angle_to_point(position)), sin(Player.position.angle_to_point(position)))*30, 0.5)
-				wand.run()
+				wand.run(self)
 			else:
 				speed = lerp(speed, primordial_tremor*60, 0.2)
 				if last_seen != Vector2(0, 0):
