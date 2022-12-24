@@ -20,6 +20,16 @@ func _on_casting_spell(spell: Spell, wand: Wand, caster: Node2D, offset: float =
 	
 	for i in spell.input_contents:
 		i.behavior_modifiers.append_array(spell.behavior_modifiers.duplicate())
+		var counts := {}
+		for j in i.behavior_modifiers:
+			if counts.has(j):
+				counts[j] += 1
+			else:
+				counts[j] = 1
+			if counts[j] == 2:
+				counts[j] = 0
+				i.behavior_modifiers.erase(j)
+				i.behavior_modifiers.erase(j)
 	match spell.id:
 		"multiply":
 			_on_casting_spell(spell.input_contents[0], wand, caster, 0)
