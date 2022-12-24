@@ -9,13 +9,14 @@ var timer := 0.0
 var noise := OpenSimplexNoise.new()
 
 var CastInfo := SpellCastInfo.new()
-
+var spell_behavior := ProjectileBehavior.new()
 
 func _ready():
 	WorldMap = get_tree().get_nodes_in_group("World")[0]
 	noise.seed = randi()
 	CastInfo.set_position(self)
 	CastInfo.set_goal()
+	spell_behavior.velocity = (CastInfo.goal - position).normalized() * CastInfo.projectile_speed
 	rotate = CastInfo.goal.angle_to_point(position)
 	var sound_emitter := AudioStreamPlayer2D.new()
 	sound_emitter.stream = preload("res://Sfx/spells/laserfire01.wav")
@@ -29,7 +30,8 @@ func _ready():
 
 func _physics_process(delta):
 	timer += 0.1
-	position += CastInfo.vector_from_angle(rotate, 7.0*60*delta)
+	spell_behavior.velocity = CastInfo.vector_from_angle(rotate, 60*delta * CastInfo.projectile_speed)
+	position += spell_behavior.move(0.2, CastInfo.modifiers)
 	rotate += noise.get_noise_3d(position.x, position.y, timer)*(timer/60.0)
 	for body in get_overlapping_bodies():
 		_on_body_entered(body)

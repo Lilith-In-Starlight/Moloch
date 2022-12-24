@@ -5,10 +5,11 @@ onready var Raycast2 := $Raycast2
 onready var Raycast3 := $Raycast3
 
 var CastInfo := SpellCastInfo.new()
+var spell_behavior := ProjectileBehavior.new()
+
 var Map : TileMap
 var angle := 0.0
 
-var speed := Vector2(0, 0)
 
 var already_collided := false
 
@@ -18,13 +19,13 @@ func _ready() -> void:
 	CastInfo.heat_caster(5.0)
 	CastInfo.set_position(self)
 	angle = CastInfo.get_angle(self)
-	speed = Vector2(cos(angle), sin(angle)) * 10
-	Raycast.cast_to = speed
-	Raycast2.cast_to = speed
-	Raycast3.cast_to = speed
+	spell_behavior.velocity = Vector2(cos(angle), sin(angle)) * 10 * CastInfo.projectile_speed
+	Raycast.cast_to = spell_behavior.velocity
+	Raycast2.cast_to = spell_behavior.velocity
+	Raycast3.cast_to = spell_behavior.velocity
 	
-	Raycast2.position = speed.tangent().normalized() * 5
-	Raycast3.position = -speed.tangent().normalized() * 5
+	Raycast2.position = spell_behavior.velocity.tangent().normalized() * 5
+	Raycast3.position = -spell_behavior.velocity.tangent().normalized() * 5
 
 
 func _process(delta: float) -> void:
@@ -43,6 +44,5 @@ func _process(delta: float) -> void:
 				already_collided = true
 				return
 		
-		position += speed * delta * 60
-		speed += Vector2(cos(angle), sin(angle)) * 5 * delta * 60
-		Raycast.cast_to = speed
+		position += spell_behavior.move(0, CastInfo.modifiers, Vector2(cos(angle), sin(angle)) * 5) * delta * 60
+		Raycast.cast_to = spell_behavior.velocity

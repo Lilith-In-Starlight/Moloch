@@ -143,7 +143,7 @@ func parse_spells():
 		for i in modified_spell.inputs:
 			var top_spell = spell_stack.pop_back()
 			top_spell = top_spell.duplicate()
-			top_spell.behavior_mods.append_array(modified_spell.behavior_mods)
+			top_spell.behavior_modifiers.append_array(modified_spell.behavior_modifiers)
 			modified_spell.input_contents.append(top_spell)
 		
 		spell_stack.append(modified_spell)
