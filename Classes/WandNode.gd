@@ -82,23 +82,40 @@ func run(caster: Node2D):
 		
 	var current_spell :int = spell_stack.size() - 1
 	self.running = true
+	var cast_cooldown_multiplier := 1.0
+	var recharge_cooldown_multiplier := 1.0
 	
 	while current_spell >= 0:
+		if !spell_stack[current_spell].wand_modifiers.empty():
+			match spell_stack[current_spell].wand_modifiers[0]:
+				"cast_cooldown": cast_cooldown_multiplier /= float(spell_stack[current_spell].wand_modifiers[1])
+				"recharge_cooldown": recharge_cooldown_multiplier /= float(spell_stack[current_spell].wand_modifiers[1])
+			
+			print(cast_cooldown_multiplier)
 		emit_signal("casting_spell", spell_stack[current_spell], self, caster)
 		current_spell -= 1
 		
-		yield(get_tree().create_timer(cast_cooldown), "timeout")
+		yield(get_tree().create_timer(cast_cooldown * cast_cooldown_multiplier), "timeout")
 	
-	yield(get_tree().create_timer(recharge_cooldown), "timeout")
+	yield(get_tree().create_timer(recharge_cooldown * recharge_cooldown_multiplier), "timeout")
 	self.running = false
 	emit_signal("finished_casting")
-	
+
 
 func parse_spells():
 	var current_parse := spells.size() - 1
 	var spell_stack := []
 	while current_parse >= 0:
 		var current_spell = spells[current_parse]
+		
+		if current_spell.is_wand_mod and !spell_stack.empty():
+			var wand_mod = get_wand_mod_property(current_spell)
+			var top_spell = spell_stack.pop_back()
+			top_spell = top_spell.duplicate()
+			top_spell.wand_modifiers = wand_mod
+			spell_stack.append(top_spell)
+			current_parse -= 1
+			continue
 		
 		if !current_spell.is_cast_mod and current_spell.behavior_mods.empty(): # It's not a modifier
 			spell_stack.append(current_spell)
@@ -158,3 +175,10 @@ func get_json() -> String:
 	string += '"color3":"#' + color3.to_html() + '"}'
 	return string
 
+
+func get_wand_mod_property(spell):
+	match spell.id:
+		"fast_cast": return ["cast_cooldown", spell.level]
+		"fast_recharge": return ["recharge_cooldown", spell.level]
+		"slow_cast": return ["cast_cooldown", 1/float(spell.level)]
+		"slow_recharge": return ["recharge_cooldown", 1/float(spell.level)]

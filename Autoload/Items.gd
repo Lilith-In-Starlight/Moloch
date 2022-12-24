@@ -122,14 +122,14 @@ func _ready():
 	register_spell(1, "plasmasprinkler", "Plasma Sprinkler", "Balls of heat ejected from a single point", preload("res://Sprites/Spells/PlasmaSprinkler.png"), preload("res://Spells/PlasmaSprinkler.tscn"))
 	register_spell(1, "shortray", "Short Ray", "A shortlived ray with a chance of piercing", preload("res://Sprites/Spells/Shortray.png"), preload("res://Spells/Shortray.tscn"))
 	
-	register_base_mod("multiply", "Multiplicative Cast", "Cast next spell %s times", preload("res://Sprites/Spells/Modifiers/Multiplicative.png"), 1, [2, 6])
-	register_base_mod("unify", "Unifying Cast", "Cast the next %s spells at once", preload("res://Sprites/Spells/Modifiers/UnifyingM.png"), 2, [2, 6])
+	register_base_mod("multiply", "Multiplicative Cast", "Cast next spell %s times", preload("res://Sprites/Spells/Modifiers/Multiplicative.png"), false, 1, [2, 6])
+	register_base_mod("unify", "Unifying Cast", "Cast the next %s spells at once", preload("res://Sprites/Spells/Modifiers/UnifyingM.png"), false, 2, [2, 6])
 #	register_base_mod("grenade", "Grenade Cast", "Copies spells into a grenade wand\nCopied Spells: %s", preload("res://Sprites/Spells/Modifiers/Grenade.png"), [1, 6])
 #	register_base_mod("landmine", "Landmine Cast", "Copies spells into a landmine wand\nCopied Spells: %s", preload("res://Sprites/Spells/Modifiers/Landmine.png"), [1, 6])
 #	register_base_mod("limited", "Limited Cast", "When applicable, casts will only have effect at the end of the wand", preload("res://Sprites/Spells/Modifiers/Limited.png"), [1, 1])
-#	register_base_mod("faster", "Faster Cast", "The following spells will be cast %s times faster", preload("res://Sprites/Spells/Modifiers/Faster.png"), [2, 6])
-#	register_base_mod("slower", "Slower Cast", "The following spells will be cast %s times slower", preload("res://Sprites/Spells/Modifiers/Slower.png"), [2, 6])
-#	register_base_mod("fasterw", "Faster Recharge Time", "The wand will recharge %s times faster", preload("res://Sprites/Spells/Modifiers/FastWand.png"), [2, 6])
+	register_base_mod("fast_cast", "Faster Cast", "The following spells will be cast %s times faster", preload("res://Sprites/Spells/Modifiers/Faster.png"), true, 0, [2, 6])
+	register_base_mod("slow_cast", "Slower Cast", "The following spells will be cast %s times slower", preload("res://Sprites/Spells/Modifiers/Slower.png"), true, 0, [2, 6])
+	register_base_mod("fast_recharge", "Faster Recharge Time", "The wand will recharge %s times faster", preload("res://Sprites/Spells/Modifiers/FastWand.png"), true, 0, [2, 6])
 	
 	# If the player is in the tree, set the Player variable of this node to it
 	if not get_tree().get_nodes_in_group("Player").empty():
@@ -171,7 +171,7 @@ func register_spell(tier:int, name_id:String, name:String, desc:String, texture 
 	all_spells[name_id] = new
 
 
-func register_base_mod(name_id:String, name:String, desc:String, texture:Texture, inputs:int = 1, level_range := [1, 6]) -> void:
+func register_base_mod(name_id:String, name:String, desc:String, texture:Texture, wand_mod := false, inputs:int = 1, level_range := [1, 6]) -> void:
 	var mod := Spell.new()
 	mod.id = name_id
 	mod.name = name
@@ -180,6 +180,7 @@ func register_base_mod(name_id:String, name:String, desc:String, texture:Texture
 	mod.minimum_level = level_range[0]
 	mod.maximum_level = level_range[1]
 	mod.is_cast_mod = true
+	mod.is_wand_mod = wand_mod
 	mod.inputs = inputs
 	base_spell_mods[name_id] = mod
 

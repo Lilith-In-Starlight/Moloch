@@ -19,6 +19,9 @@ var level: int = 0
 var inputs: int = 0
 var input_contents: Array = []
 
+var is_wand_mod: bool = false
+var wand_modifiers: Array = []
+
 
 func duplicate():
 	var new = get_script().new()
@@ -37,5 +40,8 @@ func duplicate():
 	
 	new.inputs = inputs
 	new.input_contents = input_contents.duplicate()
+	
+	new.is_wand_mod = is_wand_mod
+	new.wand_modifiers = wand_modifiers.duplicate()
 	
 	return new
