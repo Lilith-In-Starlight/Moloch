@@ -91,7 +91,6 @@ func run(caster: Node2D):
 				"cast_cooldown": cast_cooldown_multiplier /= float(spell_stack[current_spell].wand_modifiers[1])
 				"recharge_cooldown": recharge_cooldown_multiplier /= float(spell_stack[current_spell].wand_modifiers[1])
 			
-			print(cast_cooldown_multiplier)
 		emit_signal("casting_spell", spell_stack[current_spell], self, caster)
 		current_spell -= 1
 		
@@ -108,7 +107,7 @@ func parse_spells():
 	while current_parse >= 0:
 		var current_spell = spells[current_parse]
 		
-		if current_spell.is_wand_mod and !spell_stack.empty():
+		if current_spell.is_wand_mod and !spell_stack.empty(): # It's a wand modifier
 			var wand_mod = get_wand_mod_property(current_spell)
 			var top_spell = spell_stack.pop_back()
 			top_spell = top_spell.duplicate()
@@ -117,15 +116,23 @@ func parse_spells():
 			current_parse -= 1
 			continue
 		
-		if !current_spell.is_cast_mod and current_spell.behavior_mods.empty(): # It's not a modifier
+		if current_spell.is_behavior_mod and !spell_stack.empty(): # It's a behavior modifier
+			var top_spell = spell_stack.pop_back()
+			top_spell = top_spell.duplicate()
+			top_spell.behavior_modifiers.append(current_spell.id)
+			spell_stack.append(top_spell)
+			current_parse -= 1
+			continue
+		
+		if !current_spell.is_cast_mod: # It's not a modifier
 			spell_stack.append(current_spell)
 			current_parse -= 1
 			continue
-		elif spell_stack.size() < current_spell.inputs: # It's a modifier but its inputs cannot be filled
+		
+		if spell_stack.size() < current_spell.inputs: # It's a modifier but its inputs cannot be filled
 			return "Couldn't parse cast"
 		
 		# It's a modifier and its inputs can be filled
-		
 		var modified_spell = current_spell.duplicate()
 		for i in modified_spell.inputs:
 			var top_spell = spell_stack.pop_back()

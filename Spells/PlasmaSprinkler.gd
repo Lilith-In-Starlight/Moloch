@@ -5,8 +5,9 @@ var CastInfo := SpellCastInfo.new()
 var angle := 0.0
 var sprinkler := true
 
-var speed := Vector2(0, 0)
+var speed_multiplier := 1.0
 var next_shoot_angle := 0.0
+var spell_behavior := ProjectileBehavior.new()
 
 
 func _ready() -> void:
@@ -16,21 +17,21 @@ func _ready() -> void:
 		CastInfo.set_position(self)
 		angle = CastInfo.get_angle(self)
 		next_shoot_angle = angle
-	speed = Vector2(cos(angle), sin(angle)) * 5
-	if sprinkler:
-		speed = CastInfo.vector_from_angle(angle, 5)
+		
+	spell_behavior.velocity = Vector2(cos(angle), sin(angle)) * 5 * CastInfo.projectile_speed
 	Map.play_sound(preload("res://Sfx/spells/laserfire01.wav"), position, 1.0, 0.8+randf()*0.4)
 
 
 func _process(delta: float) -> void:
 	if sprinkler:
-		speed = speed.move_toward(Vector2.ZERO, 0.1 * delta * 60)
+		speed_multiplier = move_toward(speed_multiplier, 0, 0.03 * delta * 60)
+	spell_behavior.velocity *= speed_multiplier
 	
 	for body in get_overlapping_bodies():
 		if body.has_method("health_object"):
 			body.health_object().temp_change(8, CastInfo.Caster)
 		queue_free()
-	position += speed * delta * 60
+	position += spell_behavior.move(0, CastInfo.modifiers)
 
 
 func _on_ShootTimer_timeout() -> void:

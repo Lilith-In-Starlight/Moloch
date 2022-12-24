@@ -4,18 +4,20 @@ extends KinematicBody2D
 var rotate := 0.0
 var WorldMap :TileMap
 var Caster
+var CastInfo :SpellCastInfo
 
 var timer := 0.0
 
 
 var goal :Vector2
-
+var spell_behavior := ProjectileBehavior.new()
 
 func _ready():
 	WorldMap = get_tree().get_nodes_in_group("World")[0]
+	CastInfo.set_goal()
 	
 	position += Vector2(cos(rotate), sin(rotate))*12.0
-	
+	spell_behavior.velocity = (CastInfo.goal - position).normalized() * CastInfo.projectile_speed * 60 * 2.5
 
 
 func _physics_process(delta):
@@ -24,7 +26,7 @@ func _physics_process(delta):
 		_on_body_entered(body)
 	if timer > 10.0:
 		queue_free()
-	move_and_collide(Vector2(cos(rotate), sin(rotate))*12.0*(60*delta))
+	spell_behavior.velocity = move_and_slide(spell_behavior.move(0.2, CastInfo.modifiers))
 
 
 func _on_body_entered(body):

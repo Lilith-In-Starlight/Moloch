@@ -11,6 +11,8 @@ var timer := 0.0
 var Map :TileMap
 
 var has_done := false
+var spell_behavior := ProjectileBehavior.new()
+var vel_mult := 1.0
 
 func _ready():
 	Map = get_tree().get_nodes_in_group("World")[0] 
@@ -18,6 +20,7 @@ func _ready():
 	CastInfo.set_goal()
 	CastInfo.heat_caster(3.0)
 	rotate = CastInfo.goal.angle_to_point(position)
+	spell_behavior.velocity = (CastInfo.goal - position).normalized() * 60 * CastInfo.projectile_speed * 4
 	$TextureProgress.radial_initial_angle += rad2deg(rotate)
 	$TextureProgress2.radial_initial_angle += rad2deg(rotate)
 	Map.play_sound(preload("res://Sfx/spells/laserfire01.wav"), position, 1.0, 0.8+randf()*0.4)
@@ -26,15 +29,15 @@ func _ready():
 func _physics_process(delta):
 	$TextureProgress.value += delta*60*0.08*(360/3.0)
 	$TextureProgress2.value += delta*60*0.08*(360/3.0)
-	position += CastInfo.vector_from_angle(rotate, speed*delta*60)
-	speed = move_toward(speed, 0, delta*60*0.08)
-	timer += delta
-	
-	if speed < 0.01:
+	spell_behavior.velocity = spell_behavior.move(0, CastInfo.modifiers)
+	position += spell_behavior.velocity * delta
+	vel_mult = move_toward(vel_mult, 0, delta)
+	spell_behavior.velocity *= vel_mult
+	if spell_behavior.velocity.length() < 2.0:
+		timer += delta
 		$CrossBlastCross.modulate.a += 0.3
-		if not has_done:
-			Map.play_sound(Items.EXPLOSION_SOUNDS[randi()%Items.EXPLOSION_SOUNDS.size()], position, 1.0, 0.8+randf()*0.4)
-			
+		Map.play_sound(Items.EXPLOSION_SOUNDS[randi()%Items.EXPLOSION_SOUNDS.size()], position, 1.0, 0.8+randf()*0.4)
+		
 		for body in get_overlapping_bodies():
 			if body.has_method("health_object"):
 				var flesh : Flesh = body.health_object()
@@ -55,7 +58,7 @@ func _physics_process(delta):
 					if position.distance_to(body.position) != 0.0:
 						body.linear_velocity += 1/(position - body.position)*(50/position.distance_to(body.position))
 	
-	if timer > 0.95:
+	if timer > 0.15:
 		queue_free()
 		var map_pos := Map.world_to_map(position)
 		for i in range(8):

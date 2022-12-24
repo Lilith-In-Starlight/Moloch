@@ -8,10 +8,11 @@ var description :String
 var texture: Texture
 var entity :PackedScene
 var tier :int
+var behavior_modifiers: Array = []
 
 # Cast mods only
 var is_cast_mod: bool = false
-var behavior_mods: Array = []
+var is_behavior_mod: bool = false
 var minimum_level: int = 0
 var maximum_level: int = 0
 var level: int = 0
@@ -31,9 +32,10 @@ func duplicate():
 	new.texture = texture
 	new.entity = entity
 	new.tier = tier
+	new.behavior_modifiers = behavior_modifiers.duplicate()
 	
 	new.is_cast_mod = is_cast_mod
-	new.behavior_mods = behavior_mods.duplicate()
+	new.is_behavior_mod = is_behavior_mod
 	new.minimum_level = minimum_level
 	new.maximum_level = maximum_level
 	new.level = level

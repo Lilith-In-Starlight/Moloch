@@ -24,6 +24,7 @@ func _process(delta):
 		var r := preload("res://Spells/AlveolarProjectile.tscn").instance()
 		r.position = global_position
 		r.rotate = rotate
+		r.CastInfo = CastInfo
 		get_parent().add_child(r)
 		times += 1
 	

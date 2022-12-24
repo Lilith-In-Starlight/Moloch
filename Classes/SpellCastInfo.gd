@@ -6,6 +6,7 @@ var Caster :Node2D
 var wand :Wand = null
 var goal :Vector2
 var goal_offset := Vector2(0, 0)
+var projectile_speed := 3.0
 
 var spell_offset := Vector2(0, 0)
 

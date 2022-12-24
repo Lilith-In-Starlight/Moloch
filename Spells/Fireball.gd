@@ -2,6 +2,7 @@ extends KinematicBody2D
 
 
 var CastInfo := SpellCastInfo.new()
+var spell_behavior := ProjectileBehavior.new()
 
 var frames := 0
 var rotate := 0.0
@@ -12,6 +13,7 @@ func _ready():
 	CastInfo.set_position(self)
 	CastInfo.set_goal()
 	rotate = CastInfo.goal.angle_to_point(position)
+	spell_behavior.velocity = (CastInfo.goal - position).normalized() * CastInfo.projectile_speed * 60
 	CastInfo.heat_caster((-12.0 - randf() * 6.0) * 0.2)
 
 func _physics_process(delta):
@@ -20,7 +22,7 @@ func _physics_process(delta):
 			_on_body_entered(body)
 	
 	
-	move_and_slide(CastInfo.vector_from_angle(rotate, 200))
+	spell_behavior.velocity = move_and_slide(spell_behavior.move(1.0, CastInfo.modifiers))
 	frames += 1
 	time += delta
 	if time > 12.0:

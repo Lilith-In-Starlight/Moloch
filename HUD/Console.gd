@@ -70,8 +70,8 @@ func _input(event: InputEvent) -> void:
 									output("[color=red]Expected structure:[/color] givespell <spellname> <amount = 1>")
 								2:
 									if cmd[1] in Items.all_spells:
-										if Items.player_spells.has(null):
-											Items.player_spells[Items.player_spells.find(null)] = Items.all_spells[cmd[1]]
+										if Items.player_spells.size() < 6:
+											Items.player_spells.append(Items.all_spells[cmd[1]])
 											output("Given 1 unit of " + Items.all_spells[cmd[1]].name)
 										else:
 											output("[color=red]Not enough space[/color]")
@@ -82,9 +82,9 @@ func _input(event: InputEvent) -> void:
 										if cmd[2].is_valid_integer():
 											var gv := 0
 											for i in cmd[2] as int:
-												if Items.player_spells.has(null):
+												if Items.player_spells.size() < 6:
 													gv += 1
-													Items.player_spells[Items.player_spells.find(null)] = Items.all_spells[cmd[1]]
+													Items.player_spells.append(Items.all_spells[cmd[1]])
 												else:
 													output("[color=red]Not enough space[/color]")
 													break
