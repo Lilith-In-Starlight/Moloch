@@ -93,34 +93,33 @@ func _ready():
 	register_item(4, "soulfulengine", "Soulful Engine", "Passive Soul Generation", preload("res://Sprites/Items/SoulfulEngine.png"))
 	register_item(3, "DE4L", "DE4L W1TH THE D3VIL", "IRRESIT1BLE DE4L$ that will FUCK1NG KILL Y0U", preload("res://Sprites/Items/DEAL.png"))
 	
-	register_spell(4, "fuckyou", "Fuck You", "Fuck everything in that particular direction", preload("res://Sprites/Spells/FuckYou.png"), preload("res://Spells/FuckYou.tscn"))
-	register_spell(2, "evilsight", "Evil Eye", "Casts a shortlived ray that tears things apart", preload("res://Sprites/Spells/EvilEye.png"), preload("res://Spells/EvilSight.tscn"))
-	register_spell(1, "shatter", "Unstable Shattering", "Summon orbs that vibrate in frequencies that disturb souls", preload("res://Sprites/Spells/Unstable.png"), preload("res://Spells/ShatteringOrb.tscn"))
-	register_spell(1, "ray", "Generic Ray", "Pew pew!", preload("res://Sprites/Spells/Ray.png"), preload("res://Spells/Ray.tscn"))
-	register_spell(4, "push", "Push", "Away, away...", preload("res://Sprites/Spells/Push.png"), preload("res://Spells/Push.tscn"))
-	register_spell(4, "pull", "Pull", "Together, together...", preload("res://Sprites/Spells/Pull.png"), preload("res://Spells/Pull.tscn"))
-	register_spell(3, "r", "Alveolar Trill", "RRRRRRRRRRRRRRRR", preload("res://Sprites/Spells/R.png"), preload("res://Spells/AlveolarTrill.tscn"))
-	register_spell(1, "fireball", "Fireball", "Like an ice ball, but made of fire", preload("res://Sprites/Spells/Fireball.png"), preload("res://Spells/Fireball.tscn"))
-	register_spell(1, "iceball", "Iceball", "Like a fire ball, but made of ice", preload("res://Sprites/Spells/Iceball.png"), preload("res://Spells/Iceball.tscn"))
-	register_spell(3, "palejoy", "Pale Joy", "As self destructive as this spell is, I assure you, it's essential", preload("res://Sprites/Spells/PaleJoy.png"), preload("res://Spells/PaleJoy.tscn"))
-	register_spell(2, "xblast", "Crossblast", "Summons a small X-shaped explosion", preload("res://Sprites/Spells/CrossBlast.png"), preload("res://Spells/CrossBlast.tscn"))
-	register_spell(1, "bouncysoul", "Ball Of Soul", "Creates a ball of soul that bounces on every surface", preload("res://Sprites/Spells/BouncySoul.png"), preload("res://Spells/BouncySoul.tscn"))
-	register_spell(3, "souleater", "Soul Eater", "If it hits something with soul, it steals it for you, hurts you otherwise", preload("res://Sprites/Spells/SoulEater.png"), preload("res://Spells/SoulEater.tscn"))
-	register_spell(2, "bouncyray", "Bouncing Lightray", "Casts a ray of magical light that bounces through the room", preload("res://Sprites/Spells/BouncyRay.png"), preload("res://Spells/BouncyRay.tscn"))
-	register_spell(2, "spinsword", "Haunted Sword", "Summons a sword that cuts everything around you", preload("res://Sprites/Spells/SpinSword.png"), preload("res://Spells/SpinSword.tscn"))
-	register_spell(1, "windsetter", "Windsetter", "Summons a gust of wind that pushes you away", preload("res://Sprites/Spells/Windsetter.png"), preload("res://Spells/Windsetter.tscn"))
-	register_spell(3, "westdragon", "Dragon Of The West", "They call him that for a reason", preload("res://Sprites/Spells/WestDragon.png"), preload("res://Spells/WestDragon.tscn"))
-	register_spell(4, "lightning", "Lightning", "Uncontrollable wrath", preload("res://Sprites/Spells/Lightning.png"), preload("res://Spells/Lightning.tscn"))
-	register_spell(3, "relocator", "Relocator", "Relocates your body in a particular place", preload("res://Sprites/Spells/Teleport.png"), preload("res://Spells/TeleportWand.tscn"))
-	register_spell(3, "mattereater", "Matter Eater", "Eats the world", preload("res://Sprites/Spells/MatterEater.png"), preload("res://Spells/MatterEater.tscn"))
-	register_spell(3, "eidosanchor", "Eidos Anchor", "First cast stores, second cast recalls", preload("res://Sprites/Spells/Return.png"), preload("res://Spells/Return.tscn"))
-	register_spell(2, "soulwave", "Soul Wave", "Hurts things in a expanding radius", preload("res://Sprites/Spells/SoulWave.png"), preload("res://Spells/SoulWave.tscn"))
-	register_spell(3, "internalrage", "Internal Rage", "Comes towards you from far away", preload("res://Sprites/Spells/InternalRage.png"), preload("res://Spells/InternalRage.tscn"))
-	register_spell(2, "rage", "Rage", "Fireball summoned from anger itself", preload("res://Sprites/Spells/Rage.png"), preload("res://Spells/Rage.tscn"))
-	register_spell(5, "fuckeverything", "Fuck Everything", "Fuck all of you.", preload("res://Sprites/Spells/FuckEverything.png"), preload("res://Spells/FuckEverything.tscn"))
-	register_spell(5, "castlight", "Casting Light", "The next casts will appear halfway through this ray", preload("res://Sprites/Spells/CastingRay.png"), preload("res://Spells/CastingLight.tscn"))
-	register_spell(1, "plasmasprinkler", "Plasma Sprinkler", "Balls of heat ejected from a single point", preload("res://Sprites/Spells/PlasmaSprinkler.png"), preload("res://Spells/PlasmaSprinkler.tscn"))
-	register_spell(1, "shortray", "Short Ray", "A shortlived ray with a chance of piercing", preload("res://Sprites/Spells/Shortray.png"), preload("res://Spells/Shortray.tscn"))
+	register_spell(4, "Fuck You", "Fuck everything in that particular direction", preload("res://Sprites/Spells/FuckYou.png"), preload("res://Spells/FuckYou.tscn"))
+	register_spell(2, "Evil Eye", "Casts a shortlived ray that tears things apart", preload("res://Sprites/Spells/EvilEye.png"), preload("res://Spells/EvilSight.tscn"))
+	register_spell(1, "Soul Shatterer", "Summon orbs that vibrate in frequencies that disturb souls", preload("res://Sprites/Spells/Unstable.png"), preload("res://Spells/ShatteringOrb.tscn"))
+	register_spell(1, "Generic Ray", "Pew pew!", preload("res://Sprites/Spells/Ray.png"), preload("res://Spells/Ray.tscn"))
+	register_spell(4, "Push", "Away, away...", preload("res://Sprites/Spells/Push.png"), preload("res://Spells/Push.tscn"))
+	register_spell(4, "Pull", "Together, together...", preload("res://Sprites/Spells/Pull.png"), preload("res://Spells/Pull.tscn"))
+	register_spell(3, "Alveolar Trill", "RRRRRRRRRRRRRRRR", preload("res://Sprites/Spells/R.png"), preload("res://Spells/AlveolarTrill.tscn"))
+	register_spell(1, "Fireball", "Like an ice ball, but made of fire", preload("res://Sprites/Spells/Fireball.png"), preload("res://Spells/Fireball.tscn"))
+	register_spell(1, "Iceball", "Like a fire ball, but made of ice", preload("res://Sprites/Spells/Iceball.png"), preload("res://Spells/Iceball.tscn"))
+	register_spell(3, "Pale Joy", "As self destructive as this spell is, I assure you, it's essential", preload("res://Sprites/Spells/PaleJoy.png"), preload("res://Spells/PaleJoy.tscn"))
+	register_spell(2, "Crossblast", "Summons a small X-shaped explosion", preload("res://Sprites/Spells/CrossBlast.png"), preload("res://Spells/CrossBlast.tscn"))
+	register_spell(1, "Ball Of Soul", "Creates a ball of soul that bounces on every surface", preload("res://Sprites/Spells/BouncySoul.png"), preload("res://Spells/BouncySoul.tscn"))
+	register_spell(3, "Soul Eater", "If it hits something with soul, it steals it for you, hurts you otherwise", preload("res://Sprites/Spells/SoulEater.png"), preload("res://Spells/SoulEater.tscn"))
+	register_spell(2, "Bouncing Lightray", "Casts a ray of magical light that bounces through the room", preload("res://Sprites/Spells/BouncyRay.png"), preload("res://Spells/BouncyRay.tscn"))
+	register_spell(2,  "Haunted Sword", "Summons a sword that cuts everything around you", preload("res://Sprites/Spells/SpinSword.png"), preload("res://Spells/SpinSword.tscn"))
+	register_spell(1, "Windsetter", "Summons a gust of wind that pushes you away", preload("res://Sprites/Spells/Windsetter.png"), preload("res://Spells/Windsetter.tscn"))
+	register_spell(3, "Dragon Of The West", "They call him that for a reason", preload("res://Sprites/Spells/WestDragon.png"), preload("res://Spells/WestDragon.tscn"))
+	register_spell(4, "Lightning", "Uncontrollable wrath", preload("res://Sprites/Spells/Lightning.png"), preload("res://Spells/Lightning.tscn"))
+	register_spell(3, "Relocator", "Relocates your body in a particular place", preload("res://Sprites/Spells/Teleport.png"), preload("res://Spells/TeleportWand.tscn"))
+	register_spell(3, "Matter Eater", "Eats the world", preload("res://Sprites/Spells/MatterEater.png"), preload("res://Spells/MatterEater.tscn"))
+	register_spell(3, "Eidos Anchor", "First cast stores, second cast recalls", preload("res://Sprites/Spells/Return.png"), preload("res://Spells/Return.tscn"))
+	register_spell(2, "Soul Wave", "Hurts things in a expanding radius", preload("res://Sprites/Spells/SoulWave.png"), preload("res://Spells/SoulWave.tscn"))
+	register_spell(3, "Internal Rage", "Comes towards you from far away", preload("res://Sprites/Spells/InternalRage.png"), preload("res://Spells/InternalRage.tscn"))
+	register_spell(2, "Rage", "Fireball summoned from anger itself", preload("res://Sprites/Spells/Rage.png"), preload("res://Spells/Rage.tscn"))
+	register_spell(5, "Fuck Everything", "Fuck all of you.", preload("res://Sprites/Spells/FuckEverything.png"), preload("res://Spells/FuckEverything.tscn"))
+	register_spell(1, "Plasma Sprinkler", "Balls of heat ejected from a single point", preload("res://Sprites/Spells/PlasmaSprinkler.png"), preload("res://Spells/PlasmaSprinkler.tscn"))
+	register_spell(1, "Short Ray", "A shortlived ray with a chance of piercing", preload("res://Sprites/Spells/Shortray.png"), preload("res://Spells/Shortray.tscn"))
 	
 	register_base_mod("multiply", "Multiplicative Cast", "Cast next spell %s times", preload("res://Sprites/Spells/Modifiers/Multiplicative.png"), 1, [2, 6])
 	register_base_mod("unify", "Unifying Cast", "Cast the next %s spells at once", preload("res://Sprites/Spells/Modifiers/UnifyingM.png"), 2, [2, 6])
@@ -160,16 +159,16 @@ func register_item(tier:int, name_id:String, name:String, desc:String, texture:T
 	all_items[name_id] = new
 
 
-func register_spell(tier:int, name_id:String, name:String, desc:String, texture :Texture, entity :PackedScene):
+func register_spell(tier:int, name:String, desc:String, texture :Texture, entity :PackedScene):
 	var new := Spell.new()
 	new.name = name
 	new.description = desc
-	new.id = name_id
+	new.id = name.to_lower().replace(" ", "_")
 	new.texture = texture
 	new.entity = entity
 	new.tier = tier
-	spells[tier][name_id] = new
-	all_spells[name_id] = new
+	spells[tier][new.id] = new
+	all_spells[new.id] = new
 
 
 func register_base_mod(name_id:String, name:String, desc:String, texture:Texture, inputs:int = 1, level_range := [1, 6]) -> void:
