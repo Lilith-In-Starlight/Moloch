@@ -48,7 +48,7 @@ func _physics_process(delta: float) -> void:
 		aa = $AimRay.get_collision_point()
 	if $PlayerFinder.is_colliding() and $PlayerFinder.get_collider() == Player:
 		if not wand.running:
-			wand.run(self)
+			wand.run()
 		aim = lerp(aim, Player.position, 0.03)
 		$Line2D.visible = true
 		$Line2D.points[1] = aa - position

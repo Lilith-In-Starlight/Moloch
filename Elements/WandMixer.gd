@@ -55,13 +55,13 @@ func _input(event: InputEvent) -> void:
 					get_parent().add_child(n)
 					match swap:
 						0:
-							var k := left_wand.spell_recharge
-							left_wand.spell_recharge = right_wand.spell_recharge
-							right_wand.spell_recharge = k
+							var k := left_wand.cast_cooldown
+							left_wand.cast_cooldown = right_wand.cast_cooldown
+							right_wand.cast_cooldown = k
 						1:
-							var k := left_wand.full_recharge
-							left_wand.full_recharge = right_wand.full_recharge
-							right_wand.full_recharge = k
+							var k := left_wand.recharge_cooldown
+							left_wand.recharge_cooldown = right_wand.recharge_cooldown
+							right_wand.recharge_cooldown = k
 						2:
 							var k := left_wand.heat_resistance
 							left_wand.heat_resistance = right_wand.heat_resistance

@@ -69,7 +69,7 @@ func _ready():
 		if iterations > 200:
 			get_tree().change_scene("res://Game.tscn")
 			break
-		var children := Items.shuffle_array(get_children())
+		var children :Array = Items.shuffle_array(get_children())
 		for room in children:
 			var el_children = Items.shuffle_array(room.get_children())
 			for element in el_children:
@@ -154,12 +154,14 @@ func _ready():
 	min_point /= 8.0
 	min_point -= Vector2(64, 32)
 	fill_x = min_point.x
-	print("Step 5: Filling empty space from", min_point, " to ", max_point)
-	print("Area: ", (max_point.x - min_point.x) * (max_point.y - min_point.y))
-	if (max_point.x - min_point.x) * (max_point.y - min_point.y) > 350000:
-		get_tree().change_scene("res://Game.tscn")
-	else:
-		fill_empty_space_chunk()
+	print("Empty space filling has been commented out for testing")
+	print("It will be replaced once the world generation is changed")
+#	print("Step 5: Filling empty space from", min_point, " to ", max_point)
+#	print("Area: ", (max_point.x - min_point.x) * (max_point.y - min_point.y))
+#	if (max_point.x - min_point.x) * (max_point.y - min_point.y) > 350000:
+#		get_tree().change_scene("res://Game.tscn")
+#	else:
+#		fill_empty_space_chunk()
 
 
 func _process(delta):
@@ -203,10 +205,12 @@ func is_in_room(x: int, y: int) -> Rect2:
 	return Rect2(0,0,0,0)
 
 func finalize_world():
-	print("Step 6: Autotiling so it's pretty")
-	update_bitmask_region(min_point, max_point)
-	print("Step 7: Adding enemies")
-	add_enemies()
+	print("Autotiling has been commented out for testing")
+#	print("Step 6: Autotiling so it's pretty")
+#	update_bitmask_region(min_point, max_point)
+	# print("Step 7: Adding enemies")
+	print("Enemy generation has been commented out for testing")
+	# add_enemies()
 	emit_signal("generated_world")
 	if Config.discord != null:
 		var act = Discord.Activity.new()

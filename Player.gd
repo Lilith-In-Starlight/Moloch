@@ -112,18 +112,19 @@ func _process(delta: float) -> void:
 			get_parent().add_child(new_gluestone)
 	
 	# Control wand HUD
-	if Items.player_wands[Items.selected_wand] is Wand and Input.is_action_pressed("Interact1") and not Items.player_wands[Items.selected_wand].running and not get_tree().get_nodes_in_group("HUD")[0].block_cast:
-		Items.player_wands[Items.selected_wand].shuffle()
-		Items.player_wands[Items.selected_wand].run(self)
+	if !Items.player_wands.empty():
+		if Items.player_wands[Items.selected_wand] is Wand and Input.is_action_pressed("Interact1") and not get_tree().get_nodes_in_group("HUD")[0].block_cast:
+			Items.player_wands[Items.selected_wand].shuffle()
+			Items.player_wands[Items.selected_wand].run()
 	
-	if not Config.last_input_was_controller:
+	if not Config.last_input_was_controller and not Items.player_wands.empty():
 		if Input.is_action_just_released("scrollup"):
 			Items.selected_wand -= 1
 			if Items.selected_wand < 0:
-				Items.selected_wand = 5
+				Items.selected_wand = Items.player_wands.size()-1
 
 		elif Input.is_action_just_released("scrolldown"):
-			Items.selected_wand = (Items.selected_wand + 1) % 6
+			Items.selected_wand = (Items.selected_wand + 1) % Items.player_wands.size()
 	
 	if Input.is_action_just_pressed("hotbar1"):
 		Items.selected_wand = 0
@@ -216,7 +217,9 @@ func _process(delta: float) -> void:
 func _physics_process(delta: float) -> void:
 	$Fire.visible = health.effects.has("onfire")
 	looking_at = get_local_mouse_position()
-	wand = Items.player_wands[Items.selected_wand]
+	wand = null
+	if not Items.player_wands.empty():
+		wand = Items.player_wands[Items.selected_wand]
 	if not "confused" in health.effects:
 		inputs = {
 			"left":Input.is_action_pressed("left"),
@@ -291,7 +294,7 @@ func _physics_process(delta: float) -> void:
 	# The wounds can cicatrize on their own
 	# Bandaids help
 	if health.poked_holes > 0:
-		var plus := 0.0008 * 0.0008*Items.count_player_items("bandaid")
+		var plus :float = 0.0008 * 0.0008*Items.count_player_items("bandaid")
 		if randf() < 0.0005 + plus:
 			health.poked_holes -= 1
 			if health.poked_holes < 0:

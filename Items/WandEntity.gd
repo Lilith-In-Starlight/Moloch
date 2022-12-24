@@ -14,8 +14,8 @@ func _process(_delta):
 	
 	if Player.position.distance_to(position) < 50:
 		if Input.is_action_just_pressed("down"):
-			for i in Items.player_wands.size():
-				if Items.player_wands[i] == null:
-					Items.player_wands[i] = wand
-					queue_free()
-					break
+			if Items.player_wands.size() < 6:
+				Items.player_wands.append(wand)
+				wand.connect("casting_spell", get_tree().get_nodes_in_group("GameNode")[0], "_on_casting_spell")
+				Items.add_child(wand)
+				queue_free()

@@ -161,9 +161,11 @@ func _process(delta):
 	ScrapsAmount.text = str(Items.cloth_scraps)
 	
 	# Show the wands the player is carrying
-	for i in WandHUD.get_child_count():
-		WandHUD.get_child(i).render_wand(Items.player_wands[i], i == Items.selected_wand)
-	
+	for i in 6:
+		if i < Items.player_wands.size():
+			WandHUD.get_child(i).render_wand(Items.player_wands[i], i == Items.selected_wand)
+		else: 
+			WandHUD.get_child(i).render_wand(null, false)
 	for i in CompanionWandHUD.get_child_count():
 		if Items.companions.size() > i:
 			CompanionWandHUD.get_child(i).render_wand(Items.companions[i][1])
@@ -174,7 +176,7 @@ func _process(delta):
 	
 	# Show the spells the player is carrying
 	for i in SpellBagHUD.get_child_count():
-		if Items.player_spells[i] != null:
+		if i < Items.player_spells.size():
 			SpellBagHUD.get_child(i).texture = Items.player_spells[i].texture
 		else:
 			SpellBagHUD.get_child(i).texture = preload("res://Sprites/Spells/Empty.png")
@@ -182,16 +184,16 @@ func _process(delta):
 	# Show the spells the wand the player is using has
 	for i in WandSpellHUD.get_child_count():
 		# If a non-empty wand slot is selected
-		if Items.player_wands[Items.selected_wand] != null:
+		if Items.get_player_wand() != null:
 			# Make the spell hud visible
 			WandSpellHUD.visible = true
-			var wand :Wand = Items.player_wands[Items.selected_wand]
+			var wand :Wand = Items.get_player_wand()
 			# If the wand has this slot
 			if i < wand.spell_capacity:
 				# Make it visible
 				WandSpellHUD.get_child(i).visible = true
 				# If the isn't empty, show the spell's texture
-				if wand.spells[i] != null:
+				if i < wand.spells.size():
 					WandSpellHUD.get_child(i).texture = wand.spells[i].texture
 				else: # if it is empty, show the empty slot texture
 					WandSpellHUD.get_child(i).texture = preload("res://Sprites/Spells/Empty.png")
@@ -223,7 +225,7 @@ func _process(delta):
 				clicked = 2
 				slot = i
 				# If the slot isn't empty
-				if Items.player_wands[i] != null:
+				if i < Items.player_wands.size():
 					var d_wand :Wand = Items.player_wands[i]
 					# Which information to set
 					if Input.is_action_pressed("see_info"):
@@ -231,8 +233,8 @@ func _process(delta):
 						var new_text := "[img]res://Sprites/Menus/WandIcon.png[/img] [color=#ffbd00]Wand[/color]"
 						if new_text != DescriptionBoxName.bbcode_text:
 							DescriptionBoxName.bbcode_text = new_text
-						new_text = "[img]res://Sprites/Menus/CastDelayIcon.png[/img] Cast Cooldown: " + str(d_wand.spell_recharge).pad_decimals(3) + "s"
-						new_text += "\n[img]res://Sprites/Menus/CooldownIcon.png[/img] Recharge Time: " + str(d_wand.full_recharge).pad_decimals(3) + "s"
+						new_text = "[img]res://Sprites/Menus/CastDelayIcon.png[/img] Cast Cooldown: " + str(d_wand.cast_cooldown).pad_decimals(3) + "s"
+						new_text += "\n[img]res://Sprites/Menus/CooldownIcon.png[/img] Recharge Time: " + str(d_wand.recharge_cooldown).pad_decimals(3) + "s"
 						new_text += "\nTemp. Resistance: " + str(1.0/d_wand.heat_resistance).pad_decimals(2)
 						new_text += "\nSoul Resistance: " + str(1.0/d_wand.soul_resistance).pad_decimals(2)
 						new_text += "\nPush Resistance: " + str(1.0/d_wand.push_resistance).pad_decimals(2)
@@ -242,7 +244,7 @@ func _process(delta):
 							DescriptionBoxInfo.bbcode_text = new_text
 					else:
 						ShortDescriptionBox.visible = true
-						ShortDescriptionBox.bbcode_text = "[img]res://Sprites/Menus/CastDelayIcon.png[/img] " + str(d_wand.spell_recharge).pad_decimals(2) + "s [img]res://Sprites/Menus/CooldownIcon.png[/img] " + str(d_wand.full_recharge).pad_decimals(2) + "s"
+						ShortDescriptionBox.bbcode_text = "[img]res://Sprites/Menus/CastDelayIcon.png[/img] " + str(d_wand.cast_cooldown).pad_decimals(2) + "s [img]res://Sprites/Menus/CooldownIcon.png[/img] " + str(d_wand.recharge_cooldown).pad_decimals(2) + "s"
 				break # Stop checking for if it's in a slot, we already did all this stuff
 	
 	# If the mouse is in the companions' wand area
@@ -272,8 +274,8 @@ func _process(delta):
 				break # Stop checking for if it's in a slot, we already did all this stuff
 	
 	# If the mouse is in the wands' spells area and is holding a wand
-	elif mouse.x < 240 and mouse.y > 25 and mouse.y < 25+16 and Items.player_wands[Items.selected_wand] != null:
-		var wand :Wand = Items.player_wands[Items.selected_wand]
+	elif mouse.x < 240 and mouse.y > 25 and mouse.y < 25+16 and Items.get_player_wand() != null:
+		var wand :Wand = Items.get_player_wand()
 		for i in Wand.MAX_CAPACITY:
 			# If it's in a slot
 			if mouse.x >= 4+i*(16+4) and mouse.x < (i+1)*(16+4):
@@ -285,7 +287,7 @@ func _process(delta):
 					# Then this is the slot that was clicked (aka I didn't click an empty area)
 					slot = i
 					# Set the description accordingly
-					if wand.spells[i] != null:
+					if i < wand.spells.size():
 						if Input.is_action_pressed("see_info"):
 							DescriptionBox.visible = true
 							DescriptionBoxName.bbcode_text = "[color=#ffbd00]" + wand.spells[i].name + "[/color]"
@@ -304,7 +306,7 @@ func _process(delta):
 				clicked = 0
 				slot = i
 				# Descriptions
-				if Items.player_spells[i] != null:
+				if i < Items.player_spells.size():
 					if Input.is_action_pressed("see_info"):
 						DescriptionBox.visible = true
 						DescriptionBoxName.bbcode_text = "[color=#ffbd00]" + Items.player_spells[i].name + "[/color]"
@@ -397,28 +399,52 @@ func _process(delta):
 	# If the player clicks a part of the inventory, swap that slot's content
 	# with the mouse slot's content
 	if not Config.last_input_was_controller and Input.is_action_just_pressed("Interact1") and clicked != -1:
+		var clicked_array: Array
+		var clicked_array_max: int = 6
+		var clicked_array_type: String = ""
 		match clicked:
 			1:
-				if slot != -1 and Items.player_wands[Items.selected_wand] != null:
-					var wand :Wand = Items.player_wands[Items.selected_wand]
-					var k :Spell = wand.spells[slot]
-					Items.player_wands[Items.selected_wand].spells[slot] = mouse_spell
-					mouse_spell = k
+				if slot != -1:
+					clicked_array = Items.player_wands[Items.selected_wand].spells
+					clicked_array_max = Items.player_wands[Items.selected_wand].spell_capacity
+					clicked_array_type = "spell"
 			0:
 				if slot != -1:
-					var k :Spell = Items.player_spells[slot]
-					Items.player_spells[slot] = mouse_spell
-					mouse_spell = k
+					clicked_array = Items.player_spells
+					clicked_array_type = "spell"
+					
 			2:
 				if slot != -1:
-					var k :Wand = Items.player_wands[slot]
-					Items.player_wands[slot] = mouse_wand
-					mouse_wand = k
+					clicked_array = Items.player_wands
+					clicked_array_type = "wand"
+					if slot <= Items.selected_wand:
+						Items.selected_wand -= 1
 			3:
 				if slot != -1:
-					var k :Wand = Items.companions[slot][1]
-					Items.companions[slot][1] = mouse_wand
-					mouse_wand = k
+					clicked_array = Items.companions[slot][1]
+					clicked_array_type = "wand"
+		
+		
+		if slot < clicked_array.size():
+			var k = clicked_array[slot]
+			
+			if k is Spell:
+				clicked_array[slot] = mouse_spell
+				mouse_spell = k
+			elif k is Wand:
+				clicked_array[slot] = mouse_wand
+				mouse_wand = k
+			
+		elif slot <= clicked_array_max and clicked_array_type == "spell":
+			clicked_array.append(mouse_spell)
+			mouse_spell = null
+		elif slot <= clicked_array_max and clicked_array_type == "wand":
+			clicked_array.append(mouse_wand)
+			mouse_wand = null
+		
+		while clicked_array.find(null) != -1:
+			clicked_array.remove(clicked_array.find(null))
+			
 	elif Config.last_input_was_controller and  Input.is_action_just_pressed("select_inventory"):
 		match which_inventory:
 			0:
@@ -440,6 +466,8 @@ func _process(delta):
 				Items.companions[which_slot][1] = mouse_wand
 				mouse_wand = k
 				
+	
+	
 	
 	# If the player right clicks and is not in an inventory space
 	# drop the  item

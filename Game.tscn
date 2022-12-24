@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=2]
+[gd_scene load_steps=53 format=2]
 
 [ext_resource path="res://Player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://EditorTileset.tres" type="TileSet" id=2]
@@ -26,6 +26,7 @@
 [ext_resource path="res://Themes/SmolDescTextTheme.tres" type="Theme" id=24]
 [ext_resource path="res://Sprites/Blocks/template_block.png" type="Texture" id=25]
 [ext_resource path="res://HUD/Shader.gd" type="Script" id=26]
+[ext_resource path="res://Game.gd" type="Script" id=27]
 
 [sub_resource type="CanvasItemMaterial" id=1]
 blend_mode = 1
@@ -187,7 +188,8 @@ tracks/0/keys = {
 "values": [ Vector2( -128, 0 ), Vector2( 0, 0 ) ]
 }
 
-[node name="Game" type="Node2D"]
+[node name="Game" type="Node2D" groups=["GameNode"]]
+script = ExtResource( 27 )
 
 [node name="Background" type="CanvasLayer" parent="."]
 layer = -24

@@ -40,7 +40,7 @@ func _init():
 	var spells_to_give := clamp(min(spell_capacity, round(abs(Items.LootRNG.randfn(2.0, 3.0)))), 1, 12)
 	for i in spells_to_give:
 		if Items.LootRNG.randf() < 0.3 and not (i == 0 and spells_to_give == 1):
-			spells.append(Items.pick_random_modifier())
+#			spells.append(Items.pick_random_modifier())
 			continue
 		spells.append(Items.pick_random_spell())
 	
@@ -68,16 +68,9 @@ func string():
 func shuffle():
 	if shuffle:
 		spells.shuffle()
-		for s in spells.size():
-			if spells[s] == null:
-				for s2 in range(s, spells.size()):
-					if spells[s2] != null:
-						spells[s] = spells[s2]
-						spells[s2] = null
-						break
 
 
-func run(Caster:Node2D):
+func run():
 	if self.running:
 		return
 	
@@ -103,7 +96,7 @@ func parse_spells():
 	while current_parse >= 0:
 		var current_spell = spells[current_parse]
 		
-		if !current_spell.cast_mod and current_spell.behavior_mods.empty(): # It's not a modifier
+		if !current_spell.is_cast_mod and current_spell.behavior_mods.empty(): # It's not a modifier
 			spell_stack.append(current_spell)
 			current_parse -= 1
 			continue
@@ -132,8 +125,8 @@ func unrun():
 
 
 func fix_spells() -> void:
-	while spells.size() < spell_capacity:
-		spells.append(null)
+#	while spells.size() < spell_capacity:
+#		spells.append(null)
 	while spells.size() > spell_capacity:
 		spells.pop_back()
 

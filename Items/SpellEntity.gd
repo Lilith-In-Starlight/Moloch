@@ -13,8 +13,6 @@ func _process(_delta):
 	$Sprite.texture = spell.texture
 	if Player.position.distance_to(position) < 50:
 		if Input.is_action_just_pressed("down"):
-			for i in Items.player_spells.size():
-				if Items.player_spells[i] == null:
-					Items.player_spells[i] = spell
-					queue_free()
-					break
+			if Items.player_spells.size() < 6:
+				Items.player_spells.append(spell)
+				queue_free()

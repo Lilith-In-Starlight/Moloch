@@ -24,8 +24,8 @@ func _ready():
 	Player = get_tree().get_nodes_in_group("Player")[0]
 	Map = get_tree().get_nodes_in_group("World")[0]
 	type = Items.LootRNG.randi()%TYPES.size()
-	if Items.LootRNG.randf() < 0.4:
-		spell = Items.pick_random_modifier()
+#	if Items.LootRNG.randf() < 0.4:
+#		spell = Items.pick_random_modifier()
 	match type:
 		TYPES.ITEM:
 			$Sprite.modulate = "#96ff9a"
