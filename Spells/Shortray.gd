@@ -6,17 +6,18 @@ onready var Line := $Line2D
 
 
 var CastInfo := SpellCastInfo.new()
-var angle := 0.0
+var spell_behavior := RayBehavior.new()
 
 
 func _ready() -> void:
 	var Map :TileMap = get_tree().get_nodes_in_group("World")[0]
 	CastInfo.set_position(self)
-	angle = CastInfo.get_angle(self)
+	spell_behavior.get_angle(CastInfo.goal + CastInfo.goal_offset, position, CastInfo)
 	Map.play_sound(preload("res://Sfx/spells/laserfire01.wav"), position, 1.0, 0.8+randf()*0.4)
 	 
-	var point := CastInfo.vector_from_angle(angle, 100)
+	var point := CastInfo.vector_from_angle(spell_behavior.angle, 100)
 	Ray.cast_to = point
+	CastInfo.set_position(self)
 	Ray.force_raycast_update()
 	if Ray.is_colliding():
 		point = Ray.get_collision_point() - position

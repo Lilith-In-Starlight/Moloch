@@ -1,10 +1,10 @@
 extends RayCast2D
 
-var rotate := 0.0
 
 var timer := 0.0
 
 var CastInfo := SpellCastInfo.new()
+var spell_behavior = RayBehavior.new()
 
 var did := false
 
@@ -12,8 +12,8 @@ func _ready():
 	enabled = true
 	CastInfo.set_position(self)
 	CastInfo.set_goal()
-	rotate = CastInfo.goal.angle_to_point(position)
-	cast_to = CastInfo.vector_from_angle(rotate, 1000)
+	spell_behavior.get_angle(CastInfo.goal, position, CastInfo)
+	cast_to = CastInfo.vector_from_angle(spell_behavior.angle, 1000)
 	var sound_emitter := AudioStreamPlayer2D.new()
 	sound_emitter.stream = preload("res://Sfx/spells/laserfire01.wav")
 	sound_emitter.position = position
@@ -25,6 +25,7 @@ func _ready():
 
 func _physics_process(delta):
 	timer += delta
+	CastInfo.set_position(self)
 	if is_colliding():
 		cast_to = get_collision_point() - position
 		var col := get_collider()

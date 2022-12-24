@@ -2,7 +2,7 @@ extends RayCast2D
 
 
 var CastInfo := SpellCastInfo.new()
-var rotate := 0.0
+var spell_behavior := RayBehavior.new()
 var times_done := 0
 
 var timer := 0.0
@@ -12,9 +12,9 @@ var did := false
 func _ready():
 	CastInfo.set_position(self)
 	CastInfo.set_goal()
-	rotate = CastInfo.get_angle(self)
-	cast_to = Vector2(cos(rotate), sin(rotate))*2000
-	position += Vector2(cos(rotate), sin(rotate))
+	spell_behavior.get_angle(CastInfo.goal + CastInfo.goal_offset, position, CastInfo)
+	cast_to = Vector2(cos(spell_behavior.angle), sin(spell_behavior.angle))*2000
+	position += Vector2(cos(spell_behavior.angle), sin(spell_behavior.angle))
 	var Map :TileMap = get_tree().get_nodes_in_group("World")[0]
 	Map.play_sound(preload("res://Sfx/spells/laserfire01.wav"), position, 1.0, 0.8+randf()*0.4)
 
@@ -35,7 +35,7 @@ func _physics_process(delta):
 			enabled = false
 			new.times_done = times_done + 1
 	else:
-		$RayCast2D.points[1] = Vector2(cos(rotate), sin(rotate))*2000
+		$RayCast2D.points[1] = Vector2(cos(spell_behavior.angle), sin(spell_behavior.angle))*2000
 	if timer > 0.2:
 		queue_free()
 

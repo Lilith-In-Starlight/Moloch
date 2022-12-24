@@ -1,10 +1,10 @@
 extends RayCast2D
 
 
-var rotate := 0.0
 var WorldMap :TileMap
 
 var CastInfo := SpellCastInfo.new()
+var spell_behavior := RayBehavior.new()
 
 var timer := 0.0
 
@@ -13,15 +13,15 @@ func _ready():
 	WorldMap = get_tree().get_nodes_in_group("World")[0]
 	CastInfo.set_position(self)
 	CastInfo.set_goal()
-	rotate = CastInfo.goal.angle_to_point(position)
-	cast_to = CastInfo.vector_from_angle(rotate, 124)
+	spell_behavior.get_angle(CastInfo.goal, position, CastInfo)
+	cast_to = CastInfo.vector_from_angle(spell_behavior.angle, 124)
 
 
 func _physics_process(delta):
 	CastInfo.set_position(self)
 	CastInfo.set_goal()
-	rotate = CastInfo.goal.angle_to_point(position)
-	cast_to = CastInfo.vector_from_angle(rotate, 124)
+	spell_behavior.get_angle(CastInfo.goal, position, CastInfo)
+	cast_to = CastInfo.vector_from_angle(spell_behavior.angle, 124)
 	CastInfo.heat_caster(1/60.0)
 	if is_colliding():
 		var pos := get_collision_point()
