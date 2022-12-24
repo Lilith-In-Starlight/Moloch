@@ -24,7 +24,7 @@ func _ready():
 func _physics_process(delta):
 	Ray.cast_to = spell_behavior.velocity * delta * 60
 	if not Ray.is_colliding():
-		position += spell_behavior.move(0, CastInfo.modifiers) * delta * 60
+		position += spell_behavior.move(0, CastInfo) * delta * 60
 		flip = false
 	elif not flip:
 		if Ray.get_collider().has_method("health_object"):
@@ -35,7 +35,7 @@ func _physics_process(delta):
 		else:
 			spell_behavior.velocity = spell_behavior.velocity.bounce(Ray.get_collision_normal().normalized())*1.02
 			Map.play_sound(preload("res://Sfx/spells/laserfire01.wav"), position, 1.0, 0.8+randf()*0.4)
-		position += spell_behavior.move(0, CastInfo.modifiers) * delta * 60
+		position += spell_behavior.move(0, CastInfo) * delta * 60
 		flip = true
 		dtimer += 0.05
 		update()

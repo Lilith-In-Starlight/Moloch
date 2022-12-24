@@ -5,18 +5,18 @@ class_name ProjectileBehavior
 var first_time := true
 var velocity := Vector2()
 
-func move(gravity: float, modifiers, external_forces: Vector2 = Vector2(0, 0)):
+func move(gravity: float, cast_info, external_forces: Vector2 = Vector2(0, 0)):
 	var output: Vector2
 	velocity += external_forces
 	
 	var gravity_vec := Vector2(0, gravity)
-	if "invert_gravity" in modifiers:
+	if "invert_gravity" in cast_info.modifiers:
 		gravity_vec *= -1
 	if !first_time:
 		velocity += gravity_vec
 	output = velocity
 	
-	if "orthogonal" in modifiers:
+	if "orthogonal" in cast_info.modifiers:
 		var given_vel := velocity
 		var normalized := velocity.normalized()
 		if normalized.x > 0.3:

@@ -29,7 +29,7 @@ func _ready():
 func _physics_process(delta):
 	$TextureProgress.value += delta*60*0.08*(360/3.0)
 	$TextureProgress2.value += delta*60*0.08*(360/3.0)
-	spell_behavior.velocity = spell_behavior.move(0, CastInfo.modifiers)
+	spell_behavior.velocity = spell_behavior.move(0, CastInfo)
 	position += spell_behavior.velocity * delta
 	vel_mult = move_toward(vel_mult, 0, delta)
 	spell_behavior.velocity *= vel_mult

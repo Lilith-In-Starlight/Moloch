@@ -26,7 +26,7 @@ func _physics_process(delta):
 		_on_body_entered(body)
 	if timer > 10.0:
 		queue_free()
-	spell_behavior.velocity = move_and_slide(spell_behavior.move(0.2, CastInfo.modifiers))
+	spell_behavior.velocity = move_and_slide(spell_behavior.move(0.2, CastInfo))
 
 
 func _on_body_entered(body):

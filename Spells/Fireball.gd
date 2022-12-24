@@ -22,7 +22,7 @@ func _physics_process(delta):
 			_on_body_entered(body)
 	
 	
-	spell_behavior.velocity = move_and_slide(spell_behavior.move(1.0, CastInfo.modifiers))
+	spell_behavior.velocity = move_and_slide(spell_behavior.move(1.0, CastInfo))
 	frames += 1
 	time += delta
 	if time > 12.0:

@@ -36,7 +36,7 @@ func _physics_process(delta):
 		force = force.move_toward((move_to - position)*0.5, 5*delta*60)
 	
 	
-	position += spell_behavior.move(grav, CastInfo.modifiers, force) * delta
+	position += spell_behavior.move(grav, CastInfo, force) * delta
 	if spell_behavior.velocity.length() > 450:
 		spell_behavior.velocity = spell_behavior.velocity.normalized() * 450
 	

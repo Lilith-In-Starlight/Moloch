@@ -31,7 +31,7 @@ func _process(delta: float) -> void:
 		if body.has_method("health_object"):
 			body.health_object().temp_change(8, CastInfo.Caster)
 		queue_free()
-	position += spell_behavior.move(0, CastInfo.modifiers)
+	position += spell_behavior.move(0, CastInfo)
 
 
 func _on_ShootTimer_timeout() -> void:

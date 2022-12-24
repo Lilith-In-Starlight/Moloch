@@ -24,7 +24,7 @@ func _physics_process(delta):
 		if not body == self:
 			_on_body_entered(body)
 	
-	spell_behavior.velocity = move_and_slide(spell_behavior.move(10.0, CastInfo.modifiers))
+	spell_behavior.velocity = move_and_slide(spell_behavior.move(10.0, CastInfo))
 	frames += 1
 
 func _on_body_entered(body):

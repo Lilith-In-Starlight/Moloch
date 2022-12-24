@@ -31,7 +31,7 @@ func _ready():
 func _physics_process(delta):
 	timer += 0.1
 	spell_behavior.velocity = CastInfo.vector_from_angle(rotate, 60*delta * CastInfo.projectile_speed)
-	position += spell_behavior.move(0.2, CastInfo.modifiers)
+	position += spell_behavior.move(0.2, CastInfo)
 	rotate += noise.get_noise_3d(position.x, position.y, timer)*(timer/60.0)
 	for body in get_overlapping_bodies():
 		_on_body_entered(body)

@@ -44,5 +44,5 @@ func _process(delta: float) -> void:
 				already_collided = true
 				return
 		
-		position += spell_behavior.move(0, CastInfo.modifiers, Vector2(cos(angle), sin(angle)) * 5) * delta * 60
+		position += spell_behavior.move(0, CastInfo, Vector2(cos(angle), sin(angle)) * 5) * delta * 60
 		Raycast.cast_to = spell_behavior.velocity
