@@ -14,7 +14,7 @@ func _on_casting_spell(spell: Spell, wand: Wand, caster: Node2D):
 		spell_instance.CastInfo.wand = wand
 		add_child(spell_instance)
 	
-	match spell.name:
+	match spell.id:
 		"multiply":
 			for i in spell.level:
 				_on_casting_spell(spell.input_contents[0], wand, caster)

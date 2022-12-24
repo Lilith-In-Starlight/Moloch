@@ -122,8 +122,8 @@ func _ready():
 	register_spell(1, "plasmasprinkler", "Plasma Sprinkler", "Balls of heat ejected from a single point", preload("res://Sprites/Spells/PlasmaSprinkler.png"), preload("res://Spells/PlasmaSprinkler.tscn"))
 	register_spell(1, "shortray", "Short Ray", "A shortlived ray with a chance of piercing", preload("res://Sprites/Spells/Shortray.png"), preload("res://Spells/Shortray.tscn"))
 	
-#	register_base_mod("multiplicative", "Multiplicative Cast", "Many casts from one\nIterations: %s", preload("res://Sprites/Spells/Modifiers/Multiplicative.png"), [2, 6])
-#	register_base_mod("unifying", "Unifying Cast", "One cast from many\nAmalgamations: %s", preload("res://Sprites/Spells/Modifiers/UnifyingM.png"), [2, 6])
+	register_base_mod("multiply", "Multiplicative Cast", "Cast next spell %s times", preload("res://Sprites/Spells/Modifiers/Multiplicative.png"), 1, [2, 6])
+	register_base_mod("unify", "Unifying Cast", "Cast the next %s spells at once", preload("res://Sprites/Spells/Modifiers/UnifyingM.png"), 2, [2, 6])
 #	register_base_mod("grenade", "Grenade Cast", "Copies spells into a grenade wand\nCopied Spells: %s", preload("res://Sprites/Spells/Modifiers/Grenade.png"), [1, 6])
 #	register_base_mod("landmine", "Landmine Cast", "Copies spells into a landmine wand\nCopied Spells: %s", preload("res://Sprites/Spells/Modifiers/Landmine.png"), [1, 6])
 #	register_base_mod("limited", "Limited Cast", "When applicable, casts will only have effect at the end of the wand", preload("res://Sprites/Spells/Modifiers/Limited.png"), [1, 1])
@@ -171,15 +171,17 @@ func register_spell(tier:int, name_id:String, name:String, desc:String, texture 
 	all_spells[name_id] = new
 
 
-#func register_base_mod(name_id:String, name:String, desc:String, texture:Texture, level_range := [1, 6]) -> void:
-#	var mod := SpellMod.new()
-#	mod.id = name_id
-#	mod.name = name
-#	mod.description = desc
-#	mod.texture = texture
-#	mod.minimum_level = level_range[0]
-#	mod.maximum_level = level_range[1]
-#	base_spell_mods[name_id] = mod
+func register_base_mod(name_id:String, name:String, desc:String, texture:Texture, inputs:int = 1, level_range := [1, 6]) -> void:
+	var mod := Spell.new()
+	mod.id = name_id
+	mod.name = name
+	mod.description = desc
+	mod.texture = texture
+	mod.minimum_level = level_range[0]
+	mod.maximum_level = level_range[1]
+	mod.is_cast_mod = true
+	mod.inputs = inputs
+	base_spell_mods[name_id] = mod
 
 
 func pick_random_spell(rng:RandomNumberGenerator = LootRNG) -> Spell:
@@ -227,21 +229,16 @@ func pick_random_item(rng:RandomNumberGenerator = LootRNG) -> Item:
 			return ret
 	return items[tier].values()[rng.randi()%items[tier].values().size()]
 
-#
-#func pick_random_modifier(rng:RandomNumberGenerator = LootRNG) -> SpellMod:
-#	var mod := SpellMod.new()
-#	var mod_templade :SpellMod = base_spell_mods.values()[rng.randi() % base_spell_mods.size()]
-#	mod.id = mod_templade.id
-#	mod.name = mod_templade.name
-#	mod.description = mod_templade.description
-#	mod.texture = mod_templade.texture
-#	mod.level = rng.randi_range(mod_templade.minimum_level, mod_templade.maximum_level)
-#
-#	if "%s" in mod.description:
-#		mod.description %= str(mod.level)
-#
-#	spell_mods.append(mod)
-#	return mod
+
+func pick_random_modifier(rng:RandomNumberGenerator = LootRNG) -> Spell:
+	var mod :Spell = base_spell_mods.values()[rng.randi() % base_spell_mods.size()].duplicate()
+	mod.level = rng.randi_range(mod.minimum_level, mod.maximum_level)
+
+	if "%s" in mod.description:
+		mod.description %= str(mod.level)
+
+	spell_mods.append(mod)
+	return mod
 
 
 func reset_player():
@@ -265,8 +262,8 @@ func reset_player():
 	cloth_scraps = 3
 	player_items = {}
 	player_spells = []
-#	if LootRNG.randf() < 0.2:
-#		player_spells[0] = pick_random_modifier()
+	if LootRNG.randf() < 0.2:
+		player_spells.append(pick_random_modifier())
 	for i in player_wands:
 		i.queue_free()
 	player_wands = []

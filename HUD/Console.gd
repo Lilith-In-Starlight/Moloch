@@ -102,7 +102,7 @@ func _input(event: InputEvent) -> void:
 									if parse_result.error != OK:
 										print(parse_result.error_string)
 									else:
-										if Items.player_wands.has(null):
+										if Items.player_wands.size() < 6:
 											var new_wand := Wand.new()
 											var tags :Dictionary = parse_result.result
 											for i in tags:
@@ -162,8 +162,7 @@ func _input(event: InputEvent) -> void:
 													new_wand.color3 = Color(tags["color3"])
 												else:
 													output("[color=red]color3 is an invalid hex number[/color]")
-											var slot := Items.player_wands.find(null)
-											Items.player_wands[slot] = new_wand
+											Items.player_wands.append(new_wand)
 										else:
 											output("[color=red]No inventory space[/color]")
 						"wandjson": 
@@ -173,18 +172,13 @@ func _input(event: InputEvent) -> void:
 							if cmd.size() == 3:
 								if Items.base_spell_mods.has(cmd[1]):
 									if cmd[2].is_valid_integer():
-										var slot := Items.player_spells.find(null)
-										if slot != -1:
-											var base :SpellMod = Items.base_spell_mods[cmd[1]]
-											var new_spell := SpellMod.new()
-											new_spell.name = base.name
-											new_spell.id = base.id
-											new_spell.texture = base.texture
-											new_spell.description = base.description
+										if  Items.player_spells.size() < 6:
+											var base :Spell = Items.base_spell_mods[cmd[1]]
+											var new_spell :Spell = base.duplicate()
 											if "%s" in new_spell.description:
 												new_spell.description = base.description % cmd[2]
 											new_spell.level = clamp(cmd[2] as int,2,6)
-											Items.player_spells[slot] = new_spell
+											Items.player_spells.append(new_spell)
 											Items.spell_mods.append(new_spell)
 										else:
 											output("[color=red]No inventory space[/color]")

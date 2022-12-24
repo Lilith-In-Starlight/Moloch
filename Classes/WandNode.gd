@@ -40,7 +40,7 @@ func _init():
 	var spells_to_give := clamp(min(spell_capacity, round(abs(Items.LootRNG.randfn(2.0, 3.0)))), 1, 12)
 	for i in spells_to_give:
 		if Items.LootRNG.randf() < 0.3 and not (i == 0 and spells_to_give == 1):
-#			spells.append(Items.pick_random_modifier())
+			spells.append(Items.pick_random_modifier())
 			continue
 		spells.append(Items.pick_random_spell())
 	
@@ -76,6 +76,10 @@ func run(caster: Node2D):
 	
 	var spell_stack = parse_spells()
 	
+	if spell_stack is String:
+		self.running = false
+		return
+		
 	var current_spell :int = spell_stack.size() - 1
 	self.running = true
 	
@@ -87,12 +91,12 @@ func run(caster: Node2D):
 	
 	yield(get_tree().create_timer(recharge_cooldown), "timeout")
 	self.running = false
+	emit_signal("finished_casting")
 	
 
 func parse_spells():
 	var current_parse := spells.size() - 1
 	var spell_stack := []
-	
 	while current_parse >= 0:
 		var current_spell = spells[current_parse]
 		
@@ -104,10 +108,13 @@ func parse_spells():
 			return "Couldn't parse cast"
 		
 		# It's a modifier and its inputs can be filled
-		var modified_spell = current_spell.duplicate(true)
+		
+		var modified_spell = current_spell.duplicate()
 		for i in modified_spell.inputs:
 			var top_spell = spell_stack.pop_back()
-			top_spell = top_spell.duplicate(true)
+			print(top_spell.name)
+			top_spell = top_spell.duplicate()
+			print(top_spell.name)
 			top_spell.behavior_mods.append_array(modified_spell.behavior_mods)
 			modified_spell.input_contents.append(top_spell)
 		
