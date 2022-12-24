@@ -14,14 +14,14 @@ func _ready():
 	CastInfo.set_position(self)
 	CastInfo.set_goal()
 	spell_behavior.get_angle(CastInfo.goal, position, CastInfo)
-	cast_to = CastInfo.vector_from_angle(spell_behavior.angle, 124)
+	cast_to = spell_behavior.get_cast_to(124, CastInfo)
 
 
 func _physics_process(delta):
 	CastInfo.set_position(self)
 	CastInfo.set_goal()
 	spell_behavior.get_angle(CastInfo.goal, position, CastInfo)
-	cast_to = CastInfo.vector_from_angle(spell_behavior.angle, 124)
+	cast_to = spell_behavior.get_cast_to(124, CastInfo)
 	CastInfo.heat_caster(1/60.0)
 	if is_colliding():
 		var pos := get_collision_point()

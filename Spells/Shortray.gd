@@ -15,7 +15,7 @@ func _ready() -> void:
 	spell_behavior.get_angle(CastInfo.goal + CastInfo.goal_offset, position, CastInfo)
 	Map.play_sound(preload("res://Sfx/spells/laserfire01.wav"), position, 1.0, 0.8+randf()*0.4)
 	 
-	var point := CastInfo.vector_from_angle(spell_behavior.angle, 100)
+	var point := spell_behavior.get_cast_to(124, CastInfo)
 	Ray.cast_to = point
 	CastInfo.set_position(self)
 	Ray.force_raycast_update()

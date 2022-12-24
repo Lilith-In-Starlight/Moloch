@@ -18,6 +18,8 @@ func _on_casting_spell(spell: Spell, wand: Wand, caster: Node2D, offset: float =
 		
 		return
 	
+	for i in spell.input_contents:
+		i.behavior_modifiers.append_array(spell.behavior_modifiers.duplicate())
 	match spell.id:
 		"multiply":
 			_on_casting_spell(spell.input_contents[0], wand, caster, 0)

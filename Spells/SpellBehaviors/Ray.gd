@@ -13,3 +13,10 @@ func get_angle(start: Vector2, end: Vector2, cast_info: SpellCastInfo):
 		output = deg2rad(deg)
 	angle = output
 	return output
+
+
+func get_cast_to(length: float, cast_info: SpellCastInfo) -> Vector2:
+	if cast_info.modifiers.has("limited"):
+		cast_info.vector_from_angle(angle, 2)
+	return cast_info.vector_from_angle(angle, length)
+	

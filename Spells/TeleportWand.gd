@@ -2,12 +2,13 @@ extends RayCast2D
 
 
 var CastInfo := SpellCastInfo.new()
+var spell_behavior := RayBehavior.new()
 
 func _ready() -> void:
 	CastInfo.set_position(self)
 	CastInfo.set_goal()
-	var angle := CastInfo.get_angle(self)
-	cast_to = CastInfo.vector_from_angle(angle, 500)
+	spell_behavior.get_angle(CastInfo.goal, position, CastInfo)
+	cast_to = spell_behavior.get_cast_to(500, CastInfo)
 	force_raycast_update()
 	var goal := cast_to
 	if is_colliding():

@@ -94,7 +94,8 @@ func run(caster: Node2D):
 		emit_signal("casting_spell", spell_stack[current_spell], self, caster)
 		current_spell -= 1
 		
-		yield(get_tree().create_timer(cast_cooldown * cast_cooldown_multiplier), "timeout")
+		if current_spell > 0:
+			yield(get_tree().create_timer(cast_cooldown * cast_cooldown_multiplier), "timeout")
 	
 	yield(get_tree().create_timer(recharge_cooldown * recharge_cooldown_multiplier), "timeout")
 	self.running = false
