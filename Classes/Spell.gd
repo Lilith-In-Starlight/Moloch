@@ -30,12 +30,12 @@ func duplicate():
 	new.tier = tier
 	
 	new.is_cast_mod = is_cast_mod
-	new.behavior_mods = behavior_mods
+	new.behavior_mods = behavior_mods.duplicate()
 	new.minimum_level = minimum_level
 	new.maximum_level = maximum_level
 	new.level = level
 	
 	new.inputs = inputs
-	new.input_contents = input_contents
+	new.input_contents = input_contents.duplicate()
 	
 	return new

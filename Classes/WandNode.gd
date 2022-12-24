@@ -85,8 +85,8 @@ func run(caster: Node2D):
 	
 	while current_spell >= 0:
 		emit_signal("casting_spell", spell_stack[current_spell], self, caster)
-			
 		current_spell -= 1
+		
 		yield(get_tree().create_timer(cast_cooldown), "timeout")
 	
 	yield(get_tree().create_timer(recharge_cooldown), "timeout")
@@ -112,9 +112,7 @@ func parse_spells():
 		var modified_spell = current_spell.duplicate()
 		for i in modified_spell.inputs:
 			var top_spell = spell_stack.pop_back()
-			print(top_spell.name)
 			top_spell = top_spell.duplicate()
-			print(top_spell.name)
 			top_spell.behavior_mods.append_array(modified_spell.behavior_mods)
 			modified_spell.input_contents.append(top_spell)
 		
