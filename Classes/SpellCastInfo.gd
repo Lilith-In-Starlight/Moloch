@@ -56,7 +56,7 @@ func push_caster(push:Vector2) -> void:
 	if is_instance_valid(Caster):
 		var push_to_do := push
 		if wand != null:
-			push_to_do = push*wand.push_resistance
+			push_to_do = push
 		if Caster.get("speed"):
 			Caster.speed += push_to_do
 		elif Caster.get("linear_velocity"):

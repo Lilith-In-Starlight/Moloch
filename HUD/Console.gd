@@ -137,11 +137,11 @@ func _input(event: InputEvent) -> void:
 													new_wand.soul_resistance = tags["soul"] as float
 												else:
 													output("[color=red]soul is an invalid float[/color]")
-											if "push" in tags:
-												if tags["push"].is_valid_float():
-													new_wand.push_resistance = tags["push"] as float
+											if "speed" in tags:
+												if tags["speed"].is_valid_float():
+													new_wand.projectile_speed = tags["speed"] as float
 												else:
-													output("[color=red]push is an invalid float[/color]")
+													output("[color=red]speed is an invalid float[/color]")
 											if "shuffle" in tags:
 												match tags["shuffle"]:
 													"0", "1":
