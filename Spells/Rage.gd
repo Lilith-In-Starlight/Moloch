@@ -19,7 +19,7 @@ func _ready() -> void:
 	CastInfo.heat_caster(5.0)
 	CastInfo.set_position(self)
 	angle = CastInfo.get_angle(self)
-	spell_behavior.velocity = Vector2(cos(angle), sin(angle)) * 10 * CastInfo.projectile_speed
+	spell_behavior.velocity = Vector2(cos(angle), sin(angle)) * 10 * CastInfo.wand.projectile_speed
 	Raycast.cast_to = spell_behavior.velocity
 	Raycast2.cast_to = spell_behavior.velocity
 	Raycast3.cast_to = spell_behavior.velocity

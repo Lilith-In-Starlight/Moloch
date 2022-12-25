@@ -16,7 +16,7 @@ func _ready():
 	noise.seed = randi()
 	CastInfo.set_position(self)
 	CastInfo.set_goal()
-	spell_behavior.velocity = (CastInfo.goal - position).normalized() * CastInfo.projectile_speed
+	spell_behavior.velocity = spell_behavior.get_initial_velocity(self)
 	rotate = 0
 	var sound_emitter := AudioStreamPlayer2D.new()
 	sound_emitter.stream = preload("res://Sfx/spells/laserfire01.wav")

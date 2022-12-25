@@ -16,7 +16,7 @@ func _ready():
 	CastInfo.set_position(self)
 	CastInfo.set_goal()
 	rotate = CastInfo.get_angle(self)
-	spell_behavior.velocity = Vector2(cos(rotate), sin(rotate)) * CastInfo.projectile_speed
+	spell_behavior.velocity = spell_behavior.get_initial_velocity(self)
 	Ray.cast_to = spell_behavior.velocity
 	Map.play_sound(preload("res://Sfx/spells/laserfire01.wav"), position, 1.0, 0.8+randf()*0.4)
 
