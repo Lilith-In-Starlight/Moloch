@@ -402,12 +402,29 @@ func _process(delta):
 		var clicked_array: Array
 		var clicked_array_max: int = 6
 		var clicked_array_type: String = ""
+		var doswap := true
 		match clicked:
 			1:
 				if slot != -1:
 					clicked_array = Items.player_wands[Items.selected_wand].spells
 					clicked_array_max = Items.player_wands[Items.selected_wand].spell_capacity
 					clicked_array_type = "spell"
+					
+					doswap = false
+					print(clicked_array.size(), slot)
+					if clicked_array.size() == clicked_array_max or mouse_spell == null or clicked_array.size() <= slot or Input.is_key_pressed(KEY_SHIFT):
+						doswap = true
+					else:
+						var new_array = []
+						for i in clicked_array.size() + 1:
+							if i < slot + 1:
+								new_array.append(clicked_array[i])
+							elif i == slot + 1:
+								new_array.append(mouse_spell)
+							else:
+								new_array.append(clicked_array[i-1])
+						Items.player_wands[Items.selected_wand].spells = new_array
+						mouse_spell = null
 			0:
 				if slot != -1:
 					clicked_array = Items.player_spells
@@ -425,22 +442,23 @@ func _process(delta):
 					clicked_array_type = "wand"
 		
 		
-		if slot < clicked_array.size():
-			var k = clicked_array[slot]
-			
-			if k is Spell:
-				clicked_array[slot] = mouse_spell
-				mouse_spell = k
-			elif k is Wand:
-				clicked_array[slot] = mouse_wand
-				mouse_wand = k
-			
-		elif slot <= clicked_array_max and clicked_array_type == "spell":
-			clicked_array.append(mouse_spell)
-			mouse_spell = null
-		elif slot <= clicked_array_max and clicked_array_type == "wand":
-			clicked_array.append(mouse_wand)
-			mouse_wand = null
+		if doswap:
+			if slot < clicked_array.size():
+				var k = clicked_array[slot]
+				
+				if k is Spell:
+					clicked_array[slot] = mouse_spell
+					mouse_spell = k
+				elif k is Wand:
+					clicked_array[slot] = mouse_wand
+					mouse_wand = k
+				
+			elif slot <= clicked_array_max and clicked_array_type == "spell":
+				clicked_array.append(mouse_spell)
+				mouse_spell = null
+			elif slot <= clicked_array_max and clicked_array_type == "wand":
+				clicked_array.append(mouse_wand)
+				mouse_wand = null
 		
 		while clicked_array.find(null) != -1:
 			clicked_array.remove(clicked_array.find(null))
