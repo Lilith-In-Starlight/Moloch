@@ -14,15 +14,17 @@ var modifiers := []
 
 
 func set_position(CastEntity:Node2D):
+	CastEntity.position = get_position()
+
+
+func get_position():
 	if is_instance_valid(wand):
 		if wand.spell_offset != Vector2(0, 0):
 			spell_offset = wand.spell_offset
 	if is_instance_valid(Caster):
 		if Caster.has_method("cast_from"):
-			CastEntity.position = Caster.cast_from() + spell_offset
-			return
-		CastEntity.position = Caster.position + spell_offset
-
+			return Caster.cast_from() + spell_offset
+		return Caster.position + spell_offset
 
 func set_goal():
 	if is_instance_valid(Caster):
