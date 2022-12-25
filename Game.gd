@@ -43,3 +43,5 @@ func _on_casting_spell(spell: Spell, wand: Wand, caster: Node2D, offset: float =
 func _process(delta: float) -> void:
 	if Items.selected_wand >= Items.player_wands.size():
 		Items.selected_wand = Items.player_wands.size() - 1
+	if not Items.player_wands.empty() and Items.selected_wand < 0:
+		Items.selected_wand = 0

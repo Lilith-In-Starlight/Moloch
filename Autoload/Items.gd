@@ -351,5 +351,4 @@ func new_player_wand() -> Wand:
 func get_player_wand():
 	if player_wands.size() <= selected_wand or player_wands.empty():
 		return null
-	print(selected_wand)
 	return player_wands[selected_wand]

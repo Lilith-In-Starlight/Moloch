@@ -24,6 +24,10 @@ var is_wand_mod: bool = false
 var wand_modifiers: Array = []
 
 
+func is_modifier():
+	return is_wand_mod or is_behavior_mod or is_cast_mod
+
+
 func duplicate():
 	var new = get_script().new()
 	new.name = name

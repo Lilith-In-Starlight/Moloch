@@ -167,8 +167,8 @@ func _input(event: InputEvent) -> void:
 										else:
 											output("[color=red]No inventory space[/color]")
 						"wandjson": 
-							if Items.player_wands[Items.selected_wand] != null:
-								OS.set_clipboard(Items.player_wands[Items.selected_wand].get_json())
+							if Items.get_player_wand() != null:
+								OS.set_clipboard(Items.get_player_wand().get_json())
 						"givemod":
 							if cmd.size() == 3:
 								if Items.base_spell_mods.has(cmd[1]):

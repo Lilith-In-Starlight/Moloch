@@ -345,7 +345,7 @@ func _process(delta):
 					which_inventory = 0
 					which_slot = 5
 				elif Input.is_action_just_pressed("scroll_right"):
-					if Items.player_wands[Items.selected_wand] != null:
+					if Items.get_player_wand() != null:
 						which_inventory = 1
 					else:
 						which_inventory = 0
@@ -356,7 +356,7 @@ func _process(delta):
 					which_slot -= 1
 					if which_slot < 0:
 						which_slot = 0
-						if Items.player_wands[Items.selected_wand] != null:
+						if Items.get_player_wand() != null:
 							which_inventory = 1
 				elif Input.is_action_just_released("scrolldown"):
 					which_slot = which_slot + 1
@@ -366,17 +366,17 @@ func _process(delta):
 				elif Input.is_action_just_pressed("scroll_left"):
 					which_inventory = 2
 				elif Input.is_action_just_pressed("scroll_right"):
-					if Items.player_wands[Items.selected_wand] != null:
+					if Items.get_player_wand() != null:
 						which_inventory = 1
 				$HUD/ControllerSelect.rect_position = Vector2(4+16+8,62+3+20*which_slot)
 			1:
 				if Input.is_action_just_released("scrollup"):
 					which_slot -= 1
 					if which_slot < 0:
-						which_slot = Items.player_wands[Items.selected_wand].spell_capacity - 1
+						which_slot = Items.get_player_wand().spell_capacity - 1
 				elif Input.is_action_just_released("scrolldown"):
 					which_slot = which_slot + 1
-					if which_slot >= Items.player_wands[Items.selected_wand].spell_capacity:
+					if which_slot >= Items.get_player_wand().spell_capacity:
 						which_slot = 0
 				elif Input.is_action_just_pressed("scroll_left"):
 					which_inventory = 2
@@ -406,25 +406,27 @@ func _process(delta):
 		match clicked:
 			1:
 				if slot != -1:
-					clicked_array = Items.player_wands[Items.selected_wand].spells
-					clicked_array_max = Items.player_wands[Items.selected_wand].spell_capacity
-					clicked_array_type = "spell"
-					
 					doswap = false
-					print(clicked_array.size(), slot)
-					if clicked_array.size() == clicked_array_max or mouse_spell == null or clicked_array.size() <= slot or Input.is_key_pressed(KEY_SHIFT):
-						doswap = true
-					else:
-						var new_array = []
-						for i in clicked_array.size() + 1:
-							if i < slot + 1:
-								new_array.append(clicked_array[i])
-							elif i == slot + 1:
-								new_array.append(mouse_spell)
-							else:
-								new_array.append(clicked_array[i-1])
-						Items.player_wands[Items.selected_wand].spells = new_array
-						mouse_spell = null
+					
+					if Items.get_player_wand() != null:
+						clicked_array = Items.get_player_wand().spells
+						clicked_array_max = Items.get_player_wand().spell_capacity
+						clicked_array_type = "spell"
+						
+						print(clicked_array.size(), slot)
+						if clicked_array.size() == clicked_array_max or mouse_spell == null or clicked_array.size() <= slot or Input.is_key_pressed(KEY_SHIFT):
+							doswap = true
+						else:
+							var new_array = []
+							for i in clicked_array.size() + 1:
+								if i < slot + 1:
+									new_array.append(clicked_array[i])
+								elif i == slot + 1:
+									new_array.append(mouse_spell)
+								else:
+									new_array.append(clicked_array[i-1])
+							Items.get_player_wand().spells = new_array
+							mouse_spell = null
 			0:
 				if slot != -1:
 					clicked_array = Items.player_spells
@@ -472,13 +474,13 @@ func _process(delta):
 				Items.player_spells[which_slot] = mouse_spell
 				mouse_spell = k
 			1:
-				if Items.player_wands[Items.selected_wand] != null:
-					var wand :Wand = Items.player_wands[Items.selected_wand]
+				if Items.get_player_wand() != null:
+					var wand :Wand = Items.get_player_wand()
 					var k :Spell = wand.spells[which_slot]
-					Items.player_wands[Items.selected_wand].spells[which_slot] = mouse_spell
+					wand.spells[which_slot] = mouse_spell
 					mouse_spell = k
 			2:
-				var k :Wand = Items.player_wands[Items.selected_wand]
+				var k :Wand = Items.get_player_wand()
 				Items.player_wands[Items.selected_wand] = mouse_wand
 				mouse_wand = k
 			3:

@@ -36,63 +36,77 @@ func _ready() -> void:
 func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("down"):
 		if not control:
-			var player_wand :Wand = Items.get_player_wand()
-			match side:
-				-1:
-					if left_wand == null:
-						left_wand = player_wand
-						Items.player_wands.pop_at(Items.selected_wand)
-					elif Items.player_wands.size() < 6:
-						Items.player_wands.append(left_wand)
-						left_wand = null
-				1:
-					if right_wand == null:
-						right_wand = player_wand
-						Items.player_wands.pop_at(Items.selected_wand)
-					elif Items.player_wands.size() < 6:
-						Items.player_wands.append(right_wand)
-						right_wand = null
+			add_wand_to_side()
 		else:
-			if uses <= 3:
-				if right_wand != null and left_wand != null:
-					var n := SWAPPING_PARTICLES.instance()
-					n.position = position + $Control.position + Vector2(0, -10)
-					get_parent().add_child(n)
-					match swap:
-						0:
-							var k := left_wand.cast_cooldown
-							left_wand.cast_cooldown = right_wand.cast_cooldown
-							right_wand.cast_cooldown = k
-						1:
-							var k := left_wand.recharge_cooldown
-							left_wand.recharge_cooldown = right_wand.recharge_cooldown
-							right_wand.recharge_cooldown = k
-						2:
-							var k := left_wand.heat_resistance
-							left_wand.heat_resistance = right_wand.heat_resistance
-							right_wand.heat_resistance = k
-						3:
-							var k := left_wand.soul_resistance
-							left_wand.soul_resistance = right_wand.soul_resistance
-							right_wand.soul_resistance = k
-						4:
-							var k := left_wand.push_resistance
-							left_wand.push_resistance = right_wand.push_resistance
-							right_wand.push_resistance = k
-					swap = randi() % PROPERTIES.size()
-					$Control/ButtonsToPress/Control/Label.text = "Swap " + PROPERTIES[swap]
-					if randf() < 0.4:
-						Player.health.poke_hole(1)
-			elif uses == 4:
-				var n := SWAPPING_DENIAL.instance()
-				n.position = position + $Control.position + Vector2(0, -10)
-				get_parent().add_child(n)
-			uses += 1
+			attempt_wand_swap()
 	
 	$PillarL/WandRenderSprite.render_wand(left_wand)
 	$PillarR/WandRenderSprite.render_wand(right_wand)
 	$PillarL/WandRenderSprite.visible = left_wand != null
 	$PillarR/WandRenderSprite.visible = right_wand != null
+
+
+func add_wand_to_side():
+	var player_wand :Wand = Items.get_player_wand()
+	match side:
+		-1:
+			if left_wand == null:
+				left_wand = player_wand
+				Items.player_wands.pop_at(Items.selected_wand)
+			elif Items.player_wands.size() < 6:
+				Items.player_wands.append(left_wand)
+				left_wand = null
+		1:
+			if right_wand == null:
+				right_wand = player_wand
+				Items.player_wands.pop_at(Items.selected_wand)
+			elif Items.player_wands.size() < 6:
+				Items.player_wands.append(right_wand)
+				right_wand = null
+
+
+func swap_wands_success():
+	if right_wand != null and left_wand != null:
+		var n := SWAPPING_PARTICLES.instance()
+		n.position = position + $Control.position + Vector2(0, -10)
+		get_parent().add_child(n)
+		match swap:
+			0:
+				var k := left_wand.cast_cooldown
+				left_wand.cast_cooldown = right_wand.cast_cooldown
+				right_wand.cast_cooldown = k
+			1:
+				var k := left_wand.recharge_cooldown
+				left_wand.recharge_cooldown = right_wand.recharge_cooldown
+				right_wand.recharge_cooldown = k
+			2:
+				var k := left_wand.heat_resistance
+				left_wand.heat_resistance = right_wand.heat_resistance
+				right_wand.heat_resistance = k
+			3:
+				var k := left_wand.soul_resistance
+				left_wand.soul_resistance = right_wand.soul_resistance
+				right_wand.soul_resistance = k
+			4:
+				var k := left_wand.push_resistance
+				left_wand.push_resistance = right_wand.push_resistance
+				right_wand.push_resistance = k
+		
+		swap = randi() % PROPERTIES.size()
+		$Control/ButtonsToPress/Control/Label.text = "Swap " + PROPERTIES[swap]
+		if randf() < 0.4:
+			Player.health.poke_hole(1)
+
+
+func attempt_wand_swap():
+	if uses <= 3:
+		swap_wands_success()
+	elif uses == 4:
+		var n := SWAPPING_DENIAL.instance()
+		n.position = position + $Control.position + Vector2(0, -10)
+		get_parent().add_child(n)
+	
+	uses += 1
 
 
 func _on_PillarL_body_entered(body: Node) -> void:
