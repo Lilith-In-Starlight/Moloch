@@ -36,17 +36,22 @@ func _ready() -> void:
 func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("down"):
 		if not control:
-			var player_wand :Wand = Items.player_wands[Items.selected_wand]
-			var k :Wand
+			var player_wand :Wand = Items.get_player_wand()
 			match side:
 				-1:
-					k = left_wand
-					left_wand = player_wand
-					Items.player_wands[Items.selected_wand] = k
+					if left_wand == null:
+						left_wand = player_wand
+						Items.player_wands.pop_at(Items.selected_wand)
+					elif Items.player_wands.size() < 6:
+						Items.player_wands.append(left_wand)
+						left_wand = null
 				1:
-					k = right_wand
-					right_wand = player_wand
-					Items.player_wands[Items.selected_wand] = k
+					if right_wand == null:
+						right_wand = player_wand
+						Items.player_wands.pop_at(Items.selected_wand)
+					elif Items.player_wands.size() < 6:
+						Items.player_wands.append(right_wand)
+						right_wand = null
 		else:
 			if uses <= 3:
 				if right_wand != null and left_wand != null:

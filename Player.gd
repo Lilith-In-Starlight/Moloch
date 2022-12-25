@@ -217,9 +217,7 @@ func _process(delta: float) -> void:
 func _physics_process(delta: float) -> void:
 	$Fire.visible = health.effects.has("onfire")
 	looking_at = get_local_mouse_position()
-	wand = null
-	if not Items.player_wands.empty():
-		wand = Items.player_wands[Items.selected_wand]
+	wand = Items.get_player_wand()
 	if not "confused" in health.effects:
 		inputs = {
 			"left":Input.is_action_pressed("left"),

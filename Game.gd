@@ -38,3 +38,8 @@ func _on_casting_spell(spell: Spell, wand: Wand, caster: Node2D, offset: float =
 		"unify":
 			_on_casting_spell(spell.input_contents[0], wand, caster)
 			_on_casting_spell(spell.input_contents[1], wand, caster)
+
+
+func _process(delta: float) -> void:
+	if Items.selected_wand >= Items.player_wands.size():
+		Items.selected_wand = Items.player_wands.size() - 1

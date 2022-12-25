@@ -436,6 +436,8 @@ func _process(delta):
 					clicked_array_type = "wand"
 					if slot <= Items.selected_wand:
 						Items.selected_wand -= 1
+					if slot < 0:
+						Items.selected_wand = 0
 			3:
 				if slot != -1:
 					clicked_array = Items.companions[slot][1]
