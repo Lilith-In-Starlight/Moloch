@@ -16,6 +16,7 @@ func _process(_delta):
 		if Input.is_action_just_pressed("down"):
 			if Items.player_wands.size() < 6:
 				Items.player_wands.append(wand)
-				wand.connect("casting_spell", get_tree().get_nodes_in_group("GameNode")[0], "_on_casting_spell")
-				Items.add_child(wand)
+				if not Items.get_children().has(wand):
+					var err = wand.connect("casting_spell", get_tree().get_nodes_in_group("GameNode")[0], "_on_casting_spell")
+					Items.add_child(wand)
 				queue_free()
