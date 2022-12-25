@@ -8,7 +8,7 @@ const PROPERTIES := {
 	1 : "Recharge Time",
 	2 : "Heat Resistance",
 	3 : "Soul Resistance",
-	4 : "Push Resistance",
+	4 : "Projectile Speed",
 }
 
 var side :int = 0
@@ -88,9 +88,9 @@ func swap_wands_success():
 				left_wand.soul_resistance = right_wand.soul_resistance
 				right_wand.soul_resistance = k
 			4:
-				var k := left_wand.push_resistance
-				left_wand.push_resistance = right_wand.push_resistance
-				right_wand.push_resistance = k
+				var k := left_wand.projectile_speed
+				left_wand.projectile_speed = right_wand.projectile_speed
+				right_wand.projectile_speed = k
 		
 		swap = randi() % PROPERTIES.size()
 		$Control/ButtonsToPress/Control/Label.text = "Swap " + PROPERTIES[swap]

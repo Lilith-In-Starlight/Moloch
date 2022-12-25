@@ -238,7 +238,7 @@ func _process(delta):
 						new_text += "\n[img]res://Sprites/Menus/CooldownIcon.png[/img] Recharge Time: " + str(d_wand.recharge_cooldown).pad_decimals(3) + "s"
 						new_text += "\nTemp. Resistance: " + str(1.0/d_wand.heat_resistance).pad_decimals(2)
 						new_text += "\nSoul Resistance: " + str(1.0/d_wand.soul_resistance).pad_decimals(2)
-						new_text += "\nPush Resistance: " + str(1.0/d_wand.push_resistance).pad_decimals(2)
+						new_text += "\nProjectile Speed: " + str(d_wand.projectile_speed).pad_decimals(2)
 						if d_wand.shuffle:
 							new_text += "\nShuffle"
 						if DescriptionBoxInfo.bbcode_text != new_text:
