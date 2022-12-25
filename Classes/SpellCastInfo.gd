@@ -6,7 +6,6 @@ var Caster :Node2D
 var wand :Wand = null
 var goal :Vector2
 var goal_offset := Vector2(0, 0)
-var projectile_speed := 3.0
 
 var spell_offset := Vector2(0, 0)
 
@@ -14,7 +13,8 @@ var modifiers := []
 
 
 func set_position(CastEntity:Node2D):
-	CastEntity.position = get_position()
+	if get_position() != null:
+		CastEntity.position = get_position()
 
 
 func get_position():
@@ -25,6 +25,7 @@ func get_position():
 		if Caster.has_method("cast_from"):
 			return Caster.cast_from() + spell_offset
 		return Caster.position + spell_offset
+	return null
 
 func set_goal():
 	if is_instance_valid(Caster):

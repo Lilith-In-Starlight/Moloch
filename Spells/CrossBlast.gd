@@ -20,7 +20,7 @@ func _ready():
 	CastInfo.set_goal()
 	CastInfo.heat_caster(3.0)
 	rotate = CastInfo.goal.angle_to_point(position)
-	spell_behavior.velocity = (CastInfo.goal - position).normalized() * 60 * CastInfo.projectile_speed * 4
+	spell_behavior.velocity = (CastInfo.goal - position).normalized() * 60 * 12
 	$TextureProgress.radial_initial_angle += rad2deg(rotate)
 	$TextureProgress2.radial_initial_angle += rad2deg(rotate)
 	Map.play_sound(preload("res://Sfx/spells/laserfire01.wav"), position, 1.0, 0.8+randf()*0.4)

@@ -13,7 +13,7 @@ func _ready():
 	CastInfo.set_position(self)
 	CastInfo.set_goal()
 	rotate = CastInfo.goal.angle_to_point(position)
-	spell_behavior.velocity = (CastInfo.goal - position).normalized() * CastInfo.projectile_speed * 60
+	spell_behavior.velocity = spell_behavior.get_initial_velocity(self) * 60
 	CastInfo.heat_caster((-12.0 - randf() * 6.0) * 0.2)
 
 func _physics_process(delta):
