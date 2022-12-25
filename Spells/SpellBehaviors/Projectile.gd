@@ -12,8 +12,12 @@ func move(gravity: float, cast_info, external_forces: Vector2 = Vector2(0, 0)):
 	var gravity_vec := Vector2(0, gravity)
 	if "invert_gravity" in cast_info.modifiers:
 		gravity_vec *= -1
+		
 	if !first_time:
 		velocity += gravity_vec
+		
+		if "acceleration" in cast_info.modifiers:
+			velocity += (cast_info.goal - cast_info.get_position()).normalized() * 2
 	output = velocity
 	
 	if "orthogonal" in cast_info.modifiers:
@@ -30,6 +34,7 @@ func move(gravity: float, cast_info, external_forces: Vector2 = Vector2(0, 0)):
 			normalized.y = -1
 		else: normalized.y = 0
 		output = normalized.normalized() * velocity.length()
-		
+	
+	
 	first_time = false
 	return output

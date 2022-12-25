@@ -17,7 +17,7 @@ func _ready():
 	CastInfo.set_position(self)
 	CastInfo.set_goal()
 	spell_behavior.velocity = (CastInfo.goal - position).normalized() * CastInfo.projectile_speed
-	rotate = CastInfo.goal.angle_to_point(position)
+	rotate = 0
 	var sound_emitter := AudioStreamPlayer2D.new()
 	sound_emitter.stream = preload("res://Sfx/spells/laserfire01.wav")
 	sound_emitter.position = position
@@ -30,9 +30,9 @@ func _ready():
 
 func _physics_process(delta):
 	timer += 0.1
-	spell_behavior.velocity = CastInfo.vector_from_angle(rotate, 60*delta * CastInfo.projectile_speed)
-	position += spell_behavior.move(0.2, CastInfo)
-	rotate += noise.get_noise_3d(position.x, position.y, timer)*(timer/60.0)
+	spell_behavior.velocity = spell_behavior.velocity.rotated(rotate)
+	position += spell_behavior.move(0.01, CastInfo)
+	rotate = noise.get_noise_3d(position.x, position.y, timer)*(timer/60.0)
 	for body in get_overlapping_bodies():
 		_on_body_entered(body)
 	if timer > 10.0:
