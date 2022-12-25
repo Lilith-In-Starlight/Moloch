@@ -125,6 +125,8 @@ func _ready():
 	register_base_mod("unify", "Unifying Cast", "Cast the next %s spells at once", preload("res://Sprites/Spells/Modifiers/UnifyingM.png"), 2, [2, 6])
 	register_behavior_mod("orthogonal", "Orthogonal Cast", "The next spell only moves orthogonally", preload("res://Sprites/Spells/Modifiers/Orthogonal.png"))
 	register_behavior_mod("acceleration", "Accelerating Projectile", "The next spell accelerates towards where you shoot it", preload("res://Sprites/Spells/Modifiers/Accel.png"))
+	register_behavior_mod("down_gravity", "Graviting", "The next projectile will be pulled by the earth", preload("res://Sprites/Spells/Modifiers/DownGrav.png"))
+	register_behavior_mod("up_gravity", "Inverted Gravity", "The next projectile will be pulled by the heavens", preload("res://Sprites/Spells/Modifiers/UpGrav.png"))
 #	register_base_mod("grenade", "Grenade Cast", "Copies spells into a grenade wand\nCopied Spells: %s", preload("res://Sprites/Spells/Modifiers/Grenade.png"), [1, 6])
 #	register_base_mod("landmine", "Landmine Cast", "Copies spells into a landmine wand\nCopied Spells: %s", preload("res://Sprites/Spells/Modifiers/Landmine.png"), [1, 6])
 	register_behavior_mod("limited", "Limited Cast", "When applicable, casts will only have effect at the end of the wand", preload("res://Sprites/Spells/Modifiers/Limited.png"))
