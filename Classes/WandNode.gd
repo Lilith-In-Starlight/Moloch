@@ -46,23 +46,16 @@ func _init():
 	
 	fix_spells()
 
+
+func _ready() -> void:
+	if get_tree().get_nodes_in_group("GameNode").empty():
+		return
+	
+	connect("casting_spell", get_tree().get_nodes_in_group("GameNode")[0], "_on_casting_spell")
+
+
 func string():
 	return "SC: " + str(spell_capacity) + " SR: " + str(cast_cooldown) + " FR: " + str(recharge_cooldown) + " S: " + str(spells) + " RC: " + str(recharge) + " R: " + str(running) + " CS: " + str(current_spell)
-
-
-#func duplicate():
-#	var w = get_script().new()
-#	w.spell_capacity = spell_capacity
-#	w.spell_recharge = spell_recharge
-#	w.full_recharge = full_recharge
-#	w.heat_resistance = heat_resistance
-#	w.soul_resistance = soul_resistance
-#	w.push_resistance = push_resistance
-#	w.color1 = color1
-#	w.color2 = color2
-#	w.color3 = color3
-#	w.spells = spells.duplicate()
-#	return w
 
 
 func shuffle():

@@ -19,6 +19,7 @@ var Map :TileMap
 
 
 func _ready():
+	Items.add_child(wand)
 	Map = get_tree().get_nodes_in_group("World")[0]
 	noise.seed = hash(self)
 	health.connect("died", self, "health_died")
@@ -26,7 +27,7 @@ func _ready():
 	health.connect("hole_poked", self, "_on_hole_poked")
 	health.blood = 0.4
 	Player = get_tree().get_nodes_in_group("Player")[0]
-	wand.full_recharge = max(wand.full_recharge, 1.5)
+	wand.recharge_cooldown = max(wand.recharge_cooldown, 1.5)
 	if Player.position.distance_to(position) < 500:
 		queue_free()
 

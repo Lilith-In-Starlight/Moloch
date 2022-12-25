@@ -264,13 +264,13 @@ func _process(delta):
 					if Input.is_action_pressed("see_info"):
 						DescriptionBox.visible = true
 						DescriptionBoxName.bbcode_text = "[color=#ffbd00]Wand[/color]"
-						DescriptionBoxInfo.bbcode_text = "Spell Cooldown: " + str(Items.companions[i][1].spell_recharge).pad_decimals(3)
-						DescriptionBoxInfo.bbcode_text += "\nUsage Cooldown: " + str(Items.companions[i][1].full_recharge).pad_decimals(3)
+						DescriptionBoxInfo.bbcode_text = "Spell Cooldown: " + str(Items.companions[i][1].cast_cooldown).pad_decimals(3)
+						DescriptionBoxInfo.bbcode_text += "\nUsage Cooldown: " + str(Items.companions[i][1].recharge_cooldown).pad_decimals(3)
 						if Items.companions[i][1].shuffle:
 							DescriptionBoxInfo.bbcode_text += "\nShuffle"
 					else:
 						ShortDescriptionBox.visible = true
-						ShortDescriptionBox.bbcode_text =  str(Items.companions[i][1].spell_recharge).pad_decimals(2) + "/" + str(Items.companions[i][1].full_recharge).pad_decimals(2)
+						ShortDescriptionBox.bbcode_text =  str(Items.companions[i][1].cast_cooldown).pad_decimals(2) + "/" + str(Items.companions[i][1].recharge_cooldown).pad_decimals(2)
 				break # Stop checking for if it's in a slot, we already did all this stuff
 	
 	# If the mouse is in the wands' spells area and is holding a wand

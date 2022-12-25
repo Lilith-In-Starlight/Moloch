@@ -104,17 +104,18 @@ func _input(event: InputEvent) -> void:
 									else:
 										if Items.player_wands.size() < 6:
 											var new_wand := Wand.new()
+											Items.add_child(new_wand)
 											var tags :Dictionary = parse_result.result
 											for i in tags:
 												tags[i] = tags[i] as String
 											if "cast" in tags:
 												if tags["cast"].is_valid_float():
-													new_wand.spell_recharge = tags["cast"] as float
+													new_wand.cast_cooldown = tags["cast"] as float
 												else:
 													output("[color=red]cast is an invalid float[/color]")
 											if "recharge" in tags:
 												if tags["recharge"].is_valid_float():
-													new_wand.full_recharge = tags["recharge"] as float
+													new_wand.recharge_cooldown = tags["recharge"] as float
 												else:
 													output("[color=red]recharge is an invalid float[/color]")
 											if "spellcap" in tags:

@@ -208,9 +208,9 @@ func finalize_world():
 	print("Autotiling has been commented out for testing")
 #	print("Step 6: Autotiling so it's pretty")
 #	update_bitmask_region(min_point, max_point)
-	# print("Step 7: Adding enemies")
-	print("Enemy generation has been commented out for testing")
-	# add_enemies()
+	print("Step 7: Adding enemies")
+	add_enemies()
+#	print("Enemy generation has been commented out for testing")
 	emit_signal("generated_world")
 	if Config.discord != null:
 		var act = Discord.Activity.new()

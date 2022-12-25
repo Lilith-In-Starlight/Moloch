@@ -14,7 +14,7 @@ var modifiers := []
 
 
 func set_position(CastEntity:Node2D):
-	if wand != null:
+	if is_instance_valid(wand):
 		if wand.spell_offset != Vector2(0, 0):
 			spell_offset = wand.spell_offset
 	if is_instance_valid(Caster):

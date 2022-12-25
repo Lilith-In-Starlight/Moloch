@@ -17,11 +17,10 @@ var aim := last_seen
 func _ready() -> void:
 	last_seen = position
 	wand = Wand.new()
-	for i in wand.spells.size():
-		wand.spells[i] = null
+	Items.add_child(wand)
 	wand.spells[0] = Items.pick_random_spell()
-	wand.full_recharge = 1.5 + randf()*2.0
-	wand.spell_recharge = 0.5 + randf()*1.3
+	wand.recharge_cooldown = 1.5 + randf()*2.0
+	wand.cast_cooldown = 0.5 + randf()*1.3
 	Map = get_tree().get_nodes_in_group("World")[0]
 	Player = get_tree().get_nodes_in_group("Player")[0]
 	health.connect("died", self, "health_died_second")
