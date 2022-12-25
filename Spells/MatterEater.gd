@@ -4,7 +4,7 @@ const AREA := 4
 const RoundParticles := preload("res://Particles/MagicDust.tscn")
 
 var CastInfo := SpellCastInfo.new()
-var spell_behavior := ProjectileBehavior.new()
+var spell_behavior := AreaBehavior.new()
 var Map :TileMap
 
 func _ready() -> void:
@@ -29,7 +29,7 @@ func _process(delta: float) -> void:
 		n.position = position
 		n.modulate = ColorN("mediumorchid")
 		get_parent().add_child(n)
-	position += spell_behavior.move(0.0, CastInfo) * delta * 60
+	spell_behavior.process_area_spell(self)
 	for x in range(-AREA,AREA+1):
 		for y in range(-AREA,AREA+1):
 			var vec := Vector2(x+int(position.x/8), y+int(position.y/8))
