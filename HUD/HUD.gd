@@ -87,6 +87,7 @@ func _process(delta):
 		$HUD/HealTutorial.visible = false
 		Config.save_config()
 		has_healed = true
+		
 	# Control the temperature vignettes
 	if Items.player_health.temperature > 30:
 		HotHUD.modulate.a = lerp(HotHUD.modulate.a, (Items.player_health.temperature-30)/110.0, 0.2)

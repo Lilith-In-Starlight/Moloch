@@ -51,6 +51,9 @@ func _ready() -> void:
 	if get_tree().get_nodes_in_group("GameNode").empty():
 		return
 	
+	if is_connected("casting_spell", get_tree().get_nodes_in_group("GameNode")[0], "_on_casting_spell"):
+		return
+	
 	connect("casting_spell", get_tree().get_nodes_in_group("GameNode")[0], "_on_casting_spell")
 
 
