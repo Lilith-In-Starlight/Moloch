@@ -29,13 +29,13 @@ func _process(delta: float) -> void:
 		n.position = position
 		n.modulate = ColorN("mediumorchid")
 		get_parent().add_child(n)
-	position += spell_behavior.move(0.0, CastInfo)
+	position += spell_behavior.move(0.0, CastInfo) * delta * 60
 	for x in range(-AREA,AREA+1):
 		for y in range(-AREA,AREA+1):
 			var vec := Vector2(x+int(position.x/8), y+int(position.y/8))
 			if Vector2(x,y).length()<=AREA:
 				Map.set_cellv(vec, Items.break_block(Map.get_cellv(vec), 0.5))
-				CastInfo.heat_caster((0.01 * delta * 60) / (0.08 + 0.3))
+				CastInfo.heat_caster((0.01 / (0.08 + 0.3)) * delta)
 
 
 func _on_Tween_tween_completed(object: Object, key: NodePath) -> void:
