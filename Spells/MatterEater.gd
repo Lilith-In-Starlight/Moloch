@@ -1,6 +1,7 @@
 extends Sprite
 
 const AREA := 4
+const RoundParticles := preload("res://Particles/MagicDust.tscn")
 
 var CastInfo := SpellCastInfo.new()
 var spell_behavior := ProjectileBehavior.new()
@@ -23,6 +24,11 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	if randf() < 0.2:
+		var n = RoundParticles.instance()
+		n.position = position
+		n.modulate = ColorN("mediumorchid")
+		get_parent().add_child(n)
 	position += spell_behavior.move(0.0, CastInfo)
 	for x in range(-AREA,AREA+1):
 		for y in range(-AREA,AREA+1):
