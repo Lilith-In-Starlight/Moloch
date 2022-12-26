@@ -81,13 +81,15 @@ func process_movement(delta:float) -> void:
 					
 					if is_on_floor():
 						state = STATES.GROUND
-						print(health.handle_impact(last_speed_before_collision))
-						if last_speed_before_collision.y > 800:
-							health.break_legs()
+						health.handle_impact(last_speed_before_collision)
 					
 					if is_on_wall():
 						state = STATES.WALL
-						
+						health.handle_impact(last_speed_before_collision)
+					
+					if is_on_ceiling():
+						health.handle_impact(last_speed_before_collision)
+					
 					if not input_pressed("jump") and jump_height_control:
 						speed.y *= 0.5
 						jump_height_control = false
