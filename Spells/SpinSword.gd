@@ -12,10 +12,10 @@ var yspeed := 0.0
 
 
 func _ready():
-	position = CastInfo.Caster.position
+	position = CastInfo.get_caster_position()
 	CastInfo.set_goal()
 	rotation = CastInfo.get_angle(self) - PI/4.0
-	position = CastInfo.Caster.position + Vector2(cos(rotation), sin(rotation))*lenght
+	position = CastInfo.get_caster_position() + Vector2(cos(rotation), sin(rotation))*lenght
 
 
 func _process(delta):
@@ -24,7 +24,7 @@ func _process(delta):
 	if angle_accel > 0.1*60:
 		angle_accel = 0.1*60
 	if is_instance_valid(CastInfo.Caster):
-		position = CastInfo.Caster.position + Vector2(cos(rotation), sin(rotation))*lenght + Vector2(0, fallen)
+		position = CastInfo.get_caster_position() + Vector2(cos(rotation), sin(rotation))*lenght + Vector2(0, fallen)
 		if CastInfo.Caster.get("speed"):
 			CastInfo.Caster.speed += Vector2(cos(rotation), sin(rotation))*48/lenght
 	else:
