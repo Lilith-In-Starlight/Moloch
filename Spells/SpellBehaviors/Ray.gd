@@ -3,7 +3,20 @@ extends Node
 
 class_name RayBehavior
 
+signal hit_something
+signal never_hit_something
+
 var angle := 0.0
+
+var length := 2000
+
+
+func ray_setup(entity: Node2D, ray_length: float):
+	entity.CastInfo.set_position(entity)
+	entity.CastInfo.set_goal()
+	length = ray_length
+	get_angle(entity.CastInfo.goal, entity.position, entity.CastInfo)
+
 
 func get_angle(start: Vector2, end: Vector2, cast_info: SpellCastInfo):
 	var output := start.angle_to_point(end)
@@ -15,7 +28,7 @@ func get_angle(start: Vector2, end: Vector2, cast_info: SpellCastInfo):
 	return output
 
 
-func get_cast_to(length: float, cast_info: SpellCastInfo) -> Vector2:
+func get_cast_to(cast_info: SpellCastInfo) -> Vector2:
 	if cast_info.modifiers.has("limited"):
 		cast_info.vector_from_angle(angle, 2)
 	return cast_info.vector_from_angle(angle, length)

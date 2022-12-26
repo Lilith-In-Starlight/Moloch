@@ -10,18 +10,16 @@ var spell_behavior = RayBehavior.new()
 var timer := 0.0
 
 func _ready():
+	add_child(spell_behavior)
+	spell_behavior.ray_setup(self, 30000)
 	WorldMap = get_tree().get_nodes_in_group("World")[0]
-	CastInfo.set_position(self)
-	CastInfo.set_goal()
-	spell_behavior.get_angle(CastInfo.goal, position, CastInfo)
-	cast_to = CastInfo.vector_from_angle(spell_behavior.angle, 30000)
+	cast_to = spell_behavior.get_cast_to(CastInfo)
 
 
 func _physics_process(delta):
 	CastInfo.set_position(self)
 	CastInfo.set_goal()
-	spell_behavior.get_angle(CastInfo.goal, position, CastInfo)
-	cast_to = CastInfo.vector_from_angle(spell_behavior.angle, 30000)
+	cast_to = spell_behavior.get_cast_to(CastInfo)
 	CastInfo.heat_caster(1/60.0)
 	if is_colliding():
 		var pos := get_collision_point()
