@@ -18,7 +18,7 @@ func _ready() -> void:
 		angle = CastInfo.get_angle(self)
 		next_shoot_angle = angle
 		
-	spell_behavior.velocity = Vector2(cos(angle), sin(angle)) * CastInfo.wand.projectile_speed
+	spell_behavior.velocity = Vector2(cos(angle), sin(angle)) * 3
 	Map.play_sound(preload("res://Sfx/spells/laserfire01.wav"), position, 1.0, 0.8+randf()*0.4)
 
 
