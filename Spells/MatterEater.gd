@@ -8,13 +8,14 @@ var spell_behavior := AreaBehavior.new()
 var Map :TileMap
 
 func _ready() -> void:
-	spell_behavior.velocity = Vector2(0, 0)
+	CastInfo.set_goal()
+	CastInfo.set_position(self)
+	spell_behavior.projectile_side.velocity = spell_behavior.get_initial_velocity(self)
 	if randf() > 0.5:
 		scale.x = -1
 	if randf() > 0.5:
 		scale.y = -1
 	Map = get_tree().get_nodes_in_group("World")[0]
-	CastInfo.set_position(self)
 
 	var point := Vector2(int(position.x/8), int(position.y/8))
 	Map.update_bitmask_region(point-Vector2(AREA,AREA), point+Vector2(AREA,AREA))
@@ -29,7 +30,7 @@ func _process(delta: float) -> void:
 		n.position = position
 		n.modulate = ColorN("mediumorchid")
 		get_parent().add_child(n)
-	spell_behavior.process_area_spell(self)
+	position += spell_behavior.projectile_side.move(0.0, CastInfo) * delta * 60
 	for x in range(-AREA,AREA+1):
 		for y in range(-AREA,AREA+1):
 			var vec := Vector2(x+int(position.x/8), y+int(position.y/8))
