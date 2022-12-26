@@ -414,24 +414,36 @@ func _process(delta):
 						clicked_array_max = Items.get_player_wand().spell_capacity
 						clicked_array_type = "spell"
 						
-						print(clicked_array.size(), slot)
-						if clicked_array.size() == clicked_array_max or mouse_spell == null or clicked_array.size() <= slot or Input.is_key_pressed(KEY_SHIFT):
-							doswap = true
+						
+						if clicked_array.size() == clicked_array_max or mouse_spell == null or clicked_array.size() < slot or not Input.is_key_pressed(KEY_SHIFT):
+							if Input.is_key_pressed(KEY_SHIFT) and Items.player_spells.size() < 6 and mouse_spell == null and clicked_array.size() > slot:
+								var spell_to_move = clicked_array.pop_at(slot)
+								Items.player_spells.append(spell_to_move)
+							else:
+								doswap = true
 						else:
 							var new_array = []
 							for i in clicked_array.size() + 1:
-								if i < slot + 1:
+								if i < slot:
 									new_array.append(clicked_array[i])
-								elif i == slot + 1:
+								elif i == slot:
 									new_array.append(mouse_spell)
 								else:
-									new_array.append(clicked_array[i-1])
+									new_array.append(clicked_array[i - 1])
 							Items.get_player_wand().spells = new_array
 							mouse_spell = null
 			0:
 				if slot != -1:
 					clicked_array = Items.player_spells
 					clicked_array_type = "spell"
+					
+					var current_wand_spells = Items.get_player_wand().spells
+					var current_wand_capacity = Items.get_player_wand().spell_capacity
+					
+					if Input.is_key_pressed(KEY_SHIFT) and Items.player_spells.size() > slot and current_wand_spells.size() < current_wand_capacity:
+						var spell_to_move = clicked_array.pop_at(slot)
+						current_wand_spells.append(spell_to_move)
+						doswap = false
 					
 			2:
 				if slot != -1:
