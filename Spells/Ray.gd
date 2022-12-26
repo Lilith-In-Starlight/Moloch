@@ -34,7 +34,6 @@ func _physics_process(delta):
 
 
 func _on_hit_something():
-	print(spell_behavior.get_collider().collision_mask)
 	var col = spell_behavior.get_collider()
 	if col.has_method("health_object") and not did:
 		col.health_object().poke_hole(1, CastInfo.Caster)

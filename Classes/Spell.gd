@@ -23,6 +23,7 @@ var input_contents: Array = []
 var is_wand_mod: bool = false
 var wand_modifiers: Array = []
 
+var iters := 0
 
 func is_modifier():
 	return is_wand_mod or is_behavior_mod or is_cast_mod
