@@ -17,9 +17,9 @@ var force := Vector2()
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	CastInfo.set_goal()
-	position = CastInfo.Caster.position + (CastInfo.goal - CastInfo.Caster.position).normalized()*50
+	position = CastInfo.get_caster_position() + (CastInfo.goal - CastInfo.get_caster_position()).normalized()*50
 	spell_behavior.velocity = spell_behavior.get_initial_velocity(self) * 3
-	move_to = CastInfo.Caster.position
+	move_to = CastInfo.get_caster_position()
 	
 	yield(get_tree().create_timer(6.0), "timeout")
 	start_fall = true
@@ -32,7 +32,7 @@ func _physics_process(delta):
 		grav += delta * 60
 		force = force.move_toward(Vector2(), 5*delta*60)
 	else:
-		move_to = move_to.move_toward(CastInfo.Caster.position, 10*delta*60)
+		move_to = move_to.move_toward(CastInfo.get_caster_position(), 10*delta*60)
 		force = force.move_toward((move_to - position)*0.5, 5*delta*60)
 	
 	

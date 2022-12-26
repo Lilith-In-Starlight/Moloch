@@ -5,7 +5,7 @@ var CastInfo := SpellCastInfo.new()
 
 
 func _ready() -> void:
-	position = CastInfo.Caster.position
+	position = CastInfo.get_caster_position()
 	for i in get_tree().get_nodes_in_group("ReturnCastEntities"):
 		if is_instance_valid(i.CastInfo.Caster):
 			if i.CastInfo.wand == CastInfo.wand and i.CastInfo.Caster == CastInfo.Caster:

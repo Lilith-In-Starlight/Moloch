@@ -65,6 +65,9 @@ var dead := false
 var chances := 0
 var guarantees := 0
 
+var leg_impact_resistance := 700.0
+var side_resistance := 500
+
 
 func shatter_soul(freq :float, from: Node2D = null, side := false) -> void:
 	soul -= freq
@@ -172,3 +175,15 @@ func break_legs():
 		emit_signal("broken_leg", d)
 		total_broken_appendages += d
 	broken_moving_appendages = min(broken_moving_appendages + brkn_legs, 2)
+
+
+func handle_impact(force: Vector2):
+	if force.y > leg_impact_resistance:
+		break_legs()
+	if force.y > leg_impact_resistance * 2:
+		break_legs()
+		poke_hole(1)
+	if abs(force.x) > side_resistance:
+		poke_hole(1)
+	if abs(force.y) < leg_impact_resistance * -1.5:
+		poke_hole(1)

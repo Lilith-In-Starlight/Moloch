@@ -12,6 +12,9 @@ var spell_offset := Vector2(0, 0)
 var modifiers := []
 
 
+var last_known_caster_position := Vector2(0, 0)
+
+
 func set_position(CastEntity:Node2D):
 	if get_position() != null:
 		CastEntity.position = get_position()
@@ -77,3 +80,10 @@ func vector_from_angle(angle:float, length:float) -> Vector2:
 	if "limited" in modifiers:
 		return Vector2(cos(angle), sin(angle)) * 2.0
 	return Vector2(cos(angle), sin(angle)) * length
+
+
+func get_caster_position():
+	if is_instance_valid(Caster):
+		last_known_caster_position = Caster.position
+		return Caster.position
+	return last_known_caster_position

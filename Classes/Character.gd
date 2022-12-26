@@ -81,6 +81,7 @@ func process_movement(delta:float) -> void:
 					
 					if is_on_floor():
 						state = STATES.GROUND
+						print(health.handle_impact(last_speed_before_collision))
 						if last_speed_before_collision.y > 800:
 							health.break_legs()
 					
