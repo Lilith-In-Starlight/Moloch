@@ -10,10 +10,10 @@ func move(gravity: float, cast_info, external_forces: Vector2 = Vector2(0, 0)):
 	velocity += external_forces
 	
 	var gravity_vec := Vector2(0, gravity)
-	if "down_gravity" in cast_info.modifiers and gravity_vec.y < 5:
-		gravity_vec.y = 5
-	elif "up_gravity" in cast_info.modifiers and gravity_vec.y > -5:
-		gravity_vec.y = -5
+	if "down_gravity" in cast_info.modifiers and gravity_vec.y < 0.5:
+		gravity_vec.y = 0.5
+	elif "up_gravity" in cast_info.modifiers and gravity_vec.y > -0.5:
+		gravity_vec.y = -0.5
 	elif "up_gravity" in cast_info.modifiers and "down_gravity" in cast_info.modifiers:
 		gravity_vec.y = 0
 		
