@@ -23,6 +23,8 @@ func ray_setup(entity: Node2D, ray_length: float):
 	entity.CastInfo.set_position(entity)
 	entity.CastInfo.set_goal()
 	length = ray_length
+	if entity.CastInfo.modifiers.has("fractal"):
+		connect("never_hit_something", get_tree().get_nodes_in_group("GameNode")[0], "_on_casting_spell", [entity.CastInfo.spell, entity.CastInfo.wand, self])
 	get_angle(entity.CastInfo.goal, entity.position, entity.CastInfo)
 
 
@@ -40,7 +42,7 @@ func get_cast_to_from_cast_info(cast_info: SpellCastInfo) -> Vector2:
 	if cast_info.modifiers.has("limited"):
 		cast_info.vector_from_angle(angle, 2)
 	return cast_info.vector_from_angle(angle, length)
-	
+
 
 func cast(cast_info: SpellCastInfo):
 	cast_to = get_cast_to_from_cast_info(cast_info)
