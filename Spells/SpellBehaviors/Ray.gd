@@ -24,7 +24,7 @@ func ray_setup(entity: Node2D, ray_length: float):
 	entity.CastInfo.set_goal()
 	length = ray_length
 	if entity.CastInfo.modifiers.has("fractal"):
-		connect("never_hit_something", get_tree().get_nodes_in_group("GameNode")[0], "_on_casting_spell", [entity.CastInfo.spell, entity.CastInfo.wand, self])
+		connect("hit_nothing", get_tree().get_nodes_in_group("GameNode")[0], "_on_casting_spell", [entity.CastInfo.spell, entity.CastInfo.wand, self])
 	get_angle(entity.CastInfo.goal, entity.position, entity.CastInfo)
 
 
@@ -51,3 +51,19 @@ func cast(cast_info: SpellCastInfo):
 		emit_signal("hit_something")
 	else:
 		emit_signal("hit_nothing")
+
+
+func looking_at():
+	if is_colliding():
+		var pos :Vector2 = get_collision_point()
+		var normal :Vector2 = get_collision_normal()
+		return (pos - global_position).bounce(normal)*20 + pos
+	
+	return cast_to
+
+
+func cast_from():
+	if is_colliding():
+		return get_collision_point() - cast_to.normalized()
+	
+	return cast_to

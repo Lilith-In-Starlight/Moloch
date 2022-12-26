@@ -20,21 +20,6 @@ func _ready():
 	Map.play_sound(preload("res://Sfx/spells/laserfire01.wav"), position, 1.0, 0.8+randf()*0.4)
 
 
-func looking_at():
-	if spell_behavior.is_colliding():
-		var pos :Vector2 = spell_behavior.get_collision_point()
-		var normal :Vector2 = spell_behavior.get_collision_normal()
-		print(normal)
-		return (pos - position).bounce(normal.normalized())*20 + pos
-	else:
-		return spell_behavior.cast_to
-
-
-func cast_from():
-	if spell_behavior.is_colliding():
-		return spell_behavior.get_collision_point() - spell_behavior.cast_to.normalized() * 3
-
-
 func _on_hit_something():
 	var pos :Vector2 = spell_behavior.get_collision_point()
 	if spell_behavior.get_collider().has_method("health_object") and not did:
@@ -62,7 +47,7 @@ func _on_hit_nothing():
 
 func _on_new_bounce_timeout():
 	var new = load("res://Spells/BouncyRay.tscn").instance()
-	new.CastInfo.Caster = self
+	new.CastInfo.Caster = spell_behavior
 	new.times_done = times_done + 1
 	get_parent().add_child(new)
 	queue_free()
