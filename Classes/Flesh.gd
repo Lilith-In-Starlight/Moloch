@@ -65,8 +65,12 @@ var dead := false
 var chances := 0
 var guarantees := 0
 
+<<<<<<< HEAD
 var leg_impact_resistance := 700.0
 var side_resistance := 500
+=======
+var leg_impact_resistance := 15.0
+>>>>>>> 7e0d93d (Give the Flesh class a function to handle impact forces)
 
 
 func shatter_soul(freq :float, from: Node2D = null, side := false) -> void:
