@@ -10,11 +10,13 @@ var casted := false
 var did := false
 
 func _ready():
+	add_child(spell_behavior)
+	spell_behavior.ray_setup(self, 2000)
 	CastInfo.set_position(self)
 	CastInfo.set_goal()
 	spell_behavior.get_angle(CastInfo.goal + CastInfo.goal_offset, position, CastInfo)
-	cast_to = spell_behavior.get_cast_to(2000, CastInfo)
-	position += spell_behavior.get_cast_to(1, CastInfo)
+	cast_to = spell_behavior.get_cast_to(CastInfo)
+	position += spell_behavior.get_cast_to(CastInfo).normalized()
 	var Map :TileMap = get_tree().get_nodes_in_group("World")[0]
 	Map.play_sound(preload("res://Sfx/spells/laserfire01.wav"), position, 1.0, 0.8+randf()*0.4)
 
@@ -35,7 +37,7 @@ func _physics_process(delta):
 			enabled = false
 			new.times_done = times_done + 1
 	else:
-		$RayCast2D.points[1] = spell_behavior.get_cast_to(2000, CastInfo)
+		$RayCast2D.points[1] = spell_behavior.get_cast_to(CastInfo)
 	if timer > 0.2:
 		queue_free()
 
