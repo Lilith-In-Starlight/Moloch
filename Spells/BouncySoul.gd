@@ -18,7 +18,7 @@ func _ready():
 	rotate = CastInfo.get_angle(self)
 	spell_behavior.velocity = spell_behavior.get_initial_velocity(self)
 	Ray.cast_to = spell_behavior.velocity
-	Map.play_sound(preload("res://Sfx/spells/laserfire01.wav"), position, 1.0, 0.8+randf()*0.4)
+	Map.play_sound(preload("res://Sfx/spells/laserfire01.wav"), position, 1.0, 0.8 + randf() * 0.4)
 
 
 func _physics_process(delta):

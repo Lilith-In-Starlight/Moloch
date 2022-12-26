@@ -44,7 +44,7 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Spells/SpellBehaviors/Projectile.gd"
 }, {
-"base": "Node",
+"base": "RayCast2D",
 "class": "RayBehavior",
 "language": "GDScript",
 "path": "res://Spells/SpellBehaviors/Ray.gd"

@@ -1,4 +1,4 @@
-extends RayCast2D
+extends Node2D
 
 
 var timer := 0.0
@@ -12,8 +12,8 @@ var did := false
 func _ready():
 	add_child(spell_behavior)
 	spell_behavior.ray_setup(self, 2000)
-	cast_to = spell_behavior.get_cast_to(CastInfo)
-	enabled = true
+	spell_behavior.connect("hit_something", self, "_on_hit_something", [], 4)
+	spell_behavior.connect("hit_nothing", self, "_on_hit_nothing", [], 4)
 	var sound_emitter := AudioStreamPlayer2D.new()
 	sound_emitter.stream = preload("res://Sfx/spells/laserfire01.wav")
 	sound_emitter.position = position
@@ -27,15 +27,21 @@ func _ready():
 func _physics_process(delta):
 	timer += delta
 	CastInfo.set_position(self)
-	if is_colliding():
-		cast_to = get_collision_point() - position
-		var col := get_collider()
-		if col.has_method("health_object") and not did:
-			col.health_object().poke_hole(1, CastInfo.Caster)
-			did = true
-		$Line2D.points = [Vector2(0, 0), get_collision_point()-position]
-	else:
-		$Line2D.points = [Vector2(0, 0), cast_to]
+	spell_behavior.cast(CastInfo)
 	
 	if timer > 0.05:
 		queue_free()
+
+
+func _on_hit_something():
+	print(spell_behavior.get_collider().collision_mask)
+	var col = spell_behavior.get_collider()
+	if col.has_method("health_object") and not did:
+		col.health_object().poke_hole(1, CastInfo.Caster)
+		did = true
+	$Line2D.points = [Vector2(0, 0), spell_behavior.get_collision_point() - position]
+
+
+func _on_hit_nothing():
+	$Line2D.points = [Vector2(0, 0), spell_behavior.cast_to]
+	
