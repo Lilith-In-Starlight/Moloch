@@ -3,6 +3,7 @@ extends Resource
 class_name SpellCastInfo
 
 var Caster :Node2D
+var spell :Spell
 var wand :Wand = null
 var goal :Vector2
 var goal_offset := Vector2(0, 0)

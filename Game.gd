@@ -14,6 +14,7 @@ func _on_casting_spell(spell: Spell, wand: Wand, caster: Node2D, offset: float =
 		spell_instance.CastInfo.goal = caster.looking_at()
 		spell_instance.CastInfo.wand = wand
 		spell_instance.CastInfo.modifiers = spell.behavior_modifiers
+		spell_instance.CastInfo.spell = spell
 		add_child(spell_instance)
 		
 		return
