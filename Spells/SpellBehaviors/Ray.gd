@@ -23,9 +23,11 @@ func ray_setup(entity: Node2D, ray_length: float):
 	entity.CastInfo.set_position(entity)
 	entity.CastInfo.set_goal()
 	length = ray_length
-	if entity.CastInfo.modifiers.has("fractal"):
-		connect("hit_nothing", get_tree().get_nodes_in_group("GameNode")[0], "_on_casting_spell", [entity.CastInfo.spell, entity.CastInfo.wand, self])
 	get_angle(entity.CastInfo.goal, entity.position, entity.CastInfo)
+	if entity.CastInfo.modifiers.has("down_gravity") or entity.CastInfo.modifiers.has("up_gravity"):
+		var original_length = length 
+		length = 20
+		connect("hit_nothing", get_tree().get_nodes_in_group("GameNode")[0], "_on_casting_spell", [entity.CastInfo.spell, entity.CastInfo.wand, self])
 
 
 func get_angle(start: Vector2, end: Vector2, cast_info: SpellCastInfo):
@@ -53,17 +55,28 @@ func cast(cast_info: SpellCastInfo):
 		emit_signal("hit_nothing")
 
 
+func dry_cast(cast_info: SpellCastInfo):
+	cast_to = get_cast_to_from_cast_info(cast_info)
+	force_raycast_update()
+	return is_colliding()
+
+
 func looking_at():
+	var output: Vector2 = global_position + cast_to * 2
 	if is_colliding():
 		var pos :Vector2 = get_collision_point()
 		var normal :Vector2 = get_collision_normal()
-		return (pos - global_position).bounce(normal)*20 + pos
+		output = (pos - global_position).bounce(normal)*20 + pos
 	
-	return cast_to
+	if "down_gravity" in get_parent().CastInfo.modifiers:
+		output.y += 5
+	if "up_gravity" in get_parent().CastInfo.modifiers:
+		output.y -= 5
+	return output
 
 
 func cast_from():
 	if is_colliding():
 		return get_collision_point() - cast_to.normalized()
 	
-	return cast_to
+	return cast_to + global_position
