@@ -372,5 +372,5 @@ func _on_frame_changed() -> void:
 		Map.play_sound(preload("res://Sfx/step.wav"), position + Vector2(0, 6), 1.0, 0.8+randf()*0.4)
 
 func _on_impacted_body_top(force: float) -> void:
-	if force < health.leg_impact_resistance * 1.5:
+	if force < -health.leg_impact_resistance:
 		send_message("You have hit your head too hard")

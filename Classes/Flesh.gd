@@ -192,7 +192,7 @@ func handle_impact(force: Vector2):
 	if abs(force.x) > side_resistance:
 		poke_hole(1)
 		emit_signal("impacted_body_side", force.x)
-	if abs(force.y) < leg_impact_resistance * -1.5:
+	if abs(force.y) < -leg_impact_resistance:
 		poke_hole(1)
 		add_effect("confused")
 		emit_signal("impacted_body_top", force.y)
