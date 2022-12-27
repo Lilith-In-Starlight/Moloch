@@ -39,11 +39,22 @@ func _init():
 	# you dont want the amount of spells to be larger than the spell capacity
 	# you dont want it to be zero, that's only for the starting wand
 	var spells_to_give := clamp(min(spell_capacity, round(abs(Items.LootRNG.randfn(2.0, 3.0)))), 1, 12)
+	
 	for i in spells_to_give:
-		if Items.LootRNG.randf() < 0.3 and not (i == 0 and spells_to_give == 1):
-			spells.append(Items.pick_random_modifier())
-			continue
-		spells.append(Items.pick_random_spell())
+		var new_append: Array
+		
+		var attempts := 0
+		while attempts < 6:
+			attempts += 1
+			new_append = generate_spell_branch()
+			if spells.size() + new_append.size() < spell_capacity:
+				break
+		
+		if attempts == 6:
+			break
+		
+		if spells.size() + new_append.size() <= spell_capacity:
+			spells.append_array(new_append)
 	
 	fix_spells()
 
@@ -192,3 +203,25 @@ func get_wand_mod_property(spell):
 		"fast_recharge": return ["recharge_cooldown", spell.level]
 		"slow_cast": return ["cast_cooldown", 1/float(spell.level)]
 		"slow_recharge": return ["recharge_cooldown", 1/float(spell.level)]
+
+
+func generate_spell_branch() -> Array:
+	var new_spell := pick_spell_or_modifier()
+	var output := [new_spell]
+	
+	if not new_spell.is_modifier():
+		return output
+	
+	if new_spell.is_cast_mod:
+		for i in new_spell.inputs:
+			output.append_array(generate_spell_branch())
+	else:
+		output.append_array(generate_spell_branch())
+	
+	return output
+
+
+func pick_spell_or_modifier() -> Spell:
+	if Items.LootRNG.randf() < 0.3:
+		return Items.pick_random_modifier()
+	return Items.pick_random_spell()
