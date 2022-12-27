@@ -352,7 +352,9 @@ func _process(delta):
 				elif Input.is_action_just_pressed("scroll_right"):
 					set_next_inventory_in_cycle()
 					slot_selected_by_controller = 0
+				
 				$HUD/ControllerSelect.rect_position = Vector2(-20,20)
+			
 			INVENTORIES.PLAYER_SPELLS:
 				if Input.is_action_just_released("scrollup"):
 					slot_selected_by_controller -= 1
@@ -370,7 +372,9 @@ func _process(delta):
 				elif Input.is_action_just_pressed("scroll_right"):
 					if Items.get_player_wand() != null:
 						inventory_selected_by_controller = INVENTORIES.PLAYER_WANDS
+				
 				$HUD/ControllerSelect.rect_position = Vector2(4+16+8,62+3+20*slot_selected_by_controller)
+			
 			INVENTORIES.PLAYER_WAND_SPELLS:
 				if Input.is_action_just_released("scrollup"):
 					slot_selected_by_controller -= 1
@@ -384,6 +388,7 @@ func _process(delta):
 					inventory_selected_by_controller = INVENTORIES.PLAYER_WANDS
 				elif Input.is_action_just_pressed("scroll_right"):
 					inventory_selected_by_controller = INVENTORIES.PLAYER_SPELLS
+					
 				$HUD/ControllerSelect.rect_position = Vector2(4+3+20*slot_selected_by_controller, 20+16+8)
 		
 				
@@ -426,6 +431,7 @@ func _process(delta):
 		DescriptionBox.rect_position = mouse - Vector2(0, DescriptionBox.rect_size.y)
 	else:
 		DescriptionBox.rect_position = mouse
+	
 	ShortDescriptionBox.rect_position = mouse
 	$HUD/ShiftButton.rect_position = ShortDescriptionBox.rect_position + ShortDescriptionBox.rect_size - Vector2(19, 4)
 	$HUD/ShiftButton.visible = ShortDescriptionBox.visible
@@ -453,21 +459,21 @@ func _on_player_died():
 	player_died = true
 	$HUD/DeathSFX.play()
 
+
 func _on_level_ended():
 	level_ended = true
 	Items.level += 1
 
 
-func click_inventory_slot(clicked: int, slot: int):
+func click_inventory_slot(clicked_inventory: int, slot: int):
 	var clicked_array: Array
 	var clicked_array_max: int = 6
 	var clicked_array_type: String = ""
-	var doswap := true
 	
 	if slot == -1:
 		return
 	
-	match clicked:
+	match clicked_inventory:
 		INVENTORIES.PLAYER_WAND_SPELLS:
 			if Items.get_player_wand() == null:
 				return
@@ -493,6 +499,7 @@ func click_inventory_slot(clicked: int, slot: int):
 				handle_click_on_inventory(slot, clicked_array, clicked_array_max, clicked_array_type)
 			
 			remove_null_values_from_array(clicked_array)
+		
 		INVENTORIES.PLAYER_SPELLS:
 			clicked_array = Items.player_spells
 			clicked_array_type = "spell"
@@ -506,9 +513,9 @@ func click_inventory_slot(clicked: int, slot: int):
 			if Input.is_key_pressed(KEY_SHIFT) and Items.player_spells.size() > slot and current_wand_spells.size() < current_wand_capacity:
 				var spell_to_move = clicked_array.pop_at(slot)
 				current_wand_spells.append(spell_to_move)
-				doswap = false
 			else:
 				handle_click_on_inventory(slot, clicked_array, clicked_array_max, clicked_array_type)
+		
 		INVENTORIES.PLAYER_WANDS:
 			clicked_array = Items.player_wands
 			clicked_array_type = "wand"
@@ -518,6 +525,7 @@ func click_inventory_slot(clicked: int, slot: int):
 				Items.selected_wand = 0
 			
 			handle_click_on_inventory(slot, clicked_array, clicked_array_max, clicked_array_type)
+		
 		INVENTORIES.COMPANIONS:
 			clicked_array = Items.companions[slot][1]
 			clicked_array_type = "wand"
