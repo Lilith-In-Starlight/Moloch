@@ -11,6 +11,12 @@ signal died
 signal was_damaged(type)
 signal effect_changed(effect, added)
 signal broken_leg(amount)
+<<<<<<< HEAD
+=======
+signal impacted_body_top(force)
+signal impacted_body_side(force)
+signal impacted_body_bottom(force)
+>>>>>>> eee1e04 (Added signals for bodily impact)
 
 enum DEATHS {
 	BLED,
@@ -180,10 +186,15 @@ func break_legs():
 func handle_impact(force: Vector2):
 	if force.y > leg_impact_resistance:
 		break_legs()
+		emit_signal("impacted_body_bottom", force.y)
 	if force.y > leg_impact_resistance * 2:
 		break_legs()
 		poke_hole(1)
+		emit_signal("impacted_body_bottom", force.y)
 	if abs(force.x) > side_resistance:
 		poke_hole(1)
+		emit_signal("impacted_body_side", force.x)
 	if abs(force.y) < leg_impact_resistance * -1.5:
 		poke_hole(1)
+		add_effect("confused")
+		emit_signal("impacted_body_top", force.y)
