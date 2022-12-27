@@ -297,7 +297,7 @@ func reset_player():
 	player_wands = []
 	player_wands.append(new_player_wand())
 	player_wands.append(new_player_wand())
-	match LootRNG.randi() % 4:
+	match LootRNG.randi() % 3:
 		0:
 			player_wands[0].spells = [spells[1]["short_ray"]]
 		1:
@@ -305,7 +305,7 @@ func reset_player():
 		2:
 			player_wands[0].spells = [spells[1]["soul_shatterer"]]
 	if LootRNG.randf() < 0.02:
-		player_wands[0].spells = [spells[4].values()[LootRNG.randi()%spells[4].values().size()]]
+		player_wands[0].spells = [spells[3].values()[LootRNG.randi()%spells[3].values().size()]]
 	player_wands[1].spells = [spells[2].values()[LootRNG.randi()%spells[2].values().size()]]
 
 
