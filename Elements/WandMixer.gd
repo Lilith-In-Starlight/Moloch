@@ -37,7 +37,7 @@ func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("down"):
 		if not control:
 			add_wand_to_side()
-		else:
+		elif Player.position.distance_to(position) < 200:
 			attempt_wand_swap()
 	
 	$PillarL/WandRenderSprite.render_wand(left_wand)
@@ -102,8 +102,12 @@ func attempt_wand_swap():
 	if uses <= 3:
 		swap_wands_success()
 	elif uses == 4:
-		var n := SWAPPING_DENIAL.instance()
+		var n = SWAPPING_DENIAL.instance()
 		n.position = position + $Control.position + Vector2(0, -10)
+		get_parent().add_child(n)
+		
+		n = preload("res://Particles/Earthquake.tscn").instance()
+		n.position = position  + $Control.position - Vector2(0, 16)
 		get_parent().add_child(n)
 	
 	uses += 1

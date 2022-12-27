@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Particles/EarthquakeDebris.gd" type="Script" id=1]
+[ext_resource path="res://EditorTileset.tres" type="TileSet" id=2]
+
+[node name="Debris" type="RigidBody2D"]
+collision_layer = 0
+collision_mask = 27
+mass = 500.0
+gravity_scale = 8.0
+script = ExtResource( 1 )
+
+[node name="TileMap" type="TileMap" parent="."]
+tile_set = ExtResource( 2 )
+cell_size = Vector2( 8, 8 )
+collision_use_parent = true
+collision_layer = 0
+collision_mask = 0
+format = 1
