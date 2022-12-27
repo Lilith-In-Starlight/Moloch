@@ -173,9 +173,6 @@ glow_blend_mode = 1
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 3 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Symbol" type="TextureRect" parent="."]
 material = SubResource( 14 )
@@ -224,7 +221,7 @@ __meta__ = {
 margin_right = 40.0
 margin_bottom = 14.0
 theme = ExtResource( 6 )
-text = "Nightly 261222"
+text = "Nightly 271222"
 
 [node name="Animations" type="AnimationPlayer" parent="."]
 anims/Fadein = SubResource( 1 )
