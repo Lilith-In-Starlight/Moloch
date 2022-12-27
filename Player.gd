@@ -219,7 +219,7 @@ func _process(delta: float) -> void:
 func _physics_process(delta: float) -> void:
 	var controller_axis := Vector2(Input.get_joy_axis(0, 2), Input.get_joy_axis(0, 3)) * 50.0
 	$Fire.visible = health.effects.has("onfire")
-	if Input.get_connected_joypads().empty():
+	if !Config.last_input_was_controller:
 		looking_at = get_local_mouse_position()
 	else:
 		if controller_axis.length() > 10:
@@ -249,7 +249,8 @@ func _physics_process(delta: float) -> void:
 	process_movement(delta)
 	handle_wand_sprite($WandRender)
 	animation_info($Player)
-	if Input.get_connected_joypads().empty():
+	
+	if !Config.last_input_was_controller:
 		$CastDirection.cast_to = get_local_mouse_position().normalized()*30
 	else:
 		$CastDirection.cast_to = last_controller_aim.normalized() * 30
@@ -261,7 +262,7 @@ func _physics_process(delta: float) -> void:
 	
 	# Control the camera with the mouse
 	var coffset := get_local_mouse_position()/2.5
-	if !Input.get_connected_joypads().empty():
+	if Config.last_input_was_controller:
 		coffset = last_controller_aim * 0.5
 	Cam.offset += (coffset-Cam.offset)/5.0
 	Cam.position = lerp(Cam.position, position, 0.1)

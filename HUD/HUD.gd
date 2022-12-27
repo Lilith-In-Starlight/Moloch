@@ -1,5 +1,13 @@
 extends CanvasLayer
 
+enum INVENTORIES {
+	NONE = -1,
+	PLAYER_WANDS,
+	COMPANIONS,
+	PLAYER_SPELLS,
+	PLAYER_WAND_SPELLS,
+}
+
 onready var UsefulAdvice := $HUD/Generating/UsefulAdvice
 onready var LastItem := $HUD/LastItem
 onready var HotHUD := $HUD/Hot
@@ -62,8 +70,8 @@ var end_times : String # How long did the run last
 
 
 # Control the inventory with controller
-var which_inventory := 2
-var which_slot := 0
+var inventory_selected_by_controller :int = INVENTORIES.PLAYER_WANDS
+var slot_selected_by_controller := 0
 
 var has_healed := false
 var has_seen_info := false
@@ -209,8 +217,8 @@ func _process(delta):
 	DescriptionBox.visible = false
 	ShortDescriptionBox.visible = false
 	# Variables for which inventory the player click and what slot
-	var clicked := -1
-	var slot := -1
+	var clicked_inventory :int = INVENTORIES.NONE
+	var clicked_slot := -1
 	block_cast = false # Also stop blocking the player's ability to
 	# cast spells
 	
@@ -223,8 +231,8 @@ func _process(delta):
 			if mouse.x >= 4+i*(16+4) and mouse.x < 4+(i+1)*(16+4):
 				# Set the inventory and slot clicked, and don't let the
 				# player cast spells
-				clicked = 2
-				slot = i
+				clicked_inventory = INVENTORIES.PLAYER_WANDS
+				clicked_slot = i
 				# If the slot isn't empty
 				if i < Items.player_wands.size():
 					var d_wand :Wand = Items.player_wands[i]
@@ -257,8 +265,8 @@ func _process(delta):
 			if mouse.x >= 140+i*(16+4) and mouse.x < 140+(i+1)*(16+4):
 				# Set the inventory and slot clicked, and don't let the
 				# player cast spells
-				clicked = 3
-				slot = i
+				clicked_inventory = INVENTORIES.COMPANIONS
+				clicked_slot = i
 				# If the slot isn't empty
 				if Items.companions[i][1] != null:
 					# Which information to set
@@ -284,9 +292,9 @@ func _process(delta):
 				if i < wand.spell_capacity:
 					# Don't let the player cast spells
 					block_cast = true
-					clicked = 1
+					clicked_inventory = INVENTORIES.PLAYER_WAND_SPELLS
 					# Then this is the slot that was clicked (aka I didn't click an empty area)
-					slot = i
+					clicked_slot = i
 					# Set the description accordingly
 					if i < wand.spells.size():
 						if Input.is_action_pressed("see_info"):
@@ -304,8 +312,8 @@ func _process(delta):
 			# If it's in a slot
 			if mouse.y >= 62+i*(16+4) and mouse.y < 62+(i+1)*(16+4):
 				# Set what inventory and slot was clicked, block spell casts
-				clicked = 0
-				slot = i
+				clicked_inventory = INVENTORIES.PLAYER_SPELLS
+				clicked_slot = i
 				# Descriptions
 				if i < Items.player_spells.size():
 					if Input.is_action_pressed("see_info"):
@@ -328,8 +336,8 @@ func _process(delta):
 	
 	# Navigate inventory with controller
 	if Config.last_input_was_controller:
-		match which_inventory:
-			2:
+		match inventory_selected_by_controller:
+			INVENTORIES.PLAYER_WANDS:
 				if Input.is_action_just_released("scrollup"):
 					Items.selected_wand -= 1
 					if Items.selected_wand < 0:
@@ -337,241 +345,60 @@ func _process(delta):
 				elif Input.is_action_just_released("scrolldown"):
 					Items.selected_wand = Items.selected_wand + 1
 					if Items.selected_wand >= 6:
-						Items.selected_wand = 5
-						if Items.companions.size() > 0:
-							which_inventory = 3
-						else:
-							Items.selected_wand = 0
+						Items.selected_wand = 0
 				elif Input.is_action_just_pressed("scroll_left"):
-					which_inventory = 0
-					which_slot = 5
+					set_previous_inventory_in_cycle()
+					slot_selected_by_controller = 5
 				elif Input.is_action_just_pressed("scroll_right"):
-					if Items.get_player_wand() != null:
-						which_inventory = 1
-					else:
-						which_inventory = 0
-					which_slot = 0
+					set_next_inventory_in_cycle()
+					slot_selected_by_controller = 0
 				$HUD/ControllerSelect.rect_position = Vector2(-20,20)
-			0:
+			INVENTORIES.PLAYER_SPELLS:
 				if Input.is_action_just_released("scrollup"):
-					which_slot -= 1
-					if which_slot < 0:
-						which_slot = 0
+					slot_selected_by_controller -= 1
+					if slot_selected_by_controller < 0:
+						slot_selected_by_controller = 0
 						if Items.get_player_wand() != null:
-							which_inventory = 1
+							inventory_selected_by_controller = INVENTORIES.PLAYER_WAND_SPELLS
 				elif Input.is_action_just_released("scrolldown"):
-					which_slot = which_slot + 1
-					if which_slot >= 6:
-						which_slot = 0
-						which_inventory = 2
+					slot_selected_by_controller = slot_selected_by_controller + 1
+					if slot_selected_by_controller >= 6:
+						slot_selected_by_controller = 0
+						inventory_selected_by_controller = INVENTORIES.PLAYER_WANDS
 				elif Input.is_action_just_pressed("scroll_left"):
-					which_inventory = 2
+					inventory_selected_by_controller = INVENTORIES.PLAYER_WAND_SPELLS
 				elif Input.is_action_just_pressed("scroll_right"):
 					if Items.get_player_wand() != null:
-						which_inventory = 1
-				$HUD/ControllerSelect.rect_position = Vector2(4+16+8,62+3+20*which_slot)
-			1:
+						inventory_selected_by_controller = INVENTORIES.PLAYER_WANDS
+				$HUD/ControllerSelect.rect_position = Vector2(4+16+8,62+3+20*slot_selected_by_controller)
+			INVENTORIES.PLAYER_WAND_SPELLS:
 				if Input.is_action_just_released("scrollup"):
-					which_slot -= 1
-					if which_slot < 0:
-						which_slot = Items.get_player_wand().spell_capacity - 1
+					slot_selected_by_controller -= 1
+					if slot_selected_by_controller < 0:
+						slot_selected_by_controller = Items.get_player_wand().spell_capacity - 1
 				elif Input.is_action_just_released("scrolldown"):
-					which_slot = which_slot + 1
-					if which_slot >= Items.get_player_wand().spell_capacity:
-						which_slot = 0
+					slot_selected_by_controller = slot_selected_by_controller + 1
+					if slot_selected_by_controller >= Items.get_player_wand().spell_capacity:
+						slot_selected_by_controller = 0
 				elif Input.is_action_just_pressed("scroll_left"):
-					which_inventory = 2
+					inventory_selected_by_controller = INVENTORIES.PLAYER_WANDS
 				elif Input.is_action_just_pressed("scroll_right"):
-					which_inventory = 0
-				$HUD/ControllerSelect.rect_position = Vector2(4+3+20*which_slot, 20+16+8)
-			3:
-				if Input.is_action_just_released("scrollup"):
-					which_slot -= 1
-					if which_slot < 0:
-						Items.selected_wand = 5
-						which_inventory = 2
-				elif Input.is_action_just_released("scrolldown"):
-					which_slot = which_slot + 1
-					if which_slot >= 6:
-						which_slot = 0
-				$HUD/ControllerSelect.rect_position = Vector2(140+8+20*which_slot, 4+16+3)
+					inventory_selected_by_controller = INVENTORIES.PLAYER_SPELLS
+				$HUD/ControllerSelect.rect_position = Vector2(4+3+20*slot_selected_by_controller, 20+16+8)
 		
 				
 	# If the player clicks a part of the inventory, swap that slot's content
 	# with the mouse slot's content
-	if not Config.last_input_was_controller and Input.is_action_just_pressed("Interact1") and clicked != -1:
-		var clicked_array: Array
-		var clicked_array_max: int = 6
-		var clicked_array_type: String = ""
-		var doswap := true
-		match clicked:
-			1:
-				if slot != -1:
-					doswap = false
-					
-					if Items.get_player_wand() != null:
-						clicked_array = Items.get_player_wand().spells
-						clicked_array_max = Items.get_player_wand().spell_capacity
-						clicked_array_type = "spell"
-						
-						
-						if clicked_array.size() == clicked_array_max or mouse_spell == null or clicked_array.size() < slot or not Input.is_key_pressed(KEY_SHIFT):
-							if Input.is_key_pressed(KEY_SHIFT) and Items.player_spells.size() < 6 and mouse_spell == null and clicked_array.size() > slot:
-								var spell_to_move = clicked_array.pop_at(slot)
-								Items.player_spells.append(spell_to_move)
-							else:
-								doswap = true
-						else:
-							var new_array = []
-							for i in clicked_array.size() + 1:
-								if i < slot:
-									new_array.append(clicked_array[i])
-								elif i == slot:
-									new_array.append(mouse_spell)
-								else:
-									new_array.append(clicked_array[i - 1])
-							Items.get_player_wand().spells = new_array
-							mouse_spell = null
-			0:
-				if slot != -1:
-					clicked_array = Items.player_spells
-					clicked_array_type = "spell"
-					
-					var current_wand_spells = Items.get_player_wand().spells
-					var current_wand_capacity = Items.get_player_wand().spell_capacity
-					
-					if Input.is_key_pressed(KEY_SHIFT) and Items.player_spells.size() > slot and current_wand_spells.size() < current_wand_capacity:
-						var spell_to_move = clicked_array.pop_at(slot)
-						current_wand_spells.append(spell_to_move)
-						doswap = false
-					
-			2:
-				if slot != -1:
-					clicked_array = Items.player_wands
-					clicked_array_type = "wand"
-					if slot <= Items.selected_wand:
-						Items.selected_wand -= 1
-					if slot < 0:
-						Items.selected_wand = 0
-			3:
-				if slot != -1:
-					clicked_array = Items.companions[slot][1]
-					clicked_array_type = "wand"
-		
-		
-		if doswap:
-			if slot < clicked_array.size():
-				var k = clicked_array[slot]
-				
-				if k is Spell:
-					clicked_array[slot] = mouse_spell
-					mouse_spell = k
-				elif k is Wand:
-					clicked_array[slot] = mouse_wand
-					mouse_wand = k
-				
-			elif slot <= clicked_array_max and clicked_array_type == "spell":
-				clicked_array.append(mouse_spell)
-				mouse_spell = null
-			elif slot <= clicked_array_max and clicked_array_type == "wand":
-				clicked_array.append(mouse_wand)
-				mouse_wand = null
-		
-		while clicked_array.find(null) != -1:
-			clicked_array.remove(clicked_array.find(null))
-			
-	elif Config.last_input_was_controller and (Input.is_action_just_pressed("select_inventory") or Input.is_action_just_pressed("select_inventory_2")):
-		var clicked_array: Array
-		var clicked_array_max: int = 6
-		var clicked_array_type: String = ""
-		var doswap := true
-		match which_inventory:
-			1:
-				if which_slot != -1:
-					doswap = false
-					
-					if Items.get_player_wand() != null:
-						clicked_array = Items.get_player_wand().spells
-						clicked_array_max = Items.get_player_wand().spell_capacity
-						clicked_array_type = "spell"
-						
-						
-						if clicked_array.size() == clicked_array_max or mouse_spell == null or clicked_array.size() < which_slot or not Input.is_key_pressed(KEY_SHIFT):
-							if Input.is_key_pressed(KEY_SHIFT) and Items.player_spells.size() < 6 and mouse_spell == null and clicked_array.size() > which_slot:
-								var spell_to_move = clicked_array.pop_at(which_slot)
-								Items.player_spells.append(spell_to_move)
-							else:
-								doswap = true
-						else:
-							var new_array = []
-							for i in clicked_array.size() + 1:
-								if i < which_slot:
-									new_array.append(clicked_array[i])
-								elif i == which_slot:
-									new_array.append(mouse_spell)
-								else:
-									new_array.append(clicked_array[i - 1])
-							Items.get_player_wand().spells = new_array
-							mouse_spell = null
-			0:
-				if which_slot != -1:
-					clicked_array = Items.player_spells
-					clicked_array_type = "spell"
-					
-					var current_wand_spells = Items.get_player_wand().spells
-					var current_wand_capacity = Items.get_player_wand().spell_capacity
-					
-					if Input.is_key_pressed(KEY_SHIFT) and Items.player_spells.size() > which_slot and current_wand_spells.size() < current_wand_capacity:
-						var spell_to_move = clicked_array.pop_at(which_slot)
-						current_wand_spells.append(spell_to_move)
-						doswap = false
-					
-			2:
-				if which_slot != -1:
-					clicked_array = Items.player_wands
-					clicked_array_type = "wand"
-					if Input.is_action_just_pressed("select_inventory_2") and Items.player_wands.size() < 6 and mouse_wand != null:
-						doswap = false
-						Items.player_wands.append(mouse_wand)
-						mouse_wand = null
-					else:
-						if which_slot <= Items.selected_wand:
-							Items.selected_wand -= 1
-						if which_slot < 0:
-							Items.selected_wand = 0
-			3:
-				if which_slot != -1:
-					clicked_array = Items.companions[which_slot][1]
-					clicked_array_type = "wand"
-		
-		
-		if doswap:
-			if which_slot < clicked_array.size():
-				var k = clicked_array[which_slot]
-				
-				if k is Spell:
-					clicked_array[which_slot] = mouse_spell
-					mouse_spell = k
-				elif k is Wand:
-					clicked_array[which_slot] = mouse_wand
-					mouse_wand = k
-				
-			elif which_slot <= clicked_array_max and clicked_array_type == "spell":
-				clicked_array.append(mouse_spell)
-				mouse_spell = null
-			elif which_slot <= clicked_array_max and clicked_array_type == "wand":
-				clicked_array.append(mouse_wand)
-				mouse_wand = null
-		
-		while clicked_array.find(null) != -1:
-			clicked_array.remove(clicked_array.find(null))
-				
+	if not Config.last_input_was_controller and Input.is_action_just_pressed("Interact1") and clicked_inventory != INVENTORIES.NONE:
+		click_inventory_slot(clicked_inventory, clicked_slot)
 	
+	elif Config.last_input_was_controller and (Input.is_action_just_pressed("select_inventory") or Input.is_action_just_pressed("select_inventory_2")):
+		controller_select_inventory()
 	
 	
 	# If the player right clicks and is not in an inventory space
 	# drop the  item
-	if (Input.is_action_just_pressed("Interact2") and clicked == -1) or (Input.is_action_just_pressed("Interact2") and Config.last_input_was_controller):
+	if (Input.is_action_just_pressed("Interact2") and clicked_inventory == INVENTORIES.NONE) or (Input.is_action_just_pressed("Interact2") and Config.last_input_was_controller):
 		if mouse_spell != null:
 			Map.summon_spell(mouse_spell, Player.position, Vector2(-120 + randf()*240, -100))
 		mouse_spell = null
@@ -630,3 +457,171 @@ func _on_level_ended():
 	level_ended = true
 	Items.level += 1
 
+
+func click_inventory_slot(clicked: int, slot: int):
+	var clicked_array: Array
+	var clicked_array_max: int = 6
+	var clicked_array_type: String = ""
+	var doswap := true
+	
+	if slot == -1:
+		return
+	
+	match clicked:
+		INVENTORIES.PLAYER_WAND_SPELLS:
+			if Items.get_player_wand() == null:
+				return
+			
+			clicked_array = Items.get_player_wand().spells
+			clicked_array_max = Items.get_player_wand().spell_capacity
+			clicked_array_type = "spell"
+			
+			
+			# Allows for minecraft-like shift-clicking on slots
+			# where shift clicking on a slot of one inventory
+			# will transfer items to the other
+			if clicked_array.size() == clicked_array_max or mouse_spell == null or clicked_array.size() <= slot:
+				if Input.is_key_pressed(KEY_SHIFT) and Items.player_spells.size() < 6 and mouse_spell == null and clicked_array.size() > slot:
+					var spell_to_move = clicked_array.pop_at(slot)
+					Items.player_spells.append(spell_to_move)
+				else:
+					handle_click_on_inventory(slot, clicked_array, clicked_array_max, clicked_array_type)
+			elif Input.is_key_pressed(KEY_SHIFT):
+				push_at(slot, Items.get_player_wand().spells, mouse_spell)
+				mouse_spell = null
+			else:
+				handle_click_on_inventory(slot, clicked_array, clicked_array_max, clicked_array_type)
+			
+			remove_null_values_from_array(clicked_array)
+		INVENTORIES.PLAYER_SPELLS:
+			clicked_array = Items.player_spells
+			clicked_array_type = "spell"
+			
+			var current_wand_spells = Items.get_player_wand().spells
+			var current_wand_capacity = Items.get_player_wand().spell_capacity
+			
+			# Allows for minecraft-like shift-clicking on slots
+			# where shift clicking on a slot of one inventory
+			# will transfer items to the other
+			if Input.is_key_pressed(KEY_SHIFT) and Items.player_spells.size() > slot and current_wand_spells.size() < current_wand_capacity:
+				var spell_to_move = clicked_array.pop_at(slot)
+				current_wand_spells.append(spell_to_move)
+				doswap = false
+			else:
+				handle_click_on_inventory(slot, clicked_array, clicked_array_max, clicked_array_type)
+		INVENTORIES.PLAYER_WANDS:
+			clicked_array = Items.player_wands
+			clicked_array_type = "wand"
+			if slot <= Items.selected_wand:
+				Items.selected_wand -= 1
+			if slot < 0:
+				Items.selected_wand = 0
+			
+			handle_click_on_inventory(slot, clicked_array, clicked_array_max, clicked_array_type)
+		INVENTORIES.COMPANIONS:
+			clicked_array = Items.companions[slot][1]
+			clicked_array_type = "wand"
+			
+			handle_click_on_inventory(slot, clicked_array, clicked_array_max, clicked_array_type)
+
+
+func controller_select_inventory():
+	var clicked_array: Array
+	var clicked_array_max: int = 6
+	var clicked_array_type: String = ""
+	var doswap := true
+	
+	if slot_selected_by_controller == -1:
+		return
+		
+	match inventory_selected_by_controller:
+		INVENTORIES.PLAYER_WAND_SPELLS:
+			if Items.get_player_wand() == null:
+				return
+			
+			clicked_array = Items.get_player_wand().spells
+			clicked_array_max = Items.get_player_wand().spell_capacity
+			clicked_array_type = "spell"
+			
+			
+			if clicked_array.size() == clicked_array_max or mouse_spell == null or clicked_array.size() < slot_selected_by_controller:
+				handle_click_on_inventory(slot_selected_by_controller, clicked_array, clicked_array_max, clicked_array_type)
+		INVENTORIES.PLAYER_SPELLS:
+			clicked_array = Items.player_spells
+			clicked_array_type = "spell"
+			
+			var current_wand_spells = Items.get_player_wand().spells
+			var current_wand_capacity = Items.get_player_wand().spell_capacity
+			
+			handle_click_on_inventory(slot_selected_by_controller, clicked_array, clicked_array_max, clicked_array_type)
+		INVENTORIES.PLAYER_WANDS:
+			clicked_array = Items.player_wands
+			clicked_array_type = "wand"
+			if Input.is_action_just_pressed("select_inventory_2") and Items.player_wands.size() < 6 and mouse_wand != null:
+				Items.player_wands.append(mouse_wand)
+				mouse_wand = null
+				remove_null_values_from_array(clicked_array)
+			else:
+				if slot_selected_by_controller <= Items.selected_wand:
+					Items.selected_wand -= 1
+				if slot_selected_by_controller < 0:
+					Items.selected_wand = 0
+				handle_click_on_inventory(slot_selected_by_controller, clicked_array, clicked_array_max, clicked_array_type)
+				
+			
+		INVENTORIES.PLAYER_COMPANIONS:
+			clicked_array = Items.companions[slot_selected_by_controller][1]
+			clicked_array_type = "wand"
+			
+			handle_click_on_inventory(slot_selected_by_controller, clicked_array, clicked_array_max, clicked_array_type)
+
+
+func handle_click_on_inventory(slot: int, clicked_array: Array, clicked_array_max: int, clicked_array_type: String):
+	if slot < clicked_array.size():
+		var k = clicked_array[slot]
+		
+		if k is Spell:
+			clicked_array[slot] = mouse_spell
+			mouse_spell = k
+		elif k is Wand:
+			clicked_array[slot] = mouse_wand
+			mouse_wand = k
+		
+	elif slot <= clicked_array_max and clicked_array_type == "spell":
+		clicked_array.append(mouse_spell)
+		mouse_spell = null
+	elif slot <= clicked_array_max and clicked_array_type == "wand":
+		clicked_array.append(mouse_wand)
+		mouse_wand = null
+	
+	remove_null_values_from_array(clicked_array)
+
+
+func remove_null_values_from_array(clicked_array):
+	while clicked_array.find(null) != -1:
+		clicked_array.remove(clicked_array.find(null))
+
+
+func push_at(index: int, array: Array, pushed):
+	var used_to_be = array[index]
+	array[index] = pushed
+	for current_index in range(index + 1, array.size()):
+		var k = array[current_index]
+		array[current_index] = used_to_be
+		used_to_be = k
+	
+	array.append(used_to_be)
+	
+
+func set_next_inventory_in_cycle():
+	match inventory_selected_by_controller:
+		INVENTORIES.PLAYER_WANDS: return INVENTORIES.PLAYER_WAND_SPELLS
+		INVENTORIES.PLAYER_WAND_SPELLS: return INVENTORIES.PLAYER_SPELLS
+		INVENTORIES.PLAYER_SPELLS: return INVENTORIES.PLAYER_WANDS
+
+
+func set_previous_inventory_in_cycle():
+	match inventory_selected_by_controller:
+		INVENTORIES.PLAYER_WANDS: return INVENTORIES.PLAYER_SPELLS
+		INVENTORIES.PLAYER_SPELLS: return INVENTORIES.PLAYER_WAND_SPELLS
+		INVENTORIES.PLAYER_WAND_SPELLS: return INVENTORIES.PLAYER_WANDS
