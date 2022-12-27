@@ -24,6 +24,7 @@ func _ready() -> void:
 	health.connect("full_healed", self, "send_message", ["Your flesh is renewed"])
 	health.connect("effect_changed", self, "_on_effect_changes")
 	health.connect("broken_leg", self, "_on_broken_leg")
+	health.connect("impacted_body_top", self, "_on_impacted_body_top")
 	Cam = get_tree().get_nodes_in_group("Camera")[0]
 	set_physics_process(false)
 	set_process(false)
@@ -369,3 +370,7 @@ func _on_hole_poked():
 func _on_frame_changed() -> void:
 	if $Player.animation in ["run", "run_lookback"] and $Player.frame in [0,3]:
 		Map.play_sound(preload("res://Sfx/step.wav"), position + Vector2(0, 6), 1.0, 0.8+randf()*0.4)
+
+func _on_impacted_body_top(force: float) -> void:
+	if force < health.leg_impact_resistance * 1.5:
+		send_message("You have hit your head too hard")
