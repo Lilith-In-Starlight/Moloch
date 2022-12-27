@@ -34,6 +34,7 @@ func get_position():
 func set_goal():
 	if is_instance_valid(Caster):
 		if Caster.has_method("looking_at"):
+			print(Caster.looking_at())
 			goal = Caster.looking_at() + goal_offset
 
 

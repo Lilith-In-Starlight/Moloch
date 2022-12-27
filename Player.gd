@@ -13,6 +13,8 @@ var died_from_own_spell := false
 
 var Map :TileMap
 
+var last_controller_aim := Vector2(0, 0)
+
 func _ready() -> void:
 	Map = get_tree().get_nodes_in_group("World")[0]
 	health = Items.player_health
@@ -215,11 +217,15 @@ func _process(delta: float) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	var controller_axis := Vector2(Input.get_joy_axis(0, 2), Input.get_joy_axis(0, 3)) * 50.0
 	$Fire.visible = health.effects.has("onfire")
 	if Input.get_connected_joypads().empty():
 		looking_at = get_local_mouse_position()
 	else:
-		looking_at = Vector2(Input.get_joy_axis(0, 2), Input.get_joy_axis(0, 3)) * 50.0
+		if controller_axis.length() > 10:
+			last_controller_aim = controller_axis
+		looking_at = last_controller_aim
+	
 	wand = Items.get_player_wand()
 	if not "confused" in health.effects:
 		inputs = {
@@ -246,7 +252,7 @@ func _physics_process(delta: float) -> void:
 	if Input.get_connected_joypads().empty():
 		$CastDirection.cast_to = get_local_mouse_position().normalized()*30
 	else:
-		$CastDirection.cast_to = Vector2(Input.get_joy_axis(0, 2), Input.get_joy_axis(0, 3)) * 30.0
+		$CastDirection.cast_to = last_controller_aim.normalized() * 30
 	
 	if $CastDirection.is_colliding():
 		spell_cast_pos = $CastDirection.get_collision_point() - position
@@ -255,6 +261,8 @@ func _physics_process(delta: float) -> void:
 	
 	# Control the camera with the mouse
 	var coffset := get_local_mouse_position()/2.5
+	if !Input.get_connected_joypads().empty():
+		coffset = last_controller_aim * 0.5
 	Cam.offset += (coffset-Cam.offset)/5.0
 	Cam.position = lerp(Cam.position, position, 0.1)
 	
