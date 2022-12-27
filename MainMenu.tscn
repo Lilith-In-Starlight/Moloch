@@ -224,7 +224,7 @@ __meta__ = {
 margin_right = 40.0
 margin_bottom = 14.0
 theme = ExtResource( 6 )
-text = "Nightly 251222"
+text = "Nightly 261222"
 
 [node name="Animations" type="AnimationPlayer" parent="."]
 anims/Fadein = SubResource( 1 )
