@@ -11,12 +11,10 @@ signal died
 signal was_damaged(type)
 signal effect_changed(effect, added)
 signal broken_leg(amount)
-<<<<<<< HEAD
-=======
 signal impacted_body_top(force)
 signal impacted_body_side(force)
 signal impacted_body_bottom(force)
->>>>>>> eee1e04 (Added signals for bodily impact)
+
 
 enum DEATHS {
 	BLED,
