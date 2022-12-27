@@ -480,26 +480,91 @@ func _process(delta):
 		while clicked_array.find(null) != -1:
 			clicked_array.remove(clicked_array.find(null))
 			
-	elif Config.last_input_was_controller and  Input.is_action_just_pressed("select_inventory"):
+	elif Config.last_input_was_controller and (Input.is_action_just_pressed("select_inventory") or Input.is_action_just_pressed("select_inventory_2")):
+		var clicked_array: Array
+		var clicked_array_max: int = 6
+		var clicked_array_type: String = ""
+		var doswap := true
 		match which_inventory:
-			0:
-				var k :Spell = Items.player_spells[which_slot]
-				Items.player_spells[which_slot] = mouse_spell
-				mouse_spell = k
 			1:
-				if Items.get_player_wand() != null:
-					var wand :Wand = Items.get_player_wand()
-					var k :Spell = wand.spells[which_slot]
-					wand.spells[which_slot] = mouse_spell
-					mouse_spell = k
+				if which_slot != -1:
+					doswap = false
+					
+					if Items.get_player_wand() != null:
+						clicked_array = Items.get_player_wand().spells
+						clicked_array_max = Items.get_player_wand().spell_capacity
+						clicked_array_type = "spell"
+						
+						
+						if clicked_array.size() == clicked_array_max or mouse_spell == null or clicked_array.size() < which_slot or not Input.is_key_pressed(KEY_SHIFT):
+							if Input.is_key_pressed(KEY_SHIFT) and Items.player_spells.size() < 6 and mouse_spell == null and clicked_array.size() > which_slot:
+								var spell_to_move = clicked_array.pop_at(which_slot)
+								Items.player_spells.append(spell_to_move)
+							else:
+								doswap = true
+						else:
+							var new_array = []
+							for i in clicked_array.size() + 1:
+								if i < which_slot:
+									new_array.append(clicked_array[i])
+								elif i == which_slot:
+									new_array.append(mouse_spell)
+								else:
+									new_array.append(clicked_array[i - 1])
+							Items.get_player_wand().spells = new_array
+							mouse_spell = null
+			0:
+				if which_slot != -1:
+					clicked_array = Items.player_spells
+					clicked_array_type = "spell"
+					
+					var current_wand_spells = Items.get_player_wand().spells
+					var current_wand_capacity = Items.get_player_wand().spell_capacity
+					
+					if Input.is_key_pressed(KEY_SHIFT) and Items.player_spells.size() > which_slot and current_wand_spells.size() < current_wand_capacity:
+						var spell_to_move = clicked_array.pop_at(which_slot)
+						current_wand_spells.append(spell_to_move)
+						doswap = false
+					
 			2:
-				var k :Wand = Items.get_player_wand()
-				Items.player_wands[Items.selected_wand] = mouse_wand
-				mouse_wand = k
+				if which_slot != -1:
+					clicked_array = Items.player_wands
+					clicked_array_type = "wand"
+					if Input.is_action_just_pressed("select_inventory_2") and Items.player_wands.size() < 6 and mouse_wand != null:
+						doswap = false
+						Items.player_wands.append(mouse_wand)
+						mouse_wand = null
+					else:
+						if which_slot <= Items.selected_wand:
+							Items.selected_wand -= 1
+						if which_slot < 0:
+							Items.selected_wand = 0
 			3:
-				var k :Wand = Items.companions[which_slot][1]
-				Items.companions[which_slot][1] = mouse_wand
-				mouse_wand = k
+				if which_slot != -1:
+					clicked_array = Items.companions[which_slot][1]
+					clicked_array_type = "wand"
+		
+		
+		if doswap:
+			if which_slot < clicked_array.size():
+				var k = clicked_array[which_slot]
+				
+				if k is Spell:
+					clicked_array[which_slot] = mouse_spell
+					mouse_spell = k
+				elif k is Wand:
+					clicked_array[which_slot] = mouse_wand
+					mouse_wand = k
+				
+			elif which_slot <= clicked_array_max and clicked_array_type == "spell":
+				clicked_array.append(mouse_spell)
+				mouse_spell = null
+			elif which_slot <= clicked_array_max and clicked_array_type == "wand":
+				clicked_array.append(mouse_wand)
+				mouse_wand = null
+		
+		while clicked_array.find(null) != -1:
+			clicked_array.remove(clicked_array.find(null))
 				
 	
 	

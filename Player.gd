@@ -216,7 +216,10 @@ func _process(delta: float) -> void:
 
 func _physics_process(delta: float) -> void:
 	$Fire.visible = health.effects.has("onfire")
-	looking_at = get_local_mouse_position()
+	if Input.get_connected_joypads().empty():
+		looking_at = get_local_mouse_position()
+	else:
+		looking_at = Vector2(Input.get_joy_axis(0, 2), Input.get_joy_axis(0, 3)) * 50.0
 	wand = Items.get_player_wand()
 	if not "confused" in health.effects:
 		inputs = {
@@ -240,49 +243,15 @@ func _physics_process(delta: float) -> void:
 	process_movement(delta)
 	handle_wand_sprite($WandRender)
 	animation_info($Player)
-	$CastDirection.cast_to = get_local_mouse_position().normalized()*30
+	if Input.get_connected_joypads().empty():
+		$CastDirection.cast_to = get_local_mouse_position().normalized()*30
+	else:
+		$CastDirection.cast_to = Vector2(Input.get_joy_axis(0, 2), Input.get_joy_axis(0, 3)) * 30.0
+	
 	if $CastDirection.is_colliding():
 		spell_cast_pos = $CastDirection.get_collision_point() - position
 	else:
 		spell_cast_pos = $CastDirection.cast_to
-	# Controller aim
-	
-	var mouse_pos := get_viewport().get_mouse_position()
-	var xproportion := get_viewport().size.x/800.0
-	var yproportion := get_viewport().size.y/450.0
-	var axis := Vector2(Input.get_joy_axis(0, JOY_ANALOG_RX), Input.get_joy_axis(0, JOY_ANALOG_RY))
-	axis = axis.normalized()*axis.length_squared() * Config.joystick_sensitivity
-	var dx := abs(axis.x * xproportion)
-	var dy := abs(axis.y * yproportion)
-	if Input.is_action_pressed("aim_up"):
-		if mouse_pos.y - dy > 0:
-			get_viewport().warp_mouse(mouse_pos - Vector2(0, dy))
-			mouse_pos -= Vector2(0, dy)
-		else:
-			get_viewport().warp_mouse(Vector2(mouse_pos.x, 1))
-			mouse_pos.y = 1
-	elif Input.is_action_pressed("aim_down"):
-		if mouse_pos.y + dy < get_viewport().size.y:
-			get_viewport().warp_mouse(mouse_pos + Vector2(0, dy))
-			mouse_pos += Vector2(0, dy)
-		else:
-			get_viewport().warp_mouse(Vector2(mouse_pos.x, get_viewport().size.y-1))
-			mouse_pos.y = get_viewport().size.y-1
-	
-	if Input.is_action_pressed("aim_left"):
-		if mouse_pos.x - dx > 0:
-			get_viewport().warp_mouse(mouse_pos - Vector2(dx, 0))
-			mouse_pos -= Vector2(dx, 0)
-		else:
-			get_viewport().warp_mouse(Vector2(1, mouse_pos.y))
-			mouse_pos.x = 0
-	elif Input.is_action_pressed("aim_right"):
-		if mouse_pos.x + dx < get_viewport().size.x:
-			get_viewport().warp_mouse(mouse_pos + Vector2(dx, 0))
-			mouse_pos += Vector2(dx, 0)
-		else:
-			get_viewport().warp_mouse(Vector2(get_viewport().size.x-1, mouse_pos.y))
-			mouse_pos.x = get_viewport().size.x-1
 	
 	# Control the camera with the mouse
 	var coffset := get_local_mouse_position()/2.5
