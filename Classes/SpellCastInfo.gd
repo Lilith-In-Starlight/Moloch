@@ -14,10 +14,12 @@ var modifiers := []
 
 
 var last_known_caster_position := Vector2(0, 0)
+var last_known_cast_from := Vector2(0, 0)
+var last_known_looking_at := Vector2(0, 0)
 
 
 func set_position(CastEntity:Node2D):
-	if get_position() != null:
+	if get_position() != null and is_instance_valid(CastEntity):
 		CastEntity.position = get_position()
 
 
@@ -25,16 +27,21 @@ func get_position():
 	if is_instance_valid(wand):
 		if wand.spell_offset != Vector2(0, 0):
 			spell_offset = wand.spell_offset
+	
 	if is_instance_valid(Caster):
 		if Caster.has_method("cast_from"):
-			return Caster.cast_from() + spell_offset
+			last_known_cast_from = Caster.cast_from() + spell_offset
+			return last_known_cast_from
+		
+		last_known_cast_from = Caster.position + spell_offset
 		return Caster.position + spell_offset
-	return null
+	
+	return last_known_cast_from
 
 func set_goal():
-	if is_instance_valid(Caster):
-		if Caster.has_method("looking_at"):
-			goal = Caster.looking_at() + goal_offset
+	if is_instance_valid(Caster) and Caster.has_method("looking_at"):
+		last_known_looking_at = Caster.looking_at()
+		goal = Caster.looking_at() + goal_offset
 
 
 func get_angle(CastEntity:Node2D) -> float:
@@ -57,11 +64,8 @@ func drain_caster_soul(soul:float) -> void:
 			Caster.health_object().shatter_soul(soul, null, true)
 
 
-func push_caster(push:Vector2) -> void:
+func push_caster(push_to_do: Vector2) -> void:
 	if is_instance_valid(Caster):
-		var push_to_do := push
-		if wand != null:
-			push_to_do = push
 		if Caster.get("speed"):
 			Caster.speed += push_to_do
 		elif Caster.get("linear_velocity"):
@@ -88,3 +92,9 @@ func get_caster_position():
 		last_known_caster_position = Caster.position
 		return Caster.position
 	return last_known_caster_position
+
+
+func get_wand_projectile_speed():
+	if is_instance_valid(wand):
+		return wand.projectile_speed
+	return 5

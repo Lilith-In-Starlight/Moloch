@@ -17,7 +17,7 @@ func _ready():
 	CastInfo.set_goal()
 	
 	position += Vector2(cos(rotate), sin(rotate))*12.0
-	spell_behavior.velocity = (CastInfo.goal - position).normalized() * CastInfo.wand.projectile_speed * 60 * 2.5
+	spell_behavior.velocity = (CastInfo.goal - position).normalized() * CastInfo.get_wand_projectile_speed() * 60 * 2.5
 
 
 func _physics_process(delta):

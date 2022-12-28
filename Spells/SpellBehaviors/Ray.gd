@@ -24,10 +24,10 @@ func ray_setup(entity: Node2D, ray_length: float):
 	entity.CastInfo.set_goal()
 	length = ray_length
 	get_angle(entity.CastInfo.goal, entity.position, entity.CastInfo)
-	if entity.CastInfo.modifiers.has("down_gravity") or entity.CastInfo.modifiers.has("up_gravity"):
-		var original_length = length 
-		length = 20
-		connect("hit_nothing", get_tree().get_nodes_in_group("GameNode")[0], "_on_casting_spell", [entity.CastInfo.spell, entity.CastInfo.wand, self])
+#	if entity.CastInfo.modifiers.has("down_gravity") or entity.CastInfo.modifiers.has("up_gravity"):
+#		var original_length = length 
+#		length = 20
+#		connect("hit_nothing", get_tree().get_nodes_in_group("GameNode")[0], "_on_casting_spell", [entity.CastInfo.spell, entity.CastInfo.wand, self])
 
 
 func get_angle(start: Vector2, end: Vector2, cast_info: SpellCastInfo):

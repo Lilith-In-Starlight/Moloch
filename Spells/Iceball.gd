@@ -15,8 +15,7 @@ func _ready():
 	rotate = CastInfo.goal.angle_to_point(position)
 	spell_behavior.velocity = spell_behavior.get_initial_velocity(self) * 60
 	
-	if CastInfo.Caster.has_method("health_object"):
-		CastInfo.heat_caster((-12.0 - randf() * 6.0) * -0.2)
+	CastInfo.heat_caster((-12.0 - randf() * 6.0) * -0.2)
 
 
 func _physics_process(delta):

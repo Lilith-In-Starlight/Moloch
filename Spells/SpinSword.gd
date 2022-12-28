@@ -23,19 +23,22 @@ func _process(delta):
 	rotation += angle_accel*delta*24/lenght
 	if angle_accel > 0.1*60:
 		angle_accel = 0.1*60
+	
 	if is_instance_valid(CastInfo.Caster):
 		position = CastInfo.get_caster_position() + Vector2(cos(rotation), sin(rotation))*lenght + Vector2(0, fallen)
-		if CastInfo.Caster.get("speed"):
-			CastInfo.Caster.speed += Vector2(cos(rotation), sin(rotation))*48/lenght
+		CastInfo.push_caster(Vector2(cos(rotation), sin(rotation))*48/lenght)
 	else:
 		queue_free()
+	
 	timer += delta
 	if timer > 1.0:
 		lenght += delta*60*5
 		yspeed += delta*2.0
 		fallen += yspeed
+	
 	if lenght > 300:
 		queue_free()
+	
 	for i in get_overlapping_bodies():
 		if i.has_method("health_object"):
 			if randi()%3 == 1:
