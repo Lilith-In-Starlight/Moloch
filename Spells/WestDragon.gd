@@ -18,9 +18,7 @@ func _process(delta):
 	CastInfo.set_goal()
 	angle = CastInfo.get_angle(self)
 	var i := 0
-	if is_instance_valid(CastInfo.Caster):
-		if CastInfo.Caster.has_method("health_object"):
-			CastInfo.heat_caster(-0.5)
+	CastInfo.heat_caster(-0.5)
 	for rc in get_children():
 		rc.force_raycast_update()
 		if randf()<0.2:
@@ -33,8 +31,7 @@ func _process(delta):
 				2: n.modulate = "#feb700"
 			get_parent().add_child(n)
 		if rc.is_colliding():
-			if is_instance_valid(CastInfo.Caster) and CastInfo.Caster.get("speed"):
-				CastInfo.Caster.speed -= rc.cast_to.normalized()*4.5
+			CastInfo.push_caster(-rc.cast_to.normalized()*4.5)
 			if rc.get_collider().has_method("health_object"):
 				rc.get_collider().health_object().temp_change(1.5, CastInfo.Caster)
 			if rc.get_collider().get("speed"):

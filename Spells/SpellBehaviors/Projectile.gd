@@ -46,5 +46,5 @@ func move(gravity: float, cast_info, external_forces: Vector2 = Vector2(0, 0)):
 
 func get_initial_velocity(entity: Node2D):
 	if is_instance_valid(entity.CastInfo.wand):
-		return (entity.CastInfo.goal - entity.position).normalized() * (entity.CastInfo.wand.projectile_speed)
+		return (entity.CastInfo.goal - entity.position).normalized() * (entity.CastInfo.get_wand_projectile_speed())
 	return (entity.CastInfo.goal - entity.position).normalized() * 5

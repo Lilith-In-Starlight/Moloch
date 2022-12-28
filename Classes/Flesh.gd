@@ -78,7 +78,10 @@ func shatter_soul(freq :float, from: Node2D = null, side := false) -> void:
 	if freq > 0.0:
 		emit_signal("was_damaged", "soul")
 	damaged_from_side_effect = side
-	last_damaged_by = from
+	if is_instance_valid(from):
+		last_damaged_by = from
+	else:
+		last_damaged_by = null
 
 
 func poke_hole(holes := 1, from: Node2D = null, side := false) -> void:
@@ -88,7 +91,10 @@ func poke_hole(holes := 1, from: Node2D = null, side := false) -> void:
 	if holes > 0:
 		emit_signal("was_damaged", "hole")
 	damaged_from_side_effect = side
-	last_damaged_by = from
+	if is_instance_valid(from):
+		last_damaged_by = from
+	else:
+		last_damaged_by = null
 	bleeding_from_side_effect = side
 	bleeding_by = from
 
@@ -100,7 +106,10 @@ func temp_change(deg :float, from: Node2D = null, side := false) -> void:
 	elif deg < 0:
 		emit_signal("was_damaged", "cold")
 	damaged_from_side_effect = side
-	last_damaged_by = from
+	if is_instance_valid(from):
+		last_damaged_by = from
+	else:
+		last_damaged_by = null
 
 
 func full_heal():
