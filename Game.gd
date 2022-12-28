@@ -8,14 +8,15 @@ func _ready() -> void:
 
 func _on_casting_spell(spell: Spell, wand: Wand, caster: Node2D, offset: float = 0.0):
 	if !spell.is_cast_mod:
-		var spell_instance = spell.entity.instance()
-		spell_instance.CastInfo.Caster = caster
-		spell_instance.CastInfo.goal_offset = Vector2(-offset + randf()*offset*2, -offset + randf()*offset*2) * 50
-		spell_instance.CastInfo.goal = caster.looking_at()
-		spell_instance.CastInfo.wand = wand
-		spell_instance.CastInfo.modifiers = spell.behavior_modifiers
-		spell_instance.CastInfo.spell = spell
-		add_child(spell_instance)
+		if is_instance_valid(caster):
+			var spell_instance = spell.entity.instance()
+			spell_instance.CastInfo.Caster = caster
+			spell_instance.CastInfo.goal_offset = Vector2(-offset + randf()*offset*2, -offset + randf()*offset*2) * 50
+			spell_instance.CastInfo.goal = caster.looking_at()
+			spell_instance.CastInfo.wand = wand
+			spell_instance.CastInfo.modifiers = spell.behavior_modifiers
+			spell_instance.CastInfo.spell = spell
+			add_child(spell_instance)
 		
 		return
 	

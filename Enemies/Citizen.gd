@@ -18,7 +18,7 @@ func _ready() -> void:
 	last_seen = position
 	wand = Wand.new()
 	Items.add_child(wand)
-	wand.spells[0] = Items.pick_random_spell()
+	wand.spells = [Items.pick_random_spell()]
 	wand.recharge_cooldown = 1.5 + randf()*2.0
 	wand.cast_cooldown = 0.5 + randf()*1.3
 	Map = get_tree().get_nodes_in_group("World")[0]
