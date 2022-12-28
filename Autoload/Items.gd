@@ -87,7 +87,7 @@ func _ready():
 	register_item(1, "gluestone", "Gluestone", "Small entity that tries to act as a shield", preload("res://Sprites/Items/Gluestone.png"))
 #	register_item(3, "egg", "Magic Egg", "If it hatches, it will summon a surprise", preload("res://Sprites/Items/Egg.png"))
 	register_item(3, "shance", "Second Chance", "Provides a chance of being revived", preload("res://Sprites/Items/SecondChance.png"))
-	register_item(3, "suarantee", "Second Guarantee", "Provides a guarantee of being revived", preload("res://Sprites/Items/SecondGuarantee.png"))
+	register_item(4, "suarantee", "Second Guarantee", "Provides a guarantee of being revived", preload("res://Sprites/Items/SecondGuarantee.png"))
 	register_item(2, "legs", "Pocket Leg", "Put these on if you lose the old ones", preload("res://Sprites/Items/PocketLegs.png"))
 	register_item(3, "bloodless", "Bloodless", "Blood Unnecessary", preload("res://Sprites/Items/Bloodless.png"))
 	register_item(4, "soulfulengine", "Soulful Engine", "Passive Soul Generation", preload("res://Sprites/Items/SoulfulEngine.png"))
