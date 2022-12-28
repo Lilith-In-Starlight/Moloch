@@ -81,11 +81,13 @@ func _process(delta: float) -> void:
 	if Items.count_player_items("suarantee") > 0:
 		Items.player_items["suarantee"] -= 1
 		health.guarantees += 1
+		send_message("You died... but you survived!")
 	
 	if Items.count_player_items("legs") > 0:
 		if health.broken_moving_appendages > 0:
 			health.broken_moving_appendages -= 1
 			Items.player_items["legs"] -= 1
+			send_message("You put on a new leg")
 	
 	for i in Items.count_player_items("gluestone"):
 		if get_tree().get_nodes_in_group("Gluestone").size() <= i:
