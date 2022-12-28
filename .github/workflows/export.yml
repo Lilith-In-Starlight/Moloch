@@ -8,7 +8,11 @@ on:
 
 jobs:
   Godot:
+<<<<<<< HEAD
     runs-on: macos-latest
+=======
+    runs-on: ubuntu-latest
+>>>>>>> ca50b2f (Removed export_presets.cfg from .gitignore)
     strategy:
       matrix:
         platform: [linux, windows, mac]
@@ -20,11 +24,19 @@ jobs:
         id: build
         uses: manleydev/build-godot-action@v1.4.1
         with:
+<<<<<<< HEAD
           name: Moloch
+=======
+          name: example
+>>>>>>> ca50b2f (Removed export_presets.cfg from .gitignore)
           preset: ${{ matrix.platform }}
           debugMode: "false"
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
+<<<<<<< HEAD
           name: Moloch - ${{ matrix.platform }}
+=======
+          name: Client - ${{ matrix.platform }}
+>>>>>>> ca50b2f (Removed export_presets.cfg from .gitignore)
           path: ${{ github.workspace }}/${{ steps.build.outputs.build }}
