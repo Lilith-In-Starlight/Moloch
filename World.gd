@@ -686,16 +686,16 @@ func are_tiles_connected(start: Vector2, end: Vector2, tilemap: Dictionary) -> b
 			return true
 			
 		if tilemap.has(adjacencies[0]):
-			if get_tile_side_value(tilemap[adjacencies[0]], "top") != -1:
+			if get_tile_side_value(tilemap[adjacencies[0]], "bottom") != -1:
 				tiles_to_check.append(adjacencies[0])
 		if tilemap.has(adjacencies[1]):
-			if get_tile_side_value(tilemap[adjacencies[1]], "bottom") != -1:
+			if get_tile_side_value(tilemap[adjacencies[1]], "top") != -1:
 				tiles_to_check.append(adjacencies[1])
 		if tilemap.has(adjacencies[2]):
-			if get_tile_side_value(tilemap[adjacencies[2]], "left") != -1:
+			if get_tile_side_value(tilemap[adjacencies[2]], "right") != -1:
 				tiles_to_check.append(adjacencies[2])
 		if tilemap.has(adjacencies[3]):
-			if get_tile_side_value(tilemap[adjacencies[3]], "right") != -1:
+			if get_tile_side_value(tilemap[adjacencies[3]], "left") != -1:
 				tiles_to_check.append(adjacencies[3])
 		
 		
