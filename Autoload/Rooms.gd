@@ -40,5 +40,5 @@ func _ready():
 			tiles_by_side["bottom"][room_instance.bottom].append(new_tile_index)
 			tiles_by_side["right"][room_instance.right].append(new_tile_index)
 			
-			room_instance.queue_free()
+			room_instance.free()
 	
