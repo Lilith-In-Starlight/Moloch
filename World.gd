@@ -575,8 +575,6 @@ func get_tile_with_requirements(requirement: Dictionary) -> int:
 			for i in range(1, all_side_matches.size()):
 				all_valid_matches = intersect_sets(all_valid_matches, all_side_matches[i])
 	
-	if all_valid_matches.size() == 2:
-		print(all_valid_matches)
 	if all_valid_matches.empty():
 		return -1
 	
@@ -600,7 +598,6 @@ func intersect_sets(a: Array, b: Array) -> Array:
 
 
 func generate_world() -> Dictionary:
-	print("wa")
 	var world_tiles := {}
 	var tiles_to_make := [Vector2(0, min_point.y + 1), Vector2.ZERO]
 	var tiles_made := []

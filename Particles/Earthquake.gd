@@ -4,8 +4,6 @@ extends Node2D
 func _ready() -> void:
 	for i in get_children():
 		i.cast_to = Vector2(1, 0).rotated(-randf() * PI) * 30*8
-		print(i.cast_to.normalized())
-		print(i.cast_to.angle())
 		i.force_raycast_update()
 		if i.is_colliding():
 			var n: RigidBody2D = preload("res://Particles/EarthquakeDebris.tscn").instance()

@@ -26,7 +26,6 @@ func _process(delta: float) -> void:
 	speed_n = abs(speed_n)
 	$Wings.rotation = lerp_angle($Wings.rotation, 0.01 * (speed_n * direction.x), 0.3)
 	
-	print(speed_n)
 	if direction == Vector2(0, 0):
 		direction = Vector2(0, 1)
 	
