@@ -86,7 +86,7 @@ func _physics_process(delta):
 				speed += (primordial_termor-speed)/8.0
 			
 			position_timer += delta
-			if position_timer >= 0.3:
+			if position_timer >= 0.7:
 				state = STATES.RECOIL
 				position_timer = 0.0
 				speed = -(last_seen-position).normalized()*100
