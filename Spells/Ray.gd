@@ -20,7 +20,7 @@ func _ready():
 	sound_emitter.pitch_scale = 0.9 + float()*0.3
 	get_parent().add_child(sound_emitter)
 	sound_emitter.play()
-	var Map :TileMap = get_tree().get_nodes_in_group("World")[0]
+	var Map :Node2D = get_tree().get_nodes_in_group("World")[0]
 	Map.play_sound(preload("res://Sfx/spells/laserfire01.wav"), position, 1.0, 0.8+randf()*0.4)
 
 

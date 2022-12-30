@@ -3,7 +3,7 @@ extends CanvasLayer
 
 onready var Tiles := $Following
 var Cam :Camera2D
-var Map :TileMap
+var Map :Node2D
 
 var TileRNG := RandomNumberGenerator.new()
 

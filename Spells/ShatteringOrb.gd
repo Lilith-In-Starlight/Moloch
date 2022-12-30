@@ -2,7 +2,7 @@ extends Area2D
 
 
 var rotate := 0.0
-var WorldMap :TileMap
+var WorldMap :Node2D
 
 var timer := 0.0
 
@@ -48,5 +48,5 @@ func _on_body_entered(body):
 		if body.has_method("health_object"):
 			body.health_object().shatter_soul(0.2, CastInfo.Caster)
 		queue_free()
-	if body.is_in_group("World"):
+	if body.is_in_group("WorldPiece"):
 		queue_free()

@@ -11,7 +11,7 @@ func _ready():
 	spell_behavior.ray_setup(self, 1000)
 	spell_behavior.connect("hit_something", self, "_on_hit_something", [], 4)
 	spell_behavior.connect("hit_nothing", self, "_on_hit_nothing", [], 4)
-	var Map :TileMap = get_tree().get_nodes_in_group("World")[0]
+	var Map :Node2D = get_tree().get_nodes_in_group("World")[0]
 	Map.play_sound(preload("res://Sfx/spells/laserfire01.wav"), position, 1.0, 0.8+randf()*0.4)
 
 func _physics_process(delta):

@@ -11,7 +11,7 @@ var was_dead := false
 var died_from_own_cast := false
 var died_from_own_spell := false
 
-var Map :TileMap
+var Map :Node2D
 
 var last_controller_aim := Vector2(0, 0)
 

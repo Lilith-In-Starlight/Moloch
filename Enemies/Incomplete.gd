@@ -15,7 +15,7 @@ var last_seen := Vector2(0, 0)
 var search_time := 0.0
 var health := Flesh.new()
 var wand := Wand.new()
-var Map :TileMap
+var Map :Node2D
 
 
 func _ready():

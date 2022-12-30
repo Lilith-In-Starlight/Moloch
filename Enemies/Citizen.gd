@@ -7,7 +7,7 @@ var held_jump := 0.0
 
 var last_seen := Vector2(0, 0)
 
-var Map :TileMap
+var Map :Node2D
 
 var first_check := false
 

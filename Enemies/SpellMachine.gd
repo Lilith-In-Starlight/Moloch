@@ -8,7 +8,7 @@ enum STATES {
 }
 
 var Player :KinematicBody2D
-var Map :TileMap
+var Map :Node2D
 
 var state :int = STATES.IDLE
 var speed := Vector2(0, 0)

@@ -20,7 +20,7 @@ var noise := OpenSimplexNoise.new()
 
 var health := Flesh.new()
 
-var Map :TileMap
+var Map :Node2D
 
 var first_check := false
 

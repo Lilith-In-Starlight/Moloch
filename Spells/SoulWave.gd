@@ -9,7 +9,7 @@ var frames := 0
 
 
 func _ready() -> void:
-	var Map :TileMap = get_tree().get_nodes_in_group("World")[0]
+	var Map :Node2D = get_tree().get_nodes_in_group("World")[0]
 	CastInfo.set_position(self)
 	shape.radius = 2.0
 	$CollisionShape2D.shape = shape

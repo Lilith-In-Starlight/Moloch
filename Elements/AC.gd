@@ -1,7 +1,7 @@
 extends RigidBody2D
 
 
-var WorldMap :TileMap
+var WorldMap :Node2D
 var to_change := []
 var frames := 0
 
@@ -23,7 +23,7 @@ func _physics_process(delta):
 				i.health_object().temperature = move_toward(i.health_object().temperature, 25, 0.25)
 		else:
 			to_change.erase(i)
-	if get_parent().get_cellv(get_parent().world_to_map(position) + Vector2(0, -2)) == -1:
+	if get_parent().get_tiles_cellv(get_parent().world_to_map(position) + Vector2(0, -2)) == -1:
 		gravity_scale = 10.0
 		sleeping = false
 

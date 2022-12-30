@@ -2,9 +2,7 @@
 
 [ext_resource path="res://Sprites/Elements/Decoration/MolochStatue.png" type="Texture" id=1]
 
-[node name="MolochStatue" type="RigidBody2D" groups=[
-"MolochStatue",
-]]
+[node name="MolochStatue" type="RigidBody2D" groups=["MolochStatue"]]
 collision_layer = 128
 collision_mask = 2
 can_sleep = false

@@ -7,7 +7,7 @@ onready var Raycast3 := $Raycast3
 var CastInfo := SpellCastInfo.new()
 var spell_behavior := ProjectileBehavior.new()
 
-var Map : TileMap
+var Map : Node2D
 var angle := 0.0
 
 

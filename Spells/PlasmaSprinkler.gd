@@ -11,7 +11,7 @@ var spell_behavior := ProjectileBehavior.new()
 
 
 func _ready() -> void:
-	var Map : TileMap = get_tree().get_nodes_in_group("World")[0]
+	var Map : Node2D = get_tree().get_nodes_in_group("World")[0]
 	if sprinkler:
 		$ShootTimer.start()
 		CastInfo.set_position(self)

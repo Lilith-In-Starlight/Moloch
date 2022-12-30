@@ -8,7 +8,7 @@ var spell_behavior := ProjectileBehavior.new()
 var rotate := 0.0
 var flip := false
 var dtimer := 0.0
-var Map :TileMap
+var Map :Node2D
 
 
 func _ready():

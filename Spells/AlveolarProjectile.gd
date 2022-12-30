@@ -2,7 +2,7 @@ extends KinematicBody2D
 
 
 var rotate := 0.0
-var WorldMap :TileMap
+var WorldMap :Node2D
 var Caster
 var CastInfo :SpellCastInfo
 
@@ -34,5 +34,5 @@ func _on_body_entered(body):
 		if body.has_method("health_object"):
 			body.health_object().poke_hole(1, Caster)
 		queue_free()
-	if body.is_in_group("World"):
+	if body.is_in_group("WorldPiece"):
 		queue_free()

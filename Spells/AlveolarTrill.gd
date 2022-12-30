@@ -1,7 +1,7 @@
 extends Node2D
 
 var rotate := 0.0
-var WorldMap :TileMap
+var WorldMap :Node2D
 
 var timer := 0.0
 var times := 0
