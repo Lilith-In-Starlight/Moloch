@@ -63,7 +63,7 @@ func _physics_process(delta):
 	match state:
 		STATES.IDLE:
 			$Eye.position += (speed.normalized()*8 - $Eye.position)/3.0
-			speed += (primordial_termor*10.0-speed)/3.0
+			speed += (primordial_termor*30.0-speed)/3.0
 			if $RayCast2D.is_colliding():
 				if $RayCast2D.get_collider() == Player:
 					last_seen = Player.position
@@ -79,17 +79,17 @@ func _physics_process(delta):
 			else:
 				state = STATES.SEARCHING
 			if position.distance_to(Player.position) > 120:
-				speed += (((last_seen-position).normalized()*30+primordial_termor)-speed)/3.0
+				speed += (((last_seen-position).normalized()*100+primordial_termor)-speed)/3.0
 			elif position.distance_to(Player.position) < 110:
-				speed += ((-(last_seen-position).normalized()*30+primordial_termor)-speed)/3.0
+				speed += ((-(last_seen-position).normalized()*100+primordial_termor)-speed)/3.0
 			else:
-				speed += (primordial_termor-speed)/10.0
+				speed += (primordial_termor-speed)/8.0
 			
 			position_timer += delta
-			if position_timer >= 1.0:
+			if position_timer >= 0.3:
 				state = STATES.RECOIL
 				position_timer = 0.0
-				speed = -(last_seen-position).normalized()*30
+				speed = -(last_seen-position).normalized()*100
 				var orb := preload("res://Spells/ShatteringOrb.tscn").instance()
 				orb.CastInfo.goal = Player.position
 				orb.CastInfo.Caster = self
