@@ -46,6 +46,11 @@ class _Room:
 func ready():
 	if Items.level > 2:
 		level_tile = 1
+	
+	var tile_texture := preload("res://Sprites/Blocks/RedRoomBlock.png")
+	if Items.level > 2:
+		tile_texture = preload("res://Sprites/Blocks/BrownRoomBlock.png")
+	
 	print("Generating dungeon")
 	position = Vector2(0, 0)
 	print("Step 0: Generating first room")
@@ -73,6 +78,7 @@ func ready():
 				new_tile = first_room
 				new_tile.position = tile_position * Rooms.tile_size * 8
 				add_child(new_tile)
+				new_tile.tile_set.tile_set_texture(0, tile_texture)
 			elif world_tiles[tile_position] == "last_room":
 				new_tile = preload("res://Rooms/Sacrifice/End.tscn").instance()
 				new_tile.position = tile_position * Rooms.tile_size * 8
