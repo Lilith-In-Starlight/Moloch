@@ -19,5 +19,5 @@ position = Vector2( 24, 184 )
 size = 22
 
 [node name="Platform2" parent="." instance=ExtResource( 3 )]
-position = Vector2( 328, 72 )
-size = 22
+position = Vector2( 24, 72 )
+size = 60
