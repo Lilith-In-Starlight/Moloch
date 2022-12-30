@@ -37,6 +37,7 @@ func _process(delta: float) -> void:
 		if timer > 0.1:
 			var n := small_attack.instance()
 			if randf() > 0.98:
+				n.queue_free()
 				n = attack.instance()
 			n.CastInfo.goal = eye_dir * 100 + position
 			n.CastInfo.Caster = self

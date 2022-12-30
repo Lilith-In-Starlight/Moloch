@@ -6,7 +6,7 @@ var timer := 0.0
 var dmg_multi := 1.0
 var area_of_effect := 10
 
-var Map
+var Map :Node2D
 
 
 func _ready():
@@ -19,9 +19,9 @@ func _ready():
 		for y in range(-area_of_effect,area_of_effect+1):
 			var vec := Vector2(x+int(position.x/8), y+int(position.y/8))
 			if Vector2(x,y).length()<=area_of_effect*0.7+randi()%4:
-				Map.set_cellv(vec, Items.break_block(Map.get_cellv(vec), 0.5))
+				Map.set_tiles_cellv(vec, Items.break_block(Map.get_tiles_cellv(vec), 0.5))
 	var point := Vector2(int(position.x/8), int(position.y/8))
-	Map.update_bitmask_region(point-Vector2(area_of_effect,area_of_effect), point+Vector2(area_of_effect,area_of_effect))
+#	Map.update_bitmask_region(point-Vector2(area_of_effect,area_of_effect), point+Vector2(area_of_effect,area_of_effect))
 	
 	Map.play_sound(Items.EXPLOSION_SOUNDS[randi()%Items.EXPLOSION_SOUNDS.size()], position, 1.0, 0.8+randf()*0.4)
 

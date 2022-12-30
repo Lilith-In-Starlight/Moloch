@@ -5,7 +5,7 @@ const RoundParticles := preload("res://Particles/MagicDust.tscn")
 
 var CastInfo := SpellCastInfo.new()
 var spell_behavior := AreaBehavior.new()
-var Map :TileMap
+var Map :Node2D
 
 func _ready() -> void:
 	CastInfo.set_goal()
@@ -18,7 +18,7 @@ func _ready() -> void:
 	Map = get_tree().get_nodes_in_group("World")[0]
 
 	var point := Vector2(int(position.x/8), int(position.y/8))
-	Map.update_bitmask_region(point-Vector2(AREA,AREA), point+Vector2(AREA,AREA))
+#	Map.update_bitmask_region(point-Vector2(AREA,AREA), point+Vector2(AREA,AREA))
 	$Tween.interpolate_property(self, "modulate", Color(1.0,1.0,1.0,1.0), Color(1.0,1.0,1.0,0.0), 0.3, Tween.TRANS_LINEAR, Tween.EASE_OUT, 0.08)
 	$Tween.start()
 	CastInfo.heat_caster(2.0)
@@ -35,7 +35,7 @@ func _process(delta: float) -> void:
 		for y in range(-AREA,AREA+1):
 			var vec := Vector2(x+int(position.x/8), y+int(position.y/8))
 			if Vector2(x,y).length()<=AREA:
-				Map.set_cellv(vec, Items.break_block(Map.get_cellv(vec), 0.5))
+				Map.set_tiles_cellv(vec, Items.break_block(Map.get_tiles_cellv(vec), 0.5))
 				CastInfo.heat_caster((0.01 / (0.08 + 0.3)) * delta)
 
 

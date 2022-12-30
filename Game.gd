@@ -1,9 +1,11 @@
 extends Node2D
 
+var did := false
 
 func _ready() -> void:
 	for i in Items.player_wands:
 		i.connect("casting_spell", self, "_on_casting_spell")
+	
 
 
 func _on_casting_spell(spell: Spell, wand: Wand, caster: Node2D, offset: float = 0.0):
@@ -43,6 +45,9 @@ func _on_casting_spell(spell: Spell, wand: Wand, caster: Node2D, offset: float =
 
 
 func _process(delta: float) -> void:
+	if !did:
+		$World.ready()
+	did = true
 	if Items.selected_wand >= Items.player_wands.size():
 		Items.selected_wand = Items.player_wands.size() - 1
 	if not Items.player_wands.empty() and Items.selected_wand < 0:

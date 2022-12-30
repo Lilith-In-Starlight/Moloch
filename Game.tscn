@@ -1,7 +1,6 @@
-[gd_scene load_steps=53 format=2]
+[gd_scene load_steps=52 format=2]
 
 [ext_resource path="res://Player.tscn" type="PackedScene" id=1]
-[ext_resource path="res://EditorTileset.tres" type="TileSet" id=2]
 [ext_resource path="res://World.gd" type="Script" id=3]
 [ext_resource path="res://Sprites/Blocks/RedBackgrounTile.png" type="Texture" id=4]
 [ext_resource path="res://dpcomic.ttf" type="DynamicFontData" id=5]
@@ -1144,11 +1143,7 @@ one_shot = true
 [node name="Player" parent="." groups=["Player"] instance=ExtResource( 1 )]
 position = Vector2( 256, 200 )
 
-[node name="World" type="TileMap" parent="." groups=["World"]]
-tile_set = ExtResource( 2 )
-cell_size = Vector2( 8, 8 )
-collision_layer = 2
-format = 1
+[node name="World" type="Node2D" parent="." groups=["World"]]
 script = ExtResource( 3 )
 
 [node name="Camera2D" type="Camera2D" parent="." groups=["Camera"]]

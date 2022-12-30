@@ -5,7 +5,7 @@ onready var Raycast2 := $Raycast2
 onready var Raycast3 := $Raycast3
 
 var CastInfo := SpellCastInfo.new()
-var Map : TileMap
+var Map : Node2D
 var angle := 0.0
 
 var speed := Vector2(0, 0)

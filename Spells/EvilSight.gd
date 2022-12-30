@@ -1,7 +1,7 @@
 extends Node2D
 
 
-var WorldMap :TileMap
+var WorldMap :Node2D
 
 var CastInfo := SpellCastInfo.new()
 var spell_behavior := RayBehavior.new()
@@ -32,7 +32,7 @@ func _physics_process(delta):
 func _on_hit_something():
 	var pos :Vector2 = spell_behavior.get_collision_point()
 	var pos2 :Vector2 = spell_behavior.get_collision_point()
-	if spell_behavior.get_collider().is_in_group("World"):
+	if spell_behavior.get_collider().is_in_group("WorldPiece"):
 		CastInfo.push_caster(-(pos-position).normalized()*10)
 		pos.x = int(pos.x/8)
 		pos.y = int(pos.y/8)
@@ -40,10 +40,11 @@ func _on_hit_something():
 			for y in range(-2, 3):
 				var v := Vector2(x, y)
 				if v.length() < 2:
-					WorldMap.set_cellv(v+pos,-1)
+					print("a")
+					WorldMap.set_tiles_cellv(v+pos,-1)
 					CastInfo.heat_caster(1/30.0)
 		
-		WorldMap.update_bitmask_region(pos-Vector2(2,2), pos+Vector2(2,2))
+#		WorldMap.update_bitmask_region(pos-Vector2(2,2), pos+Vector2(2,2))
 	elif spell_behavior.get_collider().has_method("health_object"):
 		spell_behavior.get_collider().health_object().temp_change(5.0, CastInfo.Caster)
 		CastInfo.heat_caster(1/60.0)

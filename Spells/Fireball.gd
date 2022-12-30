@@ -34,5 +34,5 @@ func _on_body_entered(body):
 			body.health_object().temp_change(12.0 + randf() * 6.0, CastInfo.Caster)
 			body.health_object().add_effect("onfire")
 			queue_free()
-	elif body.is_in_group("World"):
+	elif body.is_in_group("WorldPiece"):
 		queue_free()

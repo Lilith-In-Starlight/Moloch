@@ -10,7 +10,7 @@ var type :int = TYPES.ITEM
 
 var open := false
 var Player :KinematicBody2D
-var Map :TileMap
+var Map :Node2D
 
 
 var item :Item

@@ -1,6 +1,6 @@
 extends RigidBody2D
 
-var Map :TileMap
+var Map :Node2D
 var position_in_map: Vector2
 
 const adjacencies = [Vector2.UP, Vector2.DOWN, Vector2.LEFT, Vector2.RIGHT]
@@ -11,16 +11,16 @@ func _ready() -> void:
 	var to_check := [Vector2.ZERO]
 	var checked := []
 	var chance := 2.0
-	if Map.get_cellv(position_in_map) == -1:
+	if Map.get_tiles_cellv(position_in_map) == -1:
 		return
 	for i in to_check:
 		checked.append(i)
-		if Map.get_cellv(position_in_map + i) == -1:
+		if Map.get_tiles_cellv(position_in_map + i) == -1:
 			continue
 		if randf() > chance:
 			break
-		$TileMap.set_cellv(i, Map.get_cellv(position_in_map + i))
-		Map.set_cellv(position_in_map + i, -1)
+		$TileMap.set_tiles_cellv(i, Map.get_tiles_cellv(position_in_map + i))
+		Map.set_tiles_cellv(position_in_map + i, -1)
 		var adj := adjacencies.duplicate()
 		adj.shuffle()
 		for j in adjacencies:

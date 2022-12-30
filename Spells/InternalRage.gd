@@ -3,7 +3,7 @@ extends Node2D
 
 var thing := []
 var CastInfo := SpellCastInfo.new()
-var Map :TileMap
+var Map :Node2D
 
 
 func _ready() -> void:

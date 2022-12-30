@@ -3,7 +3,7 @@ extends Node2D
 
 export var size := 5
 
-var Map :TileMap
+var Map :Node2D
 
 func _ready():
 	if not Engine.editor_hint:
@@ -20,7 +20,7 @@ func _process(_delta):
 	if Engine.editor_hint:
 		$Poles.scale.y = 0.5 * size
 	else:
-		if Map.get_cellv(Map.world_to_map(position) + Vector2(0, -1))  == -1 and Map.get_cellv(Map.world_to_map(position) + Vector2(0, size + 1)) == -1:
+		if Map.get_tiles_cellv(Map.world_to_map(position) + Vector2(0, -1))  == -1 and Map.get_tiles_cellv(Map.world_to_map(position) + Vector2(0, size + 1)) == -1:
 			var n :RigidBody2D = preload("res://Elements/Falling/FallingPole.tscn").instance()
 			n.get_node("CollisionShape2D").shape = RectangleShape2D.new()
 			n.get_node("CollisionShape2D").shape.extents = Vector2(2, 4 * size)

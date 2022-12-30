@@ -1,4 +1,4 @@
-extends TileMap
+extends Node2D
 signal generated_world
 
 const LAYOUT_MAXTRIES = 10
@@ -33,6 +33,7 @@ var generated_end_room := false
 var treasure_rooms := 0
 
 var level_tile := 0
+var world_tile_instances := {}
 
 class _Room:
 		var scene = null
@@ -41,7 +42,8 @@ class _Room:
 		var area :Rect2 = Rect2()
 		var attachment_door
 
-func _ready():
+
+func ready():
 	if Items.level > 2:
 		level_tile = 1
 	print("Generating dungeon")
@@ -56,28 +58,36 @@ func _ready():
 	areas[0].position *= 8.0
 	areas[0].size *= 8.0
 	max_point = Vector2(3, 0)
-	min_point = Vector2(-3, -10)
+	min_point = Vector2(-3, -8)
 	print("Step 1: Generating layout of the world")
 	var world_tiles := generate_world()
 	
-	while not are_tiles_connected(Vector2(0, 0), Vector2(0, -9), world_tiles):
+	while not are_tiles_connected(Vector2(0, 0), Vector2(0, min_point.y + 1), world_tiles):
 		world_tiles = generate_world()
 	
 	print("Step 2: Adding tiles as nodes")
 	for tile_position in world_tiles.keys():
-		if world_tiles[tile_position] is String and world_tiles[tile_position] == "first_room":
-			var new_tile: TileMap = first_room
-			new_tile.position = tile_position * Rooms.tile_size * 8
-			add_child(new_tile)
+		var new_tile: TileMap
+		if world_tiles[tile_position] is String:
+			if world_tiles[tile_position] == "first_room":
+				new_tile = first_room
+				new_tile.position = tile_position * Rooms.tile_size * 8
+				add_child(new_tile)
+			elif world_tiles[tile_position] == "last_room":
+				new_tile = preload("res://Rooms/Sacrifice/End.tscn").instance()
+				new_tile.position = tile_position * Rooms.tile_size * 8
+				add_child(new_tile)
 		elif world_tiles[tile_position] == -1:
-			var new_tile: TileMap = preload("res://Rooms/Sacrifice/Empty_room.tscn").instance()
+			new_tile = preload("res://Rooms/Sacrifice/Empty_room.tscn").instance()
 			new_tile.position = tile_position * Rooms.tile_size * 8
 			add_child(new_tile)
-			continue
 		else:
-			var new_tile: TileMap = Rooms.all_tiles[world_tiles[tile_position]].instance()
+			new_tile = Rooms.all_tiles[world_tiles[tile_position]].instance()
 			new_tile.position = tile_position * Rooms.tile_size * 8
 			add_child(new_tile)
+		
+		new_tile.add_to_group("WorldPiece")
+		world_tile_instances[tile_position] = new_tile
 	
 	print("Step 3: Cloning all elements")
 	# this can be shrunk further if one makes the game load all files at res://Elements/* at the start
@@ -146,24 +156,24 @@ func _process(delta):
 #		fill_empty_space_chunk()
 
 
-func fill_empty_space_chunk():
-	var chunk_end = min(fill_x+x_fill_step, max_point.x)
-	
-	var start := OS.get_ticks_msec()
-	for x in range(fill_x, chunk_end):
-		var y := min_point.y
-		while y < max_point.y:
-			var room := is_in_room(x, y)
-			if room == Rect2(0,0,0,0):
-				set_cell(x, y, level_tile)
-			else:
-				y += room.size.y / 8 - 1
-			y += 1
-	x_fill_step = readjust_chunk_size(x_fill_step, start, OS.get_ticks_msec(), 200)
-	
-	fill_x = chunk_end
-	if chunk_end == max_point.x:
-		filling_done = true
+#func fill_empty_space_chunk():
+#	var chunk_end = min(fill_x+x_fill_step, max_point.x)
+#
+#	var start := OS.get_ticks_msec()
+#	for x in range(fill_x, chunk_end):
+#		var y := min_point.y
+#		while y < max_point.y:
+#			var room := is_in_room(x, y)
+#			if room == Rect2(0,0,0,0):
+#				set_cell(x, y, level_tile)
+#			else:
+#				y += room.size.y / 8 - 1
+#			y += 1
+#	x_fill_step = readjust_chunk_size(x_fill_step, start, OS.get_ticks_msec(), 200)
+#
+#	fill_x = chunk_end
+#	if chunk_end == max_point.x:
+#		filling_done = true
 
 func readjust_chunk_size(chunk_size: int, start: int, end: int, desired_chunk_ms: int) -> int:
 			var msec :int = end - start
@@ -174,7 +184,7 @@ func readjust_chunk_size(chunk_size: int, start: int, end: int, desired_chunk_ms
 
 func is_in_room(x: int, y: int) -> Rect2:
 	for a in areas:
-		if a.has_point(Vector2(x, y)*cell_size.x):
+		if a.has_point(Vector2(x, y)*8):
 			return a
 	return Rect2(0,0,0,0)
 
@@ -200,7 +210,8 @@ func finalize_world():
 
 func add_enemies():
 	var enemies = []
-	for area in areas:
+	for tile in world_tile_instances:
+		var area = Rect2(tile * Rooms.tile_size * 8, Rooms.tile_size * 8)
 		for i in Items.WorldRNG.randi()%3:
 			enemies.append(add_enemy_with_chance(area, preload("res://Enemies/MagicDrone.tscn"), 0.6))
 			enemies.append(add_enemy_with_chance(area, preload("res://Enemies/SpellMachine.tscn"), 0.3))
@@ -465,7 +476,8 @@ func stretch_global_bounds(new_area :Rect2):
 func fill_rect(rect: Rect2, value):
 	for x in range(rect.size.x):
 		for y in range(rect.size.y):
-			set_cellv(rect.position+Vector2(x,y), value)
+			pass
+#			set_cellv(rect.position+Vector2(x,y), value)
 
 func has_property(object: Object, property_name: String) -> bool:
 	for property in object.get_property_list():
@@ -500,6 +512,11 @@ func get_tile_side_value(tile_id, side: String) -> int:
 				return -1
 			else:
 				return 0
+		elif tile_id == "last_room":
+			if side == "top":
+				return -1
+			else:
+				return 0
 		else:
 			return -1
 	elif tile_id is int:
@@ -513,7 +530,7 @@ func get_tile_side_value(tile_id, side: String) -> int:
 			output = instance.bottom
 		elif side == "top":
 			output = instance.top
-		instance.queue_free()
+		instance.free()
 		return output
 	
 	return -1
@@ -557,7 +574,9 @@ func get_tile_with_requirements(requirement: Dictionary) -> int:
 		if all_side_matches.size() > 1:
 			for i in range(1, all_side_matches.size()):
 				all_valid_matches = intersect_sets(all_valid_matches, all_side_matches[i])
-		
+	
+	if all_valid_matches.size() == 2:
+		print(all_valid_matches)
 	if all_valid_matches.empty():
 		return -1
 	
@@ -581,8 +600,9 @@ func intersect_sets(a: Array, b: Array) -> Array:
 
 
 func generate_world() -> Dictionary:
+	print("wa")
 	var world_tiles := {}
-	var tiles_to_make := [Vector2.ZERO]
+	var tiles_to_make := [Vector2(0, min_point.y + 1), Vector2.ZERO]
 	var tiles_made := []
 	
 	while not tiles_to_make.empty():
@@ -593,12 +613,15 @@ func generate_world() -> Dictionary:
 		
 		tiles_made.append(tile_position)
 		
-		
 		if tile_position == Vector2(0, 0):
 			world_tiles[tile_position] = "first_room"
 			tiles_to_make.append_array(get_adjacent_positions(tile_position))
 			continue
 		
+		if tile_position == Vector2(0, min_point.y + 1):
+			world_tiles[tile_position] = "last_room"
+			tiles_to_make.append_array(get_adjacent_positions(tile_position))
+			continue
 		
 		if tile_position.x < min_point.x - 3 or tile_position.x > max_point.x + 3 or tile_position.y < min_point.y - 3 or tile_position.y > max_point.y + 3:
 			continue
@@ -607,18 +630,39 @@ func generate_world() -> Dictionary:
 		
 		var sides_to_consider := get_tile_side_restrictions(tile_position, world_tiles)
 		
-		if tile_position.x <= min_point.x:
+		if tile_position.x == min_point.x:
 			sides_to_consider["left"] = -1
-		if tile_position.x >= max_point.x:
+		if tile_position.x == max_point.x:
 			sides_to_consider["right"] = -1
-		
-		if tile_position.y <= min_point.y:
+		if tile_position.y == min_point.y:
 			sides_to_consider["top"] = -1
-		if tile_position.y >= max_point.y:
+		if tile_position.y == max_point.y:
+			sides_to_consider["bottom"] = -1
+		
+		if tile_position.x < min_point.x:
+			sides_to_consider["left"] = -1
+			sides_to_consider["right"] = -1
+			sides_to_consider["top"] = -1
+			sides_to_consider["bottom"] = -1
+		if tile_position.x > max_point.x:
+			sides_to_consider["left"] = -1
+			sides_to_consider["right"] = -1
+			sides_to_consider["top"] = -1
+			sides_to_consider["bottom"] = -1
+		if tile_position.y < min_point.y:
+			sides_to_consider["left"] = -1
+			sides_to_consider["right"] = -1
+			sides_to_consider["top"] = -1
+			sides_to_consider["bottom"] = -1
+		if tile_position.y > max_point.y:
+			sides_to_consider["left"] = -1
+			sides_to_consider["right"] = -1
+			sides_to_consider["top"] = -1
 			sides_to_consider["bottom"] = -1
 		
 		world_tiles[tile_position] = get_tile_with_requirements(sides_to_consider)
-	
+		
+		
 	return world_tiles
 
 
@@ -653,3 +697,39 @@ func are_tiles_connected(start: Vector2, end: Vector2, tilemap: Dictionary) -> b
 		
 		
 	return false
+
+
+
+func get_tiles_cellv(point: Vector2):
+	var tile_position := get_round_point_to_tile(point)
+	if not world_tile_instances.has(tile_position):
+		return -1
+	var tile_instance: TileMap = world_tile_instances[tile_position]
+	return tile_instance.get_cellv(point - tile_position * Rooms.tile_size)
+
+
+func set_tiles_cellv(point: Vector2, tile: int):
+	var tile_position := get_round_point_to_tile(point)
+	if not world_tile_instances.has(tile_position):
+		return
+	var tile_instance: TileMap = world_tile_instances[tile_position]
+	tile_instance.set_cellv(point - tile_position * Rooms.tile_size, tile)
+
+func get_round_point_to_tile(point: Vector2) -> Vector2:
+	var output_x := int(point.x / Rooms.tile_size.x)
+	var output_y := int(point.y / Rooms.tile_size.y)
+	if point.x < 0:
+		output_x = -int((-point.x - 1) / Rooms.tile_size.x) - 1
+	if point.y < 0:
+		output_y = -int((-point.y - 1) / Rooms.tile_size.y) - 1
+	return Vector2(output_x, output_y)
+
+
+func world_to_map(point: Vector2) -> Vector2:
+	var output_x := int(point.x / 8)
+	var output_y := int(point.y / 8)
+	if point.x < 0:
+		output_x = -int((-point.x - 1) / 8) - 1
+	if point.y < 0:
+		output_y = -int((-point.y - 1) / 8) - 1
+	return Vector2(output_x, output_y)

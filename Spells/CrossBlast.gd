@@ -8,7 +8,7 @@ var speed := 4.0
 
 var timer := 0.0
 
-var Map :TileMap
+var Map :Node2D
 
 var has_done := false
 var spell_behavior := ProjectileBehavior.new()
@@ -60,7 +60,7 @@ func _physics_process(delta):
 	
 	if timer > 0.15:
 		queue_free()
-		var map_pos := Map.world_to_map(position)
+		var map_pos :Vector2 = Map.world_to_map(position)
 		for i in range(8):
 			for x in range(-1,2):
 				for y in range(-1,2):
@@ -69,12 +69,12 @@ func _physics_process(delta):
 						var vec2 := map_pos + Vector2(-i+x, i+y)
 						var vec3 := map_pos + Vector2(i+x, -i+y)
 						var vec4 := map_pos + Vector2(-i+x, -i+y)
-						Map.set_cellv(vec1, Items.break_block(Map.get_cellv(vec1), 0.4))
-						Map.set_cellv(vec2, Items.break_block(Map.get_cellv(vec1), 0.4))
-						Map.set_cellv(vec3, Items.break_block(Map.get_cellv(vec1), 0.4))
-						Map.set_cellv(vec4, Items.break_block(Map.get_cellv(vec1), 0.4))
+						Map.set_tiles_cellv(vec1, Items.break_block(Map.get_tiles_cellv(vec1), 0.4))
+						Map.set_tiles_cellv(vec2, Items.break_block(Map.get_tiles_cellv(vec1), 0.4))
+						Map.set_tiles_cellv(vec3, Items.break_block(Map.get_tiles_cellv(vec1), 0.4))
+						Map.set_tiles_cellv(vec4, Items.break_block(Map.get_tiles_cellv(vec1), 0.4))
 		
-		Map.update_bitmask_region(map_pos-Vector2(10,10), map_pos+Vector2(10,10))
+#		Map.update_bitmask_region(map_pos-Vector2(10,10), map_pos+Vector2(10,10))
 
 
 func _draw():

@@ -29,7 +29,7 @@ onready var MouseSpellSlot := $HUD/MouseSlot
 onready var MouseWandSlot := $HUD/MouseWand
 
 var Player :KinematicBody2D
-var Map :TileMap
+var Map :Node2D
 
 var messages := []
 var message_timer := 0.0
