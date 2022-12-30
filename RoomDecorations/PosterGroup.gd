@@ -19,4 +19,5 @@ func _process(_delta):
 		update()
 
 func _draw():
-	draw_rect(Rect2(-shape.extents/2.0*8.0, shape.extents*8.0), ColorN("dark_green", 0.5))
+	if Engine.editor_hint:
+		draw_rect(Rect2(-shape.extents/2.0*8.0, shape.extents*8.0), ColorN("dark_green", 0.5))
