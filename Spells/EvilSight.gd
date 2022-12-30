@@ -40,7 +40,6 @@ func _on_hit_something():
 			for y in range(-2, 3):
 				var v := Vector2(x, y)
 				if v.length() < 2:
-					print("a")
 					WorldMap.set_tiles_cellv(v+pos,-1)
 					CastInfo.heat_caster(1/30.0)
 		
