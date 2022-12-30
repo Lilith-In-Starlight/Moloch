@@ -57,54 +57,46 @@ func _ready():
 	areas.append(first_room.get_used_rect())
 	areas[0].position *= 8.0
 	areas[0].size *= 8.0
-	max_point = areas[0].position + areas[0].size
-	min_point = Vector2.ZERO
+	max_point = Vector2(3, 0)
+	min_point = Vector2(-3, -7)
 	print("Step 1: Generating layout of the world")
-	rooms = 0
-	generated_end_room = false
-	treasure_rooms = 0
-	var iterations := 0
-	while not generated_end_room or rooms <= 25:
-		iterations += 1
-		if iterations > 200:
-			get_tree().change_scene("res://Game.tscn")
-			break
-		var children :Array = Items.shuffle_array(get_children())
-		for room in children:
-			var el_children = Items.shuffle_array(room.get_children())
-			for element in el_children:
-				var new_room :_Room = expand_through_door(element,room) # side action: this removes the element on success
-				if new_room:
-					rooms += 1
-					if new_room.is_treasure:
-						treasure_rooms += 1
-					if new_room.is_end:
-						generated_end_room = true
-					add_child(new_room.scene)
-					areas.append(new_room.area)
-					stretch_global_bounds(new_room.area)
+	var world_tiles := {}
+	var tiles_to_make := [Vector2.ZERO]
+	var tiles_made := []
 	
-	print(iterations)
-	for group in ["LeftDoor","RightDoor"]:
-		for element in get_tree().get_nodes_in_group(group):
-			var room = element.get_parent()
-			var new_room :_Room = expand_through_door_with_treasure(element, room)
-			if new_room:
-				rooms += 1
-				treasure_rooms += 1
-				add_child(new_room.scene)
-				areas.append(new_room.area)
-				stretch_global_bounds(new_room.area)
+	
+	while not tiles_to_make.empty():
+		var tile_position :Vector2 = tiles_to_make.pop_front()
 		
-	print("Step 2: Sealing up unused doors")
-	for group in ["LeftDoor","RightDoor","UpDoor","DownDoor"]:
-		for door in get_tree().get_nodes_in_group(group):
-			var door_in_map := world_to_map(door.position) + world_to_map(door.get_parent().position)
-			var door_rect = get_door_rect(door)
-			door_rect.position += door_in_map
-			fill_rect(door_rect, level_tile)
+		if tile_position in tiles_made:
+			continue
+		
+		tiles_made.append(tile_position)
+		
+		
+		if tile_position == Vector2(0, 0):
+			world_tiles[tile_position] = "first_room"
+			continue
+		
+		if tile_position.x < min_point.x or tile_position.x > max_point.x or tile_position.y < min_point.y or tile_position.y > max_point.y:
+			continue
+		
+		tiles_to_make.append(get_adjacent_positions(tile_position))
+		
+		var sides_to_consider := get_tile_side_restrictions(tile_position, world_tiles)
+		
+		if tile_position.x <= min_point.x:
+			sides_to_consider["left"] = -1
+		elif tile_position.x >= max_point.x:
+			sides_to_consider["right"] = -1
+		
+		if tile_position.y <= min_point.y:
+			sides_to_consider["top"] = -1
+		elif tile_position.y >= max_point.y:
+			sides_to_consider["bottom"] = -1
 	
-	print("Step 3: Cloning all elements")
+	
+	print("Step 2: Cloning all elements")
 	# this can be shrunk further if one makes the game load all files at res://Elements/* at the start
 	# then here one can use load(find_tscn_for_group(group)) and it will just return already loaded refs.
 	print("    - Chests")
@@ -498,3 +490,40 @@ func has_property(object: Object, property_name: String) -> bool:
 		if property['name'] == property_name:
 			return true
 	return false
+
+
+func get_adjacent_positions(pos: Vector2) -> Array:
+	return [pos + Vector2.UP, pos + Vector2.DOWN, pos + Vector2.LEFT, pos + Vector2.RIGHT]
+
+
+func get_tile_side_restrictions(tile_position: Vector2, world_tiles: Dictionary) -> Dictionary:
+	var adjacent_positions := get_adjacent_positions(tile_position)
+	var sides_to_consider := {}
+	if world_tiles.has(adjacent_positions[0]):
+		sides_to_consider["top"] = get_tile_side_value(world_tiles[adjacent_positions[0]], "bottom")
+	if world_tiles.has(adjacent_positions[1]):
+		sides_to_consider["bottom"] = get_tile_side_value(world_tiles[adjacent_positions[0]], "tom")
+	if world_tiles.has(adjacent_positions[2]):
+		sides_to_consider["left"] = get_tile_side_value(world_tiles[adjacent_positions[0]], "right")
+	if world_tiles.has(adjacent_positions[3]):
+		sides_to_consider["right"] = get_tile_side_value(world_tiles[adjacent_positions[0]], "left")
+	
+	return sides_to_consider
+
+
+func get_tile_side_value(tile_id, side: String) -> int:
+	if tile_id is String:
+		if tile_id == "first_room":
+			if side == "bottom":
+				return -1
+			else:
+				return 0
+		else:
+			return -1
+	elif tile_id is Vector2:
+		var instance = Rooms.all_tiles[tile_id].instance()
+		var output = instance.left
+		instance.queue_free()
+		return output
+	
+	return -1
