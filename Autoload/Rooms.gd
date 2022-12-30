@@ -9,7 +9,7 @@ var tiles_by_side := {
 	"right" : {-1: [], 0: [], 1: [], 2: []},
 }
 
-var tile_size := Vector2(16, 9)
+var tile_size := Vector2(66, 33)
 
 
 func _ready():

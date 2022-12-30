@@ -50,53 +50,36 @@ func _ready():
 	var first_room :TileMap
 	if Items.level == 1:
 		first_room = preload("res://Rooms/Sacrifice/Begin.tscn").instance()
-		add_child(first_room)
 	else:
 		first_room = preload("res://Rooms/Sacrifice/BeginL2.tscn").instance()
-		add_child(first_room)
 	areas.append(first_room.get_used_rect())
 	areas[0].position *= 8.0
 	areas[0].size *= 8.0
 	max_point = Vector2(3, 0)
-	min_point = Vector2(-3, -7)
+	min_point = Vector2(-3, -10)
 	print("Step 1: Generating layout of the world")
-	var world_tiles := {}
-	var tiles_to_make := [Vector2.ZERO]
-	var tiles_made := []
+	var world_tiles := generate_world()
 	
+	while not are_tiles_connected(Vector2(0, 0), Vector2(0, -9), world_tiles):
+		world_tiles = generate_world()
 	
-	while not tiles_to_make.empty():
-		var tile_position :Vector2 = tiles_to_make.pop_front()
-		
-		if tile_position in tiles_made:
+	print("Step 2: Adding tiles as nodes")
+	for tile_position in world_tiles.keys():
+		if world_tiles[tile_position] is String and world_tiles[tile_position] == "first_room":
+			var new_tile: TileMap = first_room
+			new_tile.position = tile_position * Rooms.tile_size * 8
+			add_child(new_tile)
+		elif world_tiles[tile_position] == -1:
+			var new_tile: TileMap = preload("res://Rooms/Sacrifice/Empty_room.tscn").instance()
+			new_tile.position = tile_position * Rooms.tile_size * 8
+			add_child(new_tile)
 			continue
-		
-		tiles_made.append(tile_position)
-		
-		
-		if tile_position == Vector2(0, 0):
-			world_tiles[tile_position] = "first_room"
-			continue
-		
-		if tile_position.x < min_point.x or tile_position.x > max_point.x or tile_position.y < min_point.y or tile_position.y > max_point.y:
-			continue
-		
-		tiles_to_make.append(get_adjacent_positions(tile_position))
-		
-		var sides_to_consider := get_tile_side_restrictions(tile_position, world_tiles)
-		
-		if tile_position.x <= min_point.x:
-			sides_to_consider["left"] = -1
-		elif tile_position.x >= max_point.x:
-			sides_to_consider["right"] = -1
-		
-		if tile_position.y <= min_point.y:
-			sides_to_consider["top"] = -1
-		elif tile_position.y >= max_point.y:
-			sides_to_consider["bottom"] = -1
+		else:
+			var new_tile: TileMap = Rooms.all_tiles[world_tiles[tile_position]].instance()
+			new_tile.position = tile_position * Rooms.tile_size * 8
+			add_child(new_tile)
 	
-	
-	print("Step 2: Cloning all elements")
+	print("Step 3: Cloning all elements")
 	# this can be shrunk further if one makes the game load all files at res://Elements/* at the start
 	# then here one can use load(find_tscn_for_group(group)) and it will just return already loaded refs.
 	print("    - Chests")
@@ -133,13 +116,13 @@ func _ready():
 	for sprite in get_tree().get_nodes_in_group("Shop"):
 		replace_layout_node_with_background_packed_scene(sprite, preload("res://Elements/Shop.tscn"))
 	
-	print("Step 4: Passing all the room data to the world TileMap")
-	for room in get_children():
-		if room is TileMap:
-			var room_in_map := world_to_map(room.position)
-			for cell in room.get_used_cells():
-				set_cellv(room_in_map + cell, level_tile)
-			room.queue_free()
+#	print("Step 4: Passing all the room data to the world TileMap")
+#	for room in get_children():
+#		if room is TileMap:
+#			var room_in_map := world_to_map(room.position)
+#			for cell in room.get_used_cells():
+#				set_cellv(room_in_map + cell, level_tile)
+#			room.queue_free()
 	
 	max_point /= 8.0
 	max_point += Vector2(64, 32)
@@ -157,11 +140,10 @@ func _ready():
 
 
 func _process(delta):
-	if filling_done:
-		finalize_world()
-		set_process(false)
-	else:
-		fill_empty_space_chunk()
+	finalize_world()
+	set_process(false)
+#	else:
+#		fill_empty_space_chunk()
 
 
 func fill_empty_space_chunk():
@@ -502,11 +484,11 @@ func get_tile_side_restrictions(tile_position: Vector2, world_tiles: Dictionary)
 	if world_tiles.has(adjacent_positions[0]):
 		sides_to_consider["top"] = get_tile_side_value(world_tiles[adjacent_positions[0]], "bottom")
 	if world_tiles.has(adjacent_positions[1]):
-		sides_to_consider["bottom"] = get_tile_side_value(world_tiles[adjacent_positions[0]], "tom")
+		sides_to_consider["bottom"] = get_tile_side_value(world_tiles[adjacent_positions[1]], "top")
 	if world_tiles.has(adjacent_positions[2]):
-		sides_to_consider["left"] = get_tile_side_value(world_tiles[adjacent_positions[0]], "right")
+		sides_to_consider["left"] = get_tile_side_value(world_tiles[adjacent_positions[2]], "right")
 	if world_tiles.has(adjacent_positions[3]):
-		sides_to_consider["right"] = get_tile_side_value(world_tiles[adjacent_positions[0]], "left")
+		sides_to_consider["right"] = get_tile_side_value(world_tiles[adjacent_positions[3]], "left")
 	
 	return sides_to_consider
 
@@ -520,10 +502,154 @@ func get_tile_side_value(tile_id, side: String) -> int:
 				return 0
 		else:
 			return -1
-	elif tile_id is Vector2:
+	elif tile_id is int:
+		if tile_id == -1:
+			return -1
 		var instance = Rooms.all_tiles[tile_id].instance()
 		var output = instance.left
+		if side == "right":
+			output = instance.right
+		elif side == "bottom":
+			output = instance.bottom
+		elif side == "top":
+			output = instance.top
 		instance.queue_free()
 		return output
 	
 	return -1
+
+
+
+func get_tile_with_requirements(requirement: Dictionary) -> int:
+	if requirement.empty():
+		return Rooms.all_tiles[Items.WorldRNG.randi() % Rooms.all_tiles.size()]
+	
+	var matches_top := ["boop"]
+	var matches_bottom := ["boop"]
+	var matches_left := ["boop"]
+	var matches_right := ["boop"]
+	
+	
+	if requirement.has("top"):
+		matches_top = Rooms.tiles_by_side["top"][requirement["top"]]
+	
+	if requirement.has("bottom"):
+		matches_bottom = Rooms.tiles_by_side["bottom"][requirement["bottom"]]
+	
+	if requirement.has("left"):
+		matches_left = Rooms.tiles_by_side["left"][requirement["left"]]
+	
+	if requirement.has("right"):
+		matches_right = Rooms.tiles_by_side["right"][requirement["right"]]
+	
+	
+	var all_side_matches = [matches_bottom, matches_top, matches_right, matches_left]
+	
+	
+	for i in all_side_matches.duplicate():
+		if not i.empty() and i[0] is String:
+			all_side_matches.erase(i)
+	
+	var all_valid_matches := []
+	
+	if all_side_matches.size() > 0:
+		all_valid_matches = all_side_matches[0]
+		if all_side_matches.size() > 1:
+			for i in range(1, all_side_matches.size()):
+				all_valid_matches = intersect_sets(all_valid_matches, all_side_matches[i])
+		
+	if all_valid_matches.empty():
+		return -1
+	
+	return all_valid_matches[Items.WorldRNG.randi()%all_valid_matches.size()]
+	
+
+
+func intersect_sets(a: Array, b: Array) -> Array:
+	var starting_set = a
+	var other_set = b
+	var output_set := []
+	if b.size() > a.size():
+		starting_set = b
+		other_set = a
+	
+	
+	for element in starting_set:
+		if other_set.has(element):
+			output_set.append(element)
+	return output_set
+
+
+func generate_world() -> Dictionary:
+	var world_tiles := {}
+	var tiles_to_make := [Vector2.ZERO]
+	var tiles_made := []
+	
+	while not tiles_to_make.empty():
+		var tile_position :Vector2 = tiles_to_make.pop_front()
+		 
+		if tile_position in tiles_made:
+			continue
+		
+		tiles_made.append(tile_position)
+		
+		
+		if tile_position == Vector2(0, 0):
+			world_tiles[tile_position] = "first_room"
+			tiles_to_make.append_array(get_adjacent_positions(tile_position))
+			continue
+		
+		
+		if tile_position.x < min_point.x - 3 or tile_position.x > max_point.x + 3 or tile_position.y < min_point.y - 3 or tile_position.y > max_point.y + 3:
+			continue
+		
+		tiles_to_make.append_array(get_adjacent_positions(tile_position))
+		
+		var sides_to_consider := get_tile_side_restrictions(tile_position, world_tiles)
+		
+		if tile_position.x <= min_point.x:
+			sides_to_consider["left"] = -1
+		if tile_position.x >= max_point.x:
+			sides_to_consider["right"] = -1
+		
+		if tile_position.y <= min_point.y:
+			sides_to_consider["top"] = -1
+		if tile_position.y >= max_point.y:
+			sides_to_consider["bottom"] = -1
+		
+		world_tiles[tile_position] = get_tile_with_requirements(sides_to_consider)
+	
+	return world_tiles
+
+
+func are_tiles_connected(start: Vector2, end: Vector2, tilemap: Dictionary) -> bool:
+	var tiles_checked := []
+	var tiles_to_check := [start]
+	
+	while not tiles_to_check.empty():
+		var current_tile = tiles_to_check.pop_back()
+		
+		if current_tile in tiles_checked:
+			continue
+		
+		tiles_checked.append(current_tile)
+		var adjacencies := get_adjacent_positions(current_tile)
+		
+		if current_tile == end:
+			return true
+			
+		if tilemap.has(adjacencies[0]):
+			if get_tile_side_value(tilemap[adjacencies[0]], "top") != -1:
+				tiles_to_check.append(adjacencies[0])
+		if tilemap.has(adjacencies[1]):
+			if get_tile_side_value(tilemap[adjacencies[1]], "bottom") != -1:
+				tiles_to_check.append(adjacencies[1])
+		if tilemap.has(adjacencies[2]):
+			if get_tile_side_value(tilemap[adjacencies[2]], "left") != -1:
+				tiles_to_check.append(adjacencies[2])
+		if tilemap.has(adjacencies[3]):
+			if get_tile_side_value(tilemap[adjacencies[3]], "right") != -1:
+				tiles_to_check.append(adjacencies[3])
+		
+		
+	return false
