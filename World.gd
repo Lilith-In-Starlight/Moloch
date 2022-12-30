@@ -212,8 +212,8 @@ func add_enemies():
 	var enemies = []
 	for tile in world_tile_instances:
 		var area = Rect2(tile * Rooms.tile_size * 8, Rooms.tile_size * 8)
-		for i in Items.WorldRNG.randi()%3:
-			enemies.append(add_enemy_with_chance(area, preload("res://Enemies/MagicDrone.tscn"), 0.6))
+		for i in Items.WorldRNG.randi()%4:
+			enemies.append(add_enemy_with_chance(area, preload("res://Enemies/MagicDrone.tscn"), 0.7))
 			enemies.append(add_enemy_with_chance(area, preload("res://Enemies/SpellMachine.tscn"), 0.3))
 			enemies.append(add_enemy_with_chance(area, preload("res://Enemies/Incomplete.tscn"), 0.1))
 			if Items.level > 1:
