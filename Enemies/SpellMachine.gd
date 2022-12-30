@@ -76,7 +76,7 @@ func _physics_process(delta):
 					state = STATES.SEARCHING
 					$Aim.visible = false
 					$AimLine.visible = false
-				elif position_timer < 0.65:
+				elif position_timer < 0.5:
 					last_seen = Player.position
 					$Aim.visible = false
 					$AimLine.visible = false
@@ -96,7 +96,7 @@ func _physics_process(delta):
 				speed += (primordial_termor-speed)/8.0
 			
 			position_timer += delta
-			if position_timer >= 0.5:
+			if position_timer >= 0.9:
 				$Aim.visible = false
 				$AimLine.visible = false
 				state = STATES.RECOIL
