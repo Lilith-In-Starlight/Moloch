@@ -267,7 +267,12 @@ func _physics_process(delta: float) -> void:
 	var coffset := get_local_mouse_position()/2.5
 	if Config.last_input_was_controller:
 		coffset = last_controller_aim * 0.5
-	Cam.offset += (coffset-Cam.offset)/10.0
+	
+	if Config.camera_smoothing > 0:
+		Cam.offset += (coffset-Cam.offset)/Config.camera_smoothing
+	
+	else:
+		Cam.offset = Vector2(0, 0)
 	Cam.position = lerp(Cam.position, position, 0.08)
 	
 	# The wounds can cicatrize on their own

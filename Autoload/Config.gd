@@ -12,6 +12,7 @@ var damage_visuals := false
 var instant_death_button := false
 var joystick_sensitivity := 6
 var use_accessible_font := false setget set_font
+var camera_smoothing := 5
 
 var app_start_time = OS.get_unix_time()
 
@@ -84,6 +85,7 @@ func _ready() -> void:
 		self.damage_visuals = config_file.get_value("config", "damage_visuals", false)
 		self.instant_death_button = config_file.get_value("config", "instant_death_button", false)
 		self.joystick_sensitivity = config_file.get_value("config", "joystick_sensitivity", 6)
+		self.camera_smoothing = config_file.get_value("config", "camera_smoothing", 5)
 		self.use_accessible_font = config_file.get_value("config", "accessible_font", false)
 		for i in InputMap.get_actions():
 			var obtained = config_file.get_value("config", "keybinds_%s"%i, InputMap.get_action_list(i))
@@ -139,6 +141,7 @@ func save_config() -> void:
 	config_file.set_value("config", "damage_visuals", damage_visuals)
 	config_file.set_value("config", "instant_death_button", instant_death_button)
 	config_file.set_value("config", "joystick_sensitivity", joystick_sensitivity)
+	config_file.set_value("config", "camera_smoothing", camera_smoothing)
 	config_file.set_value("config", "accessible_font", use_accessible_font)
 	for i in InputMap.get_actions():
 		config_file.set_value("config", "keybinds_%s"%i, InputMap.get_action_list(i))
