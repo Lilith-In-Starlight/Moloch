@@ -194,9 +194,6 @@ margin_top = -130.0
 margin_right = 117.5
 margin_bottom = 130.0
 texture = ExtResource( 8 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Smoke" type="TextureRect" parent="Symbol"]
 modulate = Color( 1, 0.870588, 0.803922, 0.145098 )
@@ -221,7 +218,7 @@ __meta__ = {
 margin_right = 40.0
 margin_bottom = 14.0
 theme = ExtResource( 6 )
-text = "Nightly 301222"
+text = "0.13.0"
 
 [node name="Animations" type="AnimationPlayer" parent="."]
 anims/Fadein = SubResource( 1 )
