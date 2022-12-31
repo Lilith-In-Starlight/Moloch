@@ -207,9 +207,6 @@ script = ExtResource( 11 )
 [node name="Following" type="Control" parent="Background"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Bg1" type="TextureRect" parent="Background/Following"]
 anchor_right = 1.0
@@ -1187,8 +1184,6 @@ environment = SubResource( 32 )
 [connection signal="pressed" from="HUD/HUD/Pause/Settings/AccessibleFont" to="HUD/HUD/Pause" method="_on_AccessibleFont_pressed"]
 [connection signal="pressed" from="HUD/HUD/Pause/Settings/Back" to="HUD/HUD/Pause" method="_on_Back_pressed"]
 [connection signal="timeout" from="HUD/HUD/Achievement/Timer" to="HUD/HUD/Achievement" method="_on_Timer_timeout"]
-[connection signal="entity_died" from="Player" to="HUD" method="_on_player_died"]
-[connection signal="entity_died" from="Player" to="HUD/HUD/Pause" method="_on_Player_died"]
 [connection signal="generated_world" from="World" to="Background" method="_on_generated_world"]
 [connection signal="generated_world" from="World" to="HUD" method="_on_generated_world"]
 [connection signal="generated_world" from="World" to="HUD/HUD/Minimap" method="_on_generated_world"]
