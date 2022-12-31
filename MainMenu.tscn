@@ -163,7 +163,7 @@ font_data = ExtResource( 2 )
 
 [sub_resource type="Environment" id=12]
 background_mode = 4
-tonemap_mode = 4
+tonemap_mode = 3
 auto_exposure_min_luma = 0.35
 auto_exposure_max_luma = 7.09
 auto_exposure_speed = 64.0
