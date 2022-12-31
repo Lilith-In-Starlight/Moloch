@@ -1015,21 +1015,19 @@ custom_colors/font_color_pressed = Color( 1, 0.596078, 0.929412, 1 )
 text = "Die Instantly"
 
 [node name="Settings" type="VBoxContainer" parent="HUD/HUD/Pause"]
+visible = false
 anchor_left = 0.5
-anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -59.5
-margin_top = -50.0
-margin_right = 59.5
-margin_bottom = 50.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+margin_left = -76.0
+margin_top = 32.0
+margin_right = 76.0
+margin_bottom = 189.0
+custom_constants/separation = 0
 
 [node name="JoystickSensitivity" type="HSlider" parent="HUD/HUD/Pause/Settings"]
 margin_right = 152.0
-margin_bottom = 16.0
+margin_bottom = 45.0
+rect_min_size = Vector2( 0, 45 )
 theme = ExtResource( 18 )
 min_value = 1.0
 max_value = 12.0
@@ -1052,10 +1050,35 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VisualizeDamage" type="CheckBox" parent="HUD/HUD/Pause/Settings"]
-margin_top = 20.0
+[node name="CameraSensitivity" type="HSlider" parent="HUD/HUD/Pause/Settings"]
+margin_top = 45.0
 margin_right = 152.0
-margin_bottom = 44.0
+margin_bottom = 61.0
+theme = ExtResource( 18 )
+max_value = 12.0
+value = 1.0
+
+[node name="Text" type="Label" parent="HUD/HUD/Pause/Settings/CameraSensitivity"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -50.0
+margin_top = -22.0
+margin_right = 50.0
+margin_bottom = -8.0
+grow_horizontal = 2
+theme = ExtResource( 18 )
+text = "Camera Sensitivity: 12"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VisualizeDamage" type="CheckBox" parent="HUD/HUD/Pause/Settings"]
+margin_top = 61.0
+margin_right = 152.0
+margin_bottom = 85.0
 theme = ExtResource( 18 )
 text = "Visualize Damage"
 __meta__ = {
@@ -1063,9 +1086,9 @@ __meta__ = {
 }
 
 [node name="InstantDeathButton" type="CheckBox" parent="HUD/HUD/Pause/Settings"]
-margin_top = 48.0
+margin_top = 85.0
 margin_right = 152.0
-margin_bottom = 72.0
+margin_bottom = 109.0
 theme = ExtResource( 18 )
 text = "Instant Death Button"
 __meta__ = {
@@ -1073,9 +1096,9 @@ __meta__ = {
 }
 
 [node name="AccessibleFont" type="CheckBox" parent="HUD/HUD/Pause/Settings"]
-margin_top = 76.0
+margin_top = 109.0
 margin_right = 152.0
-margin_bottom = 100.0
+margin_bottom = 133.0
 theme = ExtResource( 18 )
 text = "Accessible Font"
 __meta__ = {
@@ -1083,9 +1106,9 @@ __meta__ = {
 }
 
 [node name="Back" type="ToolButton" parent="HUD/HUD/Pause/Settings"]
-margin_top = 104.0
+margin_top = 133.0
 margin_right = 152.0
-margin_bottom = 128.0
+margin_bottom = 157.0
 theme = ExtResource( 18 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_colors/font_color_hover = Color( 0.737255, 1, 0.968627, 1 )
@@ -1179,6 +1202,7 @@ environment = SubResource( 32 )
 [connection signal="focus_exited" from="HUD/HUD/Console/Input" to="HUD/HUD/Console" method="_on_Input_focus_exited"]
 [connection signal="pressed" from="HUD/HUD/Pause/Options/Settings" to="HUD/HUD/Pause" method="_on_Settings_pressed"]
 [connection signal="value_changed" from="HUD/HUD/Pause/Settings/JoystickSensitivity" to="HUD/HUD/Pause" method="_on_JoystickSensitivity_value_changed"]
+[connection signal="value_changed" from="HUD/HUD/Pause/Settings/CameraSensitivity" to="HUD/HUD/Pause" method="_on_CameraSensitivity_value_changed"]
 [connection signal="pressed" from="HUD/HUD/Pause/Settings/VisualizeDamage" to="HUD/HUD/Pause" method="_on_VisualizeDamage_pressed"]
 [connection signal="pressed" from="HUD/HUD/Pause/Settings/InstantDeathButton" to="HUD/HUD/Pause" method="_on_InstantDeathButton_pressed"]
 [connection signal="pressed" from="HUD/HUD/Pause/Settings/AccessibleFont" to="HUD/HUD/Pause" method="_on_AccessibleFont_pressed"]
