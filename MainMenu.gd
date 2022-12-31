@@ -48,7 +48,7 @@ func _ready():
 			make_menu_setting("Damage Colors", Config.damage_visuals, "dv"),
 			make_menu_setting("Accessible Font", Config.use_accessible_font, "uaf"),
 			make_menu_setting("Joystick Sensitivity", Config.joystick_sensitivity, "joys"),
-			make_menu_setting("Camera Smoothing", Config.camera_smoothing, "camsense"),
+			make_menu_setting("Camera Sensitivity", Config.camera_smoothing, "camsense"),
 			make_menu_option("Controls", "controls"),
 			make_menu_option("Back", "main"),
 			],

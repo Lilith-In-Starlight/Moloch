@@ -269,7 +269,7 @@ func _physics_process(delta: float) -> void:
 		coffset = last_controller_aim * 0.5
 	
 	if Config.camera_smoothing > 0:
-		Cam.offset += (coffset-Cam.offset)/Config.camera_smoothing
+		Cam.offset += (coffset-Cam.offset)/(13 - Config.camera_smoothing)
 	
 	else:
 		Cam.offset = Vector2(0, 0)
