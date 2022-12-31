@@ -84,6 +84,7 @@ func _ready():
 		Items.using_seed = Items.WorldRNG.seed
 	UsefulAdvice.text = advice[randi()%advice.size()] + "\n"
 	UsefulAdvice.text += "Seed: " + str(Items.using_seed)
+	$HUD/Pause/Seed.text = "Seed: " + str(Items.using_seed)
 
 
 func _process(delta):
