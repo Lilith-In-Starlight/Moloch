@@ -52,3 +52,14 @@ func _process(delta: float) -> void:
 		Items.selected_wand = Items.player_wands.size() - 1
 	if not Items.player_wands.empty() and Items.selected_wand < 0:
 		Items.selected_wand = 0
+	
+	var player_tile :Vector2 = $World.get_round_point_to_tile($Player.position.snapped(Vector2(8, 8)) / 8)
+	for x in range(-2, 2):
+		for y in range(-2, 2):
+			var tile := player_tile + Vector2(x, y)
+			if not $World.world_tile_instances.has(tile):
+				var new_tile = preload("res://Rooms/Sacrifice/Empty_room.tscn").instance()
+				new_tile.position = tile * Rooms.tile_size * 8
+				new_tile.add_to_group("WorldPiece")
+				$World.world_tile_instances[tile] = new_tile
+				$World.add_child(new_tile)
