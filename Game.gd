@@ -2,7 +2,16 @@ extends Node2D
 
 var did := false
 
+var world_areas := []
+var player_in_area := 0
+
 func _ready() -> void:
+	world_areas.append(Rect2(Vector2(-3, -7) * Rooms.tile_size * 8, Vector2(7, 8) * Rooms.tile_size * 8))
+	
+	if randi() % 3112 == 31:
+		world_areas.append(Rect2(Vector2(-2002 - randi() % 31, randi() % 2002) * Rooms.tile_size * 8, Vector2(7, 8) * Rooms.tile_size * 8))
+	
+	
 	for i in Items.player_wands:
 		i.connect("casting_spell", self, "_on_casting_spell")
 	
@@ -63,3 +72,22 @@ func _process(delta: float) -> void:
 				new_tile.add_to_group("WorldPiece")
 				$World.world_tile_instances[tile] = new_tile
 				$World.add_child(new_tile)
+	
+	var index := 0
+	var previous_area = player_in_area
+	player_in_area = -1
+	for i in world_areas:
+		if i.has_point($Player.position):
+			player_in_area = index
+		index += 1
+	if player_in_area != previous_area:
+		if player_in_area == -1:
+			if previous_area == 0:
+				$Player.send_message("Leving This World")
+		else:
+			if player_in_area == 0:
+				$Player.send_message("Entering World")
+			elif Time.get_datetime_dict_from_system()["month"] == 12 and Time.get_time()["day"] == 31:
+				$Player.send_message("Entered godiscryinggodiscryinggodiscryinggodisc")
+			else:
+				$Player.send_message("Entered 20797468736321816615543854419")

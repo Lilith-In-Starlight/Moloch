@@ -984,9 +984,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 custom_styles/panel = SubResource( 23 )
 script = ExtResource( 14 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Options" type="VBoxContainer" parent="HUD/HUD/Pause"]
 anchor_left = 0.5
@@ -1034,7 +1031,7 @@ __meta__ = {
 }
 
 [node name="JoystickSensitivity" type="HSlider" parent="HUD/HUD/Pause/Settings"]
-margin_right = 119.0
+margin_right = 152.0
 margin_bottom = 16.0
 theme = ExtResource( 18 )
 min_value = 1.0
@@ -1060,7 +1057,7 @@ __meta__ = {
 
 [node name="VisualizeDamage" type="CheckBox" parent="HUD/HUD/Pause/Settings"]
 margin_top = 20.0
-margin_right = 119.0
+margin_right = 152.0
 margin_bottom = 44.0
 theme = ExtResource( 18 )
 text = "Visualize Damage"
@@ -1070,7 +1067,7 @@ __meta__ = {
 
 [node name="InstantDeathButton" type="CheckBox" parent="HUD/HUD/Pause/Settings"]
 margin_top = 48.0
-margin_right = 119.0
+margin_right = 152.0
 margin_bottom = 72.0
 theme = ExtResource( 18 )
 text = "Instant Death Button"
@@ -1079,9 +1076,9 @@ __meta__ = {
 }
 
 [node name="AccessibleFont" type="CheckBox" parent="HUD/HUD/Pause/Settings"]
-margin_top = 48.0
-margin_right = 119.0
-margin_bottom = 72.0
+margin_top = 76.0
+margin_right = 152.0
+margin_bottom = 100.0
 theme = ExtResource( 18 )
 text = "Accessible Font"
 __meta__ = {
@@ -1089,14 +1086,29 @@ __meta__ = {
 }
 
 [node name="Back" type="ToolButton" parent="HUD/HUD/Pause/Settings"]
-margin_top = 76.0
-margin_right = 119.0
-margin_bottom = 100.0
+margin_top = 104.0
+margin_right = 152.0
+margin_bottom = 128.0
 theme = ExtResource( 18 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_colors/font_color_hover = Color( 0.737255, 1, 0.968627, 1 )
 custom_colors/font_color_pressed = Color( 1, 0.596078, 0.929412, 1 )
 text = "Back"
+
+[node name="Seed" type="Label" parent="HUD/HUD/Pause"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -70.5
+margin_top = 202.0
+margin_right = 70.5
+margin_bottom = 218.0
+grow_horizontal = 2
+theme = ExtResource( 18 )
+text = "Seed: 69420yourmomxd"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="DeathSFX" type="AudioStreamPlayer" parent="HUD/HUD"]
 stream = ExtResource( 15 )

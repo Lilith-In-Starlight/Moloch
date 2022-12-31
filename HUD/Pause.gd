@@ -11,6 +11,7 @@ func _ready() -> void:
 	$Settings/InstantDeathButton.pressed = Config.instant_death_button
 	$Settings/JoystickSensitivity/Text.text = "Joystick Sensitivity: " + str(Config.joystick_sensitivity)
 	$Settings/JoystickSensitivity.value = Config.joystick_sensitivity
+	$Seed.text = "Seed: " + str(Items.using_seed)
 
 
 func _on_DieInstantly_pressed() -> void:
