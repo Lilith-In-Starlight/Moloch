@@ -86,7 +86,7 @@ func _physics_process(delta):
 				speed += (primordial_termor-speed)/8.0
 			
 			position_timer += delta
-			if position_timer >= 0.6:
+			if position_timer >= 0.5:
 				state = STATES.RECOIL
 				position_timer = 0.0
 				speed = -(last_seen-position).normalized()*100
@@ -102,7 +102,7 @@ func _physics_process(delta):
 			if $RayCast2D.is_colliding():
 				if $RayCast2D.get_collider() == Player:
 					last_seen = Player.position
-			if position_timer >= 0.5:
+			if position_timer >= 0.4:
 				if $RayCast2D.is_colliding():
 					if $RayCast2D.get_collider() == Player:
 						state = STATES.POSITIONING
