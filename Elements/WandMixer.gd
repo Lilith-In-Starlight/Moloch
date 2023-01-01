@@ -34,7 +34,7 @@ func _ready() -> void:
 
 
 func _input(event: InputEvent) -> void:
-	if Input.is_action_just_pressed("down"):
+	if Input.is_action_just_pressed("interact_world"):
 		if not control:
 			add_wand_to_side()
 		elif Player.position.distance_to(position) < 200:

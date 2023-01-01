@@ -37,7 +37,7 @@ func _ready():
 func _process(_delta):
 	if not open:
 		if Player.position.distance_to(position) < 16:
-			if Input.is_action_just_pressed("down"):
+			if Input.is_action_just_pressed("interact_world"):
 				open = true
 				$Sprite.play("open")
 				match type:
