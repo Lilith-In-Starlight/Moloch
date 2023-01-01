@@ -46,70 +46,43 @@ func _process(delta: float) -> void:
 	$Symbol/Smoke.texture.noise.persistence = 0.6 + sin(Engine.get_frames_drawn() * 0.0001) * 0.1
 	$Symbol/Smoke.texture.noise.lacunarity = 1.9 + sin(Engine.get_frames_drawn() * 0.0001) * 0.2
 	
+	$ControlSettings/Controls/Movement/UpKey.text = "Move Up: " + get_action_text("up")
+	$ControlSettings/Controls/Movement/DownKey.text = "Move Down: " + get_action_text("down")
+	$ControlSettings/Controls/Movement/MoveLeft.text = "Move Left: " + get_action_text("left")
+	$ControlSettings/Controls/Movement/MoveRight.text = "Move Left: " + get_action_text("right")
+	$ControlSettings/Controls/Movement/JumpKey.text = "Jump: " + get_action_text("jump")
+	
+	
+	$ControlSettings/Controls/Interaction/InstantlyDie.text = "Instantly Die: " + get_action_text("instant_death")
+	$ControlSettings/Controls/Interaction/Interact.text = "Interact: " + get_action_text("interact_world")
+	$ControlSettings/Controls/Interaction/UseWand.text = "Use Wand: " + get_action_text("Interact1")
+	$ControlSettings/Controls/Interaction/DropWand.text = "Drop Wand: " + get_action_text("Interact2")
+	
+	$ControlSettings/Actions/Save.disabled = changed_keys.empty()
+	
+	if changed_keys.empty():
+		$ControlSettings/Actions/Back.text = "Go Back"
+	else:
+		$ControlSettings/Actions/Back.text = "Regret Changes"
+	
 
 
-#func _input(event: InputEvent) -> void:
-#	if event is InputEventMouseButton and event.is_pressed():
-#		SeedLineEdit.release_focus()
-#	if changing_key == "":
-#		if (event is InputEventKey or event is InputEventJoypadButton) and event.is_pressed():
-#			var current_selection = menus[current_menu][current_menu_pos()]
-#			var action := ""
-#			if not SeedLineEdit.has_focus() or event is InputEventJoypadButton:
-#				for i in ["up", "down", "left", "right", "jump"]:
-#					for j in ["", "scroll", "scroll_"]:
-#						if InputMap.has_action(j + i) and Input.is_action_just_pressed(j + i):
-#							action = i
-#							break
-#			else:
-#				if event is InputEventKey and event.scancode == KEY_ESCAPE:
-#					SeedLineEdit.release_focus()
-#			if not viewing_achievements:
-#				match action:
-#					"up":
-#						set_current_pos(current_menu_pos() - 1)
-#						if current_menu_pos() < 0:
-#							set_current_pos(menus[current_menu].size()-1)
-#					"down":
-#						set_current_pos((current_menu_pos() + 1) % menus[current_menu].size())
-#					"jump":
-#						if current_selection is MenuOption:
-#							if current_selection.menu_dest != "":
-#								set_menu(current_selection.menu_dest)
-#								current_menu_pos()
-#							elif current_selection.func_ref != null:
-#								if current_selection.func_args.empty():
-#									current_selection.func_ref.call_func()
-#								else:
-#									current_selection.func_ref.call_funcv(current_selection.func_args)
-#						else:
-#							if not current_selection.slider:
-#								toggle($MenuContainer.get_child(current_menu_pos()), current_selection)
-#					"left":
-#						if current_selection is MenuSetting:
-#							slide($MenuContainer.get_child(current_menu_pos()), current_selection, -1)
-#					"right":
-#						if current_selection is MenuSetting:
-#							slide($MenuContainer.get_child(current_menu_pos()), current_selection, 1)
-#			else:
-#				if (event is InputEventKey and not event.scancode in [KEY_ALT, KEY_SUPER_L, KEY_MASK_META, KEY_SHIFT, KEY_S, KEY_W]) or event is InputEventJoypadButton:
-#					viewing_achievements = false
-#	else:
-#		if (event is InputEventKey or event is InputEventMouseButton) and event.is_pressed():
-#			changed_keys[changing_key] = event
-#			changing_key = ""
+func _input(event: InputEvent) -> void:
+	if changing_key != "":
+		if (event is InputEventKey or event is InputEventMouseButton) and event.is_pressed():
+			changed_keys[changing_key] = event
+			changing_key = ""
 
 
 func proceed_keybinds():
 	for action in changed_keys:
-		var list:Array = InputMap.get_action_list(action)
-		var new_event:InputEvent = changed_keys[action]
-		for event in list:
-			if event is InputEventKey or event is InputEventMouseButton:
-				InputMap.action_erase_event(action, event)
-				break
-		InputMap.action_add_event(action, new_event)
+		if changed_keys[action] is InputEventKey:
+			Config.keyboard_binds[action] = [changed_keys[action].scancode, "key"]
+		elif changed_keys[action] is InputEventMouseButton:
+			Config.keyboard_binds[action] = [changed_keys[action].button_index, "click"]
+	
 	changed_keys = {}
+	Config.process_keybinds()
 	Config.save_config()
 
 
@@ -219,18 +192,18 @@ func get_action_text(action:String):
 	else:
 		var i = changed_keys[action]
 		if i is InputEventKey:
-			return OS.get_scancode_string(i.scancode)
+			return OS.get_scancode_string(i.scancode) + " [*]"
 		if i is InputEventMouseButton:
 			match i.button_index:
-				1: return "Left Click"
-				2: return "Right Click"
-				3: return "Middle Click"
-				4: return "Scroll Up"
-				5: return "Scroll Down"
-				6: return "Scroll Left"
-				7: return "Scroll Right"
-				8: return "Extra Click 1"
-				9: return "Extra Click 2"
+				1: return "Left Click [*]"
+				2: return "Right Click [*]"
+				3: return "Middle Click [*]"
+				4: return "Scroll Up [*]"
+				5: return "Scroll Down [*]"
+				6: return "Scroll Left [*]"
+				7: return "Scroll Right [*]"
+				8: return "Extra Click 1 [*]"
+				9: return "Extra Click 2 [*]"
 
 
 func reset_focus(Child:Control) -> void:
@@ -272,3 +245,19 @@ func set_accessible_font(button_pressed: bool) -> void:
 func set_mouse_sensitivity(value: float) -> void:
 	Config.camera_smoothing = value
 	Config.save_config()
+
+
+func view_controls() -> void:
+	$SettingsMenuContainer.visible = false
+	$ControlSettings.visible = true
+	$ControlSettings/Controls.current_tab = 0
+	$ControlSettings/Controls/Movement/UpKey.grab_focus()
+
+
+func regret_and_go_back():
+	if changed_keys.empty():
+		$SettingsMenuContainer.visible = true
+		$ControlSettings.visible = false
+		$SettingsMenuContainer/ControlsButton.grab_focus()
+	
+	changed_keys = {}

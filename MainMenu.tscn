@@ -454,99 +454,178 @@ theme = ExtResource( 10 )
 text = "Main Menu"
 flat = true
 
-[node name="ControlSettings" type="VBoxContainer" parent="."]
+[node name="ControlSettings" type="VSplitContainer" parent="."]
 visible = false
+anchor_left = 0.5
 anchor_top = 0.5
-anchor_right = 1.0
+anchor_right = 0.5
 anchor_bottom = 0.5
-margin_top = -99.0
-margin_bottom = 99.0
-custom_constants/separation = 0
+margin_left = -131.0
+margin_top = -95.5
+margin_right = 132.0
+margin_bottom = 96.5
+size_flags_vertical = 4
+collapsed = true
+dragger_visibility = 2
 
-[node name="UpKey" type="Button" parent="ControlSettings"]
-margin_left = 137.0
+[node name="Controls" type="TabContainer" parent="ControlSettings"]
 margin_right = 263.0
-margin_bottom = 22.0
+margin_bottom = 170.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+theme = ExtResource( 10 )
+
+[node name="Movement" type="VBoxContainer" parent="ControlSettings/Controls"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 16.0
+custom_constants/separation = -4
+alignment = 1
+
+[node name="UpKey" type="Button" parent="ControlSettings/Controls/Movement"]
+margin_left = 68.0
+margin_top = 30.0
+margin_right = 194.0
+margin_bottom = 52.0
+focus_neighbour_top = NodePath("../JumpKey")
+focus_neighbour_bottom = NodePath("../DownKey")
+focus_next = NodePath("../../../Actions/Save")
+focus_previous = NodePath("../../../Actions/Back")
 size_flags_horizontal = 4
 theme = ExtResource( 10 )
 text = "Climb Up: Up Arrow"
 flat = true
 
-[node name="DownKey" type="Button" parent="ControlSettings"]
-margin_left = 92.0
-margin_top = 22.0
-margin_right = 308.0
-margin_bottom = 44.0
+[node name="DownKey" type="Button" parent="ControlSettings/Controls/Movement"]
+margin_left = 23.0
+margin_top = 48.0
+margin_right = 239.0
+margin_bottom = 70.0
+focus_neighbour_top = NodePath("../UpKey")
+focus_neighbour_bottom = NodePath("../MoveLeft")
+focus_next = NodePath("../../../Actions/Save")
 size_flags_horizontal = 4
 theme = ExtResource( 10 )
 text = "Move Down/Interact: Down Arrow"
 flat = true
 
-[node name="MoveLeft" type="Button" parent="ControlSettings"]
-margin_left = 149.0
-margin_top = 44.0
-margin_right = 250.0
-margin_bottom = 66.0
+[node name="MoveLeft" type="Button" parent="ControlSettings/Controls/Movement"]
+margin_left = 81.0
+margin_top = 66.0
+margin_right = 182.0
+margin_bottom = 88.0
+focus_neighbour_top = NodePath("../DownKey")
+focus_neighbour_bottom = NodePath("../MoveRight")
+focus_next = NodePath("../../../Actions/Save")
 size_flags_horizontal = 4
 theme = ExtResource( 10 )
 text = "Move Left: Left"
 flat = true
 
-[node name="MoveRight" type="Button" parent="ControlSettings"]
-margin_left = 143.0
-margin_top = 66.0
-margin_right = 256.0
-margin_bottom = 88.0
+[node name="MoveRight" type="Button" parent="ControlSettings/Controls/Movement"]
+margin_left = 75.0
+margin_top = 84.0
+margin_right = 188.0
+margin_bottom = 106.0
+focus_neighbour_top = NodePath("../MoveLeft")
+focus_neighbour_bottom = NodePath("../JumpKey")
+focus_next = NodePath("../../../Actions/Save")
 size_flags_horizontal = 4
 theme = ExtResource( 10 )
 text = "Move Right: Right"
 flat = true
 
-[node name="SealWound" type="Button" parent="ControlSettings"]
-margin_left = 152.0
-margin_top = 88.0
-margin_right = 248.0
-margin_bottom = 110.0
-size_flags_horizontal = 4
-theme = ExtResource( 10 )
-text = "Seal Wound: R"
-flat = true
-
-[node name="InstantlyDie" type="Button" parent="ControlSettings"]
-margin_left = 150.0
-margin_top = 110.0
-margin_right = 250.0
-margin_bottom = 132.0
-size_flags_horizontal = 4
-theme = ExtResource( 10 )
-text = "Instantly Die: P"
-flat = true
-
-[node name="JumpKey" type="Button" parent="ControlSettings"]
-margin_left = 156.0
-margin_top = 132.0
-margin_right = 244.0
-margin_bottom = 154.0
+[node name="JumpKey" type="Button" parent="ControlSettings/Controls/Movement"]
+margin_left = 87.0
+margin_top = 102.0
+margin_right = 175.0
+margin_bottom = 124.0
+focus_neighbour_top = NodePath("../MoveRight")
+focus_neighbour_bottom = NodePath("../../../Actions/Save")
+focus_next = NodePath("../../../Actions/Save")
 size_flags_horizontal = 4
 theme = ExtResource( 10 )
 text = "Jump: Space"
 flat = true
 
-[node name="Regret" type="Button" parent="ControlSettings"]
-margin_top = 154.0
-margin_right = 400.0
-margin_bottom = 176.0
+[node name="Interaction" type="VBoxContainer" parent="ControlSettings/Controls"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 16.0
+custom_constants/separation = -4
+alignment = 1
+
+[node name="InstantlyDie" type="Button" parent="ControlSettings/Controls/Interaction"]
+margin_left = 65.0
+margin_top = 48.0
+margin_right = 165.0
+margin_bottom = 70.0
+size_flags_horizontal = 4
 theme = ExtResource( 10 )
-text = "Regret Changes"
+text = "Instantly Die: P"
 flat = true
 
-[node name="Return" type="Button" parent="ControlSettings"]
-margin_top = 176.0
-margin_right = 400.0
-margin_bottom = 198.0
+[node name="Interact" type="Button" parent="ControlSettings/Controls/Interaction"]
+margin_left = 65.0
+margin_top = 66.0
+margin_right = 165.0
+margin_bottom = 88.0
+size_flags_horizontal = 4
 theme = ExtResource( 10 )
-text = "Save And Go Back"
+text = "Interact: Down"
 flat = true
+
+[node name="UseWand" type="Button" parent="ControlSettings/Controls/Interaction"]
+margin_left = 63.0
+margin_top = 84.0
+margin_right = 168.0
+margin_bottom = 106.0
+size_flags_horizontal = 4
+theme = ExtResource( 10 )
+text = "Use Wand: Click"
+flat = true
+
+[node name="DropWand" type="Button" parent="ControlSettings/Controls/Interaction"]
+margin_left = 63.0
+margin_top = 84.0
+margin_right = 168.0
+margin_bottom = 106.0
+size_flags_horizontal = 4
+theme = ExtResource( 10 )
+text = "Use Wand: Click"
+flat = true
+
+[node name="Actions" type="HBoxContainer" parent="ControlSettings"]
+margin_top = 170.0
+margin_right = 263.0
+margin_bottom = 192.0
+alignment = 1
+
+[node name="Save" type="Button" parent="ControlSettings/Actions"]
+margin_left = 16.0
+margin_right = 111.0
+margin_bottom = 22.0
+focus_neighbour_left = NodePath("../Back")
+focus_neighbour_right = NodePath("../Back")
+size_flags_horizontal = 4
+theme = ExtResource( 10 )
+disabled = true
+text = "Save Changes"
+flat = true
+
+[node name="Back" type="Button" parent="ControlSettings/Actions"]
+margin_left = 115.0
+margin_right = 247.0
+margin_bottom = 22.0
+focus_neighbour_left = NodePath("../Save")
+focus_neighbour_right = NodePath("../Save")
+size_flags_horizontal = 4
+theme = ExtResource( 10 )
+text = "Regret And Go Back"
+flat = true
+align = 2
 
 [node name="Thing" type="Panel" parent="."]
 visible = false
@@ -611,5 +690,17 @@ environment = SubResource( 12 )
 [connection signal="value_changed" from="SettingsMenuContainer/MouseSensitivityContainer/Slider" to="." method="set_mouse_sensitivity"]
 [connection signal="toggled" from="SettingsMenuContainer/DamageColorsCheckbox" to="." method="set_damage_colors"]
 [connection signal="toggled" from="SettingsMenuContainer/AccessibleFontCheckbox" to="." method="set_accessible_font"]
+[connection signal="pressed" from="SettingsMenuContainer/ControlsButton" to="." method="view_controls"]
 [connection signal="pressed" from="SettingsMenuContainer/MainMenuButton" to="." method="set_to_main_menu"]
 [connection signal="pressed" from="Achievements/MainMenuButton" to="." method="set_to_main_menu"]
+[connection signal="pressed" from="ControlSettings/Controls/Movement/UpKey" to="." method="start_changing_key" binds= [ "move_up" ]]
+[connection signal="pressed" from="ControlSettings/Controls/Movement/DownKey" to="." method="start_changing_key" binds= [ "move_down" ]]
+[connection signal="pressed" from="ControlSettings/Controls/Movement/MoveLeft" to="." method="start_changing_key" binds= [ "move_left" ]]
+[connection signal="pressed" from="ControlSettings/Controls/Movement/MoveRight" to="." method="start_changing_key" binds= [ "move_right" ]]
+[connection signal="pressed" from="ControlSettings/Controls/Movement/JumpKey" to="." method="start_changing_key" binds= [ "jump" ]]
+[connection signal="pressed" from="ControlSettings/Controls/Interaction/InstantlyDie" to="." method="start_changing_key" binds= [ "instant_death" ]]
+[connection signal="pressed" from="ControlSettings/Controls/Interaction/Interact" to="." method="start_changing_key" binds= [ "interact_world" ]]
+[connection signal="pressed" from="ControlSettings/Controls/Interaction/UseWand" to="." method="start_changing_key" binds= [ "Interact1" ]]
+[connection signal="pressed" from="ControlSettings/Controls/Interaction/DropWand" to="." method="start_changing_key" binds= [ "Interact2" ]]
+[connection signal="pressed" from="ControlSettings/Actions/Save" to="." method="proceed_keybinds"]
+[connection signal="pressed" from="ControlSettings/Actions/Back" to="." method="regret_and_go_back"]

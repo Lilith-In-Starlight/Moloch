@@ -347,6 +347,10 @@ select_inventory_2={
 "events": [ Object(InputEventJoypadButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"button_index":4,"pressure":0.0,"pressed":false,"script":null)
  ]
 }
+interact_world={
+"deadzone": 0.5,
+"events": [  ]
+}
 
 [layer_names]
 

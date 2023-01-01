@@ -12,12 +12,30 @@ font_data = ExtResource( 1 )
 [sub_resource type="StyleBoxEmpty" id=1]
 
 [sub_resource type="StyleBoxFlat" id=3]
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+anti_aliasing = false
 
 [sub_resource type="StyleBoxFlat" id=4]
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+expand_margin_left = 6.0
+expand_margin_right = 6.0
+expand_margin_top = 3.0
+anti_aliasing = false
 
 [sub_resource type="StyleBoxFlat" id=5]
+anti_aliasing = false
 
 [sub_resource type="StyleBoxFlat" id=6]
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+expand_margin_left = 6.0
+expand_margin_right = 6.0
+expand_margin_top = 3.0
+anti_aliasing = false
 
 [resource]
 default_font = SubResource( 2 )
@@ -51,6 +69,7 @@ CheckBox/styles/hover = null
 CheckBox/styles/hover_pressed = null
 CheckBox/styles/normal = null
 CheckBox/styles/pressed = null
+TabContainer/constants/hseparation = 8
 TabContainer/styles/panel = SubResource( 3 )
 TabContainer/styles/tab_bg = SubResource( 4 )
 TabContainer/styles/tab_disabled = SubResource( 5 )
