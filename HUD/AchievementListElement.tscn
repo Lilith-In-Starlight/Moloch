@@ -28,10 +28,9 @@ shader_param/achieved = true
 
 [node name="Achievement" type="Control"]
 margin_right = 380.0
+margin_bottom = 31.0
+rect_min_size = Vector2( 0, 31 )
 script = ExtResource( 4 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Icon" type="TextureRect" parent="."]
 material = SubResource( 2 )

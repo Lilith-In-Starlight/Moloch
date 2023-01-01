@@ -1,9 +1,8 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://Sprites/Menus/logo.png" type="Texture" id=1]
 [ext_resource path="res://dpcomic.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://MainMenu.gd" type="Script" id=3]
-[ext_resource path="res://Sprites/Spells/Entities/FireOrb.png" type="Texture" id=4]
 [ext_resource path="res://HUD/AchievementListElement.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Themes/VersionTheme.tres" type="Theme" id=6]
 [ext_resource path="res://Sprites/Menus/MenuBGSymbol.png" type="Texture" id=7]
@@ -202,9 +201,6 @@ material = SubResource( 17 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 texture = SubResource( 19 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Blur" type="TextureRect" parent="Symbol"]
 material = SubResource( 11 )
@@ -227,7 +223,6 @@ anims/Fadeout = SubResource( 2 )
 anims/License = SubResource( 3 )
 
 [node name="MainMenu" type="Control" parent="."]
-visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 __meta__ = {
@@ -268,7 +263,6 @@ __meta__ = {
 }
 
 [node name="MainMenuContainer" type="VBoxContainer" parent="."]
-visible = false
 anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
@@ -280,6 +274,8 @@ custom_constants/separation = -6
 [node name="NewRunButton" type="Button" parent="MainMenuContainer"]
 margin_right = 92.0
 margin_bottom = 22.0
+focus_neighbour_top = NodePath("../QuitButton")
+focus_neighbour_bottom = NodePath("../AchievementsButton")
 theme = ExtResource( 10 )
 text = "New Run"
 flat = true
@@ -288,6 +284,8 @@ flat = true
 margin_top = 16.0
 margin_right = 92.0
 margin_bottom = 38.0
+focus_neighbour_top = NodePath("../NewRunButton")
+focus_neighbour_bottom = NodePath("../SettingsButton")
 theme = ExtResource( 10 )
 text = "Achievements"
 flat = true
@@ -296,6 +294,8 @@ flat = true
 margin_top = 32.0
 margin_right = 92.0
 margin_bottom = 54.0
+focus_neighbour_top = NodePath("../AchievementsButton")
+focus_neighbour_bottom = NodePath("../QuitButton")
 theme = ExtResource( 10 )
 text = "Settings"
 flat = true
@@ -304,11 +304,14 @@ flat = true
 margin_top = 48.0
 margin_right = 92.0
 margin_bottom = 70.0
+focus_neighbour_top = NodePath("../SettingsButton")
+focus_neighbour_bottom = NodePath(".")
 theme = ExtResource( 10 )
 text = "Quit"
 flat = true
 
 [node name="SettingsMenuContainer" type="VBoxContainer" parent="."]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 118.0
@@ -334,13 +337,18 @@ align = 1
 margin_top = 14.0
 margin_right = 164.0
 margin_bottom = 30.0
+focus_neighbour_top = NodePath("../../MainMenuButton")
+focus_neighbour_bottom = NodePath("../../DamageColorsCheckbox")
 theme = ExtResource( 10 )
+max_value = 12.0
 
 [node name="DamageColorsCheckbox" type="CheckBox" parent="SettingsMenuContainer"]
 margin_left = 23.0
 margin_top = 24.0
 margin_right = 141.0
 margin_bottom = 48.0
+focus_neighbour_top = NodePath("../MouseSensitivityContainer/Slider")
+focus_neighbour_bottom = NodePath("../AccessibleFontCheckbox")
 size_flags_horizontal = 4
 theme = ExtResource( 10 )
 text = "Damage Colors"
@@ -352,6 +360,8 @@ margin_left = 23.0
 margin_top = 42.0
 margin_right = 140.0
 margin_bottom = 66.0
+focus_neighbour_top = NodePath("../DamageColorsCheckbox")
+focus_neighbour_bottom = NodePath("../ControlsButton")
 size_flags_horizontal = 4
 theme = ExtResource( 10 )
 text = "Accessible Font"
@@ -361,6 +371,8 @@ align = 2
 margin_top = 60.0
 margin_right = 164.0
 margin_bottom = 82.0
+focus_neighbour_top = NodePath("../AccessibleFontCheckbox")
+focus_neighbour_bottom = NodePath("../MainMenuButton")
 theme = ExtResource( 10 )
 text = "Controls"
 flat = true
@@ -369,84 +381,172 @@ flat = true
 margin_top = 76.0
 margin_right = 164.0
 margin_bottom = 98.0
+focus_neighbour_top = NodePath("../ControlsButton")
+focus_neighbour_bottom = NodePath("../MouseSensitivityContainer/Slider")
 theme = ExtResource( 10 )
 text = "Main Menu"
 flat = true
 
-[node name="ControlSettings" type="VBoxContainer" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 10.0
-margin_top = 10.0
-margin_right = -10.0
-margin_bottom = -10.0
-custom_constants/separation = 34
-
-[node name="MainMenuButton" type="Button" parent="ControlSettings"]
-margin_right = 380.0
-margin_bottom = 22.0
-theme = ExtResource( 10 )
-text = "Main Menu"
-flat = true
-
-[node name="Achievements" type="ScrollContainer" parent="."]
+[node name="Achievements" type="VSplitContainer" parent="."]
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 10.0
 margin_top = 15.0
 margin_right = -10.0
-margin_bottom = -20.0
+margin_bottom = -10.0
+dragger_visibility = 2
+
+[node name="AchievementList" type="ScrollContainer" parent="Achievements"]
+margin_right = 380.0
+margin_bottom = 178.0
+size_flags_vertical = 3
 follow_focus = true
 scroll_horizontal_enabled = false
 
-[node name="Container" type="VBoxContainer" parent="Achievements"]
-margin_bottom = 170.0
-custom_constants/separation = 34
+[node name="Container" type="VBoxContainer" parent="Achievements/AchievementList"]
+margin_right = 380.0
+margin_bottom = 206.0
+size_flags_horizontal = 3
 
-[node name="Achievement2" parent="Achievements/Container" instance=ExtResource( 5 )]
-margin_right = 0.0
+[node name="Achievement2" parent="Achievements/AchievementList/Container" instance=ExtResource( 5 )]
+margin_right = 368.0
 achievement = "fun2"
 
-[node name="Achievement3" parent="Achievements/Container" instance=ExtResource( 5 )]
-margin_top = 34.0
-margin_right = 0.0
-margin_bottom = 34.0
+[node name="Achievement3" parent="Achievements/AchievementList/Container" instance=ExtResource( 5 )]
+margin_top = 35.0
+margin_right = 368.0
+margin_bottom = 66.0
 achievement = "first_of_many"
 
-[node name="Achievement" parent="Achievements/Container" instance=ExtResource( 5 )]
-margin_top = 68.0
-margin_right = 0.0
-margin_bottom = 68.0
+[node name="Achievement" parent="Achievements/AchievementList/Container" instance=ExtResource( 5 )]
+margin_top = 70.0
+margin_right = 368.0
+margin_bottom = 101.0
 achievement = "fun1"
 
-[node name="Achievement4" parent="Achievements/Container" instance=ExtResource( 5 )]
-margin_top = 102.0
-margin_right = 0.0
-margin_bottom = 102.0
+[node name="Achievement4" parent="Achievements/AchievementList/Container" instance=ExtResource( 5 )]
+margin_top = 105.0
+margin_right = 368.0
+margin_bottom = 136.0
 achievement = "oof_ouch"
 
-[node name="Achievement6" parent="Achievements/Container" instance=ExtResource( 5 )]
-margin_top = 136.0
-margin_right = 0.0
-margin_bottom = 136.0
+[node name="Achievement6" parent="Achievements/AchievementList/Container" instance=ExtResource( 5 )]
+margin_top = 140.0
+margin_right = 368.0
+margin_bottom = 171.0
 achievement = "armageddont"
 
-[node name="Achievement5" parent="Achievements/Container" instance=ExtResource( 5 )]
-margin_top = 170.0
-margin_right = 0.0
-margin_bottom = 170.0
+[node name="Achievement5" parent="Achievements/AchievementList/Container" instance=ExtResource( 5 )]
+margin_top = 175.0
+margin_right = 368.0
+margin_bottom = 206.0
 achievement = "test"
 
-[node name="Ball" type="TextureRect" parent="."]
-margin_left = 250.0
-margin_top = 137.0
-margin_right = 258.0
-margin_bottom = 145.0
-texture = ExtResource( 4 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="MainMenuButton" type="Button" parent="Achievements"]
+margin_left = 306.0
+margin_top = 178.0
+margin_right = 380.0
+margin_bottom = 200.0
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme = ExtResource( 10 )
+text = "Main Menu"
+flat = true
+
+[node name="ControlSettings" type="VBoxContainer" parent="."]
+visible = false
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_top = -99.0
+margin_bottom = 99.0
+custom_constants/separation = 0
+
+[node name="UpKey" type="Button" parent="ControlSettings"]
+margin_left = 137.0
+margin_right = 263.0
+margin_bottom = 22.0
+size_flags_horizontal = 4
+theme = ExtResource( 10 )
+text = "Climb Up: Up Arrow"
+flat = true
+
+[node name="DownKey" type="Button" parent="ControlSettings"]
+margin_left = 92.0
+margin_top = 22.0
+margin_right = 308.0
+margin_bottom = 44.0
+size_flags_horizontal = 4
+theme = ExtResource( 10 )
+text = "Move Down/Interact: Down Arrow"
+flat = true
+
+[node name="MoveLeft" type="Button" parent="ControlSettings"]
+margin_left = 149.0
+margin_top = 44.0
+margin_right = 250.0
+margin_bottom = 66.0
+size_flags_horizontal = 4
+theme = ExtResource( 10 )
+text = "Move Left: Left"
+flat = true
+
+[node name="MoveRight" type="Button" parent="ControlSettings"]
+margin_left = 143.0
+margin_top = 66.0
+margin_right = 256.0
+margin_bottom = 88.0
+size_flags_horizontal = 4
+theme = ExtResource( 10 )
+text = "Move Right: Right"
+flat = true
+
+[node name="SealWound" type="Button" parent="ControlSettings"]
+margin_left = 152.0
+margin_top = 88.0
+margin_right = 248.0
+margin_bottom = 110.0
+size_flags_horizontal = 4
+theme = ExtResource( 10 )
+text = "Seal Wound: R"
+flat = true
+
+[node name="InstantlyDie" type="Button" parent="ControlSettings"]
+margin_left = 150.0
+margin_top = 110.0
+margin_right = 250.0
+margin_bottom = 132.0
+size_flags_horizontal = 4
+theme = ExtResource( 10 )
+text = "Instantly Die: P"
+flat = true
+
+[node name="JumpKey" type="Button" parent="ControlSettings"]
+margin_left = 156.0
+margin_top = 132.0
+margin_right = 244.0
+margin_bottom = 154.0
+size_flags_horizontal = 4
+theme = ExtResource( 10 )
+text = "Jump: Space"
+flat = true
+
+[node name="Regret" type="Button" parent="ControlSettings"]
+margin_top = 154.0
+margin_right = 400.0
+margin_bottom = 176.0
+theme = ExtResource( 10 )
+text = "Regret Changes"
+flat = true
+
+[node name="Return" type="Button" parent="ControlSettings"]
+margin_top = 176.0
+margin_right = 400.0
+margin_bottom = 198.0
+theme = ExtResource( 10 )
+text = "Save And Go Back"
+flat = true
 
 [node name="Thing" type="Panel" parent="."]
 visible = false
@@ -504,3 +604,12 @@ __meta__ = {
 environment = SubResource( 12 )
 
 [connection signal="animation_finished" from="Animations" to="." method="_on_animation_finished"]
+[connection signal="pressed" from="MainMenuContainer/NewRunButton" to="." method="start_new_run"]
+[connection signal="pressed" from="MainMenuContainer/AchievementsButton" to="." method="show_achievements"]
+[connection signal="pressed" from="MainMenuContainer/SettingsButton" to="." method="view_settings"]
+[connection signal="pressed" from="MainMenuContainer/QuitButton" to="." method="quit_game"]
+[connection signal="value_changed" from="SettingsMenuContainer/MouseSensitivityContainer/Slider" to="." method="set_mouse_sensitivity"]
+[connection signal="toggled" from="SettingsMenuContainer/DamageColorsCheckbox" to="." method="set_damage_colors"]
+[connection signal="toggled" from="SettingsMenuContainer/AccessibleFontCheckbox" to="." method="set_accessible_font"]
+[connection signal="pressed" from="SettingsMenuContainer/MainMenuButton" to="." method="set_to_main_menu"]
+[connection signal="pressed" from="Achievements/MainMenuButton" to="." method="set_to_main_menu"]
