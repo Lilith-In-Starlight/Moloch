@@ -476,7 +476,10 @@ theme = ExtResource( 10 )
 [node name="Movement" type="VBoxContainer" parent="ControlSettings/Controls"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_top = 16.0
+margin_left = 1.0
+margin_top = 22.0
+margin_right = -1.0
+margin_bottom = -1.0
 custom_constants/separation = -4
 alignment = 1
 
