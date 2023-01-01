@@ -351,6 +351,10 @@ interact_world={
 "deadzone": 0.5,
 "events": [  ]
 }
+pickup_item={
+"deadzone": 0.5,
+"events": [  ]
+}
 
 [layer_names]
 

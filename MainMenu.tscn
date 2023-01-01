@@ -594,6 +594,16 @@ theme = ExtResource( 10 )
 text = "Use Wand: Click"
 flat = true
 
+[node name="PickupItem" type="Button" parent="ControlSettings/Controls/Interaction"]
+margin_left = 63.0
+margin_top = 84.0
+margin_right = 168.0
+margin_bottom = 106.0
+size_flags_horizontal = 4
+theme = ExtResource( 10 )
+text = "Pick Up Item: S"
+flat = true
+
 [node name="Actions" type="HBoxContainer" parent="ControlSettings"]
 margin_top = 170.0
 margin_right = 263.0
@@ -699,5 +709,6 @@ environment = SubResource( 12 )
 [connection signal="pressed" from="ControlSettings/Controls/Interaction/Interact" to="." method="start_changing_key" binds= [ "interact_world" ]]
 [connection signal="pressed" from="ControlSettings/Controls/Interaction/UseWand" to="." method="start_changing_key" binds= [ "Interact1" ]]
 [connection signal="pressed" from="ControlSettings/Controls/Interaction/DropWand" to="." method="start_changing_key" binds= [ "Interact2" ]]
+[connection signal="pressed" from="ControlSettings/Controls/Interaction/PickupItem" to="." method="start_changing_key" binds= [ "Interact2" ]]
 [connection signal="pressed" from="ControlSettings/Actions/Save" to="." method="proceed_keybinds"]
 [connection signal="pressed" from="ControlSettings/Actions/Back" to="." method="regret_and_go_back"]

@@ -51,6 +51,7 @@ func _process(delta: float) -> void:
 	$ControlSettings/Controls/Movement/MoveLeft.text = "Move Left: " + get_action_text("left")
 	$ControlSettings/Controls/Movement/MoveRight.text = "Move Left: " + get_action_text("right")
 	$ControlSettings/Controls/Movement/JumpKey.text = "Jump: " + get_action_text("jump")
+	$ControlSettings/Controls/Interaction/PickupItem.text = "Pick Up Items: " + get_action_text("pickup_item")
 	
 	
 	$ControlSettings/Controls/Interaction/InstantlyDie.text = "Instantly Die: " + get_action_text("instant_death")

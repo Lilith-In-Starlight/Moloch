@@ -12,7 +12,7 @@ func _process(_delta):
 	$Sprite.rotation = -rotation
 	$Sprite.texture = spell.texture
 	if Player.position.distance_to(position) < 50:
-		if Input.is_action_just_pressed("interact_world"):
+		if Input.is_action_just_pressed("pickup_item"):
 			if Items.player_spells.size() < 6:
 				Items.player_spells.append(spell)
 				queue_free()

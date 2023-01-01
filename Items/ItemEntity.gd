@@ -12,7 +12,7 @@ func _process(_delta):
 	$Sprite.rotation = -rotation
 	
 	if Player.position.distance_to(position) < 50:
-		if Input.is_action_just_pressed("interact_world"):
+		if Input.is_action_just_pressed("pickup_item"):
 			Items.add_item(item.id)
 			Items.last_pickup = item
 			queue_free()

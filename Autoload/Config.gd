@@ -102,6 +102,7 @@ func _ready() -> void:
 		keyboard_binds["instant_death"] = config_file.get_value("keyboard", "instantly_die", [KEY_P, "key"])
 		keyboard_binds["Interact1"] = config_file.get_value("keyboard", "use_wand", [BUTTON_LEFT, "click"])
 		keyboard_binds["Interact2"] = config_file.get_value("keyboard", "drop_wand", [BUTTON_RIGHT, "click"])
+		keyboard_binds["pickup_item"] = config_file.get_value("keyboard", "pickup_item", [KEY_S, "key"])
 		process_keybinds()
 		
 		
