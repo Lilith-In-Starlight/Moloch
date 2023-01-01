@@ -258,9 +258,6 @@ focus_mode = 1
 theme = ExtResource( 9 )
 align = 1
 placeholder_text = "Leave empty for random seed"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="MainMenuContainer" type="VBoxContainer" parent="."]
 anchor_left = 0.5
