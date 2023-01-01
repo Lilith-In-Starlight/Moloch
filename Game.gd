@@ -6,7 +6,7 @@ var world_areas := []
 var player_in_area := 0
 
 func _ready() -> void:
-	world_areas.append(Rect2(Vector2(-3, -7) * Rooms.tile_size * 8, Vector2(7, 8) * Rooms.tile_size * 8))
+	world_areas.append(Rect2(Vector2(-3, -8) * Rooms.tile_size * 8, Vector2(7, 9) * Rooms.tile_size * 8))
 	
 	if randi() % 3112 == 31:
 		world_areas.append(Rect2(Vector2(-2002 - randi() % 31, randi() % 2002) * Rooms.tile_size * 8, Vector2(7, 8) * Rooms.tile_size * 8))
