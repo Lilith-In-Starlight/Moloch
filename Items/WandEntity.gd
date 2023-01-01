@@ -13,7 +13,7 @@ func _process(_delta):
 	$Sprite.rotation = -rotation
 	
 	if Player.position.distance_to(position) < 50:
-		if Input.is_action_just_pressed("down"):
+		if Input.is_action_just_pressed("interact_world"):
 			if Items.player_wands.size() < 6:
 				Items.player_wands.append(wand)
 				if not Items.get_children().has(wand):

@@ -14,7 +14,7 @@ func _ready():
 
 func _process(_delta):
 	if not came_from:
-		if position.distance_to(Player.position) < 20 and Input.is_action_just_pressed("down"):
+		if position.distance_to(Player.position) < 20 and Input.is_action_just_pressed("interact_world"):
 			$AnimationPlayer.play("Open")
 			
 
