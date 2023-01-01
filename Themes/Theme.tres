@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=6 format=2]
+[gd_resource type="Theme" load_steps=10 format=2]
 
 [ext_resource path="res://dpcomic.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://Sprites/Menus/CheckOff.png" type="Texture" id=2]
@@ -10,6 +10,14 @@ outline_color = Color( 0.14902, 0.14902, 0.14902, 1 )
 font_data = ExtResource( 1 )
 
 [sub_resource type="StyleBoxEmpty" id=1]
+
+[sub_resource type="StyleBoxFlat" id=3]
+
+[sub_resource type="StyleBoxFlat" id=4]
+
+[sub_resource type="StyleBoxFlat" id=5]
+
+[sub_resource type="StyleBoxFlat" id=6]
 
 [resource]
 default_font = SubResource( 2 )
@@ -42,3 +50,7 @@ CheckBox/styles/hover = null
 CheckBox/styles/hover_pressed = null
 CheckBox/styles/normal = null
 CheckBox/styles/pressed = null
+TabContainer/styles/panel = SubResource( 3 )
+TabContainer/styles/tab_bg = SubResource( 4 )
+TabContainer/styles/tab_disabled = SubResource( 5 )
+TabContainer/styles/tab_fg = SubResource( 6 )
