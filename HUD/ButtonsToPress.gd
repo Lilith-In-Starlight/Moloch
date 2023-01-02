@@ -23,7 +23,6 @@ func _ready() -> void:
 	elif not compare_actions(Config.keyboard_binds[action], Config.keyboard_binds["down"]):
 		$Control/DownArrow.visible = false
 		$Control/KeyLabel.visible = true
-		print(Config.keyboard_binds[action], Config.keyboard_binds["down"])
 	
 	if radius != 26:
 		$CollisionShape.shape = CircleShape2D.new()

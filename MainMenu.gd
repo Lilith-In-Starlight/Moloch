@@ -32,6 +32,7 @@ var random_noise := OpenSimplexNoise.new()
 
 
 func _ready():
+	get_tree().paused = false
 	Animations.play("License")
 	$MainMenuContainer/NewRunButton.grab_focus()
 	$SettingsMenuContainer/AccessibleFontCheckbox.pressed = Config.use_accessible_font

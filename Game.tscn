@@ -306,9 +306,6 @@ script = ExtResource( 6 )
 [node name="HUD" type="Control" parent="HUD"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Hot" type="Panel" parent="HUD/HUD"]
 modulate = Color( 1, 1, 1, 0 )
@@ -934,9 +931,6 @@ __meta__ = {
 anchor_right = 1.0
 anchor_bottom = 1.0
 custom_styles/panel = SubResource( 20 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Generating" type="Label" parent="HUD/HUD/Generating"]
 anchor_left = 0.5
@@ -988,6 +982,7 @@ margin_left = -47.5
 margin_top = -26.0
 margin_right = 47.5
 margin_bottom = 26.0
+custom_constants/separation = -2
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -1010,6 +1005,15 @@ custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_colors/font_color_hover = Color( 0.737255, 1, 0.968627, 1 )
 custom_colors/font_color_pressed = Color( 1, 0.596078, 0.929412, 1 )
 text = "Die Instantly"
+
+[node name="MainMenu" type="ToolButton" parent="HUD/HUD/Pause/Options"]
+margin_right = 95.0
+margin_bottom = 24.0
+theme = ExtResource( 18 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_hover = Color( 0.737255, 1, 0.968627, 1 )
+custom_colors/font_color_pressed = Color( 1, 0.596078, 0.929412, 1 )
+text = "Main Menu"
 
 [node name="Settings" type="VBoxContainer" parent="HUD/HUD/Pause"]
 visible = false
@@ -1198,6 +1202,7 @@ environment = SubResource( 32 )
 [connection signal="focus_entered" from="HUD/HUD/Console/Input" to="HUD/HUD/Console" method="_on_Input_focus_entered"]
 [connection signal="focus_exited" from="HUD/HUD/Console/Input" to="HUD/HUD/Console" method="_on_Input_focus_exited"]
 [connection signal="pressed" from="HUD/HUD/Pause/Options/Settings" to="HUD/HUD/Pause" method="_on_Settings_pressed"]
+[connection signal="pressed" from="HUD/HUD/Pause/Options/MainMenu" to="HUD/HUD/Pause" method="_on_MainMenu_pressed"]
 [connection signal="value_changed" from="HUD/HUD/Pause/Settings/JoystickSensitivity" to="HUD/HUD/Pause" method="_on_JoystickSensitivity_value_changed"]
 [connection signal="value_changed" from="HUD/HUD/Pause/Settings/CameraSensitivity" to="HUD/HUD/Pause" method="_on_CameraSensitivity_value_changed"]
 [connection signal="pressed" from="HUD/HUD/Pause/Settings/VisualizeDamage" to="HUD/HUD/Pause" method="_on_VisualizeDamage_pressed"]

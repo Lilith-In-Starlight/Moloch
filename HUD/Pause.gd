@@ -83,3 +83,7 @@ func _on_CameraSensitivity_value_changed(value: float) -> void:
 	$Settings/CameraSensitivity/Text.text = "Camera Sensitivity: " + str(value)
 	Config.camera_smoothing = value
 	Config.save_config()
+
+
+func _on_MainMenu_pressed() -> void:
+	get_tree().change_scene("res://MainMenu.tscn")
