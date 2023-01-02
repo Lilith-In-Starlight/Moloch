@@ -10,6 +10,7 @@ func _ready():
 
 func _process(_delta):
 	$Sprite.rotation = -rotation
+	$ButtonsToPress.rotation = -rotation
 	
 	if Player.position.distance_to(position) < 50:
 		if Input.is_action_just_pressed("pickup_item"):
