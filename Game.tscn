@@ -906,9 +906,6 @@ margin_bottom = -150.0
 custom_fonts/font = SubResource( 21 )
 text = "You Are Dead"
 align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Info" type="Label" parent="HUD/HUD/Death"]
 anchor_left = 0.5

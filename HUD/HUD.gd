@@ -91,6 +91,10 @@ func _process(delta):
 	# Control the tutorial
 	if Items.player_health.poked_holes > 0 and not Config.tutorial["healed"]:
 		$HUD/HealTutorial.visible = true
+		if Config.keyboard_binds["seal_blood"][1] == "key":
+			$HUD/HealTutorial.text = "Press " + Config.get_input_name(Config.keyboard_binds["seal_blood"]) + " to seal wounds"
+		else:
+			$HUD/HealTutorial.text = Config.get_input_name(Config.keyboard_binds["seal_blood"]) + " to seal wounds"
 	elif $HUD/HealTutorial.visible and not Config.tutorial["healed"] and Items.player_health.poked_holes == 0 and not has_healed:
 		Config.tutorial["healed"] = true
 		$HUD/HealTutorial.visible = false
@@ -119,7 +123,10 @@ func _process(delta):
 		DeathScreenInfo.text += "Cause Of Death: " + death + "\n"
 		DeathScreenInfo.text += "Levels: " + str(Items.level) + "\n"
 		DeathScreenInfo.text += "Seed: " + str(Items.using_seed) + "\n\n"
-		DeathScreenInfo.text += "Right click to start a new run"
+		if Config.keyboard_binds["Interact2"][1] == "key":
+			DeathScreenInfo.text += "Press " + Config.get_input_name(Config.keyboard_binds["Interact2"]) + " to start a new run"
+		else:
+			DeathScreenInfo.text += Config.get_input_name(Config.keyboard_binds["Interact2"]) + " to start a new run"
 		# If the Generating World screen is visible on screen
 		# the player's data is reset and the scene is reloaded
 		if GeneratingScreen.modulate.a > 0.9:
