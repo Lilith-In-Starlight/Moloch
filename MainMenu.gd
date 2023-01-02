@@ -46,18 +46,20 @@ func _process(delta: float) -> void:
 	$Symbol/Smoke.texture.noise.persistence = 0.6 + sin(Engine.get_frames_drawn() * 0.0001) * 0.1
 	$Symbol/Smoke.texture.noise.lacunarity = 1.9 + sin(Engine.get_frames_drawn() * 0.0001) * 0.2
 	
+	$SettingsMenuContainer/MouseSensitivityContainer/Label.text = "Mouse Sensitivity: " + str(Config.camera_smoothing)
+	
 	$ControlSettings/Controls/Movement/UpKey.text = "Move Up: " + get_action_text("up")
 	$ControlSettings/Controls/Movement/DownKey.text = "Move Down: " + get_action_text("down")
 	$ControlSettings/Controls/Movement/MoveLeft.text = "Move Left: " + get_action_text("left")
 	$ControlSettings/Controls/Movement/MoveRight.text = "Move Left: " + get_action_text("right")
 	$ControlSettings/Controls/Movement/JumpKey.text = "Jump: " + get_action_text("jump")
-	$ControlSettings/Controls/Interaction/PickupItem.text = "Pick Up Items: " + get_action_text("pickup_item")
 	
 	
 	$ControlSettings/Controls/Interaction/InstantlyDie.text = "Instantly Die: " + get_action_text("instant_death")
 	$ControlSettings/Controls/Interaction/Interact.text = "Interact: " + get_action_text("interact_world")
 	$ControlSettings/Controls/Interaction/UseWand.text = "Use Wand: " + get_action_text("Interact1")
 	$ControlSettings/Controls/Interaction/DropWand.text = "Drop Wand: " + get_action_text("Interact2")
+	$ControlSettings/Controls/Interaction/PickupItem.text = "Pick Up Items: " + get_action_text("pickup_item")
 	
 	$ControlSettings/Actions/Save.disabled = changed_keys.empty()
 	
