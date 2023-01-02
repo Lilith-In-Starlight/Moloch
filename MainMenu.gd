@@ -180,33 +180,15 @@ func get_action_text(action:String):
 	if not action in changed_keys:
 		for i in InputMap.get_action_list(action):
 			if i is InputEventKey:
-				return OS.get_scancode_string(i.scancode)
-			if i is InputEventMouseButton:
-				match i.button_index:
-					1: return "Left Click"
-					2: return "Right Click"
-					3: return "Middle Click"
-					4: return "Scroll Up"
-					5: return "Scroll Down"
-					6: return "Scroll Left"
-					7: return "Scroll Right"
-					8: return "Extra Click 1"
-					9: return "Extra Click 2"
+				return Config.get_input_name([i.scancode, "key"])
+			elif i is InputEventMouseButton:
+				return Config.get_input_name([i.button_index, "click"])
 	else:
 		var i = changed_keys[action]
 		if i is InputEventKey:
-			return OS.get_scancode_string(i.scancode) + " [*]"
+			return Config.get_input_name([i.scancode, "key"]) + " [*]"
 		if i is InputEventMouseButton:
-			match i.button_index:
-				1: return "Left Click [*]"
-				2: return "Right Click [*]"
-				3: return "Middle Click [*]"
-				4: return "Scroll Up [*]"
-				5: return "Scroll Down [*]"
-				6: return "Scroll Left [*]"
-				7: return "Scroll Right [*]"
-				8: return "Extra Click 1 [*]"
-				9: return "Extra Click 2 [*]"
+			return Config.get_input_name([i.button_index, "click"]) + " [*]"
 
 
 func reset_focus(Child:Control) -> void:

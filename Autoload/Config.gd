@@ -251,3 +251,25 @@ func process_keybinds():
 			new_event.button_index = value[0]
 			new_event.pressed = true
 			InputMap.action_add_event(key, new_event)
+
+
+func get_input_name(input: Array) -> String:
+	if input.size() != 2:
+		return "Invalid input"
+	
+	if input[1] == "key":
+		return OS.get_scancode_string(input[0])
+	elif input[1] == "click":
+		match input[0]:
+			1: return "Left Click"
+			2: return "Right Click"
+			3: return "Middle Click"
+			4: return "Scroll Up"
+			5: return "Scroll Down"
+			6: return "Scroll Left"
+			7: return "Scroll Right"
+			8: return "Extra Click 1"
+			9: return "Extra Click 2"
+			_: return "Unsupported Click"
+	else:
+		return "Unsupported Input"
