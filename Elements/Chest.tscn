@@ -48,9 +48,7 @@ animations = [ {
 "speed": 10.0
 } ]
 
-[node name="Chest" type="RigidBody2D" groups=[
-"Chest",
-]]
+[node name="Chest" type="RigidBody2D" groups=["Chest"]]
 collision_layer = 128
 collision_mask = 6
 mass = 60.0
