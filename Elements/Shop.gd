@@ -83,14 +83,14 @@ func _process(delta: float) -> void:
 	
 	$BloodBar/CostBar.visible = true
 	if selected == $Items.get_child_count() - 1 and soul_spell:
-		if Input.is_action_just_pressed("down") and $Items.get_child(selected).visible and Items.player_spells.size() < 6 and Items.player_health.soul - soul_cost > 0.0:
+		if Input.is_action_just_pressed("interact_world") and $Items.get_child(selected).visible and Items.player_spells.size() < 6 and Items.player_health.soul - soul_cost > 0.0:
 			$Items.get_child(selected).visible = false
 			Items.player_spells.append(Items.all_spells[spells[selected]])
 			Items.player_health.soul -= soul_cost
 			if randf() < 0.25:
 				Items.player_health.poke_hole()
 	else:
-		if Input.is_action_just_pressed("down") and $Items.get_child(selected).visible  and Items.player_spells.size() < 6 and Items.player_health.blood - prices[selected] > 0.0:
+		if Input.is_action_just_pressed("interact_world") and $Items.get_child(selected).visible  and Items.player_spells.size() < 6 and Items.player_health.blood - prices[selected] > 0.0:
 			$Items.get_child(selected).visible = false
 			Items.player_spells.append(Items.all_spells[spells[selected]])
 			Items.player_health.blood -= prices[selected]
