@@ -84,27 +84,25 @@ var discord : Discord.Core
 
 func _ready() -> void:
 	var err := config_file.load("user://config.moloch")
+	# Keybinds
+	keyboard_binds["up"] = config_file.get_value("keyboard", "move_up", [KEY_W, "key"])
+	keyboard_binds["down"] = config_file.get_value("keyboard", "move_down", [KEY_S, "key"])
+	keyboard_binds["left"] = config_file.get_value("keyboard", "move_left", [KEY_A, "key"])
+	keyboard_binds["right"] = config_file.get_value("keyboard", "move_right", [KEY_D, "key"])
+	keyboard_binds["jump"] = config_file.get_value("keyboard", "jump", [KEY_SPACE, "key"])
+	keyboard_binds["seal_blood"] = config_file.get_value("keyboard", "seal_wound", [KEY_R, "key"])
+	keyboard_binds["interact_world"] = config_file.get_value("keyboard", "interact", [KEY_S, "key"])
+	keyboard_binds["instant_death"] = config_file.get_value("keyboard", "instantly_die", [KEY_P, "key"])
+	keyboard_binds["Interact1"] = config_file.get_value("keyboard", "use_wand", [BUTTON_LEFT, "click"])
+	keyboard_binds["Interact2"] = config_file.get_value("keyboard", "drop_wand", [BUTTON_RIGHT, "click"])
+	keyboard_binds["pickup_item"] = config_file.get_value("keyboard", "pickup_item", [KEY_S, "key"])
+	process_keybinds()
 	if err == OK:
 		self.damage_visuals = config_file.get_value("config", "damage_visuals", false)
 		self.instant_death_button = config_file.get_value("config", "instant_death_button", false)
 		self.joystick_sensitivity = config_file.get_value("config", "joystick_sensitivity", 6)
 		self.camera_smoothing = config_file.get_value("config", "camera_smoothing", 5)
 		self.use_accessible_font = config_file.get_value("config", "accessible_font", false)
-		
-		# Keybinds
-		keyboard_binds["up"] = config_file.get_value("keyboard", "move_up", [KEY_W, "key"])
-		keyboard_binds["down"] = config_file.get_value("keyboard", "move_down", [KEY_S, "key"])
-		keyboard_binds["left"] = config_file.get_value("keyboard", "move_left", [KEY_A, "key"])
-		keyboard_binds["right"] = config_file.get_value("keyboard", "move_right", [KEY_D, "key"])
-		keyboard_binds["jump"] = config_file.get_value("keyboard", "jump", [KEY_SPACE, "key"])
-		keyboard_binds["seal_blood"] = config_file.get_value("keyboard", "seal_wound", [KEY_R, "key"])
-		keyboard_binds["interact_world"] = config_file.get_value("keyboard", "interact", [KEY_S, "key"])
-		keyboard_binds["instant_death"] = config_file.get_value("keyboard", "instantly_die", [KEY_P, "key"])
-		keyboard_binds["Interact1"] = config_file.get_value("keyboard", "use_wand", [BUTTON_LEFT, "click"])
-		keyboard_binds["Interact2"] = config_file.get_value("keyboard", "drop_wand", [BUTTON_RIGHT, "click"])
-		keyboard_binds["pickup_item"] = config_file.get_value("keyboard", "pickup_item", [KEY_S, "key"])
-		process_keybinds()
-		
 		
 #		for i in InputMap.get_actions():
 #			var obtained = config_file.get_value("config", "keybinds_%s"%i, InputMap.get_action_list(i))
