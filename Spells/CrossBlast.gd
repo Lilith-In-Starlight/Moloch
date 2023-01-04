@@ -9,6 +9,7 @@ var speed := 4.0
 var timer := 0.0
 
 var Map :Node2D
+var Cam :Camera2D
 
 var has_done := false
 var spell_behavior := ProjectileBehavior.new()
@@ -16,6 +17,7 @@ var vel_mult := 1.0
 
 func _ready():
 	Map = get_tree().get_nodes_in_group("World")[0] 
+	Cam = get_tree().get_nodes_in_group("Camera")[0] 
 	CastInfo.set_position(self)
 	CastInfo.set_goal()
 	CastInfo.heat_caster(3.0)
@@ -24,6 +26,11 @@ func _ready():
 	$TextureProgress.radial_initial_angle += rad2deg(rotate)
 	$TextureProgress2.radial_initial_angle += rad2deg(rotate)
 	Map.play_sound(preload("res://Sfx/spells/laserfire01.wav"), position, 1.0, 0.8+randf()*0.4)
+	
+	var inverse_distance := 1000.0/Cam.position.distance_to(position)
+	if inverse_distance == 0:
+		inverse_distance = 0.001
+	Cam.shake_camera(inverse_distance)
 
 
 func _physics_process(delta):
