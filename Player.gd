@@ -360,6 +360,7 @@ func _on_DamageTimer_timeout() -> void:
 
 
 func _on_hole_poked():
+	Cam.shake_camera(3.0)
 	send_message("Bleeding")
 	Map.play_sound(preload("res://Sfx/pierced_flesh/piercing-1a.wav"), position, 1.0, 0.8+randf()*0.4)
 

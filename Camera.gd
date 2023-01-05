@@ -37,3 +37,6 @@ func _process(delta: float) -> void:
 func shake_camera(amount: float):
 	if trauma < amount:
 		trauma = amount
+	
+	if trauma > 10.0:
+		trauma = 10.0

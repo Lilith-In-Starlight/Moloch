@@ -26,11 +26,6 @@ func _ready():
 	$TextureProgress.radial_initial_angle += rad2deg(rotate)
 	$TextureProgress2.radial_initial_angle += rad2deg(rotate)
 	Map.play_sound(preload("res://Sfx/spells/laserfire01.wav"), position, 1.0, 0.8+randf()*0.4)
-	
-	var inverse_distance := 1000.0/Cam.position.distance_to(position)
-	if inverse_distance == 0:
-		inverse_distance = 0.001
-	Cam.shake_camera(inverse_distance)
 
 
 func _physics_process(delta):
@@ -41,6 +36,10 @@ func _physics_process(delta):
 	vel_mult = move_toward(vel_mult, 0, delta)
 	spell_behavior.velocity *= vel_mult
 	if spell_behavior.velocity.length() < 2.0:
+		var inverse_distance := 1000.0/Cam.position.distance_to(position)
+		if inverse_distance == 0:
+			inverse_distance = 0.001
+		Cam.shake_camera(inverse_distance)
 		timer += delta
 		$CrossBlastCross.modulate.a += 0.3
 		Map.play_sound(Items.EXPLOSION_SOUNDS[randi()%Items.EXPLOSION_SOUNDS.size()], position, 1.0, 0.8+randf()*0.4)
