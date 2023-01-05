@@ -338,6 +338,7 @@ func _on_effect_changes(effect:String, added:bool) -> void:
 
 
 func _on_broken_leg(amount:int) -> void:
+	Cam.shake_camera(8.0)
 	if Items.count_player_items("ironknees") > 0:
 		health.broken_moving_appendages -= amount
 		return
@@ -368,5 +369,6 @@ func _on_frame_changed() -> void:
 		Map.play_sound(preload("res://Sfx/step.wav"), position + Vector2(0, 6), 1.0, 0.8+randf()*0.4)
 
 func _on_impacted_body_top(force: float) -> void:
+	Cam.shake_camera(8.0)
 	if force < -health.leg_impact_resistance:
 		send_message("You have hit your head too hard")
