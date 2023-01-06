@@ -9,9 +9,9 @@ func _ready() -> void:
 	$Options/DieInstantly.connect("pressed", Items.player_health, "_instakill_pressed")
 	$Settings/VisualizeDamage.pressed = Config.damage_visuals
 	$Settings/InstantDeathButton.pressed = Config.instant_death_button
-	$Settings/JoystickSensitivity/Text.text = "Joystick Sensitivity: " + str(Config.joystick_sensitivity)
+	$Settings/ScreenShake/Text.text = "Screen Shake: " + str(Config.screen_shake)
 	$Settings/CameraSensitivity/Text.text = "Camera Sensitivity: " + str(Config.camera_smoothing)
-	$Settings/JoystickSensitivity.value = Config.joystick_sensitivity
+	$Settings/ScreenShake.value = Config.screen_shake
 
 
 func _on_DieInstantly_pressed() -> void:
@@ -87,3 +87,9 @@ func _on_CameraSensitivity_value_changed(value: float) -> void:
 
 func _on_MainMenu_pressed() -> void:
 	get_tree().change_scene("res://MainMenu.tscn")
+
+
+func _on_ScreenShake_value_changed(value) -> void:
+	$Settings/ScreenShake/Text.text = "Screen Shake: " + str(value)
+	Config.screen_shake = value
+	Config.save_config()

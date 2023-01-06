@@ -320,7 +320,8 @@ custom_constants/separation = -6
 
 [node name="MouseSensitivityContainer" type="VBoxContainer" parent="SettingsMenuContainer"]
 margin_right = 164.0
-margin_bottom = 30.0
+margin_bottom = 34.0
+rect_min_size = Vector2( 0, 34 )
 custom_constants/separation = -2
 
 [node name="Label" type="Label" parent="SettingsMenuContainer/MouseSensitivityContainer"]
@@ -335,15 +336,38 @@ margin_top = 14.0
 margin_right = 164.0
 margin_bottom = 30.0
 focus_neighbour_top = NodePath("../../MainMenuButton")
+focus_neighbour_bottom = NodePath("../../ScreenShakeContainer/Slider")
+theme = ExtResource( 10 )
+max_value = 12.0
+
+[node name="ScreenShakeContainer" type="VBoxContainer" parent="SettingsMenuContainer"]
+margin_top = 28.0
+margin_right = 164.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 0, 32 )
+custom_constants/separation = -2
+
+[node name="Label" type="Label" parent="SettingsMenuContainer/ScreenShakeContainer"]
+margin_right = 164.0
+margin_bottom = 16.0
+theme = ExtResource( 10 )
+text = "Screen Shake"
+align = 1
+
+[node name="Slider" type="HSlider" parent="SettingsMenuContainer/ScreenShakeContainer"]
+margin_top = 14.0
+margin_right = 164.0
+margin_bottom = 30.0
+focus_neighbour_top = NodePath("../../MouseSensitivityContainer/Slider")
 focus_neighbour_bottom = NodePath("../../DamageColorsCheckbox")
 theme = ExtResource( 10 )
 max_value = 12.0
 
 [node name="DamageColorsCheckbox" type="CheckBox" parent="SettingsMenuContainer"]
 margin_left = 23.0
-margin_top = 24.0
+margin_top = 54.0
 margin_right = 141.0
-margin_bottom = 48.0
+margin_bottom = 78.0
 focus_neighbour_top = NodePath("../MouseSensitivityContainer/Slider")
 focus_neighbour_bottom = NodePath("../AccessibleFontCheckbox")
 size_flags_horizontal = 4
@@ -354,9 +378,9 @@ icon_align = 2
 
 [node name="AccessibleFontCheckbox" type="CheckBox" parent="SettingsMenuContainer"]
 margin_left = 23.0
-margin_top = 42.0
+margin_top = 72.0
 margin_right = 140.0
-margin_bottom = 66.0
+margin_bottom = 96.0
 focus_neighbour_top = NodePath("../DamageColorsCheckbox")
 focus_neighbour_bottom = NodePath("../ControlsButton")
 size_flags_horizontal = 4
@@ -365,9 +389,9 @@ text = "Accessible Font"
 align = 2
 
 [node name="ControlsButton" type="Button" parent="SettingsMenuContainer"]
-margin_top = 60.0
+margin_top = 90.0
 margin_right = 164.0
-margin_bottom = 82.0
+margin_bottom = 112.0
 focus_neighbour_top = NodePath("../AccessibleFontCheckbox")
 focus_neighbour_bottom = NodePath("../MainMenuButton")
 theme = ExtResource( 10 )
@@ -375,9 +399,9 @@ text = "Controls"
 flat = true
 
 [node name="MainMenuButton" type="Button" parent="SettingsMenuContainer"]
-margin_top = 76.0
+margin_top = 106.0
 margin_right = 164.0
-margin_bottom = 98.0
+margin_bottom = 128.0
 focus_neighbour_top = NodePath("../ControlsButton")
 focus_neighbour_bottom = NodePath("../MouseSensitivityContainer/Slider")
 theme = ExtResource( 10 )
@@ -698,6 +722,7 @@ environment = SubResource( 12 )
 [connection signal="pressed" from="MainMenuContainer/SettingsButton" to="." method="view_settings"]
 [connection signal="pressed" from="MainMenuContainer/QuitButton" to="." method="quit_game"]
 [connection signal="value_changed" from="SettingsMenuContainer/MouseSensitivityContainer/Slider" to="." method="set_mouse_sensitivity"]
+[connection signal="value_changed" from="SettingsMenuContainer/ScreenShakeContainer/Slider" to="." method="set_screen_shake"]
 [connection signal="toggled" from="SettingsMenuContainer/DamageColorsCheckbox" to="." method="set_damage_colors"]
 [connection signal="toggled" from="SettingsMenuContainer/AccessibleFontCheckbox" to="." method="set_accessible_font"]
 [connection signal="pressed" from="SettingsMenuContainer/ControlsButton" to="." method="view_controls"]

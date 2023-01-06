@@ -38,6 +38,7 @@ func _ready():
 	$SettingsMenuContainer/AccessibleFontCheckbox.pressed = Config.use_accessible_font
 	$SettingsMenuContainer/DamageColorsCheckbox.pressed = Config.damage_visuals
 	$SettingsMenuContainer/MouseSensitivityContainer/Slider.value = Config.camera_smoothing
+	$SettingsMenuContainer/ScreenShakeContainer/Slider.value = Config.screen_shake
 
 
 func _process(delta: float) -> void:
@@ -48,6 +49,7 @@ func _process(delta: float) -> void:
 	$Symbol/Smoke.texture.noise.lacunarity = 1.9 + sin(Engine.get_frames_drawn() * 0.0001) * 0.2
 	
 	$SettingsMenuContainer/MouseSensitivityContainer/Label.text = "Mouse Sensitivity: " + str(Config.camera_smoothing)
+	$SettingsMenuContainer/ScreenShakeContainer/Label.text = "Screen Shake: " + str(Config.screen_shake)
 	
 	$ControlSettings/Controls/Movement/UpKey.text = "Move Up: " + get_action_text("up")
 	$ControlSettings/Controls/Movement/DownKey.text = "Move Down: " + get_action_text("down")
@@ -247,3 +249,8 @@ func regret_and_go_back():
 		$SettingsMenuContainer/ControlsButton.grab_focus()
 	
 	changed_keys = {}
+
+
+func set_screen_shake(value) -> void:
+	Config.screen_shake = value
+	Config.save_config()
