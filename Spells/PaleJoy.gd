@@ -18,7 +18,7 @@ var force := Vector2()
 func _ready():
 	CastInfo.set_goal()
 	position = CastInfo.get_caster_position() + (CastInfo.goal - CastInfo.get_caster_position()).normalized()*50
-	spell_behavior.velocity = spell_behavior.get_initial_velocity(self) * 3
+	spell_behavior.velocity = spell_behavior.get_initial_velocity(self) * 120.0
 	move_to = CastInfo.get_caster_position()
 	
 	yield(get_tree().create_timer(6.0), "timeout")
