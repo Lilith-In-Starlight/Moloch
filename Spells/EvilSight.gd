@@ -2,6 +2,7 @@ extends Node2D
 
 
 var WorldMap :Node2D
+var Cam :Camera2D
 
 var CastInfo := SpellCastInfo.new()
 var spell_behavior := RayBehavior.new()
@@ -10,6 +11,7 @@ var timer := 0.0
 
 
 func _ready():
+	Cam = get_tree().get_nodes_in_group("Camera")[0]
 	add_child(spell_behavior)
 	spell_behavior.ray_setup(self, 124)
 	spell_behavior.connect("hit_something", self, "_on_hit_something", [])
@@ -49,7 +51,15 @@ func _on_hit_something():
 		CastInfo.heat_caster(1/60.0)
 		CastInfo.push_caster(-(pos-position).normalized()*5)
 	$Line2D.points = [Vector2(0, 0), pos2-position]
+	
+	
+	if Cam.position.distance_to(pos) != 0.0:
+		var inverse_distance := 1000.0/Cam.position.distance_to(pos)
+		Cam.shake_camera(inverse_distance * 0.9)
+	else:
+		Cam.shake_camera(2.0)
 
 
 func _on_hit_nothing():
+	Cam.shake_camera(1.2)
 	$Line2D.points = [Vector2(0, 0), spell_behavior.cast_to]
