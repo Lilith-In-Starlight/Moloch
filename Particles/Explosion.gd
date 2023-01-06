@@ -28,7 +28,7 @@ func _ready():
 	var inverse_distance := 1000.0/Cam.position.distance_to(position)
 	if inverse_distance == 0:
 		inverse_distance = 0.001
-	Cam.shake_camera(inverse_distance)
+	Cam.shake_camera(inverse_distance * 0.8)
 	
 	Map.play_sound(Items.EXPLOSION_SOUNDS[randi()%Items.EXPLOSION_SOUNDS.size()], position, 1.0, 0.8+randf()*0.4)
 
