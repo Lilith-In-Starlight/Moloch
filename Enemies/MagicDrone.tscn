@@ -34,4 +34,6 @@ texture = ExtResource( 3 )
 [node name="DamageTimer" type="Timer" parent="."]
 wait_time = 0.2
 
+[connection signal="screen_entered" from="VisibilityEnabler2D" to="." method="_on_VisibilityEnabler2D_screen_entered"]
+[connection signal="screen_exited" from="VisibilityEnabler2D" to="." method="_on_VisibilityEnabler2D_screen_exited"]
 [connection signal="timeout" from="DamageTimer" to="." method="_on_DamageTimer_timeout"]

@@ -121,3 +121,13 @@ func _on_damaged(damage_type:String) -> void:
 
 func _on_hole_poked() -> void:
 	Map.play_sound(preload("res://Sfx/pierced_flesh/piercing-1a.wav"), position, 1.0, 0.8+randf()*0.4)
+
+
+func _on_VisibilityEnabler2D_screen_entered() -> void:
+	$Eye.enabled = true
+	$Senses.enabled = true
+
+
+func _on_VisibilityEnabler2D_screen_exited() -> void:
+	$Eye.enabled = false
+	$Senses.enabled = false

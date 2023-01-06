@@ -37,29 +37,30 @@ script = ExtResource( 2 )
 visible = false
 position = Vector2( 7, 0 )
 frames = SubResource( 4 )
-frame = 1
+frame = 2
 playing = true
 
 [node name="Fire2" type="AnimatedSprite" parent="Fire"]
 position = Vector2( -9, 3 )
 frames = SubResource( 4 )
+frame = 1
 playing = true
 
 [node name="Fire5" type="AnimatedSprite" parent="Fire"]
 position = Vector2( -4, 3 )
 frames = SubResource( 4 )
+frame = 1
 playing = true
 
 [node name="Fire3" type="AnimatedSprite" parent="Fire"]
 position = Vector2( -9, -13 )
 frames = SubResource( 4 )
-frame = 2
 playing = true
 
 [node name="Fire4" type="AnimatedSprite" parent="Fire"]
 position = Vector2( -16, 2 )
 frames = SubResource( 4 )
-frame = 1
+frame = 2
 playing = true
 
 [node name="Idle" type="Sprite" parent="."]
@@ -90,4 +91,6 @@ position = Vector2( 24, -17 )
 wait_time = 0.2
 one_shot = true
 
+[connection signal="screen_entered" from="VisibilityEnabler2D" to="." method="_on_VisibilityEnabler2D_screen_entered"]
+[connection signal="screen_exited" from="VisibilityEnabler2D" to="." method="_on_VisibilityEnabler2D_screen_exited"]
 [connection signal="timeout" from="DamageTimer" to="." method="_on_DamageTimer_timeout"]

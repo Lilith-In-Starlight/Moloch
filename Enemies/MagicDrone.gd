@@ -164,3 +164,12 @@ func _on_DamageTimer_timeout() -> void:
 
 func _on_damaged(damage_type:String) -> void:
 	Items.damage_visuals(self, $DamageTimer, damage_type)
+
+
+
+func _on_VisibilityEnabler2D_screen_entered() -> void:
+	$RayCast2D.enabled = true
+
+
+func _on_VisibilityEnabler2D_screen_exited() -> void:
+	$RayCast2D.enabled = false
