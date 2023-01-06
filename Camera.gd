@@ -30,7 +30,8 @@ func _process(delta: float) -> void:
 	offset_by_camera_shake.y = noise_generator.get_noise_2d(Time.get_ticks_msec(), 561964)
 	trauma = move_toward(trauma, 0.0, 0.5 * delta * 60)
 	
-	offset = camera_offset_by_mouse + offset_by_camera_shake * shake_amount
+	var shake_percentage = Config.screen_shake / 12.0
+	offset = camera_offset_by_mouse + offset_by_camera_shake * shake_amount * shake_percentage
 	position = lerp(position, player.position, 0.08 * delta * 60)
 
 
