@@ -326,6 +326,8 @@ func reset_player_to_savefile():
 	LootRNG = RandomNumberGenerator.new()
 	LootRNG.state = loot_status
 	player_health = Flesh.new()
+	player_health.set_from_dict(Config.playthrough_file.get_value("player", "health", player_health.get_as_dict()))
+	
 	cloth_scraps = Config.playthrough_file.get_value("player", "cloth_scraps", 3)
 	player_items = Config.playthrough_file.get_value("player", "items", {})
 	

@@ -205,3 +205,43 @@ func handle_impact(force: Vector2):
 		poke_hole(1)
 		add_effect("confused")
 		emit_signal("impacted_body_top", force.y)
+
+
+func get_as_dict():
+	var dict := {
+		"moving_appendages" : moving_appendages,
+		"broken_moving_appendages" : broken_moving_appendages,
+		"total_broken_appendages" : total_broken_appendages,
+		"needs_blood" : needs_blood,
+		"max_blood" : max_blood,
+		"poked_holes" : poked_holes,
+		"max_holes" : max_holes,
+		"blood" : blood,
+		"blood_substance" : blood_substance,
+		"weak_to_temp" : weak_to_temp,
+		"temperature" : temperature,
+		"normal_temperature" : normal_temperature,
+		"hypertemperature" : hypertemperature,
+		"hypotemperature" : hypotemperature,
+		"death_hypertemperature" : death_hypertemperature,
+		"death_hypotemperature" : death_hypotemperature,
+		"temp_regulation" : temp_regulation,
+		"has_soul" : has_soul,
+		"needed_soul" : needed_soul,
+		"effects" : effects,
+		"fire_timer" : fire_timer,
+		"confusion_timer" : confusion_timer,
+		"chances" : chances,
+		"guarantees" : guarantees,
+		"leg_impact_resistance" : leg_impact_resistance,
+		"side_resistance" : side_resistance,
+	}
+	return dict
+
+
+func set_from_dict(dict: Dictionary):
+	for i in dict:
+		set(i, dict[i])
+
+
+	

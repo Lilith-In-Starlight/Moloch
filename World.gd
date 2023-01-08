@@ -47,6 +47,7 @@ func ready():
 	Config.playthrough_file.set_value("world", "world_state", Items.WorldRNG.state)
 	Config.playthrough_file.set_value("world", "loot_state", Items.LootRNG.state)
 	Config.playthrough_file.set_value("world", "level", Items.level)
+	Config.playthrough_file.set_value("player", "health", Items.player_health.get_as_dict())
 	var spells_array := []
 	for i in Items.player_spells:
 		if i.is_modifier():
