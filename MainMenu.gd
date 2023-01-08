@@ -39,6 +39,9 @@ func _ready():
 	$SettingsMenuContainer/DamageColorsCheckbox.pressed = Config.damage_visuals
 	$SettingsMenuContainer/MouseSensitivityContainer/Slider.value = Config.camera_smoothing
 	$SettingsMenuContainer/ScreenShakeContainer/Slider.value = Config.screen_shake
+	
+	if Config.loaded_playthrough:
+		$MainMenuContainer/NewRunButton.text = "Continue Run"
 
 
 func _process(delta: float) -> void:
@@ -93,6 +96,14 @@ func proceed_keybinds():
 
 
 func start_new_run() -> void:
+	if Config.loaded_playthrough:
+		Items.WorldRNG.state = Config.playthrough_file.get_value("world", "world_state")
+		Items.LootRNG.state = Config.playthrough_file.get_value("world", "loot_state")
+		
+		Items.reset_player_to_savefile()
+		Animations.play("Fadein")
+		return
+	
 	if not SeedLineEdit.text == "":
 		if SeedLineEdit.text.is_valid_integer():
 			Items.custom_seed = SeedLineEdit.text as int
@@ -106,6 +117,7 @@ func start_new_run() -> void:
 	else:
 		Items.WorldRNG.randomize()
 		Items.LootRNG.seed = Items.WorldRNG.seed*2
+	
 	Items.reset_player()
 	Animations.play("Fadein")
 

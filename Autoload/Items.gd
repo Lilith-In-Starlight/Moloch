@@ -309,6 +309,53 @@ func reset_player():
 	player_wands[1].spells = [spells[2].values()[LootRNG.randi()%spells[2].values().size()]]
 
 
+
+func reset_player_to_savefile():
+	Config.playthrough_file.load("user://memories.moloch")
+	last_items = Config.playthrough_file.get_value("player", "last_items", [])
+	last_spells = Config.playthrough_file.get_value("player", "last_spells", [])
+	last_pickup = null
+	level = Config.playthrough_file.get_value("world", "level", 1)
+	var world_status :int = Config.playthrough_file.get_value("world", "world_state", 1)
+	var loot_status :int = Config.playthrough_file.get_value("world", "loot_state", 1)
+	spell_mods = []
+	print("World status: ", world_status)
+	print("Loot status: ", loot_status)
+	WorldRNG = RandomNumberGenerator.new()
+	WorldRNG.state = world_status
+	LootRNG = RandomNumberGenerator.new()
+	LootRNG.state = loot_status
+	player_health = Flesh.new()
+	cloth_scraps = Config.playthrough_file.get_value("player", "cloth_scraps", 3)
+	player_items = Config.playthrough_file.get_value("player", "items", {})
+	
+	var loaded_spells = Config.playthrough_file.get_value("player", "spells", [])
+	
+	player_spells = []
+	for spell in loaded_spells:
+		if spell is Array:
+			var spell_object :Spell = Items.base_spell_mods[spell[0]].duplicate()
+			spell_object.level = spell[1] as int
+			spell_object.description = spell[2]
+			player_spells.append(spell_object)
+		else:
+			player_spells.append(Items.all_spells[spell])
+	
+	for i in player_wands:
+		i.queue_free()
+	player_wands = []
+	var loaded_wands = Config.playthrough_file.get_value("player", "wands", [])
+	
+	for i in loaded_wands:
+		var parse_result := JSON.parse(i)
+		if parse_result.error == OK:
+			var new_wand := Wand.new()
+			add_child(new_wand)
+			player_wands.append(new_wand)
+			var tags :Dictionary = parse_result.result
+			new_wand.set_from_dict(tags)
+
+
 func shuffle_array(array: Array) -> Array:
 	var r := []
 	var n := []
@@ -357,6 +404,7 @@ func add_item(name:String) -> void:
 
 func new_player_wand() -> Wand:
 	var new_wand := Wand.new()
+	new_wand.fill_with_random_spells()
 	add_child(new_wand)
 	if new_wand.spell_capacity < 2:
 		new_player_wand().spell_capacity = 2

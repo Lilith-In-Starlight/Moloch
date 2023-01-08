@@ -44,6 +44,27 @@ class _Room:
 
 
 func ready():
+	Config.playthrough_file.set_value("world", "world_state", Items.WorldRNG.state)
+	Config.playthrough_file.set_value("world", "loot_state", Items.LootRNG.state)
+	Config.playthrough_file.set_value("world", "level", Items.level)
+	var spells_array := []
+	for i in Items.player_spells:
+		if i.is_modifier():
+			spells_array.append([i.id, str(i.level), i.description])
+		else:
+			spells_array.append(i.id)
+	
+	var wands_array := []
+	
+	for i in Items.player_wands:
+		wands_array.append(i.get_json())
+		
+	Config.playthrough_file.set_value("player", "spells", spells_array)
+	Config.playthrough_file.set_value("player", "wands", wands_array)
+	Config.playthrough_file.set_value("player", "items", Items.player_items)
+	Config.playthrough_file.set_value("player", "cloth_scraps", Items.cloth_scraps)
+	Config.playthrough_file.save("user://memories.moloch")
+	Config.loaded_playthrough = true
 	if Items.level > 2:
 		level_tile = 1
 	

@@ -19,6 +19,7 @@ var Map :Node2D
 
 
 func _ready():
+	wand.fill_with_random_spells()
 	Items.add_child(wand)
 	Map = get_tree().get_nodes_in_group("World")[0]
 	noise.seed = hash(self)

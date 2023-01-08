@@ -7,20 +7,19 @@ signal casting_spell(spell, wand, caster)
 
 const MAX_CAPACITY := 12
 
-var spell_capacity :int = 1 + Items.LootRNG.randi()%(MAX_CAPACITY-1) setget set_spell_capacity
-var cast_cooldown :float = Items.LootRNG.randf()*0.3
-var recharge_cooldown :float = Items.LootRNG.randf()*0.4
-var projectile_speed :float = 4 + Items.LootRNG.randf()*8
-var heat_resistance :float = Items.LootRNG.randf()*0.7
-var soul_resistance :float = Items.LootRNG.randf()*0.7
-#var push_resistance :float = Items.LootRNG.randf()*0.7
+var spell_capacity :int = 3 setget set_spell_capacity
+var cast_cooldown :float = 0.2
+var recharge_cooldown :float = 0.2
+var projectile_speed :float = 5.0
+var heat_resistance :float = 0.5
+var soul_resistance :float = .5
 var shuffle := false
 var spells := []
 var spell_offset := Vector2(0, 0)
 
-var color1 := Color(Items.LootRNG.randf(), Items.LootRNG.randf(), Items.LootRNG.randf())
-var color2 := Color(Items.LootRNG.randf(), Items.LootRNG.randf(), Items.LootRNG.randf())
-var color3 := Color(Items.LootRNG.randf(), Items.LootRNG.randf(), Items.LootRNG.randf())
+var color1 := Color(randf(), randf(), randf())
+var color2 := Color(randf(), randf(), randf())
+var color3 := Color(randf(), randf(), randf())
 
 var current_spell := 0
 
@@ -29,7 +28,18 @@ var running := false
 var can_cast := true
 
 
-func _init():
+func fill_with_random_spells():
+	spell_capacity = 1 + Items.LootRNG.randi()%(MAX_CAPACITY-1)
+	cast_cooldown = Items.LootRNG.randf()*0.3
+	recharge_cooldown = Items.LootRNG.randf()*0.4
+	projectile_speed = 4 + Items.LootRNG.randf()*8
+	heat_resistance = Items.LootRNG.randf()*0.7
+	soul_resistance = Items.LootRNG.randf()*0.7
+	
+	color1 = Color(Items.LootRNG.randf(), Items.LootRNG.randf(), Items.LootRNG.randf())
+	color2 = Color(Items.LootRNG.randf(), Items.LootRNG.randf(), Items.LootRNG.randf())
+	color3 = Color(Items.LootRNG.randf(), Items.LootRNG.randf(), Items.LootRNG.randf())
+	
 	if Items.LootRNG.randf() < 0.15:
 		shuffle = true
 	
@@ -193,9 +203,48 @@ func get_json() -> String:
 		string += '"shuffle":"0",'
 	string += '"color1":"#' + color1.to_html() + '",'
 	string += '"color2":"#' + color2.to_html() + '",'
-	string += '"color3":"#' + color3.to_html() + '"}'
+	string += '"color3":"#' + color3.to_html() + '",'
+	string += '"inventory":['
+	
+	for i in spells:
+		if i.is_modifier():
+			string += '["' + i.id + '","' + str(i.level) + '","' + i.description + '"]'
+		else:
+			string += '"' + i.id + '",'
+		
+	string = string.trim_suffix(",")
+	
+	string +="]}"
+	
 	return string
 
+
+func set_from_dict(data: Dictionary):
+	if "cast" in data and data["cast"].is_valid_float():
+		cast_cooldown = data["cast"] as float
+	if "recharge" in data and data["recharge"].is_valid_float():
+		cast_cooldown = data["recharge"] as float
+	if "spellcap" in data and data["spellcap"].is_valid_integer():
+		spell_capacity = data["spellcap"] as int
+	if "heat" in data and data["heat"].is_valid_float():
+		heat_resistance = data["heat"] as float
+	if "soul" in data and data["soul"].is_valid_float():
+		soul_resistance = data["soul"] as float
+	if "color1" in data and data["color1"].is_valid_html_color():
+		color1 = Color(data["color1"])
+	if "color2" in data and data["color2"].is_valid_html_color():
+		color2 = Color(data["color2"])
+	if "color3" in data and data["color3"].is_valid_html_color():
+		color3 = Color(data["color3"])
+	if "inventory" in data and data["inventory"] is Array:
+		for spell in data["inventory"]:
+			if spell is Array:
+				var spell_object :Spell = Items.base_spell_mods[spell[0]].duplicate()
+				spell_object.level = spell[1] as int
+				spell_object.description = spell[2]
+				spells.append(spell_object)
+			else:
+				spells.append(Items.all_spells[spell])
 
 func get_wand_mod_property(spell):
 	match spell.id:

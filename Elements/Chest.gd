@@ -20,6 +20,7 @@ var spell
 func _ready():
 	item = Items.pick_random_item()
 	wand = Wand.new()
+	wand.fill_with_random_spells()
 	spell = Items.pick_random_spell()
 	Player = get_tree().get_nodes_in_group("Player")[0]
 	Map = get_tree().get_nodes_in_group("World")[0]

@@ -3,6 +3,7 @@ extends Node
 signal achievement_unlocked(achievement)
 
 var config_file:ConfigFile = ConfigFile.new()
+var playthrough_file:ConfigFile = ConfigFile.new()
 
 # Controller Support
 var last_input_was_controller := false
@@ -19,6 +20,9 @@ var app_start_time = OS.get_unix_time()
 
 var keyboard_binds := {
 }
+
+# Playthrough Data
+var loaded_playthrough := false
 
 var default_font = preload("res://dpcomic.ttf")
 var accessible_font = preload("res://OpenSans-Regular.ttf")
@@ -106,12 +110,6 @@ func _ready() -> void:
 		self.screen_shake = config_file.get_value("config", "screen_shake", 8)
 		self.use_accessible_font = config_file.get_value("config", "accessible_font", false)
 		
-#		for i in InputMap.get_actions():
-#			var obtained = config_file.get_value("config", "keybinds_%s"%i, InputMap.get_action_list(i))
-#			InputMap.action_erase_events(i)
-#			for j in obtained:
-#				InputMap.action_add_event(i, j)
-		
 		var new_dict = config_file.get_value("achievements", "achievements", achievements)
 		for i in new_dict:
 			achievements[i] = new_dict[i]
@@ -125,6 +123,11 @@ func _ready() -> void:
 	
 	if Input.get_connected_joypads().size() > 0:
 		last_input_was_controller = true
+	
+	
+	err = playthrough_file.load("user://memories.moloch")
+	if err == OK:
+		loaded_playthrough = true
 	
 	# Eh??
 	discord = Discord.Core.new()

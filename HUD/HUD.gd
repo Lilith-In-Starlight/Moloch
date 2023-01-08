@@ -456,6 +456,9 @@ func _on_generated_world():
 
 # Calculate time in minutes and seconds
 func _on_player_died():
+	Config.loaded_playthrough = false
+	Config.playthrough_file.clear()
+	Config.playthrough_file.save("user://memories.moloch")
 	var msecs :int = OS.get_ticks_msec() - Items.run_start_time
 	var secs = float(msecs) / 1000.0
 	var isecs = int(secs) 

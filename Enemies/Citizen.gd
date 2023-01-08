@@ -17,6 +17,7 @@ var aim := last_seen
 func _ready() -> void:
 	last_seen = position
 	wand = Wand.new()
+	wand.fill_with_random_spells()
 	Items.add_child(wand)
 	wand.spells = [Items.pick_random_spell()]
 	wand.recharge_cooldown = 1.5 + randf()*2.0
