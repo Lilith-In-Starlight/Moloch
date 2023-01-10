@@ -40,7 +40,7 @@ func _ready():
 	$SettingsMenuContainer/MouseSensitivityContainer/Slider.value = Config.camera_smoothing
 	$SettingsMenuContainer/ScreenShakeContainer/Slider.value = Config.screen_shake
 	
-	if Config.loaded_playthrough:
+	if Config.loaded_playthrough and Config.playthrough_file.has_section("world"):
 		$MainMenuContainer/NewRunButton.text = "Continue Run"
 
 
@@ -96,7 +96,7 @@ func proceed_keybinds():
 
 
 func start_new_run() -> void:
-	if Config.loaded_playthrough:
+	if Config.loaded_playthrough and Config.playthrough_file.has_section("world"):
 		Items.WorldRNG.state = Config.playthrough_file.get_value("world", "world_state")
 		Items.LootRNG.state = Config.playthrough_file.get_value("world", "loot_state")
 		
