@@ -53,9 +53,9 @@ func _on_hit_something():
 	$Line2D.points = [Vector2(0, 0), pos2-position]
 	
 	if is_instance_valid(CastInfo.Caster) and CastInfo.Caster.is_in_group("Player"):
-		if Cam.position.distance_to(pos) != 0.0:
-			var inverse_distance := 1000.0/Cam.position.distance_to(pos)
-			Cam.shake_camera(inverse_distance * 0.9)
+		if Cam.position.distance_squared_to(pos2) != 0.0:
+			var inverse_distance := 1000.0/Cam.position.distance_squared_to(pos2)
+			Cam.shake_camera(inverse_distance * 6.0)
 		else:
 			Cam.shake_camera(2.0)
 
