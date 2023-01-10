@@ -71,3 +71,5 @@ physics_process_parent = true
 
 [connection signal="animation_finished" from="Animations" to="." method="_on_animation_finished"]
 [connection signal="timeout" from="AttackingTimer" to="." method="_on_AttackingTimer_timeout"]
+[connection signal="screen_entered" from="VisibilityEnabler2D" to="." method="_on_VisibilityEnabler2D_screen_entered"]
+[connection signal="screen_exited" from="VisibilityEnabler2D" to="." method="_on_VisibilityEnabler2D_screen_exited"]

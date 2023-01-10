@@ -108,3 +108,11 @@ func bleed() -> void:
 				n.linear_velocity = Vector2(-200 + randf()*400, -80 + randf()*120)
 				n.substance = health.blood_substance
 				get_parent().add_child(n)
+
+
+func _on_VisibilityEnabler2D_screen_entered() -> void:
+	$RayCast.enabled = true
+
+
+func _on_VisibilityEnabler2D_screen_exited() -> void:
+	$RayCast.enabled = false

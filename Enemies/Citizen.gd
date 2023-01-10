@@ -116,3 +116,17 @@ func cast_from():
 
 func looking_at():
 	return aim
+
+
+func _on_VisibilityEnabler2D_screen_entered() -> void:
+	$RayCast2D.enabled = true
+	$PlayerFinder.enabled = true
+	$AimRay.enabled = true
+	$RayCast2D2.enabled = true
+
+
+func _on_VisibilityEnabler2D_screen_exited() -> void:
+	$RayCast2D.enabled = false
+	$PlayerFinder.enabled = false
+	$AimRay.enabled = false
+	$RayCast2D2.enabled = false
