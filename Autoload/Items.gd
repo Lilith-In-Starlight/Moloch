@@ -282,6 +282,7 @@ func reset_player():
 		generator_seed = randi()
 	spell_mods = []
 	print("Generator seed: ", generator_seed)
+	Config.playthrough_file.set_value("world", "genseed", generator_seed)
 	WorldRNG = RandomNumberGenerator.new()
 	WorldRNG.seed = generator_seed
 	LootRNG = RandomNumberGenerator.new()
@@ -311,6 +312,7 @@ func reset_player():
 
 
 func reset_player_to_savefile():
+	using_seed = Config.playthrough_file.get_value("world", "genseed", -1)
 	Config.playthrough_file.load("user://memories.moloch")
 	last_items = Config.playthrough_file.get_value("player", "last_items", [])
 	last_spells = Config.playthrough_file.get_value("player", "last_spells", [])
