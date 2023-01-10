@@ -19,7 +19,7 @@ position = Vector2( 24, 184 )
 size = 9
 
 [node name="Platform5" parent="." instance=ExtResource( 3 )]
-position = Vector2( 24, 80 )
+position = Vector2( 24, 72 )
 size = 9
 
 [node name="VaseRow2" type="Position2D" parent="." groups=["Vases"]]

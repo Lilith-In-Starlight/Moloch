@@ -16,7 +16,7 @@ right = 1
 
 [node name="Platform" parent="." instance=ExtResource( 3 )]
 position = Vector2( 24, 184 )
-size = 22
+size = 60
 
 [node name="Platform2" parent="." instance=ExtResource( 3 )]
 position = Vector2( 24, 72 )

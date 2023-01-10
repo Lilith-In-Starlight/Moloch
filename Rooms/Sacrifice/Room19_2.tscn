@@ -16,15 +16,15 @@ left = 2
 right = 1
 
 [node name="Platform2" parent="." instance=ExtResource( 3 )]
-position = Vector2( 808, 184 )
+position = Vector2( 432, 184 )
 size = 9
 
 [node name="Platform6" parent="." instance=ExtResource( 3 )]
-position = Vector2( 808, 80 )
+position = Vector2( 432, 72 )
 size = 9
 
 [node name="VaseRow7" type="Position2D" parent="." groups=["Vases"]]
-position = Vector2( 752, 240 )
+position = Vector2( 368, 240 )
 
 [node name="End" type="Position2D" parent="VaseRow7" groups=["Vases"]]
 position = Vector2( 112, 0 )
