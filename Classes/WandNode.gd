@@ -195,6 +195,7 @@ func get_json() -> String:
 	string += '"cast":' + '"' + str(cast_cooldown) + '",'
 	string += '"recharge":' + '"' + str(recharge_cooldown) + '",'
 	string += '"spellcap":' + '"' + str(spell_capacity) + '",'
+	string += '"projvel":' + '"' + str(projectile_speed) + '",'
 	string += '"heat":' + '"' + str(heat_resistance) + '",'
 	string += '"soul":' + '"' + str(soul_resistance) + '",'
 	if shuffle:
@@ -223,13 +224,17 @@ func set_from_dict(data: Dictionary):
 	if "cast" in data and data["cast"].is_valid_float():
 		cast_cooldown = data["cast"] as float
 	if "recharge" in data and data["recharge"].is_valid_float():
-		cast_cooldown = data["recharge"] as float
+		recharge_cooldown = data["recharge"] as float
 	if "spellcap" in data and data["spellcap"].is_valid_integer():
 		spell_capacity = data["spellcap"] as int
+	if "projvel" in data and data["projvel"].is_valid_float():
+		projectile_speed = data["projvel"] as float
 	if "heat" in data and data["heat"].is_valid_float():
 		heat_resistance = data["heat"] as float
 	if "soul" in data and data["soul"].is_valid_float():
 		soul_resistance = data["soul"] as float
+	if "shuffle" in data and data["shuffle"].is_valid_integer():
+		shuffle = data["shuffle"] == "1"
 	if "color1" in data and data["color1"].is_valid_html_color():
 		color1 = Color(data["color1"])
 	if "color2" in data and data["color2"].is_valid_html_color():

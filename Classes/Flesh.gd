@@ -228,6 +228,7 @@ func get_as_dict():
 		"temp_regulation" : temp_regulation,
 		"has_soul" : has_soul,
 		"needed_soul" : needed_soul,
+		"soul" : soul,
 		"effects" : effects,
 		"fire_timer" : fire_timer,
 		"confusion_timer" : confusion_timer,
