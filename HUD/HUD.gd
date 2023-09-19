@@ -88,6 +88,7 @@ func _ready():
 
 
 func _process(delta):
+	SpellBagHUD.visible = Items.visible_spells
 	# Control the tutorial
 	if Items.player_health.poked_holes > 0 and not Config.tutorial["healed"]:
 		$HUD/HealTutorial.visible = true
@@ -203,7 +204,7 @@ func _process(delta):
 		# If a non-empty wand slot is selected
 		if Items.get_player_wand() != null:
 			# Make the spell hud visible
-			WandSpellHUD.visible = true
+			WandSpellHUD.visible = Items.visible_spells
 			var wand :Wand = Items.get_player_wand()
 			# If the wand has this slot
 			if i < wand.spell_capacity:
@@ -232,115 +233,117 @@ func _process(delta):
 	
 	# Navigate inventory with keyboard
 	# If the mouse is in the wands' area
-	if mouse.x < 116 and mouse.y > 4 and mouse.y < 20:
-		block_cast = true 
-		for i in 6:
-			# If a slot is selected
-			if mouse.x >= 4+i*(16+4) and mouse.x < 4+(i+1)*(16+4):
-				# Set the inventory and slot clicked, and don't let the
-				# player cast spells
-				clicked_inventory = INVENTORIES.PLAYER_WANDS
-				clicked_slot = i
-				# If the slot isn't empty
-				if i < Items.player_wands.size():
-					var d_wand :Wand = Items.player_wands[i]
-					# Which information to set
-					if Input.is_action_pressed("see_info"):
-						DescriptionBox.visible = true
-						var new_text := "[img]res://Sprites/Menus/WandIcon.png[/img] [color=#ffbd00]Wand[/color]"
-						if new_text != DescriptionBoxName.bbcode_text:
-							DescriptionBoxName.bbcode_text = new_text
-						new_text = "[img]res://Sprites/Menus/CastDelayIcon.png[/img] Cast Cooldown: " + str(d_wand.cast_cooldown).pad_decimals(3) + "s"
-						new_text += "\n[img]res://Sprites/Menus/CooldownIcon.png[/img] Recharge Time: " + str(d_wand.recharge_cooldown).pad_decimals(3) + "s"
-						new_text += "\nTemp. Resistance: " + str(1.0/d_wand.heat_resistance).pad_decimals(2)
-						new_text += "\nSoul Resistance: " + str(1.0/d_wand.soul_resistance).pad_decimals(2)
-						new_text += "\nProjectile Speed: " + str(d_wand.projectile_speed).pad_decimals(2)
-						if d_wand.shuffle:
-							new_text += "\nShuffle"
-						if DescriptionBoxInfo.bbcode_text != new_text:
-							DescriptionBoxInfo.bbcode_text = new_text
-					else:
-						ShortDescriptionBox.visible = true
-						ShortDescriptionBox.bbcode_text = "[img]res://Sprites/Menus/CastDelayIcon.png[/img] " + str(d_wand.cast_cooldown).pad_decimals(2) + "s [img]res://Sprites/Menus/CooldownIcon.png[/img] " + str(d_wand.recharge_cooldown).pad_decimals(2) + "s"
-				break # Stop checking for if it's in a slot, we already did all this stuff
 	
-	# If the mouse is in the companions' wand area
-	# DEPRECATED
-	elif mouse.x > 140 and mouse.y > 4 and mouse.y < 20 and mouse.x < 140 + 20*Items.companions.size():
-		block_cast = true 
-		for i in Items.companions.size():
-			# If a slot is selected
-			if mouse.x >= 140+i*(16+4) and mouse.x < 140+(i+1)*(16+4):
-				# Set the inventory and slot clicked, and don't let the
-				# player cast spells
-				clicked_inventory = INVENTORIES.COMPANIONS
-				clicked_slot = i
-				# If the slot isn't empty
-				if Items.companions[i][1] != null:
-					# Which information to set
-					if Input.is_action_pressed("see_info"):
-						DescriptionBox.visible = true
-						DescriptionBoxName.bbcode_text = "[color=#ffbd00]Wand[/color]"
-						DescriptionBoxInfo.bbcode_text = "Spell Cooldown: " + str(Items.companions[i][1].cast_cooldown).pad_decimals(3)
-						DescriptionBoxInfo.bbcode_text += "\nUsage Cooldown: " + str(Items.companions[i][1].recharge_cooldown).pad_decimals(3)
-						if Items.companions[i][1].shuffle:
-							DescriptionBoxInfo.bbcode_text += "\nShuffle"
-					else:
-						ShortDescriptionBox.visible = true
-						ShortDescriptionBox.bbcode_text =  str(Items.companions[i][1].cast_cooldown).pad_decimals(2) + "/" + str(Items.companions[i][1].recharge_cooldown).pad_decimals(2)
-				break # Stop checking for if it's in a slot, we already did all this stuff
-	
-	# If the mouse is in the wands' spells area and is holding a wand
-	elif mouse.x < 240 and mouse.y > 25 and mouse.y < 25+16 and Items.get_player_wand() != null:
-		var wand :Wand = Items.get_player_wand()
-		for i in Wand.MAX_CAPACITY:
-			# If it's in a slot
-			if mouse.x >= 4+i*(16+4) and mouse.x < (i+1)*(16+4):
-				# If this slot is had by the wand
-				if i < wand.spell_capacity:
-					# Don't let the player cast spells
-					block_cast = true
-					clicked_inventory = INVENTORIES.PLAYER_WAND_SPELLS
-					# Then this is the slot that was clicked (aka I didn't click an empty area)
+	if Items.visible_spells:
+		if mouse.x < 116 and mouse.y > 4 and mouse.y < 20:
+			block_cast = true 
+			for i in 6:
+				# If a slot is selected
+				if mouse.x >= 4+i*(16+4) and mouse.x < 4+(i+1)*(16+4):
+					# Set the inventory and slot clicked, and don't let the
+					# player cast spells
+					clicked_inventory = INVENTORIES.PLAYER_WANDS
 					clicked_slot = i
-					# Set the description accordingly
-					if i < wand.spells.size():
+					# If the slot isn't empty
+					if i < Items.player_wands.size():
+						var d_wand :Wand = Items.player_wands[i]
+						# Which information to set
 						if Input.is_action_pressed("see_info"):
 							DescriptionBox.visible = true
-							DescriptionBoxName.bbcode_text = "[color=#ffbd00]" + wand.spells[i].name + "[/color]"
-							DescriptionBoxInfo.bbcode_text = wand.spells[i].description
+							var new_text := "[img]res://Sprites/Menus/WandIcon.png[/img] [color=#ffbd00]Wand[/color]"
+							if new_text != DescriptionBoxName.bbcode_text:
+								DescriptionBoxName.bbcode_text = new_text
+							new_text = "[img]res://Sprites/Menus/CastDelayIcon.png[/img] Cast Cooldown: " + str(d_wand.cast_cooldown).pad_decimals(3) + "s"
+							new_text += "\n[img]res://Sprites/Menus/CooldownIcon.png[/img] Recharge Time: " + str(d_wand.recharge_cooldown).pad_decimals(3) + "s"
+							new_text += "\nTemp. Resistance: " + str(1.0/d_wand.heat_resistance).pad_decimals(2)
+							new_text += "\nSoul Resistance: " + str(1.0/d_wand.soul_resistance).pad_decimals(2)
+							new_text += "\nProjectile Speed: " + str(d_wand.projectile_speed).pad_decimals(2)
+							if d_wand.shuffle:
+								new_text += "\nShuffle"
+							if DescriptionBoxInfo.bbcode_text != new_text:
+								DescriptionBoxInfo.bbcode_text = new_text
 						else:
 							ShortDescriptionBox.visible = true
-							ShortDescriptionBox.text =  wand.spells[i].name
-	
-	# If the mouse is in the spells bag's area and is holding a wand
-	elif mouse.x < 16 + 4 and mouse.y > 62 and mouse.y < 178 and mouse.x > 4:
-		block_cast = true
-		for i in 6:
-			# If it's in a slot
-			if mouse.y >= 62+i*(16+4) and mouse.y < 62+(i+1)*(16+4):
-				# Set what inventory and slot was clicked, block spell casts
-				clicked_inventory = INVENTORIES.PLAYER_SPELLS
-				clicked_slot = i
-				# Descriptions
-				if i < Items.player_spells.size():
-					if Input.is_action_pressed("see_info"):
-						DescriptionBox.visible = true
-						DescriptionBoxName.bbcode_text = "[color=#ffbd00]" + Items.player_spells[i].name + "[/color]"
-						DescriptionBoxInfo.bbcode_text = Items.player_spells[i].description
-					else:
-						ShortDescriptionBox.visible = true
-						ShortDescriptionBox.text =  Items.player_spells[i].name
-	
-	# If the player is hovering over the last picked_up item, handle descriptions
-	elif Items.last_pickup != null and mouse.x > 4 and mouse.y > 184 and mouse.x < 20 and mouse.y < 200:
-		if Input.is_action_pressed("see_info"):
-			DescriptionBox.visible = true
-			DescriptionBoxName.bbcode_text = "[color=#ffbd00]" + Items.last_pickup.name + "[/color]"
-			DescriptionBoxInfo.bbcode_text = Items.last_pickup.description
-		else:
-			ShortDescriptionBox.visible = true
-			ShortDescriptionBox.bbcode_text = Items.last_pickup.name
+							ShortDescriptionBox.bbcode_text = "[img]res://Sprites/Menus/CastDelayIcon.png[/img] " + str(d_wand.cast_cooldown).pad_decimals(2) + "s [img]res://Sprites/Menus/CooldownIcon.png[/img] " + str(d_wand.recharge_cooldown).pad_decimals(2) + "s"
+					break # Stop checking for if it's in a slot, we already did all this stuff
+		
+		# If the mouse is in the companions' wand area
+		# DEPRECATED
+		elif mouse.x > 140 and mouse.y > 4 and mouse.y < 20 and mouse.x < 140 + 20*Items.companions.size():
+			block_cast = true 
+			for i in Items.companions.size():
+				# If a slot is selected
+				if mouse.x >= 140+i*(16+4) and mouse.x < 140+(i+1)*(16+4):
+					# Set the inventory and slot clicked, and don't let the
+					# player cast spells
+					clicked_inventory = INVENTORIES.COMPANIONS
+					clicked_slot = i
+					# If the slot isn't empty
+					if Items.companions[i][1] != null:
+						# Which information to set
+						if Input.is_action_pressed("see_info"):
+							DescriptionBox.visible = true
+							DescriptionBoxName.bbcode_text = "[color=#ffbd00]Wand[/color]"
+							DescriptionBoxInfo.bbcode_text = "Spell Cooldown: " + str(Items.companions[i][1].cast_cooldown).pad_decimals(3)
+							DescriptionBoxInfo.bbcode_text += "\nUsage Cooldown: " + str(Items.companions[i][1].recharge_cooldown).pad_decimals(3)
+							if Items.companions[i][1].shuffle:
+								DescriptionBoxInfo.bbcode_text += "\nShuffle"
+						else:
+							ShortDescriptionBox.visible = true
+							ShortDescriptionBox.bbcode_text =  str(Items.companions[i][1].cast_cooldown).pad_decimals(2) + "/" + str(Items.companions[i][1].recharge_cooldown).pad_decimals(2)
+					break # Stop checking for if it's in a slot, we already did all this stuff
+		
+		# If the mouse is in the wands' spells area and is holding a wand
+		elif mouse.x < 240 and mouse.y > 25 and mouse.y < 25+16 and Items.get_player_wand() != null:
+			var wand :Wand = Items.get_player_wand()
+			for i in Wand.MAX_CAPACITY:
+				# If it's in a slot
+				if mouse.x >= 4+i*(16+4) and mouse.x < (i+1)*(16+4):
+					# If this slot is had by the wand
+					if i < wand.spell_capacity:
+						# Don't let the player cast spells
+						block_cast = true
+						clicked_inventory = INVENTORIES.PLAYER_WAND_SPELLS
+						# Then this is the slot that was clicked (aka I didn't click an empty area)
+						clicked_slot = i
+						# Set the description accordingly
+						if i < wand.spells.size():
+							if Input.is_action_pressed("see_info"):
+								DescriptionBox.visible = true
+								DescriptionBoxName.bbcode_text = "[color=#ffbd00]" + wand.spells[i].name + "[/color]"
+								DescriptionBoxInfo.bbcode_text = wand.spells[i].description
+							else:
+								ShortDescriptionBox.visible = true
+								ShortDescriptionBox.text =  wand.spells[i].name
+		
+		# If the mouse is in the spells bag's area and is holding a wand
+		elif mouse.x < 16 + 4 and mouse.y > 62 and mouse.y < 178 and mouse.x > 4:
+			block_cast = true
+			for i in 6:
+				# If it's in a slot
+				if mouse.y >= 62+i*(16+4) and mouse.y < 62+(i+1)*(16+4):
+					# Set what inventory and slot was clicked, block spell casts
+					clicked_inventory = INVENTORIES.PLAYER_SPELLS
+					clicked_slot = i
+					# Descriptions
+					if i < Items.player_spells.size():
+						if Input.is_action_pressed("see_info"):
+							DescriptionBox.visible = true
+							DescriptionBoxName.bbcode_text = "[color=#ffbd00]" + Items.player_spells[i].name + "[/color]"
+							DescriptionBoxInfo.bbcode_text = Items.player_spells[i].description
+						else:
+							ShortDescriptionBox.visible = true
+							ShortDescriptionBox.text =  Items.player_spells[i].name
+		
+		# If the player is hovering over the last picked_up item, handle descriptions
+		elif Items.last_pickup != null and mouse.x > 4 and mouse.y > 184 and mouse.x < 20 and mouse.y < 200:
+			if Input.is_action_pressed("see_info"):
+				DescriptionBox.visible = true
+				DescriptionBoxName.bbcode_text = "[color=#ffbd00]" + Items.last_pickup.name + "[/color]"
+				DescriptionBoxInfo.bbcode_text = Items.last_pickup.description
+			else:
+				ShortDescriptionBox.visible = true
+				ShortDescriptionBox.bbcode_text = Items.last_pickup.name
 	
 	# Navigate inventory with controller
 	if Config.last_input_was_controller:
@@ -402,11 +405,12 @@ func _process(delta):
 				
 	# If the player clicks a part of the inventory, swap that slot's content
 	# with the mouse slot's content
-	if not Config.last_input_was_controller and Input.is_action_just_pressed("Interact1") and clicked_inventory != INVENTORIES.NONE:
-		click_inventory_slot(clicked_inventory, clicked_slot)
-	
-	elif Config.last_input_was_controller and (Input.is_action_just_pressed("select_inventory") or Input.is_action_just_pressed("select_inventory_2")):
-		controller_select_inventory()
+	if Items.visible_spells:
+		if not Config.last_input_was_controller and Input.is_action_just_pressed("Interact1") and clicked_inventory != INVENTORIES.NONE:
+			click_inventory_slot(clicked_inventory, clicked_slot)
+		
+		elif Config.last_input_was_controller and (Input.is_action_just_pressed("select_inventory") or Input.is_action_just_pressed("select_inventory_2")):
+			controller_select_inventory()
 	
 	
 	# If the player right clicks and is not in an inventory space

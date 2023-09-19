@@ -145,6 +145,8 @@ func _ready():
 
 var simplex_noise := OpenSimplexNoise.new()
 
+var visible_spells := true
+
 func _process(delta):
 	# Fullscreen
 	if Input.is_action_just_pressed("ui_end"):

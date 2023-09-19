@@ -26,6 +26,8 @@ func _input(event: InputEvent) -> void:
 	if not Console.has_focus() and event.is_pressed() and finished_gen:
 		if event is InputEventKey:
 			match event.scancode:
+				KEY_T:
+					Items.visible_spells = !Items.visible_spells
 				KEY_ESCAPE:
 					get_tree().paused = !get_tree().paused and !Items.player_health.dead
 					visible = get_tree().paused and !Items.player_health.dead

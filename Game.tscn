@@ -541,9 +541,6 @@ margin_left = 4.0
 margin_top = 25.0
 margin_right = 120.0
 margin_bottom = 41.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Slot1" type="TextureRect" parent="HUD/HUD/Spells"]
 margin_right = 16.0
@@ -998,9 +995,9 @@ custom_colors/font_color_pressed = Color( 1, 0.596078, 0.929412, 1 )
 text = "Settings"
 
 [node name="DieInstantly" type="ToolButton" parent="HUD/HUD/Pause/Options"]
-margin_top = 28.0
+margin_top = 22.0
 margin_right = 95.0
-margin_bottom = 52.0
+margin_bottom = 46.0
 theme = ExtResource( 18 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_colors/font_color_hover = Color( 0.737255, 1, 0.968627, 1 )
@@ -1008,8 +1005,9 @@ custom_colors/font_color_pressed = Color( 1, 0.596078, 0.929412, 1 )
 text = "Die Instantly"
 
 [node name="MainMenu" type="ToolButton" parent="HUD/HUD/Pause/Options"]
+margin_top = 44.0
 margin_right = 95.0
-margin_bottom = 24.0
+margin_bottom = 68.0
 theme = ExtResource( 18 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_colors/font_color_hover = Color( 0.737255, 1, 0.968627, 1 )
