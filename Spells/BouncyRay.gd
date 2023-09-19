@@ -1,58 +1,38 @@
-extends Node2D
+extends SpellManager
 
 
-var CastInfo := SpellCastInfo.new()
-var spell_behavior := RayBehavior.new()
-var times_done := 0
+var rotate := 0.0
+var WorldMap :Node2D
 
 var timer := 0.0
-var casted := false
-var did := false
+
+var noise := OpenSimplexNoise.new()
+
+var CastInfo := SpellCastInfo.new()
+
 
 func _ready():
-	add_child(spell_behavior)
-	spell_behavior.ray_setup(self, 2000)
-	spell_behavior.connect("hit_something", self, "_on_hit_something", [], 4)
-	spell_behavior.connect("hit_nothing", self, "_on_hit_nothing", [], 4)
-	spell_behavior.cast(CastInfo)
+	CastInfo.set_position(self)
+	CastInfo.set_goal()
+	movement_manager = ParicleMovement.new()
+	movement_manager.max_bounces = 16
+	movement_manager.gravity = 0.0
+	movement_manager.velocity = (CastInfo.goal - position).normalized() * 5000
+	movement_manager.set_up_to(self)
+	add_child(movement_manager)
 	
-	var Map :Node2D = get_tree().get_nodes_in_group("World")[0]
-	Map.play_sound(preload("res://Sfx/spells/laserfire01.wav"), position, 1.0, 0.8+randf()*0.4)
-
-
-func _on_hit_something():
-	var pos :Vector2 = spell_behavior.get_collision_point()
-	if spell_behavior.get_collider().has_method("health_object") and not did:
-		spell_behavior.get_collider().health_object().poke_hole(1, CastInfo.Caster)
-		did = true
-	$RayCast2D.points = [Vector2(0, 0), pos-position]
-	var new_timer := Timer.new()
-	new_timer.wait_time = 0.2
-	new_timer.autostart = true
-	if times_done < 12:
-		new_timer.connect("timeout", self, "_on_new_bounce_timeout")
-	else:
-		new_timer.connect("timeout", self, "_on_death_timeout")
-		
-	add_child(new_timer)
-
-func _on_hit_nothing():
-	var new_timer := Timer.new()
-	new_timer.wait_time = 0.2
-	new_timer.autostart = true
-	new_timer.connect("timeout", self, "_on_death_timeout")
-	add_child(new_timer)
-	$RayCast2D.points[1] = spell_behavior.cast_to
-
-
-func _on_new_bounce_timeout():
-	var new = load("res://Spells/BouncyRay.tscn").instance()
-	new.CastInfo.Caster = spell_behavior
-	new.times_done = times_done + 1
-	get_parent().add_child(new)
-	queue_free()
-
-
-func _on_death_timeout():
-	queue_free()
+	var hurt_on_collide := HurtOnCollide.new()
+	hurt_on_collide.poke_holes = 1
+	hurt_on_collide.caster = CastInfo.Caster
+	add_child(hurt_on_collide)
 	
+	movement_manager.connect("collision_happened", hurt_on_collide, "_on_collision_happened")
+	movement_manager.connect("request_movement", $Line2D, "_on_request_movement")
+	
+	var sound_emitter := AudioStreamPlayer2D.new()
+	sound_emitter.stream = preload("res://Sfx/spells/laserfire01.wav")
+	sound_emitter.position = position
+	sound_emitter.pitch_scale = 0.9 + float()*0.3
+	get_parent().add_child(sound_emitter)
+	sound_emitter.play()
+
