@@ -1,38 +1,39 @@
-extends Node2D
+extends SpellManager
 
 
-onready var Line := $Line2D
+var rotate := 0.0
+var WorldMap :Node2D
 
+var timer := 0.0
+
+var noise := OpenSimplexNoise.new()
 
 var CastInfo := SpellCastInfo.new()
-var spell_behavior := RayBehavior.new()
 
 
-func _ready() -> void:
-	add_child(spell_behavior)
-	spell_behavior.ray_setup(self, 124)
-	spell_behavior.connect("hit_something", self, "_on_hit_something", [], 4)
-	spell_behavior.connect("hit_nothing", self, "_on_hit_nothing", [], 4)
-	var Map :Node2D = get_tree().get_nodes_in_group("World")[0]
-	Map.play_sound(preload("res://Sfx/spells/laserfire01.wav"), position, 1.0, 0.8+randf()*0.4)
-	 
+func _ready():
 	CastInfo.set_position(self)
-	spell_behavior.cast(CastInfo)
+	CastInfo.set_goal()
+	movement_manager = ParicleMovement.new()
+	movement_manager.max_bounces = 1
+	movement_manager.gravity = 0.0
+	movement_manager.velocity = (CastInfo.goal - position).normalized() * 2000
+	movement_manager.set_up_to(self)
+	add_child(movement_manager)
+	
+	var hurt_on_collide := HurtOnCollide.new()
+	hurt_on_collide.poke_holes = 1
+	hurt_on_collide.soul_damage = 0.1
+	hurt_on_collide.caster = CastInfo.Caster
+	add_child(hurt_on_collide)
+	
+	movement_manager.connect("collision_happened", hurt_on_collide, "_on_collision_happened")
+	movement_manager.connect("request_movement", $Line2D, "_on_request_movement")
+	
+	var sound_emitter := AudioStreamPlayer2D.new()
+	sound_emitter.stream = preload("res://Sfx/spells/laserfire01.wav")
+	sound_emitter.position = position
+	sound_emitter.pitch_scale = 0.9 + float()*0.3
+	get_parent().add_child(sound_emitter)
+	sound_emitter.play()
 
-
-func _on_hit_something():
-	var point = spell_behavior.get_collision_point() - position
-	var collider :Node2D = spell_behavior.get_collider()
-	if collider.has_method("health_object"):
-		collider.health_object().shatter_soul(0.2)
-		if randf() < 0.25:
-			collider.health_object().poke_hole()
-	Line.points = [Vector2(0, 0), point]
-
-
-func _on_hit_nothing():
-	Line.points = [Vector2(0, 0), spell_behavior.cast_to]
-
-
-func _on_Timer_timeout() -> void:
-	queue_free()
