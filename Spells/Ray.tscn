@@ -15,6 +15,3 @@ script = ExtResource( 3 )
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource( 2 )
 autoplay = true
-
-[node name="StaticBody2D" type="StaticBody2D" parent="."]
-collision_layer = 91
