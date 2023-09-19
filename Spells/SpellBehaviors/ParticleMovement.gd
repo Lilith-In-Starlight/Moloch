@@ -37,5 +37,9 @@ func _physics_process(delta: float) -> void:
 		bounces += 1
 		emit_signal("collision_happened", raycast.get_collider(), raycast.get_collision_point(), raycast.get_collision_normal())
 		emit_signal("request_movement", raycast.get_collision_point() - raycast.global_position - velocity.normalized())
+		if raycast.get_collision_normal().is_normalized():
+			velocity = velocity.bounce(raycast.get_collision_normal())
+		else:
+			velocity *= -1
 	else:
 		emit_signal("request_movement", velocity * delta)
