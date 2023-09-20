@@ -37,19 +37,16 @@ script = ExtResource( 2 )
 visible = false
 position = Vector2( 7, 0 )
 frames = SubResource( 4 )
-frame = 2
 playing = true
 
 [node name="Fire2" type="AnimatedSprite" parent="Fire"]
 position = Vector2( -9, 3 )
 frames = SubResource( 4 )
-frame = 1
 playing = true
 
 [node name="Fire5" type="AnimatedSprite" parent="Fire"]
 position = Vector2( -4, 3 )
 frames = SubResource( 4 )
-frame = 1
 playing = true
 
 [node name="Fire3" type="AnimatedSprite" parent="Fire"]
@@ -60,7 +57,6 @@ playing = true
 [node name="Fire4" type="AnimatedSprite" parent="Fire"]
 position = Vector2( -16, 2 )
 frames = SubResource( 4 )
-frame = 2
 playing = true
 
 [node name="Idle" type="Sprite" parent="."]
@@ -71,11 +67,9 @@ position = Vector2( 0, 4 )
 shape = SubResource( 5 )
 
 [node name="Eye" type="RayCast2D" parent="."]
-enabled = true
 collision_mask = 3
 
 [node name="Senses" type="RayCast2D" parent="."]
-enabled = true
 collision_mask = 10
 
 [node name="VisibilityEnabler2D" type="VisibilityEnabler2D" parent="."]

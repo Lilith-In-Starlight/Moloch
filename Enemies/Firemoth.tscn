@@ -60,7 +60,6 @@ shape = SubResource( 8 )
 wait_time = 0.7
 
 [node name="RayCast" type="RayCast2D" parent="."]
-enabled = true
 collision_mask = 3
 
 [node name="VisibilityEnabler2D" type="VisibilityEnabler2D" parent="."]

@@ -32,6 +32,7 @@ func _physics_process(delta: float) -> void:
 	$Fire.visible = health.effects.has("onfire")
 	if not first_check:
 		if Player.position.distance_to(position) < 500:
+			wand.queue_free()
 			queue_free()
 		var tcol :KinematicCollision2D = move_and_collide(Vector2(0, 0), true, true, true)
 		if tcol != null:
@@ -107,6 +108,7 @@ func _on_hole_poked():
 
 
 func health_died_second():
+	wand.queue_free()
 	queue_free()
 
 

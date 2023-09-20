@@ -16,7 +16,6 @@ script = ExtResource( 1 )
 shape = SubResource( 1 )
 
 [node name="RayCast2D" type="RayCast2D" parent="."]
-enabled = true
 collision_mask = 11
 
 [node name="VisibilityEnabler2D" type="VisibilityEnabler2D" parent="."]

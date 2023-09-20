@@ -197,23 +197,19 @@ frames = SubResource( 29 )
 animation = "run_lookback"
 
 [node name="RayCast2D" type="RayCast2D" parent="."]
-enabled = true
 cast_to = Vector2( 0, 13 )
 collision_mask = 6
 
 [node name="PlayerFinder" type="RayCast2D" parent="."]
-enabled = true
 cast_to = Vector2( 0, 13 )
 collision_mask = 3
 
 [node name="AimRay" type="RayCast2D" parent="."]
-enabled = true
 cast_to = Vector2( 0, 13 )
 collision_mask = 2
 
 [node name="RayCast2D2" type="RayCast2D" parent="."]
 position = Vector2( 1, 10 )
-enabled = true
 cast_to = Vector2( 0, 0 )
 collision_mask = 6
 
