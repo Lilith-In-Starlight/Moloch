@@ -1,32 +1,25 @@
-extends Node2D
+extends SpellManager
+
 
 var rotate := 0.0
 var WorldMap :Node2D
 
 var timer := 0.0
-var times := 0
 
-var CastInfo := SpellCastInfo.new()
+var noise := OpenSimplexNoise.new()
 
 
 func _ready():
-	WorldMap = get_tree().get_nodes_in_group("World")[0]
-	CastInfo.set_position(self)
-	rotate = CastInfo.goal.angle_to_point(position)
-
-func _process(delta):
-	timer += delta
 	CastInfo.set_position(self)
 	CastInfo.set_goal()
-	rotate = CastInfo.goal.angle_to_point(position)
+	movement_manager = ParicleMovement.new()
+	movement_manager.gravity = 0.0
+	movement_manager.max_bounces = 1
+	movement_manager.velocity = Vector2.ZERO
+	movement_manager.set_up_to(self)
+	add_child(movement_manager)
 	
-	if timer > 0.1:
-		var r := preload("res://Spells/AlveolarProjectile.tscn").instance()
-		r.position = global_position
-		r.rotate = rotate
-		r.CastInfo = CastInfo
-		get_parent().add_child(r)
-		times += 1
-	
-	if times > 12:
-		queue_free()
+	var spell_spawner := SpellSpawner.new()
+	add_child(spell_spawner)
+	spell_spawner.spell = preload("res://Spells/AlveolarProjectile.tscn")
+	spell_spawner.spawn()

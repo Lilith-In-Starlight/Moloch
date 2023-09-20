@@ -6,6 +6,7 @@ var Caster :Node2D
 var spell :Spell
 var wand :Wand = null
 var goal :Vector2
+var angle_offset :float
 var goal_offset := Vector2(0, 0)
 
 var spell_offset := Vector2(0, 0)
@@ -98,3 +99,24 @@ func get_wand_projectile_speed():
 	if is_instance_valid(wand):
 		return wand.projectile_speed
 	return 5
+
+
+
+func duplicate(subresources: bool = false):
+	var new = get_script().new()
+	new.Caster = self.Caster
+	new.spell = self.spell
+	new.wand = self.wand
+	new.goal = self.goal
+	new.goal_offset = self.goal_offset
+
+	new.spell_offset = self.spell_offset
+
+	new.modifiers = self.modifiers
+
+
+	new.last_known_caster_position = self.last_known_caster_position
+	new.last_known_cast_from = self.last_known_cast_from
+	new.last_known_looking_at = self.last_known_looking_at
+	
+	return new

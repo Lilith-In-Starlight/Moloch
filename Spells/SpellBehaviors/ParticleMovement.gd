@@ -11,13 +11,34 @@ var raycast : RayCast2D
 
 var bounces := 0
 var max_bounces := 1
+var do_bounces := true
+
+var distance_traveled := 0.0
+var max_distance := -1.0
 var gravity := 200.0
 
+var speed_multiplier := 1.0
+var spellcastinfo : SpellCastInfo
 
 func _ready() -> void:
+	spellcastinfo = get_parent().CastInfo
 	raycast = RayCast2D.new()
 	raycast.collision_mask = 91
 	get_parent().add_child(raycast)
+	if spellcastinfo.modifiers.has("limited"):
+		velocity = Vector2.ZERO
+	if spellcastinfo.modifiers.has("down_gravity"):
+		gravity = 500
+	if spellcastinfo.modifiers.has("up_gravity"):
+		gravity = -500
+	if spellcastinfo.modifiers.has("acceleration"):
+		speed_multiplier *= 1.1
+		if velocity.length() < 0.01:
+			velocity = (spellcastinfo.goal - get_parent().position).normalized() * 10
+	if spellcastinfo.modifiers.has("impulse"):
+		if velocity.length() < 0.01:
+			velocity = (spellcastinfo.goal - get_parent().position).normalized() * 200
+	velocity = velocity.rotated(spellcastinfo.angle_offset)
 
 
 func set_up_to(node: Node2D):
@@ -27,19 +48,37 @@ func set_up_to(node: Node2D):
 
 
 func _physics_process(delta: float) -> void:
+	if max_distance > 0 and distance_traveled + (velocity * delta).length() > max_distance:
+		velocity = velocity.normalized() * (max_distance - distance_traveled) / delta
+	
+	
+	if bounces >= max_bounces and max_bounces > 0:
+		emit_signal("request_death")
+		return
+	
+	elif distance_traveled >= max_distance and max_distance > 0:
+		emit_signal("request_death")
+		return
+	
+	velocity *= speed_multiplier * delta * 60
+	
+	
 	raycast.cast_to = velocity * delta
 	raycast.force_raycast_update()
 	
-	if bounces >= max_bounces:
-		emit_signal("request_death")
 	
+	var movement_delta := velocity * delta
 	if raycast.is_colliding():
-		bounces += 1
 		emit_signal("collision_happened", raycast.get_collider(), raycast.get_collision_point(), raycast.get_collision_normal())
-		emit_signal("request_movement", raycast.get_collision_point() - raycast.global_position - velocity.normalized())
-		if raycast.get_collision_normal().is_normalized():
-			velocity = velocity.bounce(raycast.get_collision_normal())
-		else:
-			velocity *= -1
+		if do_bounces:
+			movement_delta = raycast.get_collision_point() - raycast.global_position - velocity.normalized()
+			bounces += 1
+			if raycast.get_collision_normal().is_normalized():
+				velocity = velocity.bounce(raycast.get_collision_normal())
+			else:
+				velocity *= -1
 	else:
-		emit_signal("request_movement", velocity * delta)
+		velocity.y += gravity * delta
+	
+	emit_signal("request_movement", movement_delta)
+	distance_traveled += movement_delta.length()

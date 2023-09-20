@@ -1,12 +1,12 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://Spells/EvilSight.gd" type="Script" id=1]
+[ext_resource path="res://Spells/SpellBehaviors/Line2DTrail.gd" type="Script" id=2]
 
-[node name="EvilSight" type="RayCast2D"]
-enabled = true
-collision_mask = 75
+[node name="EvilSight" type="Node2D"]
 script = ExtResource( 1 )
 
 [node name="Line2D" type="Line2D" parent="."]
 width = 5.0
 default_color = Color( 1, 0.313726, 0.313726, 1 )
+script = ExtResource( 2 )

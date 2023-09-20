@@ -1,49 +1,35 @@
-extends Area2D
+extends SpellManager
 
 
-var CastInfo := SpellCastInfo.new()
-var angle := 0.0
-var sprinkler := true
+var rotate := 0.0
+var WorldMap :Node2D
 
-var speed_multiplier := 1.0
-var next_shoot_angle := 0.0
-var spell_behavior := ProjectileBehavior.new()
+var timer := 0.0
 
-
-func _ready() -> void:
-	var Map : Node2D = get_tree().get_nodes_in_group("World")[0]
-	if sprinkler:
-		$ShootTimer.start()
-		CastInfo.set_position(self)
-		angle = CastInfo.get_angle(self)
-		next_shoot_angle = angle
-		
-	spell_behavior.velocity = Vector2(cos(angle), sin(angle)) * 3
-	Map.play_sound(preload("res://Sfx/spells/laserfire01.wav"), position, 1.0, 0.8+randf()*0.4)
+var noise := OpenSimplexNoise.new()
 
 
-func _process(delta: float) -> void:
-	if sprinkler:
-		speed_multiplier = move_toward(speed_multiplier, 0, 0.03 * delta * 60)
-	spell_behavior.velocity *= speed_multiplier
+func _ready():
+	CastInfo.set_position(self)
+	CastInfo.set_goal()
+	movement_manager = ParicleMovement.new()
+	movement_manager.gravity = 0.0
+	movement_manager.max_bounces = 1
+	movement_manager.velocity = (CastInfo.goal - position).normalized() * 200
+	movement_manager.speed_multiplier = 0.8
+	movement_manager.set_up_to(self)
+	add_child(movement_manager)
 	
-	for body in get_overlapping_bodies():
-		if body.has_method("health_object"):
-			body.health_object().temp_change(8, CastInfo.Caster)
-		queue_free()
-	position += spell_behavior.move(0, CastInfo)
+	var spell_spawner := SpellSpawner.new()
+	add_child(spell_spawner)
+	spell_spawner.rotation = 0.2
+	spell_spawner.interval = 0.05
+	spell_spawner.amount = 64
+	spell_spawner.use_spell_as_caster = true
+	spell_spawner.spell = preload("res://Spells/PlasmaBall.tscn")
+	spell_spawner.spawn()
+	spell_spawner.connect("finished", self, "_on_request_death")
+	
 
-
-func _on_ShootTimer_timeout() -> void:
-	$ShootTimer.wait_time = 0.1
-	var new_cast :Area2D = load("res://Spells/PlasmaSprinkler.tscn").instance()
-	new_cast.sprinkler = false
-	new_cast.position = position
-	new_cast.angle = next_shoot_angle
-	new_cast.CastInfo = CastInfo
-	next_shoot_angle += TAU / 12.0
-	get_parent().add_child(new_cast)
-
-
-func _on_DespawnTimer_timeout() -> void:
-	queue_free()
+func cast_from():
+	return global_position

@@ -8,15 +8,14 @@ var timer := 0.0
 
 var noise := OpenSimplexNoise.new()
 
-var CastInfo := SpellCastInfo.new()
-
 
 func _ready():
 	CastInfo.set_position(self)
 	CastInfo.set_goal()
 	movement_manager = ParicleMovement.new()
-	movement_manager.max_bounces = 1
 	movement_manager.gravity = 0.0
+	movement_manager.max_bounces = 1
+	movement_manager.max_distance = 180
 	movement_manager.velocity = (CastInfo.last_known_looking_at - position).normalized() * 500
 	movement_manager.set_up_to(self)
 	add_child(movement_manager)

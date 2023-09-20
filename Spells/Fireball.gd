@@ -1,38 +1,37 @@
-extends KinematicBody2D
+extends SpellManager
 
 
-var CastInfo := SpellCastInfo.new()
-var spell_behavior := ProjectileBehavior.new()
-
-var frames := 0
 var rotate := 0.0
+var WorldMap :Node2D
 
-var time := 0.0
+var timer := 0.0
+
+var noise := OpenSimplexNoise.new()
+
 
 func _ready():
 	CastInfo.set_position(self)
 	CastInfo.set_goal()
-	rotate = CastInfo.goal.angle_to_point(position)
-	spell_behavior.velocity = spell_behavior.get_initial_velocity(self) * 60
-	CastInfo.heat_caster((-12.0 - randf() * 6.0) * 0.2)
-
-func _physics_process(delta):
-	for body in $Area.get_overlapping_bodies():
-		if not body == self:
-			_on_body_entered(body)
+	movement_manager = ParicleMovement.new()
+	movement_manager.max_bounces = 1
+	movement_manager.velocity = (CastInfo.last_known_looking_at - position).normalized() * 500
+	movement_manager.set_up_to(self)
+	add_child(movement_manager)
 	
+	var hurt_on_collide := HurtOnCollide.new()
+	hurt_on_collide.heat_damage = 12.0 + randf() * 6.0
+	hurt_on_collide.caster = CastInfo.Caster
+	add_child(hurt_on_collide)
 	
-	spell_behavior.velocity = move_and_slide(spell_behavior.move(1.0, CastInfo))
-	frames += 1
-	time += delta
-	if time > 12.0:
-		queue_free()
+	movement_manager.connect("collision_happened", hurt_on_collide, "_on_collision_happened")
+	
+	var sound_emitter := AudioStreamPlayer2D.new()
+	sound_emitter.stream = preload("res://Sfx/spells/laserfire01.wav")
+	sound_emitter.position = position
+	sound_emitter.pitch_scale = 0.9 + float()*0.3
+	get_parent().add_child(sound_emitter)
+	sound_emitter.play()
 
-func _on_body_entered(body):
-	if body.has_method("health_object"):
-		if (is_instance_valid(CastInfo.Caster) and (body != CastInfo.Caster or frames >= 3)) or not is_instance_valid(CastInfo.Caster):
-			body.health_object().temp_change(12.0 + randf() * 6.0, CastInfo.Caster)
-			body.health_object().add_effect("onfire")
-			queue_free()
-	elif body.is_in_group("WorldPiece"):
-		queue_free()
+
+func _draw():
+	draw_circle(Vector2(0, 0), 3, "#0faa68")

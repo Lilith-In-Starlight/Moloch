@@ -204,6 +204,7 @@ func process_movement(delta:float) -> void:
 	last_speed_before_collision = speed
 	speed = move_and_slide(speed, Vector2(0, -1))
 
+
 func bleed() -> void:
 	# If the player is bleeding
 	if health.poked_holes > 0 and health.blood > 0.01:

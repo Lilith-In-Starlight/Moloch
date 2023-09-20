@@ -31,9 +31,6 @@ margin_bottom = 80.0
 max_value = 360.0
 texture_progress = ExtResource( 2 )
 fill_mode = 8
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="TextureProgress2" type="TextureProgress" parent="."]
 margin_left = -80.0
