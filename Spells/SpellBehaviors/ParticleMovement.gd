@@ -38,6 +38,7 @@ func _ready() -> void:
 	if spellcastinfo.modifiers.has("impulse"):
 		if velocity.length() < 0.01:
 			velocity = (spellcastinfo.goal - get_parent().position).normalized() * 200
+			
 	velocity = velocity.rotated(spellcastinfo.angle_offset)
 
 
@@ -62,6 +63,20 @@ func _physics_process(delta: float) -> void:
 	
 	velocity *= speed_multiplier * delta * 60
 	
+	if spellcastinfo.modifiers.has("orthogonal"):
+		if velocity.length() != 0.0:
+			var angle = abs(velocity.angle())
+			var traangle = velocity.angle()
+			if angle <= PI/8:
+				velocity = Vector2.RIGHT.rotated(0) * velocity.length()
+			elif angle <= 3 * PI/8:
+				velocity = Vector2.RIGHT.rotated(2 * PI/8 * sign(traangle)) * velocity.length()
+			elif angle <= 5 * PI/8:
+				velocity = Vector2.RIGHT.rotated(4 * PI/8 * sign(traangle)) * velocity.length()
+			elif angle <= 7 * PI/8:
+				velocity = Vector2.RIGHT.rotated(6 * PI/8 * sign(traangle)) * velocity.length()
+			else:
+				velocity = Vector2.RIGHT   .rotated(8 * PI/8 * sign(traangle)) * velocity.length()
 	
 	raycast.cast_to = velocity * delta
 	raycast.force_raycast_update()

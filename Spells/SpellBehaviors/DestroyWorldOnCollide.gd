@@ -13,7 +13,6 @@ func _on_collision_happened(collider: Node, collision_point: Vector2, _a: Vector
 
 
 func _on_body_entered(body: Node, spell: Node) -> void:
-	print("b")
 	destroy_world(body, spell.global_position)
 
 
