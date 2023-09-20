@@ -1,41 +1,41 @@
-extends Sprite
-
-onready var Raycast := $Raycast
-
-var CastInfo := SpellCastInfo.new()
-var spell_behavior := ProjectileBehavior.new()
-
-var Map : Node2D
-var angle := 0.0
+extends SpellManager
 
 
-var already_collided := false
+var rotate := 0.0
+var WorldMap :Node2D
+
+var timer := 0.0
+
+var noise := OpenSimplexNoise.new()
 
 
-func _ready() -> void:
-	Map = get_tree().get_nodes_in_group("World")[0]
-	CastInfo.heat_caster(5.0)
+func _ready():
 	CastInfo.set_position(self)
-	angle = CastInfo.get_angle(self)
-	spell_behavior.velocity = spell_behavior.get_initial_velocity(self)
-	Raycast.target_position = spell_behavior.velocity
-
-
-func _process(delta: float) -> void:
-	scale.move_toward(Vector2(1.0, 1.0),  0.03 * delta * 60)
+	CastInfo.set_goal()
+	movement_manager = ParicleMovement.new()
+	movement_manager.shape = Items.default_circle_radius_one
+	movement_manager.gravity = 0.0
+	movement_manager.max_bounces = 1
+	movement_manager.velocity = (CastInfo.goal - position).normalized() * 1000
+	movement_manager.set_up_to(self)
+	add_child(movement_manager)
 	
-	# When the ball already collides with something, it's best to make it
-	# disappear one frame after, so that godot has time to render it as
-	# having already got there
-	if already_collided:
-		Map.summon_explosion(position, 8)
-		queue_free()
-	else:
-		for i in get_children():
-			if i.is_colliding():
-				position = i.get_collision_point(0) - i.position
-				already_collided = true
-				return
-		
-		position += spell_behavior.move(0, CastInfo, Vector2(cos(angle), sin(angle)) * 5) * delta * 60
-		Raycast.target_position = spell_behavior.velocity * delta * 60
+	
+	var hurt_on_collide := HurtOnCollide.new()
+	hurt_on_collide.poke_holes = 1
+	hurt_on_collide.caster = CastInfo.Caster
+	add_child(hurt_on_collide)
+	
+	var explode_on_collide := ExplodeOnCollide.new()
+	add_child(explode_on_collide)
+	movement_manager.connect("collision_happened", explode_on_collide, "_on_collision_happened")
+	
+	movement_manager.connect("collision_happened", hurt_on_collide, "_on_collision_happened")
+	
+	var sound_emitter := AudioStreamPlayer2D.new()
+	sound_emitter.stream = preload("res://Sfx/spells/laserfire01.wav")
+	sound_emitter.position = position
+	sound_emitter.pitch_scale = 0.9 + float()*0.3
+	get_parent().add_child(sound_emitter)
+	sound_emitter.play()
+
