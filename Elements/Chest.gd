@@ -29,11 +29,16 @@ func _ready():
 		spell = Items.pick_random_modifier()
 	match type:
 		TYPES.ITEM:
+			wand.queue_free()
+			wand = null
 			$Sprite.modulate = "#96ff9a"
 		TYPES.WAND:
 			$Sprite.modulate = "#ff4da9"
 		TYPES.SPELL:
+			wand.queue_free()
+			wand = null
 			$Sprite.modulate = "#188add"
+
 
 func _process(_delta):
 	if not open:
@@ -45,6 +50,11 @@ func _process(_delta):
 					TYPES.ITEM:
 						Map.summon_item(item, position, Vector2(-120 + randf()*240, -100))
 					TYPES.WAND:
+						Items.add_child(wand)
 						Map.summon_wand(wand, position, Vector2(-120 + randf()*240, -100))
 					TYPES.SPELL:
 						Map.summon_spell(spell, position, Vector2(-120 + randf()*240, -100))
+
+func _exit_tree() -> void:
+	if wand != null and not wand.is_inside_tree():
+		wand.queue_free()

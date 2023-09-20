@@ -35,7 +35,7 @@ var treasure_rooms := 0
 var level_tile := 0
 var world_tile_instances := {}
 
-class _Room:
+class _Room extends Reference:
 		var scene = null
 		var is_treasure :bool = false
 		var is_end :bool = false
