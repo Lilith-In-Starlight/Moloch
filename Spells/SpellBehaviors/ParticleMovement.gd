@@ -12,6 +12,7 @@ var raycast : ShapeCast2D
 var bounces := 0
 var max_bounces := 1
 var do_bounces := true
+var limit_movement_to_collision := true
 
 var distance_traveled := 0.0
 var max_distance := -1.0
@@ -56,7 +57,6 @@ func _physics_process(delta: float) -> void:
 	if max_distance > 0 and distance_traveled + (velocity * delta).length() > max_distance:
 		velocity = velocity.normalized() * (max_distance - distance_traveled) / delta
 	
-	
 	if bounces >= max_bounces and max_bounces > 0:
 		emit_signal("request_death")
 		return
@@ -85,14 +85,17 @@ func _physics_process(delta: float) -> void:
 	raycast.target_position = velocity * delta
 	raycast.force_shapecast_update()
 	
-	
 	var movement_delta := velocity * delta
+	
 	if raycast.is_colliding():
-		emit_signal("collision_happened", raycast.get_collider(0), raycast.get_collision_point(0), raycast.get_collision_normal(0))
-		if do_bounces:
+		if do_bounces or limit_movement_to_collision:
 			movement_delta = movement_delta * raycast.get_closest_collision_safe_fraction()
-			bounces += 1
-			
+		
+		emit_signal("collision_happened", raycast.get_collider(0), raycast.get_collision_point(0), raycast.get_collision_normal(0))
+		
+		
+		bounces += 1
+		if do_bounces:
 			if raycast.get_collision_normal(0).is_normalized():
 				velocity = velocity.bounce(raycast.get_collision_normal(0))
 			else:

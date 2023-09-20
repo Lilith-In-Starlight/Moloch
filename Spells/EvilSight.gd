@@ -82,6 +82,7 @@ func _ready():
 	movement_manager = ParicleMovement.new()
 	movement_manager.gravity = 0.0
 	movement_manager.max_bounces = 1
+	movement_manager.limit_movement_to_collision = true
 	movement_manager.max_distance = 100
 	movement_manager.velocity = (CastInfo.goal - position).normalized() * 9000
 	movement_manager.set_up_to(self)
