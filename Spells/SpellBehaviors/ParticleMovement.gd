@@ -7,7 +7,7 @@ signal request_movement(delta)
 signal collision_happened(collider, collision_point, collision_normal)
 
 var velocity := Vector2(0,0)
-var raycast : RayCast2D
+var raycast : ShapeCast2D
 
 var bounces := 0
 var max_bounces := 1
@@ -19,10 +19,14 @@ var gravity := 200.0
 
 var speed_multiplier := 1.0
 var spellcastinfo : SpellCastInfo
+var shape : Shape2D
 
 func _ready() -> void:
+	if shape == null:
+		shape = Items.default_circle_radius_six
 	spellcastinfo = get_parent().CastInfo
-	raycast = RayCast2D.new()
+	raycast = ShapeCast2D.new()
+	raycast.shape = shape
 	raycast.collision_mask = 91
 	get_parent().add_child(raycast)
 	if spellcastinfo.modifiers.has("limited"):
@@ -78,18 +82,19 @@ func _physics_process(delta: float) -> void:
 			else:
 				velocity = Vector2.RIGHT   .rotated(8 * PI/8 * sign(traangle)) * velocity.length()
 	
-	raycast.cast_to = velocity * delta
-	raycast.force_raycast_update()
+	raycast.target_position = velocity * delta
+	raycast.force_shapecast_update()
 	
 	
 	var movement_delta := velocity * delta
 	if raycast.is_colliding():
-		emit_signal("collision_happened", raycast.get_collider(), raycast.get_collision_point(), raycast.get_collision_normal())
+		emit_signal("collision_happened", raycast.get_collider(0), raycast.get_collision_point(0), raycast.get_collision_normal(0))
 		if do_bounces:
-			movement_delta = raycast.get_collision_point() - raycast.global_position - velocity.normalized()
+			movement_delta = movement_delta * raycast.get_closest_collision_safe_fraction()
 			bounces += 1
-			if raycast.get_collision_normal().is_normalized():
-				velocity = velocity.bounce(raycast.get_collision_normal())
+			
+			if raycast.get_collision_normal(0).is_normalized():
+				velocity = velocity.bounce(raycast.get_collision_normal(0))
 			else:
 				velocity *= -1
 	else:

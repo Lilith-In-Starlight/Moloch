@@ -64,7 +64,12 @@ var base_spell_mods := {}
 var last_items := []
 var last_spells := []
 
+var default_circle_radius_six := CircleShape2D.new()
+var default_circle_radius_one := CircleShape2D.new()
+
 func _ready():
+	default_circle_radius_six.radius = 6.0
+	default_circle_radius_one.radius = 1.0
 	var generator_seed := hash(OS.get_time())
 	print("Generator seed: ", generator_seed)
 	seed(generator_seed)
