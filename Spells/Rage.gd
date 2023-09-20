@@ -1,8 +1,6 @@
 extends Sprite
 
 onready var Raycast := $Raycast
-onready var Raycast2 := $Raycast2
-onready var Raycast3 := $Raycast3
 
 var CastInfo := SpellCastInfo.new()
 var spell_behavior := ProjectileBehavior.new()
@@ -20,12 +18,7 @@ func _ready() -> void:
 	CastInfo.set_position(self)
 	angle = CastInfo.get_angle(self)
 	spell_behavior.velocity = spell_behavior.get_initial_velocity(self)
-	Raycast.cast_to = spell_behavior.velocity
-	Raycast2.cast_to = spell_behavior.velocity
-	Raycast3.cast_to = spell_behavior.velocity
-	
-	Raycast2.position = spell_behavior.velocity.tangent().normalized() * 5
-	Raycast3.position = -spell_behavior.velocity.tangent().normalized() * 5
+	Raycast.target_position = spell_behavior.velocity
 
 
 func _process(delta: float) -> void:
@@ -40,9 +33,9 @@ func _process(delta: float) -> void:
 	else:
 		for i in get_children():
 			if i.is_colliding():
-				position = i.get_collision_point() - i.position
+				position = i.get_collision_point(0) - i.position
 				already_collided = true
 				return
 		
 		position += spell_behavior.move(0, CastInfo, Vector2(cos(angle), sin(angle)) * 5) * delta * 60
-		Raycast.cast_to = spell_behavior.velocity
+		Raycast.target_position = spell_behavior.velocity * delta * 60
