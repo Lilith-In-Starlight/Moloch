@@ -14,6 +14,7 @@ func _ready():
 	CastInfo.set_position(self)
 	CastInfo.set_goal()
 	movement_manager = ParicleMovement.new()
+	movement_manager.use_wand_speed = false
 	movement_manager.shape = Items.default_circle_radius_six
 	movement_manager.max_bounces = 32
 	movement_manager.gravity = 0.0
