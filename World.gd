@@ -89,7 +89,7 @@ func ready():
 	print("Step 1: Generating layout of the world")
 	var world_tiles := generate_world()
 	
-	while not are_tiles_connected(Vector2(0, 0), Vector2(0, min_point.y + 1), world_tiles):
+	while not are_tiles_connected(Vector2(0, 0), Vector2(0, min_point.y + 1), world_tiles) and not is_boss_level():
 		world_tiles = generate_world()
 	
 	print("Step 2: Adding tiles as nodes")
@@ -103,6 +103,18 @@ func ready():
 				new_tile.tile_set.tile_set_texture(0, tile_texture)
 			elif world_tiles[tile_position] == "last_room":
 				new_tile = preload("res://Rooms/Sacrifice/End.tscn").instance()
+				new_tile.position = tile_position * Rooms.tile_size * 8
+				add_child(new_tile)
+			elif world_tiles[tile_position] == "first_boss_room":
+				new_tile = preload("res://Rooms/BossRoom/BossEntrance.tscn").instance()
+				new_tile.position = tile_position * Rooms.tile_size * 8
+				add_child(new_tile)
+			elif world_tiles[tile_position] == "boss_climb":
+				new_tile = preload("res://Rooms/BossRoom/BossClimb.tscn").instance()
+				new_tile.position = tile_position * Rooms.tile_size * 8
+				add_child(new_tile)
+			elif world_tiles[tile_position] == "boss_arena":
+				new_tile = preload("res://Rooms/BossRoom/BossRoom1.tscn").instance()
 				new_tile.position = tile_position * Rooms.tile_size * 8
 				add_child(new_tile)
 		elif world_tiles[tile_position] == -1:
@@ -221,7 +233,7 @@ func finalize_world():
 #	print("Step 6: Autotiling so it's pretty")
 #	update_bitmask_region(min_point, max_point)
 	print("Step 7: Adding enemies")
-	add_enemies()
+	if not is_boss_level(): add_enemies()
 #	print("Enemy generation has been commented out for testing")
 	emit_signal("generated_world")
 	if Config.discord != null:
@@ -626,6 +638,11 @@ func intersect_sets(a: Array, b: Array) -> Array:
 
 
 func generate_world() -> Dictionary:
+	if is_boss_level():
+		return generate_boss_world()
+	return generate_regular_world()
+
+func generate_regular_world() -> Dictionary:
 	var world_tiles := {}
 	var tiles_to_make := [Vector2(0, min_point.y + 1), Vector2.ZERO]
 	var tiles_made := []
@@ -687,9 +704,19 @@ func generate_world() -> Dictionary:
 		
 		world_tiles[tile_position] = get_tile_with_requirements(sides_to_consider)
 		
-		
 	return world_tiles
 
+func generate_boss_world() -> Dictionary:
+	var world_tiles := {}
+	world_tiles[Vector2(0, 0)] = "first_boss_room"
+	world_tiles[Vector2(0, -1)] = "boss_climb"
+	world_tiles[Vector2(0, -2)] = "boss_arena"
+	
+	for x in range(min_point.x, max_point.x + 1):
+		for y in range(min_point.y, max_point.y + 1):
+			if Vector2(x, y) in world_tiles: continue
+			world_tiles[Vector2(x, y)] = -1
+	return world_tiles
 
 func are_tiles_connected(start: Vector2, end: Vector2, tilemap: Dictionary) -> bool:
 	var tiles_checked := []
@@ -758,3 +785,7 @@ func world_to_map(point: Vector2) -> Vector2:
 	if point.y < 0:
 		output_y = -int((-point.y - 1) / 8) - 1
 	return Vector2(output_x, output_y)
+
+
+func is_boss_level() -> bool:
+	return Items.level == 1
