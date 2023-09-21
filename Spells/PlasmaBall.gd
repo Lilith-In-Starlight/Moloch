@@ -19,3 +19,10 @@ func _ready():
 	movement_manager.velocity = (CastInfo.goal - position).normalized() * 200
 	movement_manager.set_up_to(self)
 	add_child(movement_manager)
+	
+	var hurt_on_collide := HurtOnCollide.new()
+	hurt_on_collide.heat_damage = 1
+	hurt_on_collide.caster = CastInfo.Caster
+	add_child(hurt_on_collide)
+	
+	movement_manager.connect("collision_happened", hurt_on_collide, "_on_collision_happened")
