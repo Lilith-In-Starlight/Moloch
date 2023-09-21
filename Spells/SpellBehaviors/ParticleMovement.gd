@@ -6,7 +6,7 @@ signal request_death()
 signal request_movement(delta)
 signal collision_happened(collider, collision_point, collision_normal)
 
-var velocity := Vector2(0,0)
+var velocity :Vector2 = Vector2(0,0)
 var raycast : RayCast2D
 
 var bounces := 0
@@ -23,11 +23,14 @@ var spellcastinfo : SpellCastInfo
 var shape : Shape2D
 var spawned_inside := false
 var just_cast := true
+var use_wand_speed := true
 
 func _ready() -> void:
 	if shape == null:
 		shape = Items.default_circle_radius_six
 	spellcastinfo = get_parent().CastInfo
+	if use_wand_speed: velocity = get_initial_velocity()
+	else: velocity = Vector2.RIGHT.rotated(get_initial_velocity().angle()) * velocity.length()
 	raycast = RayCast2D.new()
 #	raycast.shape = shape
 	raycast.collision_mask = 91
@@ -112,3 +115,9 @@ func _physics_process(delta: float) -> void:
 	
 	emit_signal("request_movement", movement_delta)
 	distance_traveled += movement_delta.length()
+
+
+func get_initial_velocity() -> Vector2:
+	if is_instance_valid(spellcastinfo.wand):
+		return (spellcastinfo.goal - get_parent().position).normalized() * (spellcastinfo.get_wand_projectile_speed() * 60.0)
+	return (spellcastinfo.goal - get_parent().position).normalized() * 300.0
