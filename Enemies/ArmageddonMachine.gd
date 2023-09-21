@@ -13,7 +13,7 @@ var timer := 0.0
 
 
 func _ready() -> void:
-	health.death_hypertemperature = 900.0
+	health.death_hypertemperature = INF
 	Noise.seed = hash(self)
 	health.connect("was_damaged", self, "_on_damaged")
 	health.connect("died", self, "_death")
