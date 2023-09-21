@@ -1,7 +1,7 @@
-[gd_scene load_steps=40 format=2]
+[gd_scene load_steps=44 format=2]
 
 [ext_resource path="res://Sprites/Enemies/Citizen/idle.png" type="Texture" id=1]
-[ext_resource path="res://Enemies/Citizen.gd" type="Script" id=2]
+[ext_resource path="res://Player.gd" type="Script" id=2]
 [ext_resource path="res://Sprites/Enemies/Citizen/panting.png" type="Texture" id=3]
 [ext_resource path="res://Sprites/Enemies/Citizen/crawl.png" type="Texture" id=4]
 [ext_resource path="res://Sprites/Enemies/Citizen/running.png" type="Texture" id=5]
@@ -10,6 +10,10 @@
 [ext_resource path="res://Sprites/Enemies/Citizen/up.png" type="Texture" id=8]
 [ext_resource path="res://Sprites/Enemies/Citizen/down.png" type="Texture" id=9]
 [ext_resource path="res://Sprites/Particles/fire.png" type="Texture" id=10]
+[ext_resource path="res://Entities/CitizenProperties.gd" type="Script" id=11]
+[ext_resource path="res://Entities/CitizenController.gd" type="Script" id=12]
+[ext_resource path="res://Entities/EnemySetup.gd" type="Script" id=13]
+[ext_resource path="res://Items/WandRenderSprite.tscn" type="PackedScene" id=14]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 3, 10 )
@@ -183,6 +187,17 @@ animations = [ {
 collision_layer = 24
 collision_mask = 6
 script = ExtResource( 2 )
+controller_path = NodePath("CitizenController")
+properties_path = NodePath("EntityProperties")
+
+[node name="EntityProperties" type="Node" parent="."]
+script = ExtResource( 11 )
+
+[node name="CitizenController" type="Node" parent="."]
+script = ExtResource( 12 )
+
+[node name="EnemySetup" type="Node" parent="."]
+script = ExtResource( 13 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )
@@ -192,7 +207,7 @@ position = Vector2( 0, -5 )
 frames = SubResource( 27 )
 playing = true
 
-[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+[node name="Player" type="AnimatedSprite" parent="."]
 frames = SubResource( 29 )
 animation = "run_lookback"
 
@@ -204,9 +219,13 @@ collision_mask = 6
 cast_to = Vector2( 0, 13 )
 collision_mask = 3
 
-[node name="AimRay" type="RayCast2D" parent="."]
+[node name="CastDirection" type="RayCast2D" parent="."]
 cast_to = Vector2( 0, 13 )
 collision_mask = 2
+
+[node name="AimRay" type="RayCast2D" parent="."]
+cast_to = Vector2( 0, 13 )
+collision_mask = 3
 
 [node name="RayCast2D2" type="RayCast2D" parent="."]
 position = Vector2( 1, 10 )
@@ -227,6 +246,10 @@ points = PoolVector2Array( 0, 0, 0, 0 )
 width = 3.0
 default_color = Color( 0.968627, 0, 1, 0.239216 )
 
-[connection signal="screen_entered" from="VisibilityEnabler2D" to="." method="_on_VisibilityEnabler2D_screen_entered"]
-[connection signal="screen_exited" from="VisibilityEnabler2D" to="." method="_on_VisibilityEnabler2D_screen_exited"]
+[node name="WandRender" parent="." instance=ExtResource( 14 )]
+position = Vector2( 15, -17 )
+
+[connection signal="entity_died" from="." to="EnemySetup" method="_on_entity_died"]
+[connection signal="screen_entered" from="VisibilityEnabler2D" to="EnemySetup" method="_on_screen_entered"]
+[connection signal="screen_exited" from="VisibilityEnabler2D" to="EnemySetup" method="_on_screen_exited"]
 [connection signal="timeout" from="DamageTimer" to="." method="_on_DamageTimer_timeout"]

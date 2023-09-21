@@ -108,7 +108,7 @@ func run(caster: Node2D):
 			match spell_stack[current_spell].wand_modifiers[0]:
 				"cast_cooldown": cast_cooldown_multiplier /= float(spell_stack[current_spell].wand_modifiers[1])
 				"recharge_cooldown": recharge_cooldown_multiplier /= float(spell_stack[current_spell].wand_modifiers[1])
-			
+		
 		emit_signal("casting_spell", spell_stack[current_spell], self, caster)
 		current_spell -= 1
 		

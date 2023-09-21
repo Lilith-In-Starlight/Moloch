@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=2]
+[gd_scene load_steps=51 format=2]
 
 [ext_resource path="res://Player.gd" type="Script" id=1]
 [ext_resource path="res://Sprites/Player/Player.png" type="Texture" id=2]
@@ -15,6 +15,13 @@
 [ext_resource path="res://Items/WandRenderSprite.tscn" type="PackedScene" id=13]
 [ext_resource path="res://Sprites/Player/RunLookback.png" type="Texture" id=14]
 [ext_resource path="res://Sprites/Particles/fire.png" type="Texture" id=15]
+[ext_resource path="res://Entities/InputController.gd" type="Script" id=16]
+[ext_resource path="res://HUDControl.gd" type="Script" id=17]
+[ext_resource path="res://Entities/DiscordStatusUpdate.gd" type="Script" id=18]
+[ext_resource path="res://Entities/PlayerProperties.gd" type="Script" id=19]
+[ext_resource path="res://AchievementGiver.gd" type="Script" id=20]
+[ext_resource path="res://CameraController.gd" type="Script" id=21]
+[ext_resource path="res://WandCaster.gd" type="Script" id=22]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 3, 10.5 )
@@ -38,46 +45,6 @@ animations = [ {
 "name": "default",
 "speed": 6.0
 } ]
-
-[sub_resource type="AtlasTexture" id=6]
-atlas = ExtResource( 8 )
-region = Rect2( 0, 0, 7, 24 )
-
-[sub_resource type="AtlasTexture" id=7]
-atlas = ExtResource( 8 )
-region = Rect2( 7, 0, 7, 24 )
-
-[sub_resource type="AtlasTexture" id=8]
-atlas = ExtResource( 8 )
-region = Rect2( 14, 0, 7, 24 )
-
-[sub_resource type="AtlasTexture" id=9]
-atlas = ExtResource( 8 )
-region = Rect2( 21, 0, 7, 24 )
-
-[sub_resource type="AtlasTexture" id=10]
-atlas = ExtResource( 14 )
-region = Rect2( 0, 0, 18, 22 )
-
-[sub_resource type="AtlasTexture" id=11]
-atlas = ExtResource( 14 )
-region = Rect2( 18, 0, 18, 22 )
-
-[sub_resource type="AtlasTexture" id=12]
-atlas = ExtResource( 14 )
-region = Rect2( 36, 0, 18, 22 )
-
-[sub_resource type="AtlasTexture" id=13]
-atlas = ExtResource( 14 )
-region = Rect2( 54, 0, 18, 22 )
-
-[sub_resource type="AtlasTexture" id=14]
-atlas = ExtResource( 14 )
-region = Rect2( 72, 0, 18, 22 )
-
-[sub_resource type="AtlasTexture" id=15]
-atlas = ExtResource( 14 )
-region = Rect2( 90, 0, 18, 22 )
 
 [sub_resource type="AtlasTexture" id=16]
 atlas = ExtResource( 11 )
@@ -103,6 +70,22 @@ region = Rect2( 88, 0, 22, 24 )
 atlas = ExtResource( 11 )
 region = Rect2( 110, 0, 22, 24 )
 
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 8 )
+region = Rect2( 0, 0, 7, 24 )
+
+[sub_resource type="AtlasTexture" id=7]
+atlas = ExtResource( 8 )
+region = Rect2( 7, 0, 7, 24 )
+
+[sub_resource type="AtlasTexture" id=8]
+atlas = ExtResource( 8 )
+region = Rect2( 14, 0, 7, 24 )
+
+[sub_resource type="AtlasTexture" id=9]
+atlas = ExtResource( 8 )
+region = Rect2( 21, 0, 7, 24 )
+
 [sub_resource type="AtlasTexture" id=22]
 atlas = ExtResource( 3 )
 region = Rect2( 0, 0, 18, 22 )
@@ -127,6 +110,30 @@ region = Rect2( 72, 0, 18, 22 )
 atlas = ExtResource( 3 )
 region = Rect2( 90, 0, 18, 22 )
 
+[sub_resource type="AtlasTexture" id=10]
+atlas = ExtResource( 14 )
+region = Rect2( 0, 0, 18, 22 )
+
+[sub_resource type="AtlasTexture" id=11]
+atlas = ExtResource( 14 )
+region = Rect2( 18, 0, 18, 22 )
+
+[sub_resource type="AtlasTexture" id=12]
+atlas = ExtResource( 14 )
+region = Rect2( 36, 0, 18, 22 )
+
+[sub_resource type="AtlasTexture" id=13]
+atlas = ExtResource( 14 )
+region = Rect2( 54, 0, 18, 22 )
+
+[sub_resource type="AtlasTexture" id=14]
+atlas = ExtResource( 14 )
+region = Rect2( 72, 0, 18, 22 )
+
+[sub_resource type="AtlasTexture" id=15]
+atlas = ExtResource( 14 )
+region = Rect2( 90, 0, 18, 22 )
+
 [sub_resource type="SpriteFrames" id=28]
 animations = [ {
 "frames": [ ExtResource( 12 ) ],
@@ -134,24 +141,14 @@ animations = [ {
 "name": "crawl",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ) ],
+"frames": [ SubResource( 16 ), SubResource( 17 ), SubResource( 18 ), SubResource( 19 ), SubResource( 20 ), SubResource( 21 ) ],
 "loop": true,
-"name": "panting",
+"name": "crawling",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 9 ) ],
+"frames": [ ExtResource( 2 ) ],
 "loop": true,
-"name": "oneleg_slide2",
-"speed": 5.0
-}, {
-"frames": [ SubResource( 10 ), SubResource( 11 ), SubResource( 12 ), SubResource( 13 ), SubResource( 14 ), SubResource( 15 ) ],
-"loop": true,
-"name": "run_lookback",
-"speed": 10.0
-}, {
-"frames": [ ExtResource( 5 ) ],
-"loop": true,
-"name": "slide2",
+"name": "default",
 "speed": 5.0
 }, {
 "frames": [ ExtResource( 6 ) ],
@@ -164,35 +161,70 @@ animations = [ {
 "name": "oneleg_slide",
 "speed": 5.0
 }, {
-"frames": [ SubResource( 16 ), SubResource( 17 ), SubResource( 18 ), SubResource( 19 ), SubResource( 20 ), SubResource( 21 ) ],
+"frames": [ ExtResource( 9 ) ],
 "loop": true,
-"name": "crawling",
+"name": "oneleg_slide2",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 4 ) ],
+"frames": [ SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ) ],
 "loop": true,
-"name": "slide",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 2 ) ],
-"loop": true,
-"name": "default",
-"speed": 5.0
-}, {
-"frames": [ ExtResource( 7 ) ],
-"loop": true,
-"name": "up",
+"name": "panting",
 "speed": 5.0
 }, {
 "frames": [ SubResource( 22 ), SubResource( 23 ), SubResource( 24 ), SubResource( 25 ), SubResource( 26 ), SubResource( 27 ) ],
 "loop": true,
 "name": "run",
 "speed": 10.0
+}, {
+"frames": [ SubResource( 10 ), SubResource( 11 ), SubResource( 12 ), SubResource( 13 ), SubResource( 14 ), SubResource( 15 ) ],
+"loop": true,
+"name": "run_lookback",
+"speed": 10.0
+}, {
+"frames": [ ExtResource( 4 ) ],
+"loop": true,
+"name": "slide",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 5 ) ],
+"loop": true,
+"name": "slide2",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 7 ) ],
+"loop": true,
+"name": "up",
+"speed": 5.0
 } ]
 
 [node name="Player" type="KinematicBody2D"]
 collision_mask = 38
 script = ExtResource( 1 )
+controller_path = NodePath("InputController")
+properties_path = NodePath("PlayerProperties")
+
+[node name="InputController" type="Node" parent="."]
+script = ExtResource( 16 )
+
+[node name="HUDControl" type="Node" parent="."]
+script = ExtResource( 17 )
+
+[node name="DiscordUpdater" type="Node" parent="."]
+script = ExtResource( 18 )
+
+[node name="PlayerProperties" type="Node" parent="."]
+script = ExtResource( 19 )
+
+[node name="AchievementGiver" type="Node" parent="."]
+script = ExtResource( 20 )
+
+[node name="CameraController" type="Node" parent="."]
+script = ExtResource( 21 )
+
+[node name="WandCaster" type="Node" parent="."]
+script = ExtResource( 22 )
+properties_path = NodePath("../PlayerProperties")
+controller_path = NodePath("../InputController")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )
@@ -212,7 +244,6 @@ visible = false
 position = Vector2( 0, -9 )
 scale = Vector2( 0.75, 1 )
 frames = SubResource( 5 )
-frame = 2
 playing = true
 
 [node name="Player" type="AnimatedSprite" parent="."]
