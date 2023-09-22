@@ -104,6 +104,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Entities/MalekaraiMalekha/MalekaraiMalekhaController.gd"
 }, {
+"base": "EntityProperties",
+"class": "MalekaraiMalekhaProperties",
+"language": "GDScript",
+"path": "res://Entities/MalekaraiMalekha/MalekaraiMalekhaProperties.gd"
+}, {
 "base": "Node",
 "class": "ParicleMovement",
 "language": "GDScript",
@@ -189,6 +194,7 @@ _global_script_class_icons={
 "InputData": "",
 "Item": "",
 "MalekaraiMalekhaController": "",
+"MalekaraiMalekhaProperties": "",
 "ParicleMovement": "",
 "PlayerCharacter": "",
 "PlayerProperties": "",

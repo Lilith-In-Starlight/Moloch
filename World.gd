@@ -236,6 +236,11 @@ func finalize_world():
 #	update_bitmask_region(min_point, max_point)
 	print("Step 7: Adding enemies")
 	if not is_boss_level(): add_enemies()
+	else:
+		var pos :Vector2 = Vector2(263.5 + 200, -268 - 32 - 8)
+		var node:Node2D = preload("res://Entities/MalekaraiMalekha/MalekaraiMalekha.tscn").instance()
+		node.position = pos
+		call_deferred("add_child",node)
 #	print("Enemy generation has been commented out for testing")
 	emit_signal("generated_world")
 	if Config.discord != null:

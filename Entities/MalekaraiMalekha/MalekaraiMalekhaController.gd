@@ -17,7 +17,7 @@ enum WAND_MODES {
 
 onready var player :PlayerCharacter = get_tree().get_nodes_in_group("Player")[0]
 
-var boss_arena_y_start := -268 * 2 - 32
+var boss_arena_y_start := -268 - 32
 var ai_mode :int = AI_STATES.player_outside
 
 var spellcast_mode :int = WAND_MODES.surround_rotate

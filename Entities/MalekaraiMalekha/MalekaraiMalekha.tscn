@@ -1,8 +1,11 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Entities/MalekaraiMalekha/MalekaraiMalekha.gd" type="Script" id=1]
 [ext_resource path="res://Sprites/Enemies/SpellCaster/SpellCaster.png" type="Texture" id=2]
 [ext_resource path="res://Entities/MalekaraiMalekha/MalekaraiMalekhaController.gd" type="Script" id=3]
+[ext_resource path="res://Entities/MalekaraiMalekha/MalekaraiMalekhaProperties.gd" type="Script" id=4]
+[ext_resource path="res://Entities/SpellCastingPoint.gd" type="Script" id=5]
+[ext_resource path="res://Items/WandRenderSprite.tscn" type="PackedScene" id=6]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 3.5, 11.5 )
@@ -11,17 +14,34 @@ extents = Vector2( 3.5, 11.5 )
 script = ExtResource( 1 )
 
 [node name="MalekaraiMalekhaProperties" type="Node" parent="."]
+script = ExtResource( 4 )
 
 [node name="MalekaraiMalekhaController" type="Node" parent="."]
 script = ExtResource( 3 )
 
 [node name="SpellCastingPoint" type="Node2D" parent="."]
+script = ExtResource( 5 )
+properties_path = NodePath("../MalekaraiMalekhaProperties")
+
+[node name="WandRender" parent="SpellCastingPoint" instance=ExtResource( 6 )]
 
 [node name="SpellCastingPoint2" type="Node2D" parent="."]
+script = ExtResource( 5 )
+properties_path = NodePath("../MalekaraiMalekhaProperties")
+
+[node name="WandRender" parent="SpellCastingPoint2" instance=ExtResource( 6 )]
 
 [node name="SpellCastingPoint3" type="Node2D" parent="."]
+script = ExtResource( 5 )
+properties_path = NodePath("../MalekaraiMalekhaProperties")
+
+[node name="WandRender" parent="SpellCastingPoint3" instance=ExtResource( 6 )]
 
 [node name="SpellCastingPoint4" type="Node2D" parent="."]
+script = ExtResource( 5 )
+properties_path = NodePath("../MalekaraiMalekhaProperties")
+
+[node name="WandRender" parent="SpellCastingPoint4" instance=ExtResource( 6 )]
 
 [node name="CollisionShape" type="CollisionShape2D" parent="."]
 position = Vector2( 0.5, 0.5 )

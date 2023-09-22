@@ -1,14 +1,27 @@
 extends EntityProperties
 
-class_name CitizenProperties
+class_name MalekaraiMalekhaProperties
 
 
 var items := {}
-var cloth_scraps := 3
+var cloth_scraps := 10
 var current_wand := 0
+
 
 func _ready() -> void:
 	var wand = Wand.new()
+	wand.fill_with_random_spells()
+	Items.add_child(wand)
+	wands.append(wand)
+	wand = Wand.new()
+	wand.fill_with_random_spells()
+	Items.add_child(wand)
+	wands.append(wand)
+	wand = Wand.new()
+	wand.fill_with_random_spells()
+	Items.add_child(wand)
+	wands.append(wand)
+	wand = Wand.new()
 	wand.fill_with_random_spells()
 	Items.add_child(wand)
 	wands.append(wand)
