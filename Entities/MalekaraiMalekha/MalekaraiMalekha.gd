@@ -1,16 +1,25 @@
 extends KinematicBody2D
 
+const SPELLCAST_POINT_DIST := 35.0
 
-# Declare member variables here. Examples:
-# var a: int = 2
-# var b: String = "text"
-
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
+var spellcast_rotation := 0.0
+var spellcast_focus := 0
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta: float) -> void:
-#	pass
+onready var controller :MalekaraiMalekhaController = $MalekaraiMalekhaController
+
+onready var spell_casting_points := [
+	$SpellCastingPoint,
+	$SpellCastingPoint2,
+	$SpellCastingPoint3,
+	$SpellCastingPoint4,
+]
+
+func _process(delta: float) -> void:
+	match controller.spellcast_mode:
+		controller.WAND_MODES.surround_rotate:
+			spellcast_rotation += 0.05
+			var point := Vector2.RIGHT.rotated(spellcast_rotation) * SPELLCAST_POINT_DIST
+			for node in spell_casting_points:
+				node.position = point
+				point = point.rotated(PI/2.0)

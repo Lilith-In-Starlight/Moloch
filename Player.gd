@@ -1,5 +1,7 @@
 extends Character
 
+class_name PlayerCharacter
+
 
 var spell_cast_pos :Vector2
 
