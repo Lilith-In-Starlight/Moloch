@@ -14,6 +14,10 @@ var trauma := 0.0
 func _process(delta: float) -> void:
 	# Control the camera with the mouse
 	var mouse_influence_on_camera := player.get_local_mouse_position()/2.5
+	if Items.level == 1:
+		mouse_influence_on_camera = get_local_mouse_position()/5.0
+		zoom = Vector2(1.5, 1.5)
+	
 	if Config.last_input_was_controller:
 		mouse_influence_on_camera = player.last_controller_aim * 0.5
 	
@@ -32,7 +36,11 @@ func _process(delta: float) -> void:
 	
 	var shake_percentage = Config.screen_shake / 12.0
 	offset = camera_offset_by_mouse + offset_by_camera_shake * shake_amount * shake_percentage
-	position = lerp(position, player.position, 0.08 * delta * 60)
+	var to := player.position
+	if Items.level == 1:
+		to.x = 263.5
+		to.y -= 100
+	position = lerp(position, to, 0.08 * delta * 60)
 
 
 func shake_camera(amount: float):
