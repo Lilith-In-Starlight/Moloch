@@ -41,6 +41,7 @@ func _on_hit_something():
 			for y in range(-3, 4):
 				var v := Vector2(x, y)
 				if v.length() < 3:
+					if WorldMap.get_tiles_cellv(v+pos) == 2: continue
 					WorldMap.set_tiles_cellv(v+pos,-1)
 					CastInfo.heat_caster(1/60.0)
 #		WorldMap.update_bitmask_region(pos-Vector2(3,3), pos+Vector2(3,3))

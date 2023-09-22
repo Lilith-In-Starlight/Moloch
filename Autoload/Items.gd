@@ -383,6 +383,7 @@ func break_block(block: int, strength: float) -> int:
 		0, 1:
 			if strength > 0.2:
 				return -1
+		2: return 2
 	return block
 
 

@@ -68,6 +68,7 @@ func _process(delta: float) -> void:
 		for y in range(-AREA,AREA+1):
 			var vec := Vector2(x+int(position.x/8), y+int(position.y/8))
 			if Vector2(x,y).length()<=AREA:
+				if Map.get_tiles_cellv(vec) == 2: continue
 				Map.set_tiles_cellv(vec, Items.break_block(Map.get_tiles_cellv(vec), 0.5))
 				CastInfo.heat_caster((0.01 / (0.08 + 0.3)) * delta)
 

@@ -1,6 +1,8 @@
 extends Node2D
 signal generated_world
 
+class_name WorldLevel
+
 const LAYOUT_MAXTRIES = 10
 
 # Need to match with scenes (not authoritative)

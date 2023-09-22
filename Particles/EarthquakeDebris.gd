@@ -15,8 +15,8 @@ func _ready() -> void:
 		return
 	for i in to_check:
 		checked.append(i)
-		if Map.get_tiles_cellv(position_in_map + i) == -1:
-			continue
+		if Map.get_tiles_cellv(position_in_map + i) == -1: continue
+		if Map.get_tiles_cellv(position_in_map) == 2: continue
 		if randf() > chance:
 			break
 		$TileMap.set_tiles_cellv(i, Map.get_tiles_cellv(position_in_map + i))

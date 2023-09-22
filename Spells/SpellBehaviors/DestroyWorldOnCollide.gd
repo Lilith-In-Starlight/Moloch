@@ -4,7 +4,7 @@ class_name DestroyWorld
 
 signal destroy_tile(amount)
 
-onready var WorldMap: Node2D = get_tree().get_nodes_in_group("World")[0]
+onready var WorldMap: WorldLevel = get_tree().get_nodes_in_group("World")[0]
 
 var radius: int = 2
 
@@ -28,6 +28,7 @@ func destroy_world(collider: Node, collision_point: Vector2):
 				var v := Vector2(x, y)
 				if v.length() < radius:
 					tiles_broken += 1
+					if WorldMap.get_tiles_cellv(v+pos) == 2: continue
 					WorldMap.set_tiles_cellv(v+pos,-1)
 		emit_signal("destroy_tile", tiles_broken)
 
