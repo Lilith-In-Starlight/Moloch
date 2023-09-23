@@ -19,6 +19,7 @@ func _ready():
 	add_child(movement_manager)
 	
 	var hurt_on_collide := HurtOnCollide.new()
+	hurt_on_collide.effects = ["onfire"]
 	hurt_on_collide.heat_damage = 12.0 + randf() * 6.0
 	hurt_on_collide.caster = CastInfo.Caster
 	add_child(hurt_on_collide)
