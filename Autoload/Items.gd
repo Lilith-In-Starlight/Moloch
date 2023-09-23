@@ -136,6 +136,7 @@ func _ready():
 #	register_base_mod("grenade", "Grenade Cast", "Copies spells into a grenade wand\nCopied Spells: %s", preload("res://Sprites/Spells/Modifiers/Grenade.png"), [1, 6])
 #	register_base_mod("landmine", "Landmine Cast", "Copies spells into a landmine wand\nCopied Spells: %s", preload("res://Sprites/Spells/Modifiers/Landmine.png"), [1, 6])
 	register_behavior_mod("limited", "Limited Cast", "When applicable, casts will only have effect at the end of the wand", preload("res://Sprites/Spells/Modifiers/Limited.png"))
+	register_behavior_mod("self_immunity", "Autoimmunity", "Casts will not hurt the caster", preload("res://Sprites/Spells/Modifiers/Limited.png"))
 	register_wand_mod("fast_cast", "Faster Cast", "The following spells will be cast %s times faster", preload("res://Sprites/Spells/Modifiers/Faster.png"), [2, 6])
 	register_wand_mod("slow_cast", "Slower Cast", "The following spells will be cast %s times slower", preload("res://Sprites/Spells/Modifiers/Slower.png"), [2, 6])
 	register_wand_mod("fast_recharge", "Faster Recharge Time", "The wand will recharge %s times faster", preload("res://Sprites/Spells/Modifiers/FastWand.png"), [2, 6])
@@ -380,6 +381,7 @@ func shuffle_array(array: Array) -> Array:
 
 func break_block(block: int, strength: float) -> int:
 	match block:
+		-1: return -1
 		0, 1:
 			if strength > 0.2:
 				return -1
@@ -428,3 +430,7 @@ func get_player_wand():
 	if player_wands.size() <= selected_wand or player_wands.empty():
 		return null
 	return player_wands[selected_wand]
+
+
+func is_level_boss():
+	return level == 1
