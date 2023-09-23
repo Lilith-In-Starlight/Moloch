@@ -42,4 +42,4 @@ func _on_body_entered(body: Node) -> void:
 func health_object() -> Flesh:
 	if is_instance_valid(CastInfo.Caster) and CastInfo.Caster.has_method("health_object"):
 		return CastInfo.Caster.health_object()
-	return Flesh.new()
+	return LegacyFlesh.new()

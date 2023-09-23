@@ -4,7 +4,7 @@ class_name FloatingOrb
 
 var Player :Character
 
-var health := Flesh.new()
+var health := LegacyFlesh.new()
 
 var direction := Vector2(1, 0)
 var speed_n := 0.0

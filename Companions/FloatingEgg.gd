@@ -2,7 +2,7 @@ extends KinematicBody2D
 
 
 var number := 1
-var health := Flesh.new()
+var health := LegacyFlesh.new()
 var Player :KinematicBody2D
 var old_player_position := []
 
@@ -46,5 +46,5 @@ func health_object() -> Flesh:
 func _on_hatch() -> void:
 	Items.player_items["egg"] -= 1
 	if randf()<0.4 and Items.companions.size() <= 6:
-		Items.companions.append([Flesh.new(), null])
+		Items.companions.append([LegacyFlesh.new(), null])
 	queue_free()

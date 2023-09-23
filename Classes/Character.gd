@@ -39,7 +39,7 @@ var wall_jump_buffer := 0.0
 
 var speed := Vector2(0, 0)
 
-var health := Flesh.new()
+var health := LegacyFlesh.new()
 
 var state :int = STATES.AIR
 

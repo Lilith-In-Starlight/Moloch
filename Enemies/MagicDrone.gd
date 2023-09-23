@@ -18,7 +18,7 @@ var last_seen := Vector2(0, 0)
 
 var noise := OpenSimplexNoise.new()
 
-var health := Flesh.new()
+var health := LegacyFlesh.new()
 
 var Map :Node2D
 

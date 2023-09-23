@@ -1,6 +1,6 @@
-extends Reference
+extends Flesh
 
-class_name Flesh
+class_name LegacyFlesh
 
 
 signal hole_poked

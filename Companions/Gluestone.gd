@@ -2,7 +2,7 @@ extends KinematicBody2D
 
 
 var number := 1
-var health := Flesh.new()
+var health := LegacyFlesh.new()
 var Player :KinematicBody2D
 
 

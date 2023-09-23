@@ -49,10 +49,10 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Spells/SpellBehaviors/ExplodeOnCollide.gd"
 }, {
-"base": "Reference",
+"base": "Node",
 "class": "Flesh",
 "language": "GDScript",
-"path": "res://Classes/Flesh.gd"
+"path": "res://Entities/FleshGeneric.gd"
 }, {
 "base": "KinematicBody2D",
 "class": "FloatingOrb",
@@ -98,6 +98,11 @@ _global_script_classes=[ {
 "class": "Item",
 "language": "GDScript",
 "path": "res://Classes/Item.gd"
+}, {
+"base": "Flesh",
+"class": "LegacyFlesh",
+"language": "GDScript",
+"path": "res://Classes/Flesh.gd"
 }, {
 "base": "EntityController",
 "class": "MalekaraiMalekhaController",
@@ -193,6 +198,7 @@ _global_script_class_icons={
 "InputController": "",
 "InputData": "",
 "Item": "",
+"LegacyFlesh": "",
 "MalekaraiMalekhaController": "",
 "MalekaraiMalekhaProperties": "",
 "ParicleMovement": "",

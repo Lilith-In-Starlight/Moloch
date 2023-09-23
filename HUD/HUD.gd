@@ -136,7 +136,7 @@ func _process(delta):
 		
 		# If the player right clicks, generate a new world
 		if Input.is_action_just_released("Interact2"):
-			Items.player_health = Flesh.new()
+			Items.player_health = LegacyFlesh.new()
 			GeneratingScreen.modulate.a = 1.0
 	
 	# If the player didn't die, and instead the level ended

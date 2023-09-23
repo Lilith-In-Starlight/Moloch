@@ -13,7 +13,7 @@ var noise := OpenSimplexNoise.new()
 var first_check := false
 var last_seen := Vector2(0, 0)
 var search_time := 0.0
-var health := Flesh.new()
+var health := LegacyFlesh.new()
 var wand := Wand.new()
 var Map :Node2D
 

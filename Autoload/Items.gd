@@ -34,7 +34,7 @@ var player_wands := []
 var selected_wand := 0
 
 var Player :KinematicBody2D
-var player_health := Flesh.new()
+var player_health := LegacyFlesh.new()
 
 var run_start_time :int
 
@@ -144,7 +144,7 @@ func _ready():
 	# If the player is in the tree, set the Player variable of this node to it
 	if not get_tree().get_nodes_in_group("Player").empty():
 		Player = get_tree().get_nodes_in_group("Player")[0]
-	player_health = Flesh.new()
+	player_health = LegacyFlesh.new()
 	
 	player_wands.append(new_player_wand())
 	player_wands.append(new_player_wand())
@@ -295,7 +295,7 @@ func reset_player():
 	WorldRNG.seed = generator_seed
 	LootRNG = RandomNumberGenerator.new()
 	LootRNG.seed = generator_seed*2
-	player_health = Flesh.new()
+	player_health = LegacyFlesh.new()
 	cloth_scraps = 3
 	player_items = {}
 	player_spells = []
@@ -335,7 +335,7 @@ func reset_player_to_savefile():
 	WorldRNG.state = world_status
 	LootRNG = RandomNumberGenerator.new()
 	LootRNG.state = loot_status
-	player_health = Flesh.new()
+	player_health = LegacyFlesh.new()
 	player_health.set_from_dict(Config.playthrough_file.get_value("player", "health", player_health.get_as_dict()))
 	
 	cloth_scraps = Config.playthrough_file.get_value("player", "cloth_scraps", 3)
