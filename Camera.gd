@@ -18,6 +18,9 @@ func _process(delta: float) -> void:
 		mouse_influence_on_camera = get_local_mouse_position()/5.0
 		zoom = Vector2(1.5, 1.5)
 	
+	if mouse_influence_on_camera.length() > 80:
+		mouse_influence_on_camera = mouse_influence_on_camera.normalized() * 80
+	
 	if Config.last_input_was_controller:
 		mouse_influence_on_camera = player.last_controller_aim * 0.5
 	
