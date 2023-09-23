@@ -91,7 +91,7 @@ func ready():
 	print("Step 1: Generating layout of the world")
 	var world_tiles := generate_world()
 	
-	while not are_tiles_connected(Vector2(0, 0), Vector2(0, min_point.y + 1), world_tiles) and not is_boss_level():
+	while not are_tiles_connected(Vector2(0, 0), Vector2(0, min_point.y + 1), world_tiles) and not Items.is_level_boss():
 		world_tiles = generate_world()
 	
 	print("Step 2: Adding tiles as nodes")
@@ -235,7 +235,7 @@ func finalize_world():
 #	print("Step 6: Autotiling so it's pretty")
 #	update_bitmask_region(min_point, max_point)
 	print("Step 7: Adding enemies")
-	if not is_boss_level(): add_enemies()
+	if not Items.is_level_boss(): add_enemies()
 	else:
 		var pos :Vector2 = Vector2(263.5 + 200, -268 - 32 - 8)
 		var node:Node2D = preload("res://Entities/MalekaraiMalekha/MalekaraiMalekha.tscn").instance()
@@ -645,7 +645,7 @@ func intersect_sets(a: Array, b: Array) -> Array:
 
 
 func generate_world() -> Dictionary:
-	if is_boss_level():
+	if Items.is_level_boss():
 		return generate_boss_world()
 	return generate_regular_world()
 
@@ -792,7 +792,3 @@ func world_to_map(point: Vector2) -> Vector2:
 	if point.y < 0:
 		output_y = -int((-point.y - 1) / 8) - 1
 	return Vector2(output_x, output_y)
-
-
-func is_boss_level() -> bool:
-	return Items.level == 1
