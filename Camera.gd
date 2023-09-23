@@ -42,6 +42,8 @@ func _process(delta: float) -> void:
 		to.y -= 100
 		if player.position.y < -268:
 			to = Vector2(263.5, -268 - 134)
+		if player.position.y  < -268 - 268 + 32:
+			to = player.position
 	position = lerp(position, to, 0.08 * delta * 60)
 
 

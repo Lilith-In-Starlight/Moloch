@@ -718,6 +718,7 @@ func generate_boss_world() -> Dictionary:
 	world_tiles[Vector2(0, 0)] = "first_boss_room"
 	world_tiles[Vector2(0, -1)] = "boss_climb"
 	world_tiles[Vector2(0, -2)] = "boss_arena"
+	world_tiles[Vector2(0, -3)] = "last_room"
 	
 	for x in range(min_point.x, max_point.x + 1):
 		for y in range(min_point.y, max_point.y + 1):

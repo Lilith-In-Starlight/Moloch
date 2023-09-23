@@ -7,6 +7,7 @@ export var properties_path :NodePath
 onready var properties: EntityProperties = get_node(properties_path)
 onready var wand_renderer := get_node_or_null("WandRender")
 var cast_from := global_position
+export var lerp_value := 1/3.0
 
 
 func _process(delta: float) -> void:
@@ -14,7 +15,7 @@ func _process(delta: float) -> void:
 	if wand_renderer != null:
 		wand_renderer.render_wand(get_wand(), false)
 		wand_renderer.visible = get_wand() != null
-		wand_renderer.rotation = lerp_angle(wand_renderer.rotation, (target_position - global_position).angle() + PI/4.0, 1/3.0)
+		wand_renderer.rotation = lerp_angle(wand_renderer.rotation, (target_position - global_position).angle() + PI/4.0, lerp_value)
 
 
 func cast_wand():
