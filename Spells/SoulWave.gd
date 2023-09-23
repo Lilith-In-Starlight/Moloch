@@ -31,7 +31,9 @@ func _physics_process(delta: float) -> void:
 		if i.has_method("health_object"):
 			var dist :float = i.position.distance_to(position)
 			if dist > shape.radius*0.87:
-				i.health_object().shatter_soul(5.0/(dist+0.001), CastInfo.Caster)
+				if i == CastInfo.Caster and not "self_immunity" in CastInfo.modifiers:
+					i.health_object().shatter_soul(5.0/(dist+0.001), CastInfo.Caster)
+				else: i.health_object().shatter_soul(5.0/(dist+0.001), CastInfo.Caster)
 
 
 func _on_Timer_timeout() -> void:

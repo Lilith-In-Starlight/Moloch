@@ -76,9 +76,9 @@ func _physics_process(delta):
 						var vec3 := map_pos + Vector2(i+x, -i+y)
 						var vec4 := map_pos + Vector2(-i+x, -i+y)
 						Map.set_tiles_cellv(vec1, Items.break_block(Map.get_tiles_cellv(vec1), 0.4))
-						Map.set_tiles_cellv(vec2, Items.break_block(Map.get_tiles_cellv(vec1), 0.4))
-						Map.set_tiles_cellv(vec3, Items.break_block(Map.get_tiles_cellv(vec1), 0.4))
-						Map.set_tiles_cellv(vec4, Items.break_block(Map.get_tiles_cellv(vec1), 0.4))
+						Map.set_tiles_cellv(vec2, Items.break_block(Map.get_tiles_cellv(vec2), 0.4))
+						Map.set_tiles_cellv(vec3, Items.break_block(Map.get_tiles_cellv(vec3), 0.4))
+						Map.set_tiles_cellv(vec4, Items.break_block(Map.get_tiles_cellv(vec4), 0.4))
 		
 #		Map.update_bitmask_region(map_pos-Vector2(10,10), map_pos+Vector2(10,10))
 
