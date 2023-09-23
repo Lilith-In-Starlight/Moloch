@@ -9,20 +9,29 @@ var current_wand := 0
 
 
 func _ready() -> void:
+	var base_mod :Spell = Items.base_spell_mods["self_immunity"]
+	var new_mod :Spell = base_mod.duplicate()
 	var wand = Wand.new()
-	wand.fill_with_random_spells()
+	wand.spells.append(new_mod)
+	wand.spells.append(Items.spells[4]["fuck_you"])
 	Items.add_child(wand)
 	wands.append(wand)
+	
 	wand = Wand.new()
-	wand.fill_with_random_spells()
+	wand.spells.append(new_mod)
+	wand.spells.append(Items.spells[1]["fireball"])
 	Items.add_child(wand)
 	wands.append(wand)
+	
 	wand = Wand.new()
-	wand.fill_with_random_spells()
+	wand.spells.append(new_mod)
+	wand.spells.append(Items.spells[2]["rage"])
 	Items.add_child(wand)
 	wands.append(wand)
+	
 	wand = Wand.new()
-	wand.fill_with_random_spells()
+	wand.spells.append(new_mod)
+	wand.spells.append(Items.spells[2]["soul_wave"])
 	Items.add_child(wand)
 	wands.append(wand)
 
