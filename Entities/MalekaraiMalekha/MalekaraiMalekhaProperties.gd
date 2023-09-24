@@ -9,6 +9,12 @@ var current_wand := 0
 
 
 func _ready() -> void:
+	health.add_blood()
+	health.add_body()
+	health.add_soul()
+	health.add_temperature()
+	add_child(health)
+	
 	var base_mod :Spell = Items.base_spell_mods["self_immunity"]
 	var new_mod :Spell = base_mod.duplicate()
 	var wand = Wand.new()
