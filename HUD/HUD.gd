@@ -90,23 +90,28 @@ func _ready():
 func _process(delta):
 	SpellBagHUD.visible = Items.visible_spells
 	# Control the tutorial
-	if Items.player_health.poked_holes > 0 and not Config.tutorial["healed"]:
-		$HUD/HealTutorial.visible = true
-		if Config.keyboard_binds["seal_blood"][1] == "key":
-			$HUD/HealTutorial.text = "Press " + Config.get_input_name(Config.keyboard_binds["seal_blood"]) + " to seal wounds"
-		else:
-			$HUD/HealTutorial.text = Config.get_input_name(Config.keyboard_binds["seal_blood"]) + " to seal wounds"
-	elif $HUD/HealTutorial.visible and not Config.tutorial["healed"] and Items.player_health.poked_holes == 0 and not has_healed:
-		Config.tutorial["healed"] = true
+	if Items.player_health.body_module:
+		if Items.player_health.body_module.holes > 0 and not Config.tutorial["healed"]:
+			$HUD/HealTutorial.visible = true
+			if Config.keyboard_binds["seal_blood"][1] == "key":
+				$HUD/HealTutorial.text = "Press " + Config.get_input_name(Config.keyboard_binds["seal_blood"]) + " to seal wounds"
+			else:
+				$HUD/HealTutorial.text = Config.get_input_name(Config.keyboard_binds["seal_blood"]) + " to seal wounds"
+		elif $HUD/HealTutorial.visible and not Config.tutorial["healed"] and Items.player_health.body_module.holes == 0 and not has_healed:
+			Config.tutorial["healed"] = true
+			$HUD/HealTutorial.visible = false
+			Config.save_config()
+			has_healed = true
+	else:
 		$HUD/HealTutorial.visible = false
-		Config.save_config()
-		has_healed = true
 		
 	# Control the temperature vignettes
-	if Items.player_health.temperature > 30:
-		HotHUD.modulate.a = lerp(HotHUD.modulate.a, (Items.player_health.temperature-30)/110.0, 0.2)
-	else:
-		ColdHUD.modulate.a = lerp(ColdHUD.modulate.a, (Items.player_health.temperature-30)/-60.0, 0.2)
+	if Items.player_health.temperature_module:
+		if Items.player_health.temperature_module.temperature > 30:
+			HotHUD.modulate.a = lerp(HotHUD.modulate.a, (Items.player_health.temperature_module.temperature-30)/110.0, 0.2)
+		else:
+			ColdHUD.modulate.a = lerp(ColdHUD.modulate.a, (Items.player_health.temperature_module.temperature-30)/-60.0, 0.2)
+	
 	if generated and not player_died and not level_ended:
 		GeneratingScreen.modulate.a = move_toward(GeneratingScreen.modulate.a, 0.0, 0.2)
 	
@@ -136,7 +141,7 @@ func _process(delta):
 		
 		# If the player right clicks, generate a new world
 		if Input.is_action_just_released("Interact2"):
-			Items.player_health = LegacyFlesh.new()
+			Items.player_health = Flesh.new()
 			GeneratingScreen.modulate.a = 1.0
 	
 	# If the player didn't die, and instead the level ended

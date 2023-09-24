@@ -29,6 +29,8 @@ var cause_of_death :int = DEATH_TYPES.ALIVE
 var guarantees := 0
 var chances := 0
 
+var effects := []
+
 
 func poke_hole(amt := 1, from: Node2D = null, is_side_effect := false):
 	if not body_module or amt <= 0:
@@ -49,7 +51,7 @@ func shatter_soul(amt: float, from: Node2D = null, is_side_effect := false):
 	
 
 func temp_change(deg :float, from: Node2D = null, is_side_effect := false) -> void:
-	if not temperature_module or deg <= 0:
+	if not temperature_module:
 		return
 	
 	temperature_module.temp_change(deg)
@@ -140,22 +142,25 @@ func _on_hyperthermia_died():
 
 func add_body() -> FleshBody:
 	var new_module := FleshBody.new()
-	add_child(new_module)
 	new_module.connect("hole_poked", self, "_on_poked_hole")
+	add_child(new_module)
+	body_module = new_module
 	return new_module
 
 
 func add_soul() -> FleshSoul:
 	var new_module := FleshSoul.new()
-	add_child(new_module)
 	new_module.connect("ran_out_of_soul", self, "_on_ran_out_of_soul")
+	add_child(new_module)
+	soul_module = new_module
 	return new_module
 
 
 func add_blood() -> FleshBlood:
 	var new_module := FleshBlood.new()
-	add_child(new_module)
 	new_module.connect("ran_out_of_blood", self, "_on_ran_out_of_blood")
+	add_child(new_module)
+	blood_module = new_module
 	return new_module
 
 
@@ -164,5 +169,22 @@ func add_temperature() -> FleshTemperature:
 	new_module.connect("hyperthermia_died", self, "_on_hyperthermia_died")
 	new_module.connect("hypothermia_died", self, "_on_hypothermia_died")
 	add_child(new_module)
+	temperature_module = new_module
 	return new_module
 
+func quantify_best_status() -> float:
+	var value := 0.0
+	if temperature_module:
+		value += max(temperature_module.max_temperature, temperature_module.temperature) + abs(temperature_module.min_temperature)
+	if soul_module:
+		value += soul_module.amount
+	if blood_module:
+		value += max(blood_module.amount, blood_module.maximum)
+	return value
+
+
+func get_as_dict() -> Dictionary:
+	return {}
+
+func set_from_dict(dict:Dictionary):
+	pass

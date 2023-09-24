@@ -24,16 +24,19 @@ onready var camera_controller :Node = get_node_or_null("CameraController")
 export var properties_path: NodePath
 onready var properties :Node = get_node_or_null(properties_path)
 
+
 func _ready() -> void:
 	Map = get_tree().get_nodes_in_group("World")[0]
 	health = properties.get_health()
 	health.connect("was_damaged", self, "_on_damaged")
 	health.connect("died", self, "health_died")
-	health.connect("hole_poked", self, "_on_hole_poked")
+	health.body_module.connect("hole_poked", self, "_on_hole_poked")
 	health.connect("full_healed", self, "send_message", ["Your flesh is renewed"])
 	health.connect("effect_changed", self, "_on_effect_changes")
-	health.connect("broken_leg", self, "_on_broken_leg")
-	health.connect("impacted_body_top", self, "_on_impacted_body_top")
+	health.body_module.connect("broken_legs", self, "_on_broken_leg")
+	health.body_module.connect("impacted_body_top", self, "_on_impacted_body_top")
+	health.temperature_module.connect("temperature_state_changed", self, "_on_temperature_state_changed")
+	health.soul_module.connect("soul_state_changed", self, "_on_soul_state_changed")
 	set_physics_process(false)
 	set_process(false)
 
@@ -41,47 +44,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	flying = properties.count_items("wings") > 0
 	# Apply items
-	if properties.count_items("gasolineblood") and not health.blood_substance == "nitroglycerine" and health.blood > 0.01:
-		health.blood_substance = "nitroglycerine"
-		send_message("Your insides become volatile")
-		properties.items["gasolineblood"] -= 1
 	
-	elif properties.count_items("waterblood") and not health.blood_substance == "water" and health.blood > 0.01:
-		health.blood_substance = "water"
-		send_message("Your insides become drinkable")
-		properties.items["waterblood"] -= 1
-	
-	if properties.count_items("thickblood") > 0:
-		properties.items["thickblood"] -= 1
-		health.max_blood *= 2.0
-		health.blood *= 2.0
-		health.blood += 0.5
-		health.blood = min(health.max_blood, health.blood)
-		
-	if properties.count_items("heal") > 0:
-		properties.items["heal"] -= 1
-		health.full_heal()
-		
-	if properties.count_items("scraps") > 0:
-		properties.items["scraps"] -= 1
-		properties.cloth_scraps += 1
-		
-	if properties.count_items("soulfulpill") > 0:
-		properties.items["soulfulpill"] -= 1
-		health.soul += 0.3+randf()*0.2
-		
-	if properties.count_items("icecube") > 0:
-		properties.items["icecube"] -= 1
-		health.temp_change(-5.0)
-		
-	if properties.count_items("heatadapt") > 0:
-		properties.items["heatadapt"] -= 1
-		health.death_hypertemperature += 20
-		
-	if properties.count_items("dissipator") > 0:
-		properties.items["dissipator"] -= 1
-		health.temp_regulation += 0.005
-		
 	if properties.count_items("shance") > 0:
 		properties.items["shance"] -= 1
 		health.chances += 1
@@ -91,9 +54,59 @@ func _process(delta: float) -> void:
 		health.guarantees += 1
 		send_message("You died... but you survived!")
 	
-	if properties.count_items("legs") > 0:
-		if health.broken_moving_appendages > 0:
-			health.broken_moving_appendages -= 1
+	if health.blood_module:
+		if properties.count_items("gasolineblood") and not health.blood_module.substance == "nitroglycerine" and health.blood_module.amount > 0.01:
+			health.blood_module.substance = "nitroglycerine"
+			send_message("Your insides become volatile")
+			properties.items["gasolineblood"] -= 1
+		
+		elif properties.count_items("waterblood") and not health.blood_module.substance == "water" and health.blood_module.amount > 0.01:
+			health.blood_module.substance = "water"
+			send_message("Your insides become drinkable")
+			properties.items["waterblood"] -= 1
+	
+		if properties.count_items("thickblood") > 0:
+			properties.items["thickblood"] -= 1
+			health.blood_module.maximum *= 2.0
+			health.blood_module.amount *= 2.0
+			health.blood_module.amount += 0.5
+			health.blood_module.amount = min(health.blood_module.maximum, health.blood_module.amount)
+		
+		if properties.count_items("bloodless") > 0:
+			properties.items["bloodless"] -= 1
+			health.blood_module.is_vital = false
+		
+	if properties.count_items("heal") > 0:
+		properties.items["heal"] -= 1
+		health.full_heal()
+		
+	if properties.count_items("scraps") > 0:
+		properties.items["scraps"] -= 1
+		properties.cloth_scraps += 1
+	
+	if health.soul_module:
+		if properties.count_items("soulfulpill") > 0:
+			properties.items["soulfulpill"] -= 1
+			health.soul_module.change_soul(0.3+randf()*0.2)
+		
+		health.soul_module.change_soul(0.01 * delta * properties.count_items("soulfulengine"))
+	
+	if health.temperature_module:
+		if properties.count_items("icecube") > 0:
+			properties.items["icecube"] -= 1
+			health.temperature_module.temp_change(-5.0)
+			
+		if properties.count_items("heatadapt") > 0:
+			properties.items["heatadapt"] -= 1
+			health.temperature_module.max_temperature += 20
+			
+		if properties.count_items("dissipator") > 0:
+			properties.items["dissipator"] -= 1
+			health.temperature_module.regulation += 0.01
+	
+	if health.body_module:
+		if properties.count_items("legs") > 0 and health.body_module.broken_legs > 0:
+			health.body_module.restore_legs(1)
 			properties.items["legs"] -= 1
 			send_message("You put on a new leg")
 	
@@ -108,65 +121,10 @@ func _process(delta: float) -> void:
 			var new_gluestone := preload("res://Companions/FloatingEgg.tscn").instance()
 			new_gluestone.position = position
 			get_parent().add_child(new_gluestone)
-	
-	if properties.count_items("bloodless") > 0:
-		properties.items["bloodless"] -= 1
-		health.needs_blood = false
-	
-	health.soul += 0.01 * delta * properties.count_items("soulfulengine")
 
 	
 	if controller.just_pressed_inputs.death_action and not dead and Config.instant_death_button:
-		health._instakill_pressed()
-	
-	# Hypo and hypertermia
-	if health.temperature >= -20 and health.temperature < 10 and temp_stage != -2:
-		temp_stage = -2
-		send_message("You feel like you're freezing")
-	elif health.temperature >= 10 and health.temperature < 20 and temp_stage != -1:
-		temp_stage = -1
-		send_message("You feel a bit cold")
-	elif health.temperature >= 20 and health.temperature < 45 and temp_stage != 0:
-		temp_stage = 0
-		send_message("The temperature is right")
-	elif health.temperature >= 45 and health.temperature < 60 and temp_stage != 1:
-		temp_stage = 1
-		send_message("You feel a bit overheated")
-	elif health.temperature >= 60 and health.temperature < 100 and temp_stage != 2:
-		temp_stage = 2
-		# Player explodes on high temperatures if their blood is nitro
-		if health.blood_substance == "nitroglycerine" and health.blood > 0.01:
-			var n := preload("res://Particles/Explosion.tscn").instance()
-			n.position = position
-			get_parent().add_child(n)
-		send_message("You should slow down to cool off")
-	elif health.temperature >= 100 and temp_stage != 3:
-		temp_stage = 3
-		# Player explodes on high temperatures if their blood is nitro
-		if health.blood_substance == "nitroglycerine" and health.blood > 0.01:
-			var n := preload("res://Particles/Explosion.tscn").instance()
-			n.position = position
-			get_parent().add_child(n)
-		send_message("Your insides feel like they're melting")
-	
-	
-	# Soullessness and soulfulness
-	if health.soul >= 0.001 and health.soul <= 0.3 and soul_stage != -2:
-		soul_stage = -2
-		send_message("Your soul is dying")
-	elif health.soul >= 0.3 and health.soul <= 0.6 and soul_stage != -1:
-		soul_stage = -1
-		send_message("Your soul is weakened")
-	elif health.soul > 0.6 and health.soul <= 1.0 and soul_stage != 0:
-		soul_stage = 0
-		send_message("Your soul is alive")
-	elif health.soul > 1.0 and health.soul <= 2.0 and soul_stage != 1:
-		soul_stage = 1
-		send_message("Your soul is resilient")
-	elif health.soul > 2.0 and soul_stage != 2:
-		soul_stage = 2
-		send_message("Your soul is undying")
-	
+		health.self_terminate()	
 
 
 func _physics_process(delta: float) -> void:
@@ -196,9 +154,12 @@ func _physics_process(delta: float) -> void:
 			"down": controller.pressed_inputs.up,
 			"jump": controller.pressed_inputs.move_action,
 		}
-	if controller.just_pressed_inputs.action3 and health.poked_holes > 0 and properties.cloth_scraps > 0:
-		health.poked_holes -= 1
-		properties.cloth_scraps -= 1
+	
+	if health.body_module:
+		if controller.just_pressed_inputs.action3 and health.body_module.holes > 0 and properties.cloth_scraps > 0:
+			health.body_module.holes -= 1
+			properties.cloth_scraps -= 1
+	
 	process_movement(delta)
 	handle_wand_sprite($WandRender)
 	animation_info($Player)
@@ -216,14 +177,15 @@ func _physics_process(delta: float) -> void:
 	
 	# The wounds can cicatrize on their own
 	# Bandaids help
-	if health.poked_holes > 0:
-		var plus :float = 0.0008 * 0.0008*properties.count_items("bandaid")
-		if randf() < 0.0005 + plus:
-			health.poked_holes -= 1
-			if health.poked_holes < 0:
-				health.poked_holes = 0
-			if health.poked_holes == 0:
-				send_message("Bleeding has ceased")
+	if health.body_module:
+		if health.body_module.holes > 0:
+			var plus :float = 0.0008 * 0.0008 * properties.count_items("bandaid")
+			if randf() < 0.0005 + plus:
+				health.body_module.holes -= 1
+				if health.body_module.holes < 0:
+					health.body_module.holes = 0
+				if health.body_module.holes == 0:
+					send_message("Bleeding has ceased")
 	
 
 func _on_generated_world() -> void:
@@ -251,14 +213,18 @@ func _on_effect_changes(effect:String, added:bool) -> void:
 func _on_broken_leg(amount:int) -> void:
 	if camera_controller != null: camera_controller.shake_camera(8.0)
 	if properties.count_items("ironknees") > 0:
-		health.broken_moving_appendages -= amount
+		health.body_module.broken_legs -= amount
 		return
+	
 	if amount != 0:
 		Map.play_sound(preload("res://Sfx/broken_legs.wav"), position, 1.0, 0.8+randf()*0.4)
-		if health.blood_substance == "nitroglycerine" and health.blood > 0.01:
-			var n := preload("res://Particles/Explosion.tscn").instance()
-			n.position = position
-			get_parent().add_child(n)
+		
+		if health.blood_module:
+			if health.blood_module.substance == "nitroglycerine" and health.blood_module.amount > 0.01:
+				var n := preload("res://Particles/Explosion.tscn").instance()
+				n.position = position
+				get_parent().add_child(n)
+		
 		match amount:
 			1:
 				send_message("Broken leg")
@@ -270,7 +236,7 @@ func _on_DamageTimer_timeout() -> void:
 	modulate = Color("#ffffff")
 
 
-func _on_hole_poked():
+func _on_hole_poked(_amt: float):
 	if camera_controller != null: camera_controller.shake_camera(3.0)
 	send_message("Bleeding")
 	Map.play_sound(preload("res://Sfx/pierced_flesh/piercing-1a.wav"), position, 1.0, 0.8+randf()*0.4)
@@ -282,5 +248,44 @@ func _on_frame_changed() -> void:
 
 func _on_impacted_body_top(force: float) -> void:
 	if camera_controller != null: camera_controller.shake_camera(8.0)
-	if force < -health.leg_impact_resistance:
+	if force < -health.body_module.leg_impact_resistance:
 		send_message("You have hit your head too hard")
+
+func _on_temperature_state_changed(_previous: int, new_state: int) -> void:
+	if new_state == -2:
+		send_message("You feel like you're freezing")
+	elif new_state == -1:
+		send_message("You feel a bit cold")
+	elif new_state == 0:
+		send_message("The temperature is right")
+	elif new_state == 1:
+		send_message("You feel a bit overheated")
+	elif new_state == 2:
+		send_message("You should slow down to cool off")
+		# Player explodes on high temperatures if their blood is nitro
+		if health.blood_module:
+			if health.blood_module.substance == "nitroglycerine" and health.blood_module.amount > 0.01:
+				var n := preload("res://Particles/Explosion.tscn").instance()
+				n.position = position
+				get_parent().add_child(n)
+	elif new_state == 3:
+		send_message("Your insides feel like they're melting")
+		# Player explodes on high temperatures if their blood is nitro
+		if health.blood_module:
+			if health.blood_module.substance == "nitroglycerine" and health.blood_module.amount > 0.01:
+				var n := preload("res://Particles/Explosion.tscn").instance()
+				n.position = position
+				get_parent().add_child(n)
+
+
+func _on_soul_state_changed(_previous: int, new_state: int) -> void:
+	if new_state == -2:
+		send_message("Your soul is dying")
+	elif new_state == -1:
+		send_message("Your soul is weakened")
+	elif new_state == 0:
+		send_message("Your soul is alive")
+	elif new_state == 1:
+		send_message("Your soul is resilient")
+	elif new_state == 2:
+		send_message("Your soul is undying")

@@ -49,7 +49,6 @@ var needed_soul := 1.0
 
 var is_players := false
 
-var effects := []
 
 var fire_timer := 0.0
 var confusion_timer := 0.0
@@ -235,5 +234,3 @@ func set_from_dict(dict: Dictionary):
 	for i in dict:
 		set(i, dict[i])
 
-
-	

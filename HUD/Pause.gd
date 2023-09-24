@@ -6,7 +6,7 @@ var finished_gen := false
 
 
 func _ready() -> void:
-	$Options/DieInstantly.connect("pressed", Items.player_health, "_instakill_pressed")
+	$Options/DieInstantly.connect("pressed", Items.player_health, "self_terminate")
 	$Settings/VisualizeDamage.pressed = Config.damage_visuals
 	$Settings/InstantDeathButton.pressed = Config.instant_death_button
 	$Settings/ScreenShake/Text.text = "Screen Shake: " + str(Config.screen_shake)

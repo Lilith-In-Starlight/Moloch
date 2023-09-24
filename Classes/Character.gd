@@ -39,7 +39,7 @@ var wall_jump_buffer := 0.0
 
 var speed := Vector2(0, 0)
 
-var health := LegacyFlesh.new()
+var health := Flesh.new()
 
 var state :int = STATES.AIR
 
@@ -66,7 +66,6 @@ func _ready() -> void:
 
 
 func process_movement(delta:float) -> void:
-	health.process_health(delta, speed)
 	bleed()
 	d_unit = delta * 60.0
 	speed.y += fall_speed * d_unit
@@ -81,14 +80,14 @@ func process_movement(delta:float) -> void:
 					
 					if is_on_floor():
 						state = STATES.GROUND
-						health.handle_impact(last_speed_before_collision)
+						if health.body_module: health.body_module.handle_impact(last_speed_before_collision)
 					
 					if is_on_wall():
 						state = STATES.WALL
-						health.handle_impact(last_speed_before_collision)
+						if health.body_module: health.body_module.handle_impact(last_speed_before_collision)
 					
 					if is_on_ceiling():
-						health.handle_impact(last_speed_before_collision)
+						if health.body_module: health.body_module.handle_impact(last_speed_before_collision)
 					
 					if not input_pressed("jump") and jump_height_control:
 						speed.y *= 0.5
@@ -195,11 +194,12 @@ func process_movement(delta:float) -> void:
 	last_frame_inputs = inputs.duplicate()
 	
 	
-	if randf() < (health.needed_soul-health.soul)/15.0:
-		var n := preload("res://Particles/Soul.tscn").instance()
-		n.position = position
-		get_parent().add_child(n)
-		move_and_collide(Vector2(-1+randf()*2, -1+randf()*2)*((health.needed_soul-health.soul/10.0))*10.0)
+	if health.soul_module:
+		if randf() < (health.soul_module.maximum-health.soul_module.amount)/15.0:
+			var n := preload("res://Particles/Soul.tscn").instance()
+			n.position = position
+			get_parent().add_child(n)
+			move_and_collide(Vector2(-1+randf()*2, -1+randf()*2)*((health.soul_module.maximum-health.soul_module.amount/10.0))*10.0)
 
 	last_speed_before_collision = speed
 	speed = move_and_slide(speed, Vector2(0, -1))
@@ -207,16 +207,19 @@ func process_movement(delta:float) -> void:
 
 func bleed() -> void:
 	# If the player is bleeding
-	if health.poked_holes > 0 and health.blood > 0.01:
-		if health.blood_substance == "water" and "onfire" in health.effects:
+	if not health.body_module or not health.blood_module:
+		return
+	
+	if health.body_module.holes > 0 and health.blood_module.amount > 0.01:
+		if health.blood_module.substance == "water" and "onfire" in health.effects:
 			health.effects.erase("onfire")
 		# Emit blood particles 
-		for i in min(health.poked_holes, 12):
+		for i in min(health.body_module.holes, 12):
 			if randf()>0.9:
 				var n :RigidBody2D = preload("res://Particles/Blood.tscn").instance()
 				n.position = position + Vector2(0, 6)
 				n.linear_velocity = Vector2(-200 + randf()*400, -80 + randf()*120)
-				n.substance = health.blood_substance
+				n.substance = health.blood_module.substance
 				get_parent().add_child(n)
 
 
@@ -229,9 +232,9 @@ func animation_info(sprite:AnimatedSprite) -> void:
 				STATES.GROUND:
 					# Idle animation
 					if abs(speed.x) < 10.0 or randf()<0.002:
-						# Player has one or two legs
-						if health.broken_moving_appendages != 2:
-							if health.temperature > 30.02:
+						# Player has one or two legs, or the body isnt being accounted
+						if not health.body_module or health.body_module.broken_legs != 2:
+							if health.temperature_module and health.temperature_module.temperature > 30.02:
 								sprite.play("panting")
 							else:
 								sprite.play("default")
@@ -239,8 +242,8 @@ func animation_info(sprite:AnimatedSprite) -> void:
 							# Playyer has no legs
 							sprite.play("crawl")
 					elif speed.x > 0.0: # Moving
-						# Has both legs or one leg
-						if health.broken_moving_appendages != 2:
+						# Player has one or two legs, or the body isnt being accounted
+						if not health.body_module or health.body_module.broken_legs != 2:
 							sprite.scale.x = 1
 							if looking_at.x > 0:
 								sprite.play("run")
@@ -259,7 +262,7 @@ func animation_info(sprite:AnimatedSprite) -> void:
 								sprite.scale.x = -1
 					else:
 						# Has both legs
-						if health.broken_moving_appendages != 2:
+						if not health.body_module or health.body_module.broken_legs != 2:
 							sprite.scale.x = -1
 							if looking_at.x > 0:
 								sprite.play("run_lookback")
@@ -277,7 +280,7 @@ func animation_info(sprite:AnimatedSprite) -> void:
 							else:
 								sprite.scale.x = -1
 				STATES.AIR:
-					if health.broken_moving_appendages != 2:
+					if not health.body_module or health.body_module.broken_legs != 2:
 						if sign(speed.y) > 0:
 							sprite.play("down")
 						else:
@@ -293,24 +296,24 @@ func animation_info(sprite:AnimatedSprite) -> void:
 					if kin != null:
 						sprite.scale.x = 1
 						if looking_at.x < 0:
-							if health.broken_moving_appendages == 0:
+							if not health.body_module or health.body_module.broken_legs == 0:
 								sprite.play("slide")
 							else:
 								sprite.play("oneleg_slide")
 						else:
-							if health.broken_moving_appendages == 0:
+							if not health.body_module or health.body_module.broken_legs == 0:
 								sprite.play("slide2")
 							else:
 								sprite.play("oneleg_slide2")
 					else: # Isn't left, must be right
 						sprite.scale.x = -1
 						if looking_at.x > 0:
-							if health.broken_moving_appendages == 0:
+							if not health.body_module or health.body_module.broken_legs == 0:
 								sprite.play("slide")
 							else:
 								sprite.play("oneleg_slide")
 						else:
-							if health.broken_moving_appendages == 0:
+							if not health.body_module or health.body_module.broken_legs == 0:
 								sprite.play("slide2")
 							else:
 								sprite.play("oneleg_slide2")
@@ -336,7 +339,7 @@ func handle_wand_sprite(sprite:Node2D) -> void:
 
 func walking() -> void:
 	var haxis := 0.0
-	if health.broken_moving_appendages != 1 or state == STATES.AIR:
+	if (not health.body_module or health.body_module.broken_legs != 1) or state == STATES.AIR:
 		if input_pressed("left"):
 			speed.x -= walk_accel
 			haxis = -1.0
@@ -344,7 +347,15 @@ func walking() -> void:
 			speed.x += walk_accel
 			haxis = 1.0
 	
-	match health.broken_moving_appendages:
+	if not health.body_module:
+		if abs(haxis)<0.5:
+			speed.x *= pow(0.8, d_unit)
+		elif sign(haxis)!=sign(speed.x):
+			speed.x *= pow(0.9, d_unit)
+		else:
+			speed.x *= pow(0.75, d_unit)
+	
+	match health.body_module.broken_legs:
 		0:
 			if abs(haxis)<0.5:
 				speed.x *= pow(0.8, d_unit)
@@ -381,7 +392,7 @@ func walking() -> void:
 
 
 func jumping(x_speed := 0.0, y_speed := jump_force):
-	if health.broken_moving_appendages != health.moving_appendages or state == STATES.POLE:
+	if (not health.body_module or health.body_module.broken_legs != health.body_module.legs) or state == STATES.POLE:
 		if input_just_pressed("jump") or ground_jump_buffer > 0.0:
 			if ground_coyote_time > 0.0:
 				speed.y = y_speed

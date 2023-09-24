@@ -5,16 +5,20 @@ class_name FleshBody
 signal broken_legs(amt)
 signal restored_legs(amt)
 signal hole_poked(amt)
+signal impacted_body_top(amt)
+signal impacted_body_bottom(amt)
+signal impacted_body_side(amt)
 
 const DEFAULT_LEGS := 2
 const DEFAULT_MAX_LEGS := 2
 const DEFAULT_MAX_HOLES := 200
 
-var leg_impact_resistance := 200
-var side_impact_resistance := 200
+var leg_impact_resistance := 700
+var side_impact_resistance := 500
 
 var legs := 2
 var broken_legs := 0
+var broken_legs_total := 0
 
 var holes := 0
 var slices := 0
@@ -24,6 +28,7 @@ var is_vital := true
 
 func break_legs(amt: int):
 	legs -= amt
+	broken_legs_total += amt
 	emit_signal("broken_legs", amt)
 
 
@@ -35,6 +40,7 @@ func break_random_legs():
 	if d > 0:
 		emit_signal("broken_leg", d)
 		broken_legs += d
+		broken_legs_total += d
 	broken_legs = min(broken_legs + brkn_legs, legs)
 
 

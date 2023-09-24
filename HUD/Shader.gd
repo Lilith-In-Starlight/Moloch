@@ -10,12 +10,12 @@ var time := 0.0
 func _process(delta: float) -> void:
 	if get_tree().paused == false:
 		time += delta
-		if Items.player_health.soul <= Items.player_health.needed_soul:
+		if not Items.player_health.soul_module or Items.player_health.soul_module.amount <= Items.player_health.soul_module.maximum:
 			offset_red = Vector2(0, 0)
 			offset_blue = Vector2(0, 0)
 			offset_green = Vector2(0, 0)
-		else:
-			var aa := pow(Items.player_health.soul / Items.player_health.needed_soul, 2)
+		elif Items.player_health.soul_module:
+			var aa := pow(Items.player_health.soul_module.amount / Items.player_health.soul_module.maximum, 2)
 			offset_red = aa * Vector2(noise.get_noise_2d(Engine.get_frames_drawn() * 0.9, 500), noise.get_noise_2d(Engine.get_frames_drawn() * 0.9, 0))
 			offset_blue = aa * Vector2(noise.get_noise_2d(Engine.get_frames_drawn() * 0.9, 1000), noise.get_noise_2d(Engine.get_frames_drawn() * 0.9, 1500))
 			offset_green = aa * Vector2(noise.get_noise_2d(Engine.get_frames_drawn() * .0, 2000), noise.get_noise_2d(Engine.get_frames_drawn() * 0.9, 2500))
