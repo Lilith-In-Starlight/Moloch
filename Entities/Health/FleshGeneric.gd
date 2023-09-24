@@ -129,6 +129,16 @@ func _on_ran_out_of_blood():
 	attempt_death()
 
 
+func _on_max_holed():
+	if not body_module.is_vital:
+		return
+		
+	if cause_of_death == DEATH_TYPES.ALIVE:
+		cause_of_death = DEATH_TYPES.HOLES
+	
+	attempt_death()
+
+
 func _on_ran_out_of_soul():
 	if not soul_module.is_vital:
 		return
@@ -162,6 +172,7 @@ func _on_hyperthermia_died():
 func add_body() -> FleshBody:
 	var new_module := FleshBody.new()
 	new_module.connect("hole_poked", self, "_on_poked_hole")
+	new_module.connect("max_holed", self, "_on_max_holed")
 	add_child(new_module)
 	body_module = new_module
 	return new_module

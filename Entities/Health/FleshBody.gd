@@ -5,6 +5,7 @@ class_name FleshBody
 signal broken_legs(amt)
 signal restored_legs(amt)
 signal hole_poked(amt)
+signal max_holed()
 signal impacted_body_top(amt)
 signal impacted_body_bottom(amt)
 signal impacted_body_side(amt)
@@ -27,6 +28,10 @@ var slices := 0
 var is_vital := true
 var is_flammable := true
 
+
+func _process(delta: float) -> void:
+	if holes > max_holes:
+		emit_signal("max_holed")
 
 func break_legs(amt: int):
 	legs -= amt
