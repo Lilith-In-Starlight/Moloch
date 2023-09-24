@@ -19,11 +19,11 @@ onready var spell_casting_points := [
 
 func _ready() -> void:
 	var n := 0
-	properties.health.soul = 80.0
-	properties.health.blood = 18.0
-	properties.health.max_blood = 18.0
-	properties.health.death_hypertemperature = 10000.0
-	properties.health.max_holes = 2000.0
+	properties.health.soul_module.amount = 80.0
+	properties.health.blood_module.amount = 18.0
+	properties.health.blood_module.maximum = 18.0
+	properties.health.temperature_module.max_temperature = 10000.0
+	properties.health.body_module.max_holes = 2000.0
 	properties.health.connect("died", self, "_died")
 	
 	for i in spell_casting_points:
@@ -31,7 +31,6 @@ func _ready() -> void:
 		n += 1
 
 func _process(delta: float) -> void:
-	properties.health.process_health(delta)
 	match controller.spellcast_mode:
 		controller.WAND_MODES.surround_rotate:
 			if not controller.spin_counter_clockwise: spellcast_rotation += PI/2.0 * delta
@@ -67,7 +66,7 @@ func health_object() -> Flesh:
 
 
 func _on_StopAllWounds_timeout() -> void:
-	health_object().poked_holes = 0
+	health_object().body_module.holes = 0
 
 
 func _died():
