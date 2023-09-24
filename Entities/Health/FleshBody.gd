@@ -20,6 +20,7 @@ var legs := 2
 var broken_legs := 0
 var broken_legs_total := 0
 
+var max_holes := DEFAULT_MAX_HOLES
 var holes := 0
 var slices := 0
 
