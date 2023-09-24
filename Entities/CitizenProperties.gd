@@ -8,6 +8,11 @@ var cloth_scraps := 3
 var current_wand := 0
 
 func _ready() -> void:
+	health.add_blood()
+	health.add_body()
+	health.add_soul()
+	health.add_temperature()
+	add_child(health)
 	var wand = Wand.new()
 	wand.fill_with_random_spells()
 	Items.add_child(wand)
