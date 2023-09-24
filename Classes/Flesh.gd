@@ -7,8 +7,6 @@ signal hole_poked
 signal holes_poked(amount)
 signal full_healed
 signal bled
-signal died
-signal was_damaged(type)
 signal effect_changed(effect, added)
 signal broken_leg(amount)
 signal impacted_body_top(force)
@@ -44,8 +42,6 @@ var death_hypertemperature := 140.0
 var death_hypotemperature := -40.0
 var temp_regulation := 0.002
 
-var cause_of_death := -1
-
 
 var has_soul := true
 var soul := 1.0
@@ -61,13 +57,8 @@ var confusion_timer := 0.0
 var damaged_from_side_effect := false
 var bleeding_from_side_effect := false
 
-var last_damaged_by :Node2D
 var bleeding_by :Node2D
 
-var dead := false
-
-var chances := 0
-var guarantees := 0
 
 var leg_impact_resistance := 700.0
 var side_resistance := 500
