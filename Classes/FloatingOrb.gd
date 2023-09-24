@@ -4,7 +4,7 @@ class_name FloatingOrb
 
 var Player :Character
 
-var health := LegacyFlesh.new()
+var health := Flesh.new()
 
 var direction := Vector2(1, 0)
 var speed_n := 0.0
@@ -14,7 +14,10 @@ var first_check := false
 var DamageTimer := Timer.new()
 
 func _ready() -> void:
-	health.needs_blood = false
+	health.add_body()
+	health.add_soul()
+	health.add_temperature()
+	add_child(health)
 	Player = get_tree().get_nodes_in_group("Player")[0]
 	health.connect("was_damaged",self, "_on_damaged")
 	health.connect("died", self, "on_death")
@@ -25,7 +28,6 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	health.process_health(delta)
 	if not first_check:
 		if Player.position.distance_to(position) < 500:
 			queue_free()

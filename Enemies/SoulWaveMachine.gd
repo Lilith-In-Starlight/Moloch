@@ -12,7 +12,8 @@ var timer := 0.0
 
 
 func _ready() -> void:
-	health.death_hypertemperature = 900.0
+	if health.temperature_module:
+		health.temperature_module.max_temperature = 900.0
 	Noise.seed = hash(self)
 	health.connect("was_damaged", self, "_on_damaged_2")
 
