@@ -122,7 +122,8 @@ func _process(delta):
 		var death := "Internal organs damaged by impact"
 		match Player.health_object().cause_of_death:
 			Flesh.DEATH_TYPES.BLED: death = "Ran out of blood"
-			Flesh.DEATH_TYPES.HOLES: death = "Sliced to at least two pieces"
+			Flesh.DEATH_TYPES.HOLES: death = "Turned into swiss chese"
+			Flesh.DEATH_TYPES.SLICED: death = "Sliced"
 			Flesh.DEATH_TYPES.HYPER: death = "Extremely high temperatures"
 			Flesh.DEATH_TYPES.HYPO: death = "Extremely low temperatures"
 			Flesh.DEATH_TYPES.SOUL: death = "Soul leaked out of her body"

@@ -26,6 +26,7 @@ func _ready():
 	yield(get_tree().create_timer(6.0), "timeout")
 	queue_free()
 
+
 func _physics_process(delta):
 	$Sprite.rotation += 1.0
 	if start_fall and spell_behavior.velocity.y > 20:
@@ -42,5 +43,5 @@ func _physics_process(delta):
 	
 	for i in get_overlapping_bodies():
 		if i.has_method("health_object"):
-			i.health_object().poke_hole(1000, CastInfo.Caster)
+			i.health_object().slice(CastInfo.Caster)
 

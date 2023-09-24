@@ -5,6 +5,7 @@ class_name FleshBody
 signal broken_legs(amt)
 signal restored_legs(amt)
 signal hole_poked(amt)
+signal sliced(amt)
 signal max_holed()
 signal impacted_body_top(amt)
 signal impacted_body_bottom(amt)
@@ -59,6 +60,11 @@ func restore_legs(amt: int):
 func poke_holes(amt: int):
 	holes += amt
 	emit_signal("hole_poked", amt)
+
+
+func slice():
+	slices += 1
+	emit_signal("sliced")
 
 
 func full_heal():

@@ -13,6 +13,7 @@ enum DEATH_TYPES {
 	HYPO,
 	SOUL,
 	HOLES,
+	SLICED,
 	ALIVE,
 }
 
@@ -65,6 +66,13 @@ func temp_change(deg :float, from: Node2D = null, is_side_effect := false) -> vo
 	set_last_hurter(from, is_side_effect)
 
 
+func slice(from: Node2D = null, is_side_effect := false):
+	if not body_module:
+		return
+	
+	body_module.slice()
+
+
 func add_effect(effect: String) -> void:	
 	if not effect in effects:
 		effects[effect] = get_effect_node(effect)	
@@ -73,9 +81,11 @@ func add_effect(effect: String) -> void:
 	else:
 		effects[effect].duration += randf() * 6.0
 
+
 func remove_effect(effect: String) -> void:
 	effects.erase(effect)
 	emit_signal("effect_changed", effect, false)
+
 
 func get_effect_node(effect: String) -> StatusEffect:
 	match effect:
@@ -133,6 +143,16 @@ func _on_ran_out_of_blood():
 	attempt_death()
 
 
+func _on_sliced():
+	if not body_module.is_vital:
+		return
+	
+	if cause_of_death == DEATH_TYPES.ALIVE:
+		cause_of_death = DEATH_TYPES.SLICED
+	
+	attempt_death()
+
+
 func _on_max_holed():
 	if not body_module.is_vital:
 		return
@@ -177,6 +197,7 @@ func add_body() -> FleshBody:
 	var new_module := FleshBody.new()
 	new_module.connect("hole_poked", self, "_on_poked_hole")
 	new_module.connect("max_holed", self, "_on_max_holed")
+	new_module.connect("sliced", self, "_on_sliced")
 	add_child(new_module)
 	body_module = new_module
 	return new_module
