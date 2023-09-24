@@ -19,7 +19,7 @@ var last_seen := Vector2(0, 0)
 
 var noise := OpenSimplexNoise.new()
 
-var health := LegacyFlesh.new()
+var health := Flesh.new()
 
 var first_check := false
 
@@ -28,8 +28,17 @@ var spell :Spell = Items.pick_random_spell(Items.WorldRNG)
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	noise.seed = randi()
-	health.connect("holes_poked", self, "_on_holes_poked")
+	health.add_body()
+	health.add_temperature()
+	health.add_soul()
+	health.body_module.connect("hole_poked", self, "_on_holes_poked")
 	health.connect("was_damaged",self, "_on_damaged")
+	health.connect("died", self, "_on_died")
+	health.temperature_module.max_temperature = 60.0
+	health.temperature_module.min_temperature = -120.0
+	health.body_module.max_holes = 10
+	add_child(health)
+	
 	Map = get_tree().get_nodes_in_group("World")[0]
 	Player = get_tree().get_nodes_in_group("Player")[0]
 	if Player.position.distance_to(position) < 500:
@@ -47,17 +56,9 @@ func _physics_process(delta):
 		first_check = true
 	$RayCast2D.cast_to = (Player.position - position).normalized()*300
 	var primordial_termor := Vector2(noise.get_noise_2d(position.x, OS.get_ticks_msec()/300.0), noise.get_noise_2d(position.y, OS.get_ticks_msec()/300.0))*30
-	if (health.temperature > 45.0 and health.temperature <= 60.0) or health.soul < 0.5:
+	if (health.temperature_module and health.temperature_module.temperature > 45.0 and health.temperature_module.temperature <= 60.0) or (health.soul_module and health.soul_module.amount < 0.5):
 		primordial_termor = Vector2(noise.get_noise_2d(position.x, OS.get_ticks_msec()/3.0), noise.get_noise_2d(position.y, OS.get_ticks_msec()/3.0))*30
-	# Death
-	if health.temperature > 60.0 or health.soul <= 0.0 or health.poked_holes > 10 or health.temperature < -120.0:
-		if health.poked_holes > 3 or health.temperature > 60.0:
-			var n:Area2D = preload("res://Particles/Explosion.tscn").instance()
-			n.position = position
-			get_parent().add_child(n)
-		if randf() < 0.1:
-			Map.summon_spell(spell, position, speed)
-		queue_free()
+		
 	match state:
 		STATES.IDLE:
 			$Aim.visible = false
@@ -147,11 +148,12 @@ func _physics_process(delta):
 
 	speed = move_and_slide(speed)
 	# If the soul is unstable, the entity jitters
-	if randf() < (health.needed_soul-health.soul)/15.0:
-		var n := preload("res://Particles/Soul.tscn").instance()
-		n.position = position
-		get_parent().add_child(n)
-		move_and_collide(Vector2(-1 + randf() * 2, -1 +  randf()  * 2)  * ((1.0  - health.needed_soul / 10.0)) * 5.0)
+	if health.soul_module:
+		if randf() < (health.soul_module.maximum-health.soul_module.amount)/15.0:
+			var n := preload("res://Particles/Soul.tscn").instance()
+			n.position = position
+			get_parent().add_child(n)
+			move_and_collide(Vector2(-1 + randf() * 2, -1 +  randf()  * 2)  * ((1.0  - health.soul_module.maximum / 10.0)) * 5.0)
 
 
 func health_object():
@@ -167,7 +169,7 @@ func cast_from():
 
 
 func _on_holes_poked(amount:int) -> void:
-	match health.poked_holes:
+	match health.body_module.holes:
 		0:
 			$Body.texture = preload("res://Sprites/Enemies/SpellMachine/body.png")
 		1:
@@ -194,3 +196,14 @@ func _on_VisibilityEnabler2D_screen_entered() -> void:
 
 func _on_VisibilityEnabler2D_screen_exited() -> void:
 	$RayCast2D.enabled = false
+
+
+func _on_died():
+	if health.cause_of_death == Flesh.DEATH_TYPES.HOLES or health.cause_of_death == Flesh.DEATH_TYPES.HYPER:
+		var n:Area2D = preload("res://Particles/Explosion.tscn").instance()
+		n.position = position
+		get_parent().add_child(n)
+	
+	if randf() < 0.1:
+		Map.summon_spell(spell, position, speed)
+	queue_free()
