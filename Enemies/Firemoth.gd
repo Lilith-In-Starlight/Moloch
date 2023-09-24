@@ -13,14 +13,18 @@ var timer := 0.0
 
 
 func _ready() -> void:
-	health.max_blood = 5.0
-	health.blood = 5.0
-	health.needs_blood = true
-	health.blood_substance = "lava"
-	health.death_hypertemperature = 10000000.0
-	health.temp_regulation = 0.1
-	Noise.seed = hash(self)
+	health.add_blood()
+	health.add_body()
+	health.add_soul()
+	health.add_temperature()
+	health.blood_module.maximum = 5.0
+	health.blood_module.amount = 5.0
+	health.blood_module.substance = "lava"
+	health.temperature_module.max_temperature = 10000000.0
+	health.temperature_module.regulation = 0.1
 	health.connect("died", self, "_death")
+	add_child(health)
+	Noise.seed = hash(self)
 
 
 func _physics_process(delta: float) -> void:
@@ -61,7 +65,6 @@ func _physics_process(delta: float) -> void:
 		$Animations.scale.x = -1.5
 	
 	bleed()
-	health.process_health(delta)
 
 
 func looking_at() -> Vector2:
@@ -96,17 +99,19 @@ func _on_animation_finished() -> void:
 
 func bleed() -> void:
 	# If the player is bleeding
-	if health.poked_holes > 0 and health.blood > 0.01:
-		if health.blood_substance == "water" and "onfire" in health.effects:
+	if not health.body_module or not health.blood_module:
+		return
+	
+	if health.body_module.holes > 0 and health.blood_module.amount > 0.01:
+		if health.blood_module.substance == "water" and "onfire" in health.effects:
 			health.effects.erase("onfire")
 		# Emit blood particles 
-		for i in min(health.poked_holes, 12):
+		for i in min(health.body_module.holes, 12):
 			if randf()>0.9:
 				var n :RigidBody2D = preload("res://Particles/Blood.tscn").instance()
-				n.substance = "lava"
 				n.position = position + Vector2(0, 6)
 				n.linear_velocity = Vector2(-200 + randf()*400, -80 + randf()*120)
-				n.substance = health.blood_substance
+				n.substance = health.blood_module.substance
 				get_parent().add_child(n)
 
 
