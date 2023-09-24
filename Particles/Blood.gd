@@ -25,4 +25,5 @@ func _physics_process(delta):
 	if substance == "lava":
 		for i in $Area2D.get_overlapping_bodies():
 			if i.has_method("health_object"):
-				i.health_object().temperature += 10.0
+				if i.health_object().temperature_module:
+					i.health_object().temperature_module.temperature += 10.0
