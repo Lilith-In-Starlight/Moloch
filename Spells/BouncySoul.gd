@@ -26,7 +26,6 @@ func _ready():
 	add_child(hurt_on_collide)
 	
 	movement_manager.connect("collision_happened", hurt_on_collide, "_on_collision_happened")
-	movement_manager.connect("request_movement", $Line2D, "_on_request_movement")
 	
 	var sound_emitter := AudioStreamPlayer2D.new()
 	sound_emitter.stream = preload("res://Sfx/spells/laserfire01.wav")
