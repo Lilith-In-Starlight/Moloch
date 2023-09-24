@@ -131,7 +131,7 @@ func _on_damaged(damage_type:String) -> void:
 	Items.damage_visuals(self, $DamageTimer, damage_type)
 
 
-func _on_hole_poked() -> void:
+func _on_hole_poked(amt: float) -> void:
 	Map.play_sound(preload("res://Sfx/pierced_flesh/piercing-1a.wav"), position, 1.0, 0.8+randf()*0.4)
 
 
