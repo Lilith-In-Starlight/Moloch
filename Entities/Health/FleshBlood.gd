@@ -30,3 +30,19 @@ func _process(delta: float) -> void:
 		if not ran_out:
 			ran_out = true
 			emit_signal("ran_out_of_blood")
+
+
+func get_as_dict() -> Dictionary:
+	var dict := {}
+	dict["amount"] = amount
+	dict["maximum"] = maximum
+	dict["substance"] = substance
+	dict["ran_out"] = ran_out
+	dict["is_vital"] = is_vital
+	
+	return dict
+
+
+func set_from_dict(dict: Dictionary):
+	for key in dict:
+		set(key, dict[key])

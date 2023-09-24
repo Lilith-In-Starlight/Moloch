@@ -45,14 +45,14 @@ func break_random_legs():
 		brkn_legs = 2
 	var d := min(broken_legs + brkn_legs, legs) - broken_legs
 	if d > 0:
-		emit_signal("broken_leg", d)
+		emit_signal("broken_legs", d)
 		broken_legs += d
 		broken_legs_total += d
 	broken_legs = min(broken_legs + brkn_legs, legs)
 
 
 func restore_legs(amt: int):
-	legs += amt
+	broken_legs -= amt
 	emit_signal("restored_legs", amt)
 
 
@@ -83,3 +83,23 @@ func handle_impact(force: Vector2):
 		get_parent().add_effect("confused")
 		emit_signal("impacted_body_top", force.y)
 	
+
+func get_as_dict() -> Dictionary:
+	var dict := {}
+	dict["leg_impact_resistance"] = leg_impact_resistance
+	dict["side_impact_resistance"] = side_impact_resistance
+	dict["legs"] = legs
+	dict["broken_legs"] = broken_legs
+	dict["broken_legs_total"] = broken_legs_total
+	dict["max_holes"] = max_holes
+	dict["holes"] = holes
+	dict["slices"] = slices
+	dict["is_vital"] = is_vital
+	dict["is_flammable"] = is_flammable
+	
+	return dict
+
+
+func set_from_dict(dict: Dictionary):
+	for key in dict:
+		set(key, dict[key])

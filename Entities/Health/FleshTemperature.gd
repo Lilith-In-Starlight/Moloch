@@ -57,6 +57,27 @@ func _process(delta: float) -> void:
 		emit_signal("hypothermia_died")
 	
 
+func get_as_dict() -> Dictionary:
+	var dict := {}
+	dict["max_temperature"] = max_temperature
+	dict["min_temperature"] = min_temperature
+	dict["mid_max_temperature"] = mid_max_temperature
+	dict["mid_min_temperature"] = mid_min_temperature
+	dict["normal"] = normal
+	dict["regulation"] = regulation
+	dict["temperature"] = temperature
+	dict["temp_state"] = temp_state
+	dict["previous_temp_state"] = previous_temp_state
+	dict["previous_temp_state"] = is_vital
+	
+	return dict
+
+
+func set_from_dict(dict: Dictionary):
+	for key in dict:
+		set(key, dict[key])
+	
+
 func temp_change(amt: float) -> void:
 	temperature += amt
 	emit_signal("temperature_changed", amt)

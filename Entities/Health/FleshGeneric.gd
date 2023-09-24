@@ -218,7 +218,38 @@ func quantify_best_status() -> float:
 
 
 func get_as_dict() -> Dictionary:
-	return {}
+	var dict := {}
+	if blood_module: dict["blood_module"] = blood_module.get_as_dict()
+	if soul_module: dict["soul_module"] = soul_module.get_as_dict()
+	if body_module: dict["body_module"] = body_module.get_as_dict()
+	if temperature_module: dict["temperature_module"] = temperature_module.get_as_dict()
+	
+	dict["guarantees"] = guarantees
+	dict["chances"] = chances
+	
+	return dict
+
 
 func set_from_dict(dict:Dictionary):
-	pass
+	if "blood_module" in dict:
+		if not blood_module: add_blood()
+		blood_module.set_from_dict(dict["blood_module"])
+		dict.erase("blood_module")
+	
+	if "soul_module" in dict:
+		if not soul_module: add_soul()
+		soul_module.set_from_dict(dict["soul_module"])
+		dict.erase("soul_module")
+	
+	if "body_module" in dict:
+		if not body_module: add_body()
+		body_module.set_from_dict(dict["body_module"])
+		dict.erase("body_module")
+	
+	if "temperature_module" in dict:
+		if not temperature_module: add_temperature()
+		temperature_module.set_from_dict(dict["temperature_module"])
+		dict.erase("temperature_module")
+	
+	for key in dict:
+		set(key, dict[key])

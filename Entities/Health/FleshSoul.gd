@@ -45,3 +45,19 @@ func change_soul(amt: float):
 
 func full_heal():
 	amount = maximum
+
+
+func get_as_dict() -> Dictionary:
+	var dict := {}
+	dict["amount"] = amount
+	dict["maximum"] = maximum
+	dict["soul_state"] = soul_state
+	dict["previous_soul_state"] = previous_soul_state
+	dict["is_vital"] = is_vital
+	
+	return dict
+
+
+func set_from_dict(dict: Dictionary):
+	for key in dict:
+		set(key, dict[key])
