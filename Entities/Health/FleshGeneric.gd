@@ -4,6 +4,8 @@ class_name Flesh
 
 signal died
 signal was_damaged(type)
+signal full_healed
+signal effect_changed(effect, was_added)
 
 enum DEATH_TYPES {
 	BLED,
@@ -67,11 +69,13 @@ func add_effect(effect: String) -> void:
 	if not effect in effects:
 		effects[effect] = get_effect_node(effect)	
 		add_child(effects[effect])
+		emit_signal("effect_changed", effect, true)
 	else:
 		effects[effect].duration += randf() * 6.0
 
 func remove_effect(effect: String) -> void:
 	effects.erase(effect)
+	emit_signal("effect_changed", effect, false)
 
 func get_effect_node(effect: String) -> StatusEffect:
 	match effect:

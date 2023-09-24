@@ -5,9 +5,7 @@ class_name LegacyFlesh
 
 signal hole_poked
 signal holes_poked(amount)
-signal full_healed
 signal bled
-signal effect_changed(effect, added)
 signal broken_leg(amount)
 signal impacted_body_top(force)
 signal impacted_body_side(force)
