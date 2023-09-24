@@ -335,8 +335,11 @@ func reset_player_to_savefile():
 	WorldRNG.state = world_status
 	LootRNG = RandomNumberGenerator.new()
 	LootRNG.state = loot_status
-	new_player_health()
+	new_player_health(false)
+	print(player_health.body_module)
 	player_health.set_from_dict(Config.playthrough_file.get_value("player", "health", player_health.get_as_dict()))
+	print(player_health.body_module)
+	add_child(player_health)
 	
 	cloth_scraps = Config.playthrough_file.get_value("player", "cloth_scraps", 3)
 	player_items = Config.playthrough_file.get_value("player", "items", {})
@@ -436,11 +439,11 @@ func is_level_boss():
 	return level == 4
 
 
-func new_player_health() -> Flesh:
+func new_player_health(add := true) -> Flesh:
 	player_health = Flesh.new()
 	player_health.add_blood()
 	player_health.add_body()
 	player_health.add_temperature()
 	player_health.add_soul()
-	add_child(player_health)
+	if add: add_child(player_health)
 	return player_health
