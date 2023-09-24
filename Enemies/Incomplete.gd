@@ -13,7 +13,7 @@ var noise := OpenSimplexNoise.new()
 var first_check := false
 var last_seen := Vector2(0, 0)
 var search_time := 0.0
-var health := LegacyFlesh.new()
+var health := Flesh.new()
 var wand := Wand.new()
 var Map :Node2D
 
@@ -23,10 +23,17 @@ func _ready():
 	Items.add_child(wand)
 	Map = get_tree().get_nodes_in_group("World")[0]
 	noise.seed = hash(self)
+	
+	health.add_blood()
+	health.add_body()
+	health.add_soul()
+	health.add_temperature()
 	health.connect("died", self, "health_died")
 	health.connect("was_damaged",self, "_on_damaged")
-	health.connect("hole_poked", self, "_on_hole_poked")
-	health.blood = 0.4
+	health.body_module.connect("hole_poked", self, "_on_hole_poked")
+	health.blood_module.amount = 0.4
+	add_child(health)
+	
 	Player = get_tree().get_nodes_in_group("Player")[0]
 	wand.recharge_cooldown = max(wand.recharge_cooldown, 1.5)
 	if Player.position.distance_to(position) < 500:
@@ -37,14 +44,15 @@ func _physics_process(delta):
 	$Fire.visible = health.effects.has("onfire")
 	
 	$WandRenderSprite.render_wand(wand)
-	health.process_health(delta)
-	for i in min(health.poked_holes, 6):
-		if randf()>0.9:
-			var n :RigidBody2D = preload("res://Particles/Blood.tscn").instance()
-			n.position = position + Vector2(0, 6)
-			n.linear_velocity = Vector2(-200 + randf()*400, -80 + randf()*120)
-			n.modulate = ColorN("red")
-			get_parent().add_child(n)
+	
+	if health.body_module:
+		for i in min(health.body_module.holes, 6):
+			if randf()>0.9:
+				var n :RigidBody2D = preload("res://Particles/Blood.tscn").instance()
+				n.position = position + Vector2(0, 6)
+				n.linear_velocity = Vector2(-200 + randf()*400, -80 + randf()*120)
+				n.modulate = ColorN("red")
+				get_parent().add_child(n)
 	var frames := Engine.get_frames_drawn()
 	$Senses.cast_to = speed
 	$Eye.cast_to = (Player.position-position).normalized()*500
@@ -87,11 +95,12 @@ func _physics_process(delta):
 			speed = move_and_slide(speed)
 	
 	# If the soul is unstable, the entity jitters
-	if randf() < (health.needed_soul-health.soul)/15.0:
-		var n := preload("res://Particles/Soul.tscn").instance()
-		n.position = position
-		get_parent().add_child(n)
-		move_and_collide(Vector2(-1 + randf() * 2, -1 +  randf()  * 2)  * ((1.0  - health.needed_soul / 10.0)) * 5.0)
+	if health.soul_module:
+		if randf() < (health.soul_module.maximum-health.soul_module.amount)/15.0:
+			var n := preload("res://Particles/Soul.tscn").instance()
+			n.position = position
+			get_parent().add_child(n)
+			move_and_collide(Vector2(-1 + randf() * 2, -1 +  randf()  * 2)  * ((1.0  - health.soul_module.maximum / 10.0)) * 5.0)
 
 
 func health_object() -> Flesh:
