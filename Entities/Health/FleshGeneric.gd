@@ -188,3 +188,6 @@ func get_as_dict() -> Dictionary:
 
 func set_from_dict(dict:Dictionary):
 	pass
+
+func add_effect(effect: String) -> void:
+	return
