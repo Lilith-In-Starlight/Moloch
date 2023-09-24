@@ -23,7 +23,6 @@ func _ready() -> void:
 	health.temperature_module.max_temperature = 10000000.0
 	health.temperature_module.regulation = 0.1
 	health.connect("died", self, "_death")
-	add_child(health)
 	Noise.seed = hash(self)
 
 
