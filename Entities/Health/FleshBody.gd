@@ -24,6 +24,7 @@ var holes := 0
 var slices := 0
 
 var is_vital := true
+var is_flammable := true
 
 
 func break_legs(amt: int):

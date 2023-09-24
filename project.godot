@@ -24,6 +24,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Entities/CitizenProperties.gd"
 }, {
+"base": "StatusEffect",
+"class": "Confused",
+"language": "GDScript",
+"path": "res://Entities/Health/Effects/Confused.gd"
+}, {
 "base": "Node",
 "class": "DestroyWorld",
 "language": "GDScript",
@@ -134,6 +139,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Entities/MalekaraiMalekha/MalekaraiMalekhaProperties.gd"
 }, {
+"base": "StatusEffect",
+"class": "OnFire",
+"language": "GDScript",
+"path": "res://Entities/Health/Effects/OnFire.gd"
+}, {
 "base": "Node",
 "class": "ParicleMovement",
 "language": "GDScript",
@@ -190,6 +200,11 @@ _global_script_classes=[ {
 "path": "res://Spells/SpellBehaviors/MovementModifiers/Static.gd"
 }, {
 "base": "Node",
+"class": "StatusEffect",
+"language": "GDScript",
+"path": "res://Entities/Health/Effects/StatusEffect.gd"
+}, {
+"base": "Node",
 "class": "Wand",
 "language": "GDScript",
 "path": "res://Classes/WandNode.gd"
@@ -203,6 +218,7 @@ _global_script_class_icons={
 "AreaBehavior": "",
 "Character": "",
 "CitizenProperties": "",
+"Confused": "",
 "DestroyWorld": "",
 "Discord": "",
 "EntityController": "",
@@ -225,6 +241,7 @@ _global_script_class_icons={
 "LegacyFlesh": "",
 "MalekaraiMalekhaController": "",
 "MalekaraiMalekhaProperties": "",
+"OnFire": "",
 "ParicleMovement": "",
 "PlayerCharacter": "",
 "PlayerProperties": "",
@@ -236,6 +253,7 @@ _global_script_class_icons={
 "SpellMod": "",
 "SpellSpawner": "",
 "StaticMovementModifier": "",
+"StatusEffect": "",
 "Wand": "",
 "WorldLevel": ""
 }

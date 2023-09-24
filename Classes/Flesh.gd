@@ -161,7 +161,7 @@ func _instakill_pressed():
 
 
 func add_effect(effect:String):
-	effects.append(effect)
+	effects[effect] = true
 	emit_signal("effect_changed", effect, true)
 	if effect == "onfire":
 		fire_timer += 2 + randf()*10

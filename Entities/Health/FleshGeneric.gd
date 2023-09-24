@@ -29,7 +29,7 @@ var cause_of_death :int = DEATH_TYPES.ALIVE
 var guarantees := 0
 var chances := 0
 
-var effects := []
+var effects := {}
 
 
 func poke_hole(amt := 1, from: Node2D = null, is_side_effect := false):
@@ -61,6 +61,25 @@ func temp_change(deg :float, from: Node2D = null, is_side_effect := false) -> vo
 		emit_signal("was_damaged", "cold")
 	
 	set_last_hurter(from, is_side_effect)
+
+
+func add_effect(effect: String) -> void:	
+	if not effect in effects:
+		effects[effect] = get_effect_node(effect)	
+		add_child(effects[effect])
+	else:
+		effects[effect].duration += randf() * 6.0
+
+func remove_effect(effect: String) -> void:
+	effects.erase(effect)
+
+func get_effect_node(effect: String) -> StatusEffect:
+	match effect:
+		"onfire":
+			return OnFire.new()
+		"confused":
+			return Confused.new()
+		_: return null
 
 
 func full_heal():
@@ -188,6 +207,3 @@ func get_as_dict() -> Dictionary:
 
 func set_from_dict(dict:Dictionary):
 	pass
-
-func add_effect(effect: String) -> void:
-	return
