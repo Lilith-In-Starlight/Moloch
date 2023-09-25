@@ -104,11 +104,11 @@ func _physics_process(delta: float) -> void:
 		if do_bounces or limit_movement_to_collision:
 			movement_delta = raycast.get_collision_point() - get_parent().position - velocity.normalized()
 		
-		emit_signal("collision_happened", raycast.get_collider(), raycast.get_collision_point(), raycast.get_collision_normal())
 		
 		
 		bounces += 1
-		if do_bounces:
+		if do_bounces and raycast.get_collision_normal() != Vector2.ZERO:
+			emit_signal("collision_happened", raycast.get_collider(), raycast.get_collision_point(), raycast.get_collision_normal())
 			velocity = velocity.bounce(raycast.get_collision_normal())
 	else:
 		velocity.y += gravity * delta

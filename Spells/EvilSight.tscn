@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://Spells/EvilSight.gd" type="Script" id=1]
-[ext_resource path="res://Spells/SpellBehaviors/Line2DTrail.gd" type="Script" id=2]
+[ext_resource path="res://Spells/SpellBehaviors/RayTrailSpawner.gd" type="Script" id=2]
 
 [node name="EvilSight" type="Node2D"]
 script = ExtResource( 1 )
@@ -10,3 +10,5 @@ script = ExtResource( 1 )
 width = 5.0
 default_color = Color( 1, 0.313726, 0.313726, 1 )
 script = ExtResource( 2 )
+color = Color( 1, 0.313726, 0.313726, 1 )
+line_width = 5.0

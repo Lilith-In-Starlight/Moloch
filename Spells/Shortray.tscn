@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://Spells/Shortray.gd" type="Script" id=1]
-[ext_resource path="res://Spells/SpellBehaviors/Line2DTrail.gd" type="Script" id=2]
+[ext_resource path="res://Spells/SpellBehaviors/RayTrailSpawner.gd" type="Script" id=2]
 
 [node name="Multiray" type="Node2D"]
 script = ExtResource( 1 )
@@ -10,3 +10,5 @@ script = ExtResource( 1 )
 width = 1.5
 default_color = Color( 0.462745, 1, 0.533333, 1 )
 script = ExtResource( 2 )
+color = Color( 0.462745, 1, 0.533333, 1 )
+line_width = 1.5
