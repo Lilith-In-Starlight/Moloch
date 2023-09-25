@@ -262,5 +262,8 @@ collision_mask = 74
 wait_time = 0.2
 one_shot = true
 
+[node name="Listener2D" type="Listener2D" parent="."]
+current = true
+
 [connection signal="frame_changed" from="Player" to="." method="_on_frame_changed"]
 [connection signal="timeout" from="DamageTimer" to="." method="_on_DamageTimer_timeout"]
