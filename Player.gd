@@ -42,6 +42,13 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	if health.body_module:
+		if health.body_module.broken_legs == 2:
+			$CollisionShape2D.shape.extents = Vector2(10.5, 3)
+			$CollisionShape2D.position.y = 8
+		else:
+			$CollisionShape2D.shape.extents = Vector2(3, 10.5)
+			$CollisionShape2D.position.y = 0
 	flying = properties.count_items("wings") > 0
 	# Apply items
 	
