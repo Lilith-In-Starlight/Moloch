@@ -29,6 +29,10 @@ func _ready():
 		spell = Items.pick_random_modifier()
 	match type:
 		TYPES.ITEM:
+			while item.unique and item.name in Items.items_picked_in_run:
+				item = Items.pick_random_item()
+			if not item.name in Items.items_picked_in_run:
+				Items.items_picked_in_run.append(item.name)
 			wand.queue_free()
 			wand = null
 			$Sprite.modulate = "#96ff9a"

@@ -28,6 +28,7 @@ const EXPLOSION_SOUNDS := [preload("res://Sfx/explosions/explosion01.wav"), prel
 const PIERCED_FLESH_SOUNDS := [preload("res://Sfx/pierced_flesh/piercing-1a.wav"), preload("res://Sfx/pierced_flesh/piercing-1b.wav")]
 
 var player_items := {}
+var items_picked_in_run := []
 
 var player_spells := []
 var player_wands := []
@@ -76,27 +77,27 @@ func _ready():
 	WorldRNG.seed = generator_seed
 	# Register items and spells
 	register_item(2, "heal", "Growth", "Return the flesh to a state previous", preload("res://Sprites/Items/Heal.png"))
-	register_item(1, "ironknees", "Iron Knees", "Fear the ground no more", preload("res://Sprites/Items/IronKnees.png"))
+	register_item(1, "ironknees", "Iron Knees", "Fear the ground no more", preload("res://Sprites/Items/IronKnees.png"), true)
 	register_item(1, "thickblood", "Thick Blood", "Higher amounts of blood", preload("res://Sprites/Items/ThickBlood.png"))
-	register_item(3, "wings", "Butterfly Wings", "Defy gravitational attraction", preload("res://Sprites/Items/Wings.png"))
+	register_item(3, "wings", "Butterfly Wings", "Defy gravitational attraction", preload("res://Sprites/Items/Wings.png"), true)
 	register_item(1, "gasolineblood", "Blood To Nitroglycerine", "Your insides become volatile", preload("res://Sprites/Items/BloodToGasoline.png"))
 	register_item(2, "waterblood", "Blood To Water", "Your insides become water", preload("res://Sprites/Items/BloodToWater.png"))
 	register_item(1, "scraps", "Cloth Scraps", "Can be used to seal your wounds", preload("res://Sprites/Items/Scraps.png"))
 	register_item(1, "soulfulpill", "Soulful Pill", "Heals the mind and soul", preload("res://Sprites/Items/SoulfulPill.png"))
-	register_item(2, "monocle", "Pig's Eye", "Become richer", preload("res://Sprites/Items/PigsMonocle.png"))
-	register_item(2, "bandaid", "Band-aid", "Bleeding has more chances to stop on its own", preload("res://Sprites/Items/Bandaid.png"))
+	register_item(2, "monocle", "Pig's Eye", "Become richer", preload("res://Sprites/Items/PigsMonocle.png"), true)
+	register_item(2, "bandaid", "Band-aid", "Bleeding has more chances to stop on its own", preload("res://Sprites/Items/Bandaid.png"), true)
 	register_item(1, "icecube", "Ice Cube", "Lowers your temperature", preload("res://Sprites/Items/IceCube.png"))
 	register_item(3, "dissipator", "Black Body Radiation", "Emit your body heat as radiation", preload("res://Sprites/Items/DissipateHeat.png"))
 	register_item(2, "heatadapt", "Heat Adaptation", "Adapt to greater temperatures", preload("res://Sprites/Items/SurviveHeat.png"))
-	register_item(2, ".9", "Point Nine", "Displays the current state of the bearer's body", preload("res://Sprites/Items/pointnine.png"))
+	register_item(2, ".9", "Point Nine", "Displays the current state of the bearer's body", preload("res://Sprites/Items/pointnine.png"), true)
 	register_item(1, "gluestone", "Gluestone", "Small entity that tries to act as a shield", preload("res://Sprites/Items/Gluestone.png"))
 #	register_item(3, "egg", "Magic Egg", "If it hatches, it will summon a surprise", preload("res://Sprites/Items/Egg.png"))
 	register_item(3, "shance", "Second Chance", "Provides a chance of being revived", preload("res://Sprites/Items/SecondChance.png"))
 	register_item(4, "suarantee", "Second Guarantee", "Provides a guarantee of being revived", preload("res://Sprites/Items/SecondGuarantee.png"))
 	register_item(2, "legs", "Pocket Leg", "Put these on if you lose the old ones", preload("res://Sprites/Items/PocketLegs.png"))
-	register_item(3, "bloodless", "Bloodless", "Blood Unnecessary", preload("res://Sprites/Items/Bloodless.png"))
+	register_item(3, "bloodless", "Bloodless", "Blood Unnecessary", preload("res://Sprites/Items/Bloodless.png"), true)
 	register_item(4, "soulfulengine", "Soulful Engine", "Passive Soul Generation", preload("res://Sprites/Items/SoulfulEngine.png"))
-	register_item(3, "DE4L", "DE4L W1TH THE D3VIL", "IRRESIT1BLE DE4L$ that will FUCK1NG KILL Y0U", preload("res://Sprites/Items/DEAL.png"))
+	register_item(3, "DE4L", "DE4L W1TH THE D3VIL", "IRRESIT1BLE DE4L$ that will FUCK1NG KILL Y0U", preload("res://Sprites/Items/DEAL.png"), true)
 	
 	register_spell(4, "Fuck You", "Fuck everything in that particular direction", preload("res://Sprites/Spells/FuckYou.png"), preload("res://Spells/FuckYou.tscn"))
 	register_spell(2, "Evil Eye", "Casts a shortlived ray that tears things apart", preload("res://Sprites/Spells/EvilEye.png"), preload("res://Spells/EvilSight.tscn"))
@@ -161,12 +162,13 @@ func _process(delta):
 	
 
 
-func register_item(tier:int, name_id:String, name:String, desc:String, texture:Texture):
+func register_item(tier:int, name_id:String, name:String, desc:String, texture:Texture, unique := false):
 	var new := Item.new()
 	new.name = name
 	new.description = desc
 	new.texture = texture
 	new.id = name_id
+	new.unique = true
 	items[tier][name_id] = new
 	all_items[name_id] = new
 
@@ -280,6 +282,7 @@ func pick_random_modifier(rng:RandomNumberGenerator = LootRNG) -> Spell:
 func reset_player():
 	last_items = []
 	last_spells = []
+	items_picked_in_run.clear()
 	last_pickup = null
 	level = 1
 	var generator_seed := hash(OS.get_time())
