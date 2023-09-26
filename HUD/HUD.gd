@@ -324,7 +324,7 @@ func _process(delta):
 							if Input.is_action_pressed("see_info"):
 								DescriptionBox.visible = true
 								DescriptionBoxName.bbcode_text = "[color=#ffbd00]" + wand.spells[i].name + "[/color]"
-								DescriptionBoxInfo.bbcode_text = wand.spells[i].description
+								DescriptionBoxInfo.bbcode_text = get_spell_description(wand.spells[i])
 							else:
 								ShortDescriptionBox.visible = true
 								ShortDescriptionBox.text =  wand.spells[i].name
@@ -661,3 +661,22 @@ func set_previous_inventory_in_cycle():
 		INVENTORIES.PLAYER_WANDS: return INVENTORIES.PLAYER_SPELLS
 		INVENTORIES.PLAYER_SPELLS: return INVENTORIES.PLAYER_WAND_SPELLS
 		INVENTORIES.PLAYER_WAND_SPELLS: return INVENTORIES.PLAYER_WANDS
+
+
+func get_spell_description(spell: Spell) -> String:
+	var output_text :String = spell.description
+	if spell.soul_cost or spell.blood_cost or spell.temp_cost != 0: output_text += "\n"
+	
+	if spell.soul_cost:
+		output_text += "[img]res://Sprites/Menus/SpellCostIndicators/SoulCost.png[/img]"
+	
+	if spell.blood_cost:
+		output_text += "[img]res://Sprites/Menus/SpellCostIndicators/BloodCost.png[/img]"
+	
+	match spell.temp_cost:
+		1: output_text += "[img]res://Sprites/Menus/SpellCostIndicators/HeatCost.png[/img]"
+		-1: output_text += "[img]res://Sprites/Menus/SpellCostIndicators/ColdCost.png[/img]"
+		
+	return output_text
+
+
