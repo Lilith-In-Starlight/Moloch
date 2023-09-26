@@ -90,6 +90,7 @@ func _ready():
 func _process(delta):
 	$HUD/WandcraftingGuide.visible = Items.visible_spells
 	SpellBagHUD.visible = Items.visible_spells
+	$HUD/EditWandTutorial.visible = !Items.visible_spells
 	var size := 1.0 if Items.visible_spells else 0.5
 	WandSpellHUD.rect_scale = Vector2(size, size)
 	

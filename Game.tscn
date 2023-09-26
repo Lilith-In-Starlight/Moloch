@@ -88,9 +88,6 @@ corner_radius_bottom_right = 12
 corner_radius_bottom_left = 6
 anti_aliasing = false
 
-[sub_resource type="StyleBoxFlat" id=37]
-bg_color = Color( 0, 0, 0, 0.27451 )
-
 [sub_resource type="DynamicFont" id=33]
 font_data = ExtResource( 5 )
 
@@ -110,6 +107,9 @@ font_data = ExtResource( 5 )
 Fonts/fonts/normal = SubResource( 33 )
 Label/fonts/font = SubResource( 36 )
 RichTextLabel/fonts/normal_font = SubResource( 34 )
+
+[sub_resource type="StyleBoxFlat" id=37]
+bg_color = Color( 0, 0, 0, 0.27451 )
 
 [sub_resource type="DynamicFont" id=6]
 size = 12
@@ -438,6 +438,16 @@ align = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="EditWandTutorial" type="Label" parent="HUD/HUD"]
+margin_left = 4.0
+margin_top = 34.0
+margin_right = 74.0
+margin_bottom = 47.0
+rect_scale = Vector2( 0.5, 0.5 )
+size_flags_vertical = 3
+theme = SubResource( 35 )
+text = "T: Edit wand"
 
 [node name="WandcraftingGuide" type="Panel" parent="HUD/HUD"]
 anchor_right = 1.0
