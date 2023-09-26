@@ -121,6 +121,8 @@ func _process(delta):
 	
 	# If the player is dead, show the death screen
 	if player_died:
+		if DeathScreen.modulate.a > 0.99:
+			get_parent().pause_mode = true
 		DeathScreen.modulate.a = move_toward(DeathScreen.modulate.a, 1.0, 0.2)
 		DeathScreenInfo.text = "Run Time: " + end_times + "\n"
 		var death := "Internal organs damaged by impact"
@@ -143,6 +145,7 @@ func _process(delta):
 		if GeneratingScreen.modulate.a > 0.9:
 			Items.reset_player()
 			get_tree().change_scene("res://Game.tscn")
+			get_parent().pause_mode = false
 		
 		# If the player right clicks, generate a new world
 		if Input.is_action_just_released("Interact2"):
