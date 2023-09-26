@@ -25,6 +25,11 @@ var wand_modifiers: Array = []
 
 var iters := 0
 
+var soul_cost := false
+var temp_cost := 0
+var blood_cost := false
+
+
 func is_modifier():
 	return is_wand_mod or is_behavior_mod or is_cast_mod
 
