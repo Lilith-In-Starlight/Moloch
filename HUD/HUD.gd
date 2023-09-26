@@ -88,7 +88,11 @@ func _ready():
 
 
 func _process(delta):
+	$HUD/WandcraftingGuide.visible = Items.visible_spells
 	SpellBagHUD.visible = Items.visible_spells
+	var size := 1.0 if Items.visible_spells else 0.5
+	WandSpellHUD.rect_scale = Vector2(size, size)
+	
 	# Control the tutorial
 	if Items.player_health.body_module:
 		if Items.player_health.body_module.holes > 0 and not Config.tutorial["healed"]:
@@ -210,7 +214,6 @@ func _process(delta):
 		# If a non-empty wand slot is selected
 		if Items.get_player_wand() != null:
 			# Make the spell hud visible
-			WandSpellHUD.visible = Items.visible_spells
 			var wand :Wand = Items.get_player_wand()
 			# If the wand has this slot
 			if i < wand.spell_capacity:
@@ -241,6 +244,7 @@ func _process(delta):
 	# If the mouse is in the wands' area
 	
 	if Items.visible_spells:
+		block_cast = true
 		if mouse.x < 116 and mouse.y > 4 and mouse.y < 20:
 			block_cast = true 
 			for i in 6:

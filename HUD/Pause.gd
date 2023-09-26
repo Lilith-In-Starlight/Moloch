@@ -3,6 +3,7 @@ extends Panel
 
 onready var Console := $"../Console"
 var finished_gen := false
+var ctrl_pressed := false
 
 
 func _ready() -> void:
@@ -23,6 +24,13 @@ func _on_Settings_pressed() -> void:
 	$Options.visible = false
 
 func _input(event: InputEvent) -> void:
+	if Input.is_key_pressed(KEY_TAB):
+		Items.visible_spells = true
+		ctrl_pressed = true
+	elif ctrl_pressed:
+		ctrl_pressed = false
+		Items.visible_spells = false
+	
 	if not Console.has_focus() and event.is_pressed() and finished_gen:
 		if event is InputEventKey:
 			match event.scancode:

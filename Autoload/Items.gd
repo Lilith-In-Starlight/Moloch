@@ -151,7 +151,7 @@ func _ready():
 
 var simplex_noise := OpenSimplexNoise.new()
 
-var visible_spells := true
+var visible_spells := false
 
 func _process(delta):
 	# Fullscreen
