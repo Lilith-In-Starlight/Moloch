@@ -217,6 +217,7 @@ func _process(delta):
 	for i in WandSpellHUD.get_child_count():
 		# If a non-empty wand slot is selected
 		if Items.get_player_wand() != null:
+			WandSpellHUD.visible = true
 			# Make the spell hud visible
 			var wand :Wand = Items.get_player_wand()
 			# If the wand has this slot

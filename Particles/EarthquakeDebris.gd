@@ -19,7 +19,7 @@ func _ready() -> void:
 		if Map.get_tiles_cellv(position_in_map) == 2: continue
 		if randf() > chance:
 			break
-		$TileMap.set_tiles_cellv(i, Map.get_tiles_cellv(position_in_map + i))
+		$TileMap.set_cellv(i, Map.get_tiles_cellv(position_in_map + i))
 		Map.set_tiles_cellv(position_in_map + i, -1)
 		var adj := adjacencies.duplicate()
 		adj.shuffle()

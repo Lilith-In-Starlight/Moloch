@@ -25,7 +25,7 @@ func _physics_process(delta):
 
 func _on_hit_something():
 	var col = spell_behavior.get_collider()
-	if col.has_method("health_object") and not did and col.health_object().soul_module.amount > 0.0:
+	if col.has_method("health_object") and not did and col.health_object().soul_module and col.health_object().soul_module.amount > 0.0:
 		did = true
 		if is_instance_valid(CastInfo.Caster):
 			var shatter := min(col.health_object().soul_module.amount, 0.025)
