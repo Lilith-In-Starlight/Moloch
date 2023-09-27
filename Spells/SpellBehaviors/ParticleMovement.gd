@@ -7,7 +7,9 @@ signal request_movement(delta)
 signal collision_happened(collider, collision_point, collision_normal)
 
 var velocity :Vector2 = Vector2(0,0)
-var raycast : RayCast2D
+var raycast : ShapeCast2D
+
+var collision_normal_cast: RayCast2D
 
 var bounces := 0
 var max_bounces := 1
@@ -31,11 +33,15 @@ func _ready() -> void:
 	spellcastinfo = get_parent().CastInfo
 	if use_wand_speed: velocity = get_initial_velocity()
 	else: velocity = Vector2.RIGHT.rotated(get_initial_velocity().angle()) * velocity.length()
-	raycast = RayCast2D.new()
-#	raycast.shape = shape
+	raycast = ShapeCast2D.new()
+	raycast.shape = shape
 	raycast.collision_mask = 91
 	raycast.enabled = false
 	get_parent().add_child(raycast)
+	collision_normal_cast = RayCast2D.new()
+	collision_normal_cast.enabled = false
+	collision_normal_cast.collision_mask = 91
+	get_parent().add_child(collision_normal_cast)
 	if spellcastinfo.modifiers.has("limited"):
 		velocity = Vector2.ZERO
 	if spellcastinfo.modifiers.has("down_gravity"):
@@ -88,13 +94,13 @@ func _physics_process(delta: float) -> void:
 			else:
 				velocity = Vector2.RIGHT.rotated(8 * PI/8 * sign(traangle)) * velocity.length()
 	
-	raycast.cast_to = velocity * delta
-	raycast.force_raycast_update()
+	raycast.target_position = velocity * delta
+	raycast.force_shapecast_update()
 	
 	if just_cast:
-		while raycast.is_colliding() and raycast.get_collider() == spellcastinfo.Caster and velocity.length() < 200.0:
+		while raycast.is_colliding() and raycast.get_collider(0) == spellcastinfo.Caster and velocity.length() < 200.0:
 			raycast.add_exception(spellcastinfo.Caster)
-			raycast.force_raycast_update()
+			raycast.force_shapecast_update()
 		raycast.clear_exceptions()
 		just_cast = false
 	
@@ -102,14 +108,15 @@ func _physics_process(delta: float) -> void:
 	
 	if raycast.is_colliding():
 		if do_bounces or limit_movement_to_collision:
-			movement_delta = raycast.get_collision_point() - get_parent().position - velocity.normalized()
+			movement_delta = movement_delta * raycast.get_closest_collision_safe_fraction()
 		
 		
 		
 		bounces += 1
-		if do_bounces and raycast.get_collision_normal() != Vector2.ZERO:
-			emit_signal("collision_happened", raycast.get_collider(), raycast.get_collision_point(), raycast.get_collision_normal())
-			velocity = velocity.bounce(raycast.get_collision_normal())
+		var normal := get_collision_normal(movement_delta)
+		if do_bounces and normal != Vector2.ZERO:
+			emit_signal("collision_happened", raycast.get_collider(0), raycast.get_collision_point(0), normal)
+			velocity = velocity.bounce(normal)
 	else:
 		velocity.y += gravity * delta
 	
@@ -121,3 +128,13 @@ func get_initial_velocity() -> Vector2:
 	if is_instance_valid(spellcastinfo.wand):
 		return (spellcastinfo.goal - get_parent().position).normalized() * (spellcastinfo.get_wand_projectile_speed() * 60.0)
 	return (spellcastinfo.goal - get_parent().position).normalized() * 300.0
+
+
+func get_collision_normal(delta: Vector2) -> Vector2:
+	collision_normal_cast.position = delta
+	collision_normal_cast.cast_to = (raycast.get_collision_point(0) - get_parent().position) * 1.5
+	collision_normal_cast.force_raycast_update()
+	if collision_normal_cast.is_colliding():
+		return collision_normal_cast.get_collision_normal()
+	else:
+		return raycast.get_collision_normal(0)
