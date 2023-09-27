@@ -80,14 +80,14 @@ func process_movement(delta:float) -> void:
 					
 					if is_on_floor():
 						state = STATES.GROUND
-						if health.body_module: health.body_module.handle_impact(last_speed_before_collision)
+						if health.body_module: health.body_module.handle_vertical_impact(last_speed_before_collision)
 					
 					if is_on_wall():
 						state = STATES.WALL
-						if health.body_module: health.body_module.handle_impact(last_speed_before_collision)
+						if health.body_module: health.body_module.handle_side_impact(last_speed_before_collision)
 					
 					if is_on_ceiling():
-						if health.body_module: health.body_module.handle_impact(last_speed_before_collision)
+						if health.body_module: health.body_module.handle_vertical_impact(last_speed_before_collision)
 					
 					if not input_pressed("jump") and jump_height_control:
 						speed.y *= 0.5

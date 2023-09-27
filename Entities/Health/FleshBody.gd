@@ -73,7 +73,7 @@ func full_heal():
 	slices = 0
 
 
-func handle_impact(force: Vector2):
+func handle_vertical_impact(force: Vector2):
 	if force.y > leg_impact_resistance:
 		break_random_legs()
 		emit_signal("impacted_body_bottom", force.y)
@@ -81,6 +81,9 @@ func handle_impact(force: Vector2):
 		break_random_legs()
 		poke_holes(1)
 		emit_signal("impacted_body_bottom", force.y)
+	
+
+func handle_side_impact(force: Vector2):
 	if abs(force.x) > side_impact_resistance:
 		poke_holes(1)
 		emit_signal("impacted_body_side", force.x)
@@ -88,7 +91,7 @@ func handle_impact(force: Vector2):
 		poke_holes(1)
 		get_parent().add_effect("confused")
 		emit_signal("impacted_body_top", force.y)
-	
+
 
 func get_as_dict() -> Dictionary:
 	var dict := {}
