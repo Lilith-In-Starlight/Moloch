@@ -32,4 +32,5 @@ func _ready():
 	
 
 func cast_from():
+	print("aaa")
 	return global_position

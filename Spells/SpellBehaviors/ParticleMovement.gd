@@ -43,6 +43,7 @@ func _ready() -> void:
 	collision_normal_cast.enabled = false
 	collision_normal_cast.collision_mask = 91
 	get_parent().add_child(collision_normal_cast)
+	
 	if spellcastinfo.modifiers.has("limited"):
 		velocity = Vector2.ZERO
 	if spellcastinfo.modifiers.has("down_gravity"):
@@ -58,6 +59,13 @@ func _ready() -> void:
 			velocity = (spellcastinfo.goal - get_parent().position).normalized() * 200
 	if spellcastinfo.modifiers.has("orthogonal"):
 		ortho = true
+	if spellcastinfo.modifiers.has("soul_wave_collider"):
+		var spell_spawner := SpellSpawner.new()
+		spell_spawner.spell = preload("res://Spells/SoulWave.tscn")
+		spell_spawner.amount = 1
+		spell_spawner.use_spell_as_caster = true
+		connect("collision_happened", spell_spawner, "_on_collision_happened")
+		get_parent().add_child(spell_spawner)
 			
 	velocity = velocity.rotated(spellcastinfo.angle_offset)
 

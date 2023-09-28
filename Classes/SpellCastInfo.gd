@@ -2,7 +2,7 @@ extends Resource
 
 class_name SpellCastInfo
 
-var Caster :Node2D
+var Caster :Node
 var spell :Spell
 var wand :Wand = null
 var goal :Vector2
