@@ -268,8 +268,8 @@ func _process(delta):
 							var new_text := "[img]res://Sprites/Menus/WandIcon.png[/img] [color=#ffbd00]Wand[/color]"
 							if new_text != DescriptionBoxName.bbcode_text:
 								DescriptionBoxName.bbcode_text = new_text
-							new_text = "[img]res://Sprites/Menus/CastDelayIcon.png[/img] Cast Cooldown: " + str(d_wand.cast_cooldown).pad_decimals(3) + "s"
-							new_text += "\n[img]res://Sprites/Menus/CooldownIcon.png[/img] Recharge Time: " + str(d_wand.recharge_cooldown).pad_decimals(3) + "s"
+							new_text = "[img]res://Sprites/Menus/CastDelayIcon.png[/img] Spell Cooldown: " + str(d_wand.cast_cooldown).pad_decimals(3) + "s"
+							new_text += "\n[img]res://Sprites/Menus/CooldownIcon.png[/img] Usage Cooldown: " + str(d_wand.recharge_cooldown).pad_decimals(3) + "s"
 							new_text += "\nTemp. Resistance: " + str(1.0/d_wand.heat_resistance).pad_decimals(2)
 							new_text += "\nSoul Resistance: " + str(1.0/d_wand.soul_resistance).pad_decimals(2)
 							new_text += "\nProjectile Speed: " + str(d_wand.projectile_speed).pad_decimals(2)

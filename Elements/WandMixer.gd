@@ -4,8 +4,8 @@ const SWAPPING_PARTICLES := preload("res://Particles/SwappingParticles.tscn")
 const SWAPPING_DENIAL := preload("res://Particles/SwappingDenial.tscn")
 
 const PROPERTIES := {
-	0 : "Cast Cooldown",
-	1 : "Recharge Time",
+	0 : "Spell Cooldown",
+	1 : "Usage Cooldown",
 	2 : "Heat Resistance",
 	3 : "Soul Resistance",
 	4 : "Projectile Speed",

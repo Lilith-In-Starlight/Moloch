@@ -168,7 +168,7 @@ func _ready():
 	register_behavior_mod("self_immunity", "Autoimmunity", "Casts will not hurt the caster", preload("res://Sprites/Spells/Modifiers/Autoimmune.png"))
 	register_wand_mod("fast_cast", "Faster Cast", "The following spells will be cast %s times faster", preload("res://Sprites/Spells/Modifiers/Faster.png"), [2, 6])
 	register_wand_mod("slow_cast", "Slower Cast", "The following spells will be cast %s times slower", preload("res://Sprites/Spells/Modifiers/Slower.png"), [2, 6])
-	register_wand_mod("fast_recharge", "Faster Recharge Time", "The wand will recharge %s times faster", preload("res://Sprites/Spells/Modifiers/FastWand.png"), [2, 6])
+	register_wand_mod("fast_recharge", "Faster Usage Cooldown", "The wand will recharge %s times faster", preload("res://Sprites/Spells/Modifiers/FastWand.png"), [2, 6])
 	
 	# If the player is in the tree, set the Player variable of this node to it
 	if not get_tree().get_nodes_in_group("Player").empty():
