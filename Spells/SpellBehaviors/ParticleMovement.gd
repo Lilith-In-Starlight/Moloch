@@ -163,7 +163,6 @@ func get_radius_at_angle(angle: float) -> Vector2:
 		var corner_angle = atan2(shape.extents.y, shape.extents.x)
 		var vecx = cos(quad_angle)
 		var vecy = sin(quad_angle)
-		print(quad_angle, " ", corner_angle)
 		if quad_angle < corner_angle:
 			vecx = shape.extents.x / 2.0
 			vecy *= vecx / cos(quad_angle)
@@ -176,5 +175,4 @@ func get_radius_at_angle(angle: float) -> Vector2:
 		return Vector2.RIGHT.rotated(quad_angle) * Vector2(vecx, vecy).length()
 	
 	else:
-		print("a")
 		return Vector2.RIGHT.rotated(angle) * 100
