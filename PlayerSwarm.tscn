@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=2]
+[gd_scene load_steps=47 format=2]
 
 [ext_resource path="res://Player.gd" type="Script" id=1]
 [ext_resource path="res://Sprites/Player/Player.png" type="Texture" id=2]
@@ -16,11 +16,7 @@
 [ext_resource path="res://Sprites/Player/RunLookback.png" type="Texture" id=14]
 [ext_resource path="res://Sprites/Particles/fire.png" type="Texture" id=15]
 [ext_resource path="res://Entities/InputController.gd" type="Script" id=16]
-[ext_resource path="res://HUDControl.gd" type="Script" id=17]
-[ext_resource path="res://Entities/DiscordStatusUpdate.gd" type="Script" id=18]
-[ext_resource path="res://Entities/PlayerProperties.gd" type="Script" id=19]
-[ext_resource path="res://AchievementGiver.gd" type="Script" id=20]
-[ext_resource path="res://CameraController.gd" type="Script" id=21]
+[ext_resource path="res://Entities/CitizenProperties.gd" type="Script" id=17]
 [ext_resource path="res://WandCaster.gd" type="Script" id=22]
 
 [sub_resource type="RectangleShape2D" id=1]
@@ -197,7 +193,8 @@ animations = [ {
 "speed": 5.0
 } ]
 
-[node name="Player" type="KinematicBody2D" groups=["Player"]]
+[node name="Swarm" type="KinematicBody2D"]
+collision_layer = 0
 collision_mask = 38
 script = ExtResource( 1 )
 controller_path = NodePath("InputController")
@@ -206,20 +203,8 @@ properties_path = NodePath("PlayerProperties")
 [node name="InputController" type="Node" parent="."]
 script = ExtResource( 16 )
 
-[node name="HUDControl" type="Node" parent="."]
-script = ExtResource( 17 )
-
-[node name="DiscordUpdater" type="Node" parent="."]
-script = ExtResource( 18 )
-
 [node name="PlayerProperties" type="Node" parent="."]
-script = ExtResource( 19 )
-
-[node name="AchievementGiver" type="Node" parent="."]
-script = ExtResource( 20 )
-
-[node name="CameraController" type="Node" parent="."]
-script = ExtResource( 21 )
+script = ExtResource( 17 )
 
 [node name="WandCaster" type="Node" parent="."]
 script = ExtResource( 22 )
@@ -261,9 +246,6 @@ collision_mask = 74
 [node name="DamageTimer" type="Timer" parent="."]
 wait_time = 0.2
 one_shot = true
-
-[node name="Listener2D" type="Listener2D" parent="."]
-current = true
 
 [connection signal="frame_changed" from="Player" to="." method="_on_frame_changed"]
 [connection signal="timeout" from="DamageTimer" to="." method="_on_DamageTimer_timeout"]

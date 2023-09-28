@@ -1265,7 +1265,7 @@ anims/Move = SubResource( 28 )
 wait_time = 2.0
 one_shot = true
 
-[node name="Player" parent="." groups=["Player"] instance=ExtResource( 1 )]
+[node name="Player" parent="." instance=ExtResource( 1 )]
 position = Vector2( 256, 200 )
 
 [node name="World" type="Node2D" parent="." groups=["World"]]

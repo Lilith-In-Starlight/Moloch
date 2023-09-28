@@ -91,6 +91,16 @@ func _process(delta: float) -> void:
 		properties.items["scraps"] -= 1
 		properties.cloth_scraps += 1
 	
+	if properties.count_items("swarm") > 0:
+		properties.items["swarm"] -= 1
+		for _i in randi() % 6 + 6:
+			var new_empress = load("res://PlayerSwarm.tscn").instance()
+			get_parent().add_child(new_empress)
+			new_empress.health.set_from_dict(health.get_as_dict())
+			new_empress.position = position + Vector2(-50 + randf() * 100, 0)
+			new_empress._on_generated_world()
+		
+	
 	if health.soul_module:
 		if properties.count_items("soulfulpill") > 0:
 			properties.items["soulfulpill"] -= 1
@@ -161,6 +171,7 @@ func _physics_process(delta: float) -> void:
 			"down": controller.pressed_inputs.up,
 			"jump": controller.pressed_inputs.move_action,
 		}
+	
 	
 	if health.body_module:
 		if controller.just_pressed_inputs.action3 and health.body_module.holes > 0 and properties.cloth_scraps > 0:

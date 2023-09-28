@@ -98,6 +98,7 @@ func _ready():
 	register_item(3, "bloodless", "Bloodless", "Blood Unnecessary", preload("res://Sprites/Items/Bloodless.png"), true)
 	register_item(4, "soulfulengine", "Soulful Engine", "Passive Soul Generation", preload("res://Sprites/Items/SoulfulEngine.png"))
 	register_item(3, "DE4L", "DE4L W1TH THE D3VIL", "IRRESIT1BLE DE4L$ that will FUCK1NG KILL Y0U", preload("res://Sprites/Items/DEAL.png"), true)
+	register_item(3, "swarm", "Swarm Of Empresses", "many1!1!!", preload("res://Sprites/Items/SwarmOfEmpresses.png"), true)
 	
 	var fuck_you := register_spell(4, "Fuck You", "Fuck everything in that particular direction", preload("res://Sprites/Spells/FuckYou.png"), preload("res://Spells/FuckYou.tscn"))
 	fuck_you.temp_cost = 1
