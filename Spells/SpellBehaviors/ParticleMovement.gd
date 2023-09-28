@@ -47,9 +47,9 @@ func _ready() -> void:
 	if spellcastinfo.modifiers.has("limited"):
 		velocity = Vector2.ZERO
 	if spellcastinfo.modifiers.has("down_gravity"):
-		gravity = 500
+		gravity = max(500, velocity.length() * 5)
 	if spellcastinfo.modifiers.has("up_gravity"):
-		gravity = -500
+		gravity = -max(500, velocity.length() * 5)
 	if spellcastinfo.modifiers.has("acceleration"):
 		speed_multiplier *= 1.1
 		if velocity.length() < 0.01:
