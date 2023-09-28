@@ -29,10 +29,6 @@ func _ready():
 		spell = Items.pick_random_modifier()
 	match type:
 		TYPES.ITEM:
-			while item.unique and item.name in Items.items_picked_in_run:
-				item = Items.pick_random_item()
-			if not item.name in Items.items_picked_in_run:
-				Items.items_picked_in_run.append(item.name)
 			wand.queue_free()
 			wand = null
 			$Sprite.modulate = "#96ff9a"
@@ -52,6 +48,12 @@ func _process(_delta):
 				$Sprite.play("open")
 				match type:
 					TYPES.ITEM:
+						while item.unique and item.name in Items.items_picked_in_run:
+							var temporary_rng = RandomNumberGenerator.new()
+							temporary_rng.seed = hash(Items.items_picked_in_run) + Items.LootRNG.seed
+							item = Items.pick_random_item(temporary_rng)
+						if not item.name in Items.items_picked_in_run:
+							Items.items_picked_in_run.append(item.name)
 						Map.summon_item(item, position, Vector2(-120 + randf()*240, -100))
 					TYPES.WAND:
 						Items.add_child(wand)
