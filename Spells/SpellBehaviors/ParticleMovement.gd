@@ -66,6 +66,10 @@ func _ready() -> void:
 		spell_spawner.use_spell_as_caster = true
 		connect("collision_happened", spell_spawner, "_on_collision_happened")
 		get_parent().add_child(spell_spawner)
+	if spellcastinfo.modifiers.has("explosion_collider"):
+		var spell_spawner := ExplodeOnCollide.new()
+		connect("collision_happened", spell_spawner, "_on_collision_happened")
+		get_parent().add_child(spell_spawner)
 			
 	velocity = velocity.rotated(spellcastinfo.angle_offset)
 
