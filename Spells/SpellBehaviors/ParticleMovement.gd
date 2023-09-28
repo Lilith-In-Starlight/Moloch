@@ -130,7 +130,7 @@ func _physics_process(delta: float) -> void:
 		
 		
 		bounces += 1
-		normal = get_collision_normal(movement_delta, coll_delta)
+		normal = get_collision_normal(movement_delta)
 		if do_bounces and normal != Vector2.ZERO:
 			send_collision = true
 			velocity = orthogonalize(velocity).bounce(normal)
@@ -141,7 +141,7 @@ func _physics_process(delta: float) -> void:
 	distance_traveled += orthogonalize(movement_delta).length()
 	
 	if coll_delta != null and send_collision:
-		emit_signal("collision_happened", raycast.get_collider(0), get_parent().global_position + coll_delta, normal)
+		emit_signal("collision_happened", raycast.get_collider(0), get_parent().global_position + coll_delta - movement_delta, normal)
 
 
 func get_initial_velocity() -> Vector2:
@@ -150,8 +150,7 @@ func get_initial_velocity() -> Vector2:
 	return (spellcastinfo.goal - get_parent().position).normalized() * 300.0
 
 
-func get_collision_normal(delta: Vector2, collpoint: Vector2) -> Vector2:
-	collision_normal_cast.position = delta
+func get_collision_normal(delta: Vector2) -> Vector2:
 	collision_normal_cast.cast_to = (raycast.get_collision_point(0) - get_parent().global_position)
 	collision_normal_cast.force_raycast_update()
 	if collision_normal_cast.is_colliding():
