@@ -304,6 +304,6 @@ func _on_soul_state_changed(_previous: int, new_state: int) -> void:
 	elif new_state == 0:
 		send_message("Your soul is alive")
 	elif new_state == 1:
-		send_message("Your soul is resilient")
+		send_message("Your soul is overwhelmed")
 	elif new_state == 2:
-		send_message("Your soul is undying")
+		send_message("Your soul is more real than the world")
