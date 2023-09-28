@@ -99,10 +99,9 @@ func _physics_process(delta: float) -> void:
 	
 	if raycast.is_colliding():
 		var coll_delta = movement_delta * raycast.get_closest_collision_unsafe_fraction() 
-		coll_delta = coll_delta.normalized() * (coll_delta.length() + shape.radius * 2.0)
+		coll_delta = coll_delta.normalized() * (coll_delta.length() + get_radius_at_angle(coll_delta.angle()) * 2.0)
 		if do_bounces or limit_movement_to_collision:
 			movement_delta = movement_delta * raycast.get_closest_collision_safe_fraction()
-		
 		
 		
 		bounces += 1
@@ -149,3 +148,26 @@ func orthogonalize(v: Vector2) -> Vector2:
 		else:
 			vector = Vector2.RIGHT.rotated(8 * PI/8 * sign(traangle)) * vector.length()
 	return vector
+
+
+func get_radius_at_angle(angle: float) -> Vector2:
+	if shape is CircleShape2D:
+		return shape.radius
+	elif shape is RectangleShape2D:
+		var quad_angle = atan(abs(tan(angle)))
+		var corner_angle = atan2(shape.extents.y, shape.extents.x)
+		var vecx = cos(quad_angle)
+		var vecy = sin(quad_angle)
+		if quad_angle < corner_angle:
+			vecx = shape.extents.x / 2.0
+			vecy *= vecx / cos(quad_angle)
+		elif quad_angle > corner_angle:
+			vecy = shape.extents.y / 2.0
+			vecx *= vecy / sin(quad_angle)
+		else:
+			vecx = shape.extents.x / 2.0
+			vecy = shape.extents.y / 2.0
+		return Vector2.RIGHT.rotated(quad_angle) * Vector2(vecx, vecy).length()
+	
+	else:
+		return Vector2.RIGHT.rotated(angle) * 100

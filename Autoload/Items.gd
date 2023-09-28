@@ -68,6 +68,9 @@ var last_spells := []
 var default_circle_radius_six := CircleShape2D.new()
 var default_circle_radius_one := CircleShape2D.new()
 
+var player_hitbox : RectangleShape2D
+
+
 func _ready():
 	default_circle_radius_six.radius = 6.0
 	default_circle_radius_one.radius = 0.2

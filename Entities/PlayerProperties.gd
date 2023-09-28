@@ -6,6 +6,11 @@ class_name PlayerProperties
 var items := Items.player_items # passed by reference
 var cloth_scraps := Items.cloth_scraps setget set_cloth_straps, get_cloth_straps
 
+
+func _ready() -> void:
+	Items.player_hitbox = $"../CollisionShape2D".shape
+
+
 func get_health() -> Flesh:
 	return Items.player_health
 
