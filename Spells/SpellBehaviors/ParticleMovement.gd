@@ -26,6 +26,7 @@ var shape : Shape2D
 var spawned_inside := false
 var just_cast := true
 var use_wand_speed := true
+var ortho := false
 
 func _ready() -> void:
 	if shape == null:
@@ -55,6 +56,8 @@ func _ready() -> void:
 	if spellcastinfo.modifiers.has("impulse"):
 		if velocity.length() < 0.01:
 			velocity = (spellcastinfo.goal - get_parent().position).normalized() * 200
+	if spellcastinfo.modifiers.has("orthogonal"):
+		ortho = true
 			
 	velocity = velocity.rotated(spellcastinfo.angle_offset)
 
@@ -79,22 +82,10 @@ func _physics_process(delta: float) -> void:
 	
 	velocity *= speed_multiplier * delta * 60
 	
-	if spellcastinfo.modifiers.has("orthogonal"):
-		if velocity.length() != 0.0:
-			var angle = abs(velocity.angle())
-			var traangle = velocity.angle()
-			if angle <= PI/8:
-				velocity = Vector2.RIGHT.rotated(0) * velocity.length()
-			elif angle <= 3 * PI/8:
-				velocity = Vector2.RIGHT.rotated(2 * PI/8 * sign(traangle)) * velocity.length()
-			elif angle <= 5 * PI/8:
-				velocity = Vector2.RIGHT.rotated(4 * PI/8 * sign(traangle)) * velocity.length()
-			elif angle <= 7 * PI/8:
-				velocity = Vector2.RIGHT.rotated(6 * PI/8 * sign(traangle)) * velocity.length()
-			else:
-				velocity = Vector2.RIGHT.rotated(8 * PI/8 * sign(traangle)) * velocity.length()
+#	if spellcastinfo.modifiers.has("orthogonal"):
+#		pass
 	
-	raycast.target_position = velocity * delta
+	raycast.target_position = orthogonalize(velocity * delta)
 	raycast.force_shapecast_update()
 	
 	if just_cast:
@@ -118,12 +109,12 @@ func _physics_process(delta: float) -> void:
 		var normal := get_collision_normal(movement_delta, coll_delta)
 		if do_bounces and normal != Vector2.ZERO:
 			emit_signal("collision_happened", raycast.get_collider(0), get_parent().global_position + coll_delta, normal)
-			velocity = velocity.bounce(normal)
+			velocity = orthogonalize(velocity).bounce(normal)
 	else:
 		velocity.y += gravity * delta
 	
-	emit_signal("request_movement", movement_delta)
-	distance_traveled += movement_delta.length()
+	emit_signal("request_movement", orthogonalize(movement_delta))
+	distance_traveled += orthogonalize(movement_delta).length()
 
 
 func get_initial_velocity() -> Vector2:
@@ -140,3 +131,21 @@ func get_collision_normal(delta: Vector2, collpoint: Vector2) -> Vector2:
 		return collision_normal_cast.get_collision_normal()
 	else:
 		return raycast.get_collision_normal(0)
+
+
+func orthogonalize(v: Vector2) -> Vector2:
+	var vector := v
+	if vector.length() != 0.0 and ortho:
+		var angle = abs(vector.angle())
+		var traangle = vector.angle()
+		if angle <= PI/8:
+			vector = Vector2.RIGHT.rotated(0) * vector.length()
+		elif angle <= 3 * PI/8:
+			vector = Vector2.RIGHT.rotated(2 * PI/8 * sign(traangle)) * vector.length()
+		elif angle <= 5 * PI/8:
+			vector = Vector2.RIGHT.rotated(4 * PI/8 * sign(traangle)) * vector.length()
+		elif angle <= 7 * PI/8:
+			vector = Vector2.RIGHT.rotated(6 * PI/8 * sign(traangle)) * vector.length()
+		else:
+			vector = Vector2.RIGHT.rotated(8 * PI/8 * sign(traangle)) * vector.length()
+	return vector
