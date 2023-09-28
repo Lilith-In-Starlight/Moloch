@@ -48,9 +48,9 @@ func _process(_delta):
 				$Sprite.play("open")
 				match type:
 					TYPES.ITEM:
+						var temporary_rng = RandomNumberGenerator.new()
+						temporary_rng.seed = hash(Items.items_picked_in_run) + Items.LootRNG.seed
 						while item.unique and item.name in Items.items_picked_in_run:
-							var temporary_rng = RandomNumberGenerator.new()
-							temporary_rng.seed = hash(Items.items_picked_in_run) + Items.LootRNG.seed
 							item = Items.pick_random_item(temporary_rng)
 						if not item.name in Items.items_picked_in_run:
 							Items.items_picked_in_run.append(item.name)
