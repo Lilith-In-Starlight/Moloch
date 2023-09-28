@@ -12,3 +12,7 @@ func change_temp(deg: float) -> void:
 
 func push(force: Vector2) -> void:
 	get_parent().CastInfo.push_caster(force)
+
+
+func shatter_soul(amt: float) -> void:
+	get_parent().CastInfo.drain_caster_soul(amt)

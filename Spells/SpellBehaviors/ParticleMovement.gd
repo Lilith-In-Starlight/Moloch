@@ -69,6 +69,8 @@ func set_up_to(node: Node2D):
 
 
 func _physics_process(delta: float) -> void:
+	var send_collision := false
+	
 	if max_distance > 0 and distance_traveled + (velocity * delta).length() > max_distance:
 		velocity = velocity.normalized() * (max_distance - distance_traveled) / delta
 	
@@ -82,9 +84,6 @@ func _physics_process(delta: float) -> void:
 	
 	velocity *= speed_multiplier * delta * 60
 	
-#	if spellcastinfo.modifiers.has("orthogonal"):
-#		pass
-	
 	raycast.target_position = orthogonalize(velocity * delta)
 	raycast.force_shapecast_update()
 	
@@ -97,23 +96,29 @@ func _physics_process(delta: float) -> void:
 	
 	var movement_delta := velocity * delta
 	
+	var coll_delta = null
+	var normal = null
+	
 	if raycast.is_colliding():
-		var coll_delta = movement_delta * raycast.get_closest_collision_unsafe_fraction() 
-		coll_delta = coll_delta.normalized() * (coll_delta.length() + get_radius_at_angle(coll_delta.angle()) * 2.0)
+		coll_delta = movement_delta * raycast.get_closest_collision_unsafe_fraction() 
+		coll_delta = coll_delta.normalized() * (coll_delta.length() + get_radius_at_angle(coll_delta.angle()).length() * 2.0)
 		if do_bounces or limit_movement_to_collision:
 			movement_delta = movement_delta * raycast.get_closest_collision_safe_fraction()
 		
 		
 		bounces += 1
-		var normal := get_collision_normal(movement_delta, coll_delta)
+		normal = get_collision_normal(movement_delta, coll_delta)
 		if do_bounces and normal != Vector2.ZERO:
-			emit_signal("collision_happened", raycast.get_collider(0), get_parent().global_position + coll_delta, normal)
+			send_collision = true
 			velocity = orthogonalize(velocity).bounce(normal)
 	else:
 		velocity.y += gravity * delta
 	
 	emit_signal("request_movement", orthogonalize(movement_delta))
 	distance_traveled += orthogonalize(movement_delta).length()
+	
+	if coll_delta != null and send_collision:
+		emit_signal("collision_happened", raycast.get_collider(0), get_parent().global_position + coll_delta, normal)
 
 
 func get_initial_velocity() -> Vector2:
@@ -152,12 +157,13 @@ func orthogonalize(v: Vector2) -> Vector2:
 
 func get_radius_at_angle(angle: float) -> Vector2:
 	if shape is CircleShape2D:
-		return shape.radius
+		return Vector2.RIGHT.rotated(angle)
 	elif shape is RectangleShape2D:
 		var quad_angle = atan(abs(tan(angle)))
 		var corner_angle = atan2(shape.extents.y, shape.extents.x)
 		var vecx = cos(quad_angle)
 		var vecy = sin(quad_angle)
+		print(quad_angle, " ", corner_angle)
 		if quad_angle < corner_angle:
 			vecx = shape.extents.x / 2.0
 			vecy *= vecx / cos(quad_angle)
@@ -170,4 +176,5 @@ func get_radius_at_angle(angle: float) -> Vector2:
 		return Vector2.RIGHT.rotated(quad_angle) * Vector2(vecx, vecy).length()
 	
 	else:
+		print("a")
 		return Vector2.RIGHT.rotated(angle) * 100

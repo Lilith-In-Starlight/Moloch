@@ -75,7 +75,7 @@ func push_caster(push_to_do: Vector2) -> void:
 
 func teleport_caster(relpos:Vector2) -> void:
 	if is_instance_valid(Caster):
-		Caster.position += relpos + (Caster.cast_from() - Caster.position)
+		Caster.position = relpos
 		if Caster.get("speed"):
 			Caster.speed = Vector2(0, 0)
 		elif Caster.get("linear_velocity"):
