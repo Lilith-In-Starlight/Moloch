@@ -8,7 +8,7 @@ onready var WorldMap: WorldLevel = get_tree().get_nodes_in_group("World")[0]
 
 var radius: int = 2
 
-func _on_collision_happened(collider: Node, collision_point: Vector2, _a: Vector2):
+func _on_collision_happened(collider: Node, collision_point: Vector2, _normal: Vector2):
 	destroy_world(collider, collision_point)
 
 

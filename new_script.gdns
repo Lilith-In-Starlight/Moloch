@@ -1,0 +1,8 @@
+[gd_resource type="NativeScript" load_steps=2 format=2]
+
+[sub_resource type="GDNativeLibrary" id=1]
+
+[resource]
+resource_name = "asd"
+class_name = "asd"
+library = SubResource( 1 )
