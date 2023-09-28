@@ -27,6 +27,9 @@ var spawned_inside := false
 var just_cast := true
 var use_wand_speed := true
 var ortho := false
+var collide_with_caster := true
+var max_requests := -1
+var requests := 0
 
 func _ready() -> void:
 	if shape == null:
@@ -46,6 +49,7 @@ func _ready() -> void:
 	
 	if spellcastinfo.modifiers.has("limited"):
 		velocity = Vector2.ZERO
+		max_requests = 1
 	if spellcastinfo.modifiers.has("acceleration"):
 		speed_multiplier *= 1.1
 		if velocity.length() < 0.01:
@@ -68,6 +72,7 @@ func _ready() -> void:
 		get_parent().add_child(spell_spawner)
 	if spellcastinfo.modifiers.has("bouncy"):
 		max_bounces = 16
+		max_requests = -1
 		if spellcastinfo.modifiers.has("up_gravity") or spellcastinfo.modifiers.has("down_gravity") and max_distance > 0:
 			velocity = velocity.normalized() * max_distance * 10
 			max_distance = -1
@@ -83,6 +88,8 @@ func _ready() -> void:
 			gravity = -500
 			
 	velocity = velocity.rotated(spellcastinfo.angle_offset)
+	if !collide_with_caster:
+		raycast.add_exception(spellcastinfo.Caster)
 
 
 func set_up_to(node: Node2D):
@@ -104,6 +111,10 @@ func _physics_process(delta: float) -> void:
 	elif distance_traveled >= max_distance and max_distance > 0:
 		emit_signal("request_death")
 		return
+		
+	elif requests >= max_requests and max_requests > 0:
+		emit_signal("request_death")
+		return
 	
 	velocity *= speed_multiplier * delta * 60
 	
@@ -111,11 +122,14 @@ func _physics_process(delta: float) -> void:
 	raycast.force_shapecast_update()
 	
 	if just_cast:
-		while raycast.is_colliding() and raycast.get_collider(0) == spellcastinfo.Caster and velocity.length() < 500.0:
+		while raycast.is_colliding() and raycast.get_collider(0) == spellcastinfo.Caster:
 			raycast.add_exception(spellcastinfo.Caster)
 			raycast.force_shapecast_update()
 		raycast.clear_exceptions()
 		just_cast = false
+		
+		if !collide_with_caster:
+			raycast.add_exception(spellcastinfo.Caster)
 	
 	var movement_delta := velocity * delta
 	
@@ -137,8 +151,11 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity.y += gravity * delta
 	
+	if orthogonalize(movement_delta).length() < 0.001:
+		requests += 1
 	emit_signal("request_movement", orthogonalize(movement_delta))
 	distance_traveled += orthogonalize(movement_delta).length()
+	
 	
 	if coll_delta != null and send_collision:
 		emit_signal("collision_happened", raycast.get_collider(0), get_parent().global_position + coll_delta - movement_delta, normal)

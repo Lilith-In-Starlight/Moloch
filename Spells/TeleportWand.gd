@@ -20,6 +20,7 @@ func _ready():
 	movement_manager.gravity = 0.0
 	movement_manager.velocity = (CastInfo.goal - position).normalized() * 5000
 	movement_manager.set_up_to(self)
+	movement_manager.collide_with_caster = false
 	add_child(movement_manager)
 	
 	side_effects = HurtCasterModule.new()
@@ -28,7 +29,7 @@ func _ready():
 	side_effects.shatter_soul(0.01)
 	
 	var relocate_caster := RelocateCasterModule.new()
-	movement_manager.connect("collision_happened", relocate_caster, "_on_collision_happened")
+	movement_manager.connect("request_movement", relocate_caster, "_on_request_movement")
 	add_child(relocate_caster)
 	
 	movement_manager.connect("request_movement", $Trail, "_on_request_movement")
