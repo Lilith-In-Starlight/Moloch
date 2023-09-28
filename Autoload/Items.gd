@@ -161,6 +161,7 @@ func _ready():
 	register_behavior_mod("impulse", "Impulse", "The next spell will have an impulse", preload("res://Sprites/Spells/Modifiers/Impulse.png"))
 	register_behavior_mod("soul_wave_collider", "Soul Wave Collisions", "The next spell will summon a Soul Wave on every collision", preload("res://Sprites/Spells/Modifiers/SoulWaveCollider.png"))
 	register_behavior_mod("explosion_collider", "Explosive Collisions", "The next spell will summon a Soul Wave on every collision", preload("res://Sprites/Spells/Modifiers/ExplosionCollider.png"))
+	register_behavior_mod("bouncy", "BouncySpell", "The next spell will be bouncy", preload("res://Sprites/Spells/Modifiers/Bouncy.png"))
 #	register_base_mod("grenade", "Grenade Cast", "Copies spells into a grenade wand\nCopied Spells: %s", preload("res://Sprites/Spells/Modifiers/Grenade.png"), [1, 6])
 #	register_base_mod("landmine", "Landmine Cast", "Copies spells into a landmine wand\nCopied Spells: %s", preload("res://Sprites/Spells/Modifiers/Landmine.png"), [1, 6])
 	register_behavior_mod("limited", "Limited Cast", "When applicable, casts will only have effect at the end of the wand", preload("res://Sprites/Spells/Modifiers/Limited.png"))
