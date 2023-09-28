@@ -20,6 +20,10 @@ func _ready():
 	movement_manager.set_up_to(self)
 	add_child(movement_manager)
 	
+	side_effects = HurtCasterModule.new()
+	side_effects.caster = CastInfo.Caster
+	add_child(side_effects)
+	side_effects.change_temp(40)
 	
 	var hurt_on_collide := HurtOnCollide.new()
 	hurt_on_collide.poke_holes = 1

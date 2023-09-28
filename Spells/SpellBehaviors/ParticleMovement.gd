@@ -98,7 +98,7 @@ func _physics_process(delta: float) -> void:
 	raycast.force_shapecast_update()
 	
 	if just_cast:
-		while raycast.is_colliding() and raycast.get_collider(0) == spellcastinfo.Caster and velocity.length() < 350.0:
+		while raycast.is_colliding() and raycast.get_collider(0) == spellcastinfo.Caster and velocity.length() < 500.0:
 			raycast.add_exception(spellcastinfo.Caster)
 			raycast.force_shapecast_update()
 		raycast.clear_exceptions()

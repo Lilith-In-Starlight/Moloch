@@ -140,7 +140,10 @@ func _ready():
 	
 	register_spell(2, "Soul Wave", "Hurts things in a expanding radius", preload("res://Sprites/Spells/SoulWave.png"), preload("res://Spells/SoulWave.tscn"))
 	register_spell(3, "Internal Rage", "Comes towards you from far away", preload("res://Sprites/Spells/InternalRage.png"), preload("res://Spells/InternalRage.tscn"))
-	register_spell(2, "Rage", "Fireball summoned from anger itself", preload("res://Sprites/Spells/Rage.png"), preload("res://Spells/Rage.tscn"))
+	
+	var rage := register_spell(2, "Rage", "Fireball summoned from anger itself", preload("res://Sprites/Spells/Rage.png"), preload("res://Spells/Rage.tscn"))
+	rage.temp_cost = 1
+	
 	register_spell(5, "Fuck Everything", "Fuck all of you.", preload("res://Sprites/Spells/FuckEverything.png"), preload("res://Spells/FuckEverything.tscn"))
 	register_spell(1, "Plasma Sprinkler", "Balls of heat ejected from a single point", preload("res://Sprites/Spells/PlasmaSprinkler.png"), preload("res://Spells/PlasmaSprinkler.tscn"))
 	register_spell(1, "Short Ray", "A shortlived ray with a chance of piercing", preload("res://Sprites/Spells/Shortray.png"), preload("res://Spells/Shortray.tscn"))
