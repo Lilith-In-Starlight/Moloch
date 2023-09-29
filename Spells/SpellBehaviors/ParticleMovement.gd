@@ -122,14 +122,19 @@ func _physics_process(delta: float) -> void:
 	raycast.force_raycast_update()
 	
 	if just_cast:
+		var distance_decreases := 0
+		var cdist :float = get_parent().position.distance_to(spellcastinfo.Caster.position)
 		while raycast.is_colliding() and raycast.get_collider() == spellcastinfo.Caster:
-			raycast.add_exception(spellcastinfo.Caster)
-			raycast.force_shapecast_update()
-		raycast.clear_exceptions()
+			raycast.force_raycast_update()
+			get_parent().position += raycast.cast_to.normalized()
+			var ndist :float = get_parent().position.distance_to(spellcastinfo.Caster.position)
+			if ndist < cdist:
+				distance_decreases += 1
+			if distance_decreases > 8.0:
+				break
+			cdist = ndist
 		just_cast = false
 		
-		if !collide_with_caster:
-			raycast.add_exception(spellcastinfo.Caster)
 	
 	var movement_delta := velocity * delta
 	
@@ -140,11 +145,11 @@ func _physics_process(delta: float) -> void:
 #		coll_delta = movement_delta * raycast.get_closest_collision_unsafe_fraction() 
 #		coll_delta = coll_delta.normalized() * (coll_delta.length() + get_radius_at_angle(coll_delta.angle()).length() * 2.0)
 		if do_bounces or limit_movement_to_collision:
-			movement_delta = raycast.get_collision_point() - get_parent().position
+			movement_delta = raycast.get_collision_point() - get_parent().position - velocity.normalized() * 1.0
 		
 		
 		bounces += 1
-		if do_bounces and normal != Vector2.ZERO:
+		if do_bounces and raycast.get_collision_normal() != Vector2.ZERO:
 			send_collision = true
 			velocity = orthogonalize(velocity).bounce(raycast.get_collision_normal())
 	else:
