@@ -42,14 +42,13 @@ func break_legs(amt: int):
 
 func break_random_legs():
 	var brkn_legs := 1
-	if randi()%3 == 0:
+	if (randi() % 3) == 0:
 		brkn_legs = 2
 	var d := min(broken_legs + brkn_legs, legs) - broken_legs
 	if d > 0:
 		emit_signal("broken_legs", d)
 		broken_legs += d
 		broken_legs_total += d
-	broken_legs = min(broken_legs + brkn_legs, legs)
 
 
 func restore_legs(amt: int):
