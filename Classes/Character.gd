@@ -199,7 +199,29 @@ func process_movement(delta:float) -> void:
 			var n := preload("res://Particles/Soul.tscn").instance()
 			n.position = position
 			get_parent().add_child(n)
-			move_and_collide(Vector2(-1+randf()*2, -1+randf()*2)*((health.soul_module.maximum-health.soul_module.amount/10.0))*10.0)
+			var dist := Vector2(-1+randf()*2, -1+randf()*2)*((health.soul_module.maximum-health.soul_module.amount/10.0))*10.0
+			move_and_collide(dist)
+			
+			var valid_sounds := [
+				preload("res://Sfx/soul/soul_deficit_1.wav"),
+				preload("res://Sfx/soul/soul_deficit_2.wav"), 
+				preload("res://Sfx/soul/soul_deficit_3.wav")
+			]
+			var valid_big_sounds := [
+				preload("res://Sfx/soul/soul_deficit_big_1.wav"),
+				preload("res://Sfx/soul/soul_deficit_big_2.wav"), 
+				preload("res://Sfx/soul/soul_deficit_big_3.wav")
+			]
+			
+			var sound_emitter := AudioStreamPlayer2D.new()
+			sound_emitter.stream = valid_sounds[randi()%valid_sounds.size()]
+			if dist.length() > 8:
+				sound_emitter.stream = valid_big_sounds[randi()%valid_big_sounds.size()]
+			sound_emitter.position = position
+			sound_emitter.pitch_scale = 0.9 + float()*0.3
+			sound_emitter.volume_db = -20
+			get_parent().add_child(sound_emitter)
+			sound_emitter.play()
 
 	last_speed_before_collision = speed
 	speed = move_and_slide(speed, Vector2(0, -1))
