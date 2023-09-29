@@ -122,17 +122,18 @@ func _physics_process(delta: float) -> void:
 	raycast.force_raycast_update()
 	
 	if just_cast:
-		var distance_decreases := 0
-		var cdist :float = get_parent().position.distance_to(spellcastinfo.Caster.position)
-		while raycast.is_colliding() and raycast.get_collider() == spellcastinfo.Caster:
-			raycast.force_raycast_update()
-			get_parent().position += raycast.cast_to.normalized()
-			var ndist :float = get_parent().position.distance_to(spellcastinfo.Caster.position)
-			if ndist < cdist:
-				distance_decreases += 1
-			if distance_decreases > 8.0:
-				break
-			cdist = ndist
+		if not spellcastinfo.Caster.get("position") == null:
+			var distance_decreases := 0
+			var cdist :float = get_parent().position.distance_to(spellcastinfo.Caster.position)
+			while raycast.is_colliding() and raycast.get_collider() == spellcastinfo.Caster:
+				raycast.force_raycast_update()
+				get_parent().position += raycast.cast_to.normalized()
+				var ndist :float = get_parent().position.distance_to(spellcastinfo.Caster.position)
+				if ndist < cdist:
+					distance_decreases += 1
+				if distance_decreases > 8.0:
+					break
+				cdist = ndist
 		just_cast = false
 		
 	
