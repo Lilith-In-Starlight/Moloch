@@ -209,7 +209,7 @@ func get_json() -> String:
 	
 	for i in spells:
 		if i.is_modifier():
-			string += '["' + i.id + '","' + str(i.level) + '","' + i.description + '"]'
+			string += '["' + i.id + '","' + str(i.level) + '","' + i.description + '"],'
 		else:
 			string += '"' + i.id + '",'
 		
