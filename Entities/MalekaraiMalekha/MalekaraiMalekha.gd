@@ -20,8 +20,8 @@ onready var spell_casting_points := [
 func _ready() -> void:
 	var n := 0
 	properties.health.soul_module.amount = 80.0
-	properties.health.blood_module.amount = 18.0
-	properties.health.blood_module.maximum = 18.0
+	properties.health.blood_module.amount = 10.0
+	properties.health.blood_module.maximum = 10.0
 	properties.health.temperature_module.max_temperature = 10000.0
 	properties.health.body_module.max_holes = 2000.0
 	properties.health.connect("died", self, "_died")
