@@ -50,19 +50,11 @@ func add_wand_to_side():
 	var player_wand :Wand = Items.get_player_wand()
 	match side:
 		-1:
-			if left_wand == null:
-				left_wand = player_wand
-				Items.player_wands.pop_at(Items.selected_wand)
-			elif Items.player_wands.size() < 6:
-				Items.player_wands.append(left_wand)
-				left_wand = null
+			Items.player_wands[Items.selected_wand] = left_wand
+			left_wand = player_wand
 		1:
-			if right_wand == null:
-				right_wand = player_wand
-				Items.player_wands.pop_at(Items.selected_wand)
-			elif Items.player_wands.size() < 6:
-				Items.player_wands.append(right_wand)
-				right_wand = null
+			Items.player_wands[Items.selected_wand] = right_wand
+			left_wand = right_wand
 
 
 func swap_wands_success():

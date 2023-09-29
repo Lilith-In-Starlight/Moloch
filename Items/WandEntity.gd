@@ -15,8 +15,7 @@ func _process(_delta):
 	
 	if Player.position.distance_to(position) < 50:
 		if Input.is_action_just_pressed("pickup_item"):
-			if Items.player_wands.size() < 6:
-				Items.player_wands.append(wand)
+			if Items.append_player_wand(wand):
 				if not Items.get_children().has(wand):
 					var err = wand.connect("casting_spell", get_tree().get_nodes_in_group("GameNode")[0], "_on_casting_spell")
 					Items.add_child(wand)

@@ -102,10 +102,10 @@ func _input(event: InputEvent) -> void:
 									if parse_result.error != OK:
 										print(parse_result.error_string)
 									else:
-										if Items.player_wands.size() < 6:
+										if Items.player_wands.find(null) != -1:
 											var new_wand := Wand.new()
 											Items.add_child(new_wand)
-											Items.player_wands.append(new_wand)
+											Items.append_player_wand(new_wand)
 											var tags :Dictionary = parse_result.result
 											new_wand.set_from_dict(tags)
 										else:

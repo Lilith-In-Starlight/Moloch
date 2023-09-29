@@ -194,16 +194,7 @@ func _process(delta):
 	
 	# Show the wands the player is carrying
 	for i in 6:
-		if i < Items.player_wands.size():
-			WandHUD.get_child(i).render_wand(Items.player_wands[i], i == Items.selected_wand)
-		else: 
-			WandHUD.get_child(i).render_wand(null, false)
-	for i in CompanionWandHUD.get_child_count():
-		if Items.companions.size() > i:
-			CompanionWandHUD.get_child(i).render_wand(Items.companions[i][1])
-			CompanionWandHUD.get_child(i).visible = true
-		else:
-			CompanionWandHUD.get_child(i).visible = false
+		WandHUD.get_child(i).render_wand(Items.player_wands[i], i == Items.selected_wand)
 			
 	
 	# Show the spells the player is carrying
@@ -260,7 +251,7 @@ func _process(delta):
 					clicked_inventory = INVENTORIES.PLAYER_WANDS
 					clicked_slot = i
 					# If the slot isn't empty
-					if i < Items.player_wands.size():
+					if Items.player_wands[i] != null:
 						var d_wand :Wand = Items.player_wands[i]
 						# Which information to set
 						if Input.is_action_pressed("see_info"):
@@ -280,32 +271,6 @@ func _process(delta):
 						else:
 							ShortDescriptionBox.visible = true
 							ShortDescriptionBox.bbcode_text = "[img]res://Sprites/Menus/CastDelayIcon.png[/img] " + str(d_wand.cast_cooldown).pad_decimals(2) + "s [img]res://Sprites/Menus/CooldownIcon.png[/img] " + str(d_wand.recharge_cooldown).pad_decimals(2) + "s"
-					break # Stop checking for if it's in a slot, we already did all this stuff
-		
-		# If the mouse is in the companions' wand area
-		# DEPRECATED
-		elif mouse.x > 140 and mouse.y > 4 and mouse.y < 20 and mouse.x < 140 + 20*Items.companions.size():
-			block_cast = true 
-			for i in Items.companions.size():
-				# If a slot is selected
-				if mouse.x >= 140+i*(16+4) and mouse.x < 140+(i+1)*(16+4):
-					# Set the inventory and slot clicked, and don't let the
-					# player cast spells
-					clicked_inventory = INVENTORIES.COMPANIONS
-					clicked_slot = i
-					# If the slot isn't empty
-					if Items.companions[i][1] != null:
-						# Which information to set
-						if Input.is_action_pressed("see_info"):
-							DescriptionBox.visible = true
-							DescriptionBoxName.bbcode_text = "[color=#ffbd00]Wand[/color]"
-							DescriptionBoxInfo.bbcode_text = "Spell Cooldown: " + str(Items.companions[i][1].cast_cooldown).pad_decimals(3)
-							DescriptionBoxInfo.bbcode_text += "\nUsage Cooldown: " + str(Items.companions[i][1].recharge_cooldown).pad_decimals(3)
-							if Items.companions[i][1].shuffle:
-								DescriptionBoxInfo.bbcode_text += "\nShuffle"
-						else:
-							ShortDescriptionBox.visible = true
-							ShortDescriptionBox.bbcode_text =  str(Items.companions[i][1].cast_cooldown).pad_decimals(2) + "/" + str(Items.companions[i][1].recharge_cooldown).pad_decimals(2)
 					break # Stop checking for if it's in a slot, we already did all this stuff
 		
 		# If the mouse is in the wands' spells area and is holding a wand
@@ -549,10 +514,6 @@ func click_inventory_slot(clicked_inventory: int, slot: int):
 		INVENTORIES.PLAYER_WANDS:
 			clicked_array = Items.player_wands
 			clicked_array_type = "wand"
-			if slot <= Items.selected_wand:
-				Items.selected_wand -= 1
-			if slot < 0:
-				Items.selected_wand = 0
 			
 			handle_click_on_inventory(slot, clicked_array, clicked_array_max, clicked_array_type)
 		
@@ -595,44 +556,31 @@ func controller_select_inventory():
 		INVENTORIES.PLAYER_WANDS:
 			clicked_array = Items.player_wands
 			clicked_array_type = "wand"
-			if Input.is_action_just_pressed("select_inventory_2") and Items.player_wands.size() < 6 and mouse_wand != null:
-				Items.player_wands.append(mouse_wand)
-				mouse_wand = null
-				remove_null_values_from_array(clicked_array)
-			else:
-				if slot_selected_by_controller <= Items.selected_wand:
-					Items.selected_wand -= 1
-				if slot_selected_by_controller < 0:
-					Items.selected_wand = 0
-				handle_click_on_inventory(slot_selected_by_controller, clicked_array, clicked_array_max, clicked_array_type)
-				
-			
-		INVENTORIES.PLAYER_COMPANIONS:
-			clicked_array = Items.companions[slot_selected_by_controller][1]
-			clicked_array_type = "wand"
-			
 			handle_click_on_inventory(slot_selected_by_controller, clicked_array, clicked_array_max, clicked_array_type)
+				
 
 
 func handle_click_on_inventory(slot: int, clicked_array: Array, clicked_array_max: int, clicked_array_type: String):
-	if slot < clicked_array.size():
+	if slot < clicked_array.size() and clicked_array_type != "wand":
 		var k = clicked_array[slot]
 		
 		if k is Spell:
 			clicked_array[slot] = mouse_spell
 			mouse_spell = k
+			remove_null_values_from_array(clicked_array)
 		elif k is Wand:
 			clicked_array[slot] = mouse_wand
 			mouse_wand = k
 		
+		
 	elif slot <= clicked_array_max and clicked_array_type == "spell":
 		clicked_array.append(mouse_spell)
 		mouse_spell = null
+		remove_null_values_from_array(clicked_array)
 	elif slot <= clicked_array_max and clicked_array_type == "wand":
-		clicked_array.append(mouse_wand)
-		mouse_wand = null
-	
-	remove_null_values_from_array(clicked_array)
+		var k = clicked_array[slot]
+		clicked_array[slot] = mouse_wand
+		mouse_wand = k
 
 
 func remove_null_values_from_array(clicked_array):

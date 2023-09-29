@@ -4,7 +4,7 @@ extends Node
 onready var controller := $"../InputController"
 
 func _process(delta: float) -> void:
-	if not Config.last_input_was_controller and not Items.player_wands.empty():
+	if not Config.last_input_was_controller:
 		if Input.is_action_just_released("scrollup"):
 			Items.selected_wand -= 1
 			if Items.selected_wand < 0:

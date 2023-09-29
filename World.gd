@@ -60,7 +60,10 @@ func ready():
 	var wands_array := []
 	
 	for i in Items.player_wands:
-		wands_array.append(i.get_json())
+		if i != null:
+			wands_array.append(i.get_json())
+		else:
+			wands_array.append("null")
 		
 	Config.playthrough_file.set_value("player", "spells", spells_array)
 	Config.playthrough_file.set_value("player", "wands", wands_array)

@@ -13,6 +13,7 @@ func _ready() -> void:
 	
 	
 	for i in Items.player_wands:
+		if i == null: continue
 		i.connect("casting_spell", self, "_on_casting_spell")
 	
 
@@ -59,7 +60,7 @@ func _process(delta: float) -> void:
 	did = true
 	if Items.selected_wand >= Items.player_wands.size():
 		Items.selected_wand = Items.player_wands.size() - 1
-	if not Items.player_wands.empty() and Items.selected_wand < 0:
+	if Items.selected_wand < 0:
 		Items.selected_wand = 0
 	
 	var player_tile :Vector2 = $World.get_round_point_to_tile($Player.position.snapped(Vector2(8, 8)) / 8)

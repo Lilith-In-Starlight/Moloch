@@ -175,8 +175,8 @@ func _ready():
 		Player = get_tree().get_nodes_in_group("Player")[0]
 	new_player_health()
 	
-	player_wands.append(new_player_wand())
-	player_wands.append(new_player_wand())
+	append_player_wand(new_player_wand())
+	append_player_wand(new_player_wand())
 
 var simplex_noise := OpenSimplexNoise.new()
 
@@ -333,11 +333,9 @@ func reset_player():
 	player_spells = []
 	if LootRNG.randf() < 0.2:
 		player_spells.append(pick_random_modifier())
-	for i in player_wands:
-		i.queue_free()
-	player_wands = []
-	player_wands.append(new_player_wand())
-	player_wands.append(new_player_wand())
+	clear_player_wands()
+	append_player_wand(new_player_wand())
+	append_player_wand(new_player_wand())
 	match LootRNG.randi() % 3:
 		0:
 			player_wands[0].spells = [spells[1]["short_ray"]]
@@ -388,17 +386,17 @@ func reset_player_to_savefile():
 		else:
 			player_spells.append(Items.all_spells[spell])
 	
-	for i in player_wands:
-		i.queue_free()
-	player_wands = []
+	clear_player_wands()
 	var loaded_wands = Config.playthrough_file.get_value("player", "wands", [])
 	
-	for i in loaded_wands:
-		var parse_result := JSON.parse(i)
+	for idx in loaded_wands.size():
+		var json_string :String = loaded_wands[idx]
+		if json_string == "null": continue
+		var parse_result := JSON.parse(json_string)
 		if parse_result.error == OK:
 			var new_wand := Wand.new()
 			add_child(new_wand)
-			player_wands.append(new_wand)
+			player_wands[idx] = new_wand
 			var tags :Dictionary = parse_result.result
 			new_wand.set_from_dict(tags)
 
@@ -479,3 +477,28 @@ func new_player_health(add := true) -> Flesh:
 	player_health.add_soul()
 	if add: add_child(player_health)
 	return player_health
+
+
+# Returns whether it was able to append the wand
+func append_player_wand(wand: Wand) -> bool:
+	var null_pos = player_wands.find(null)
+	if null_pos != -1:
+		player_wands[null_pos] = wand
+	return null_pos != -1
+
+
+func clear_player_wands() -> void:
+	while player_wands.size() > 6:
+		player_wands.pop_back()
+	for index in player_wands.size():
+		if player_wands[index] != null:
+			player_wands[index].queue_free()
+			player_wands[index] = null
+	while player_wands.size() < 6:
+		player_wands.append(null)
+
+
+func player_wands_pop_at(idx: int) -> Wand:
+	var return_value = player_wands[idx]
+	player_wands[idx] = null
+	return return_value
