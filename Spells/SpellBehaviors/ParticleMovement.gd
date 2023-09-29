@@ -7,7 +7,7 @@ signal request_movement(delta)
 signal collision_happened(collider, collision_point, collision_normal)
 
 var velocity :Vector2 = Vector2(0,0)
-var raycast : ShapeCast2D
+var raycast : RayCast2D
 
 var collision_normal_cast: RayCast2D
 
@@ -37,15 +37,15 @@ func _ready() -> void:
 	spellcastinfo = get_parent().CastInfo
 	if use_wand_speed: velocity = get_initial_velocity()
 	else: velocity = Vector2.RIGHT.rotated(get_initial_velocity().angle()) * velocity.length()
-	raycast = ShapeCast2D.new()
-	raycast.shape = shape
+	raycast = RayCast2D.new()
+#	raycast.shape = shape
 	raycast.collision_mask = 91
 	raycast.enabled = false
 	get_parent().add_child(raycast)
-	collision_normal_cast = RayCast2D.new()
-	collision_normal_cast.enabled = false
-	collision_normal_cast.collision_mask = 91
-	get_parent().add_child(collision_normal_cast)
+#	collision_normal_cast = RayCast2D.new()
+#	collision_normal_cast.enabled = false
+#	collision_normal_cast.collision_mask = 91
+#	get_parent().add_child(collision_normal_cast)
 	
 	if spellcastinfo.modifiers.has("limited"):
 		velocity = Vector2.ZERO
@@ -118,11 +118,11 @@ func _physics_process(delta: float) -> void:
 	
 	velocity *= speed_multiplier * delta * 60
 	
-	raycast.target_position = orthogonalize(velocity * delta)
-	raycast.force_shapecast_update()
+	raycast.cast_to = orthogonalize(velocity * delta)
+	raycast.force_raycast_update()
 	
 	if just_cast:
-		while raycast.is_colliding() and raycast.get_collider(0) == spellcastinfo.Caster:
+		while raycast.is_colliding() and raycast.get_collider() == spellcastinfo.Caster:
 			raycast.add_exception(spellcastinfo.Caster)
 			raycast.force_shapecast_update()
 		raycast.clear_exceptions()
@@ -133,21 +133,20 @@ func _physics_process(delta: float) -> void:
 	
 	var movement_delta := velocity * delta
 	
-	var coll_delta = null
+#	var coll_delta = null
 	var normal = null
 	
 	if raycast.is_colliding():
-		coll_delta = movement_delta * raycast.get_closest_collision_unsafe_fraction() 
-		coll_delta = coll_delta.normalized() * (coll_delta.length() + get_radius_at_angle(coll_delta.angle()).length() * 2.0)
+#		coll_delta = movement_delta * raycast.get_closest_collision_unsafe_fraction() 
+#		coll_delta = coll_delta.normalized() * (coll_delta.length() + get_radius_at_angle(coll_delta.angle()).length() * 2.0)
 		if do_bounces or limit_movement_to_collision:
-			movement_delta = movement_delta * raycast.get_closest_collision_safe_fraction()
+			movement_delta = raycast.get_collision_point() - get_parent().position
 		
 		
 		bounces += 1
-		normal = get_collision_normal(movement_delta)
 		if do_bounces and normal != Vector2.ZERO:
 			send_collision = true
-			velocity = orthogonalize(velocity).bounce(normal)
+			velocity = orthogonalize(velocity).bounce(raycast.get_collision_normal())
 	else:
 		velocity.y += gravity * delta
 	
@@ -157,8 +156,8 @@ func _physics_process(delta: float) -> void:
 	distance_traveled += orthogonalize(movement_delta).length()
 	
 	
-	if coll_delta != null and send_collision:
-		emit_signal("collision_happened", raycast.get_collider(0), get_parent().global_position + coll_delta - movement_delta, normal)
+	if send_collision:
+		emit_signal("collision_happened", raycast.get_collider(), raycast.get_collision_point(), raycast.get_collision_normal())
 
 
 func get_initial_velocity() -> Vector2:
@@ -167,13 +166,13 @@ func get_initial_velocity() -> Vector2:
 	return (spellcastinfo.goal - get_parent().position).normalized() * 300.0
 
 
-func get_collision_normal(delta: Vector2) -> Vector2:
-	collision_normal_cast.cast_to = (raycast.get_collision_point(0) - get_parent().global_position)
-	collision_normal_cast.force_raycast_update()
-	if collision_normal_cast.is_colliding():
-		return collision_normal_cast.get_collision_normal()
-	else:
-		return raycast.get_collision_normal(0)
+#func get_collision_normal(delta: Vector2) -> Vector2:
+#	collision_normal_cast.cast_to = (raycast.get_collision_point(0) - get_parent().global_position)
+#	collision_normal_cast.force_raycast_update()
+#	if collision_normal_cast.is_colliding():
+#		return collision_normal_cast.get_collision_normal()
+#	else:
+#		return raycast.get_collision_normal(0)
 
 
 func orthogonalize(v: Vector2) -> Vector2:
@@ -194,24 +193,24 @@ func orthogonalize(v: Vector2) -> Vector2:
 	return vector
 
 
-func get_radius_at_angle(angle: float) -> Vector2:
-	if shape is CircleShape2D:
-		return Vector2.RIGHT.rotated(angle)
-	elif shape is RectangleShape2D:
-		var quad_angle = atan(abs(tan(angle)))
-		var corner_angle = atan2(shape.extents.y, shape.extents.x)
-		var vecx = cos(quad_angle)
-		var vecy = sin(quad_angle)
-		if quad_angle < corner_angle:
-			vecx = shape.extents.x / 2.0
-			vecy *= vecx / cos(quad_angle)
-		elif quad_angle > corner_angle:
-			vecy = shape.extents.y / 2.0
-			vecx *= vecy / sin(quad_angle)
-		else:
-			vecx = shape.extents.x / 2.0
-			vecy = shape.extents.y / 2.0
-		return Vector2.RIGHT.rotated(quad_angle) * Vector2(vecx, vecy).length()
-	
-	else:
-		return Vector2.RIGHT.rotated(angle) * 100
+#func get_radius_at_angle(angle: float) -> Vector2:
+#	if shape is CircleShape2D:
+#		return Vector2.RIGHT.rotated(angle)
+#	elif shape is RectangleShape2D:
+#		var quad_angle = atan(abs(tan(angle)))
+#		var corner_angle = atan2(shape.extents.y, shape.extents.x)
+#		var vecx = cos(quad_angle)
+#		var vecy = sin(quad_angle)
+#		if quad_angle < corner_angle:
+#			vecx = shape.extents.x / 2.0
+#			vecy *= vecx / cos(quad_angle)
+#		elif quad_angle > corner_angle:
+#			vecy = shape.extents.y / 2.0
+#			vecx *= vecy / sin(quad_angle)
+#		else:
+#			vecx = shape.extents.x / 2.0
+#			vecy = shape.extents.y / 2.0
+#		return Vector2.RIGHT.rotated(quad_angle) * Vector2(vecx, vecy).length()
+#
+#	else:
+#		return Vector2.RIGHT.rotated(angle) * 100

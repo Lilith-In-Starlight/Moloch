@@ -30,6 +30,7 @@ func _ready():
 	
 	var relocate_caster := RelocateCasterModule.new()
 	movement_manager.connect("request_movement", relocate_caster, "_on_request_movement")
+	movement_manager.connect("collision_happened", relocate_caster, "_on_collision_happened")
 	add_child(relocate_caster)
 	
 	movement_manager.connect("request_movement", $Trail, "_on_request_movement")
