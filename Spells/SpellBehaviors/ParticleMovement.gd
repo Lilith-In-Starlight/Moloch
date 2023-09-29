@@ -122,7 +122,7 @@ func _physics_process(delta: float) -> void:
 	raycast.force_raycast_update()
 	
 	if just_cast:
-		if not spellcastinfo.Caster.get("position") == null:
+		if is_instance_valid(spellcastinfo.Caster) and not spellcastinfo.Caster.get("position") == null:
 			var distance_decreases := 0
 			var cdist :float = get_parent().position.distance_to(spellcastinfo.Caster.position)
 			while raycast.is_colliding() and raycast.get_collider() == spellcastinfo.Caster:
