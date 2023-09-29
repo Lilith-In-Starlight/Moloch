@@ -28,6 +28,7 @@ func _ready():
 
 
 func _physics_process(delta):
+	$AudioStreamPlayer2D.volume_db = lerp($AudioStreamPlayer2D.volume_db, 0.0, 0.5)
 	$Sprite.rotation += 1.0
 	if start_fall and spell_behavior.velocity.y > 20:
 		grav += delta * 60
