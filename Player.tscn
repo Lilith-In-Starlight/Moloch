@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=2]
+[gd_scene load_steps=52 format=2]
 
 [ext_resource path="res://Player.gd" type="Script" id=1]
 [ext_resource path="res://Sprites/Player/Player.png" type="Texture" id=2]
@@ -22,6 +22,7 @@
 [ext_resource path="res://AchievementGiver.gd" type="Script" id=20]
 [ext_resource path="res://CameraController.gd" type="Script" id=21]
 [ext_resource path="res://WandCaster.gd" type="Script" id=22]
+[ext_resource path="res://Entities/SoulJittering.gd" type="Script" id=23]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 3, 10.5 )
@@ -225,6 +226,9 @@ script = ExtResource( 21 )
 script = ExtResource( 22 )
 properties_path = NodePath("../PlayerProperties")
 controller_path = NodePath("../InputController")
+
+[node name="SoulJittering" type="Node" parent="."]
+script = ExtResource( 23 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )

@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Enemies/MagicDrone.gd" type="Script" id=1]
 [ext_resource path="res://Sprites/Enemies/SoulDrone/body.png" type="Texture" id=2]
 [ext_resource path="res://Sprites/Enemies/SoulDrone/eye.png" type="Texture" id=3]
+[ext_resource path="res://Entities/SoulJittering.gd" type="Script" id=4]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 8.0
@@ -32,6 +33,9 @@ texture = ExtResource( 3 )
 
 [node name="DamageTimer" type="Timer" parent="."]
 wait_time = 0.2
+
+[node name="SoulJittering" type="Node" parent="."]
+script = ExtResource( 4 )
 
 [connection signal="screen_entered" from="VisibilityEnabler2D" to="." method="_on_VisibilityEnabler2D_screen_entered"]
 [connection signal="screen_exited" from="VisibilityEnabler2D" to="." method="_on_VisibilityEnabler2D_screen_exited"]

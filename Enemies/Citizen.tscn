@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=2]
+[gd_scene load_steps=45 format=2]
 
 [ext_resource path="res://Sprites/Enemies/Citizen/idle.png" type="Texture" id=1]
 [ext_resource path="res://Player.gd" type="Script" id=2]
@@ -14,6 +14,7 @@
 [ext_resource path="res://Entities/CitizenController.gd" type="Script" id=12]
 [ext_resource path="res://Entities/EnemySetup.gd" type="Script" id=13]
 [ext_resource path="res://Items/WandRenderSprite.tscn" type="PackedScene" id=14]
+[ext_resource path="res://Entities/SoulJittering.gd" type="Script" id=15]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 3, 10 )
@@ -248,6 +249,9 @@ default_color = Color( 0.968627, 0, 1, 0.239216 )
 
 [node name="WandRender" parent="." instance=ExtResource( 14 )]
 position = Vector2( 15, -17 )
+
+[node name="SoulJittering" type="Node" parent="."]
+script = ExtResource( 15 )
 
 [connection signal="entity_died" from="." to="EnemySetup" method="_on_entity_died"]
 [connection signal="screen_entered" from="VisibilityEnabler2D" to="EnemySetup" method="_on_screen_entered"]

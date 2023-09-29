@@ -130,13 +130,6 @@ func _physics_process(delta):
 					position_timer = 0.0
 
 	speed = move_and_slide(speed)
-	# If the soul is unstable, the entity jitters
-	if health.soul_module:
-		if randf() < (health.soul_module.maximum-health.soul_module.amount)/15.0:
-			var n := preload("res://Particles/Soul.tscn").instance()
-			n.position = position
-			get_parent().add_child(n)
-			move_and_collide(Vector2(-1 + randf() * 2, -1 +  randf()  * 2)  * ((1.0  - health.soul_module.maximum / 10.0)) * 5.0)
 
 
 func health_object():

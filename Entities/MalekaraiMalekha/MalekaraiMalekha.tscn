@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Entities/MalekaraiMalekha/MalekaraiMalekha.gd" type="Script" id=1]
 [ext_resource path="res://Sprites/Enemies/SpellCaster/SpellCaster.png" type="Texture" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://Entities/SpellCastingPoint.gd" type="Script" id=5]
 [ext_resource path="res://Items/WandRenderSprite.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Entities/Bleed.gd" type="Script" id=7]
+[ext_resource path="res://Entities/SoulJittering.gd" type="Script" id=8]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 3.5, 11.5 )
@@ -64,5 +65,8 @@ shape = SubResource( 1 )
 texture = ExtResource( 2 )
 centered = false
 offset = Vector2( -3, -11 )
+
+[node name="SoulJittering" type="Node" parent="."]
+script = ExtResource( 8 )
 
 [connection signal="timeout" from="StopAllWounds" to="." method="_on_StopAllWounds_timeout"]

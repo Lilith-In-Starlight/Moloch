@@ -174,6 +174,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Spells/SpellBehaviors/RelocateCaster.gd"
 }, {
+"base": "Node",
+"class": "SoulJittering",
+"language": "GDScript",
+"path": "res://Entities/SoulJittering.gd"
+}, {
 "base": "Reference",
 "class": "Spell",
 "language": "GDScript",
@@ -253,6 +258,7 @@ _global_script_class_icons={
 "ProjectileBehavior": "",
 "RayBehavior": "",
 "RelocateCasterModule": "",
+"SoulJittering": "",
 "Spell": "",
 "SpellCastInfo": "",
 "SpellManager": "",
