@@ -5,6 +5,7 @@ class_name ParicleMovement
 signal request_death()
 signal request_movement(delta)
 signal collision_happened(collider, collision_point, collision_normal)
+signal collision_happened_vel(collider, collision_point, collision_normal, velocity)
 
 var velocity :Vector2 = Vector2(0,0)
 var raycast : RayCast2D
@@ -147,6 +148,7 @@ func _physics_process(delta: float) -> void:
 	
 	if send_collision:
 		emit_signal("collision_happened", raycast.get_collider(), raycast.get_collision_point(), raycast.get_collision_normal())
+		emit_signal("collision_happened_vel", raycast.get_collider(), raycast.get_collision_point(), raycast.get_collision_normal(), velocity)
 
 
 func get_initial_velocity() -> Vector2:

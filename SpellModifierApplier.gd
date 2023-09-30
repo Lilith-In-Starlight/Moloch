@@ -72,5 +72,5 @@ func apply_mods():
 				spell_spawner.spell_object = spell
 				spell_spawner.amount = 1
 				spell_spawner.use_spell_as_caster = true
-				collision_manager.connect("collision_happened", spell_spawner, "_on_collision_happened")
+				collision_manager.connect("collision_happened_vel", spell_spawner, "_on_collision_vel_happened")
 				applied_to.add_child(spell_spawner)

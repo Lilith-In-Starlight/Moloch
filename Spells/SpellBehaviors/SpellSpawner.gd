@@ -45,6 +45,10 @@ func spawn():
 func _on_collision_happened(_collider, _point, normal: Vector2) -> void:
 	current_rotation = normal.angle()
 	spawn()
+	
+func _on_collision_vel_happened(_collider, _point, normal: Vector2, vel: Vector2) -> void:
+	current_rotation = vel.angle()
+	spawn()
 
 
 func cast_from():

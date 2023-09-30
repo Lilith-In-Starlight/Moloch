@@ -154,7 +154,7 @@ func _ready():
 	
 	register_base_mod("multiply", "Multiplicative Cast", "Cast next spell %s times", preload("res://Sprites/Spells/Modifiers/Multiplicative.png"), 1, [2, 6])
 	register_base_mod("unify", "Unifying Cast", "Cast the next %s spells at once", preload("res://Sprites/Spells/Modifiers/UnifyingM.png"), 2, [2, 6])
-	register_base_mod("cast_collider", "Cast Collisions", "Cast the second spell after the first one collides", preload("res://Sprites/Spells/Modifiers/UnifyingM.png"), 2, [2, 6])
+	register_base_mod("cast_collider", "Cast Collisions", "Cast the second spell after the first one collides", preload("res://Sprites/Spells/Modifiers/CastCollider.png"), 2, [2, 6])
 	register_behavior_mod("orthogonal", "Orthogonal Cast", "The next spell only moves orthogonally", preload("res://Sprites/Spells/Modifiers/Orthogonal.png"))
 	register_behavior_mod("acceleration", "Accelerating Projectile", "The next spell accelerates towards where you shoot it", preload("res://Sprites/Spells/Modifiers/Accel.png"))
 	register_behavior_mod("down_gravity", "Graviting", "The next projectile will be pulled by the earth", preload("res://Sprites/Spells/Modifiers/DownGrav.png"))
