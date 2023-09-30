@@ -17,6 +17,7 @@ func _process(_delta):
 		if Input.is_action_just_pressed("pickup_item"):
 			if Items.append_player_wand(wand):
 				if not Items.get_children().has(wand):
-					var err = wand.connect("casting_spell", get_tree().get_nodes_in_group("GameNode")[0], "_on_casting_spell")
+					if not wand.is_connected("casting_spell", get_tree().get_nodes_in_group("GameNode")[0], "_on_casting_spell"):
+						var err = wand.connect("casting_spell", get_tree().get_nodes_in_group("GameNode")[0], "_on_casting_spell")
 					Items.add_child(wand)
 				queue_free()

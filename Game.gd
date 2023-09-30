@@ -18,13 +18,22 @@ func _ready() -> void:
 	
 
 
-func _on_casting_spell(spell: Spell, wand: Wand, caster: Node2D, offset: float = 0.0):
+func _on_casting_spell(info: WandCastingInfo):
+	var spell := info.spell
+	var caster := info.caster
+	var offset := info.offset
+	var wand :Wand = info.wand
+	var position_caster := info.position_caster
+	if position_caster == null:
+		position_caster = caster
+	
 	if !spell.is_cast_mod:
 		if is_instance_valid(caster):
 			var spell_instance = spell.entity.instance()
 			spell_instance.CastInfo.Caster = caster
+			spell_instance.CastInfo.position_caster = position_caster
 			spell_instance.CastInfo.goal_offset = Vector2(-offset + randf()*offset*2, -offset + randf()*offset*2) * 50
-			spell_instance.CastInfo.goal = caster.looking_at()
+			spell_instance.CastInfo.goal = position_caster.looking_at()
 			spell_instance.CastInfo.wand = wand
 			spell_instance.CastInfo.modifiers = spell.behavior_modifiers
 			spell_instance.CastInfo.spell = spell
@@ -46,15 +55,23 @@ func _on_casting_spell(spell: Spell, wand: Wand, caster: Node2D, offset: float =
 				i.behavior_modifiers.erase(j)
 	match spell.id:
 		"multiply":
-			_on_casting_spell(spell.input_contents[0], wand, caster, 0)
-			for i in spell.level - 1:
-				_on_casting_spell(spell.input_contents[0], wand, caster, offset - 2 + randf()*2)
+			var new_info :WandCastingInfo = info.duplicate()
+			new_info.spell = spell.input_contents[0]
+			for i in spell.level:
+				_on_casting_spell(new_info)
+				new_info.offset = info.offset - 2 + randf() * 2
 		"unify":
-			_on_casting_spell(spell.input_contents[0], wand, caster)
-			_on_casting_spell(spell.input_contents[1], wand, caster)
+			var new_info_1 :WandCastingInfo = info.duplicate()
+			var new_info_2 :WandCastingInfo = info.duplicate()
+			new_info_1.spell = spell.input_contents[0]
+			new_info_2.spell = spell.input_contents[1]
+			_on_casting_spell(new_info_1)
+			_on_casting_spell(new_info_2)
 		"cast_collider":
+			var new_info :WandCastingInfo = info.duplicate()
 			spell.input_contents[0].behavior_modifiers.append(["cast_collider", spell.input_contents[1]])
-			_on_casting_spell(spell.input_contents[0], wand, caster)
+			new_info.spell = spell.input_contents[0]
+			_on_casting_spell(new_info)
 
 
 func _process(delta: float) -> void:

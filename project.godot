@@ -224,6 +224,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://Classes/WandNode.gd"
 }, {
+"base": "Reference",
+"class": "WandCastingInfo",
+"language": "GDScript",
+"path": "res://WandCastingState.gd"
+}, {
 "base": "Node2D",
 "class": "WorldLevel",
 "language": "GDScript",
@@ -273,6 +278,7 @@ _global_script_class_icons={
 "StaticMovementModifier": "",
 "StatusEffect": "",
 "Wand": "",
+"WandCastingInfo": "",
 "WorldLevel": ""
 }
 
