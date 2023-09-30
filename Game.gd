@@ -55,7 +55,6 @@ func _on_casting_spell(spell: Spell, wand: Wand, caster: Node2D, offset: float =
 		"cast_collider":
 			spell.input_contents[0].behavior_modifiers.append(["cast_collider", spell.input_contents[1]])
 			_on_casting_spell(spell.input_contents[0], wand, caster)
-			_on_casting_spell(spell.input_contents[1], wand, caster)
 
 
 func _process(delta: float) -> void:

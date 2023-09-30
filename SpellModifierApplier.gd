@@ -67,3 +67,10 @@ func apply_mods():
 					gravity = -velocity.length() * 20
 				else:
 					gravity = -500
+			["cast_collider", var spell]:
+				var spell_spawner := SpellSpawner.new()
+				spell_spawner.spell_object = spell
+				spell_spawner.amount = 1
+				spell_spawner.use_spell_as_caster = true
+				collision_manager.connect("collision_happened", spell_spawner, "_on_collision_happened")
+				applied_to.add_child(spell_spawner)

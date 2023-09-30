@@ -16,10 +16,10 @@ var global_position : Vector2
 
 
 func spawn():
-	if spell_object == null:
+	if spell_object != null:
 		var game_node = get_tree().get_nodes_in_group("GameNode")[0]
 		for i in amount:
-			game_node._on_casting_spell(spell_object, get_parent().CastInfo.wand, get_parent().CastInfo.caster)
+			game_node._on_casting_spell(spell_object, get_parent().CastInfo.wand, get_parent().CastInfo.Caster)
 			if amount > 1:
 				yield(get_tree().create_timer(interval), "timeout")
 	elif spell != null:
@@ -36,7 +36,8 @@ func spawn():
 	emit_signal("finished")
 
 
-func _on_collision_happened(_collider, _point, _normal) -> void:
+func _on_collision_happened(_collider, _point, normal: Vector2) -> void:
+	current_rotation = normal.angle()
 	spawn()
 
 
