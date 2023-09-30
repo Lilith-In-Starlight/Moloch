@@ -16,10 +16,11 @@ func _ready():
 	movement_manager.gravity = 0.0
 	movement_manager.max_bounces = 1
 	movement_manager.velocity = Vector2.ZERO
-	movement_manager.set_up_to(self)
 	add_child(movement_manager)
 	
 	var spell_spawner := SpellSpawner.new()
 	add_child(spell_spawner)
 	spell_spawner.spell = preload("res://Spells/AlveolarProjectile.tscn")
 	spell_spawner.spawn()
+	
+	spell_spawner.connect("finished", self, "queue_free")
