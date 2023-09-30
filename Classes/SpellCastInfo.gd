@@ -2,12 +2,13 @@ extends Resource
 
 class_name SpellCastInfo
 
-var Caster :Node
+var Caster :Node setget set_caster
 var spell :Spell
 var wand :Wand = null
 var goal :Vector2
 var angle_offset :float
 var goal_offset := Vector2(0, 0)
+var position_caster: Node
 
 var spell_offset := Vector2(0, 0)
 
@@ -17,6 +18,11 @@ var modifiers := []
 var last_known_caster_position := Vector2(0, 0)
 var last_known_cast_from := Vector2(0, 0)
 var last_known_looking_at := Vector2(0, 0)
+
+
+func set_caster(value):
+	Caster = value
+	position_caster = value
 
 
 func set_position(CastEntity:Node2D):
@@ -29,20 +35,20 @@ func get_position():
 		if wand.spell_offset != Vector2(0, 0):
 			spell_offset = wand.spell_offset
 	
-	if is_instance_valid(Caster):
-		if Caster.has_method("cast_from"):
-			last_known_cast_from = Caster.cast_from() + spell_offset
+	if is_instance_valid(position_caster):
+		if position_caster.has_method("cast_from"):
+			last_known_cast_from = position_caster.cast_from() + spell_offset
 			return last_known_cast_from
 		
-		last_known_cast_from = Caster.position + spell_offset
-		return Caster.position + spell_offset
+		last_known_cast_from = position_caster.position + spell_offset
+		return position_caster.position + spell_offset
 	
 	return last_known_cast_from
 
 func set_goal():
-	if is_instance_valid(Caster) and Caster.has_method("looking_at"):
-		last_known_looking_at = Caster.looking_at()
-		goal = Caster.looking_at() + goal_offset
+	if is_instance_valid(position_caster) and position_caster.has_method("looking_at"):
+		last_known_looking_at = position_caster.looking_at()
+		goal = position_caster.looking_at() + goal_offset
 
 
 func get_angle(CastEntity:Node2D) -> float:

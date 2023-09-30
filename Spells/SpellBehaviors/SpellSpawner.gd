@@ -18,7 +18,7 @@ func spawn():
 		new_spell.CastInfo = get_parent().CastInfo.duplicate()
 		new_spell.CastInfo.angle_offset = current_rotation
 		if use_spell_as_caster:
-			new_spell.CastInfo.Caster = self
+			new_spell.CastInfo.position_caster = self
 		get_parent().get_parent().add_child(new_spell)
 		current_rotation += rotation
 		if amount > 1:

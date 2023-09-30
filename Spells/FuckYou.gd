@@ -52,7 +52,7 @@ func _on_hit_something():
 		var collider :Node = spell_behavior.get_collider()
 		if collider == CastInfo.Caster and not "self_immunity" in CastInfo.modifiers:
 			collider.health_object().temp_change(5.0, CastInfo.Caster)
-		else:
+		elif collider != CastInfo.Caster:
 			collider.health_object().temp_change(5.0, CastInfo.Caster)
 		
 		if not "self_immunity" in CastInfo.modifiers: CastInfo.heat_caster(1/60.0)

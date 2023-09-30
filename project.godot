@@ -554,6 +554,7 @@ pickup_item={
 [physics]
 
 common/enable_pause_aware_picking=true
+2d/thread_model=0
 
 [rendering]
 
