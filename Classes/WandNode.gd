@@ -155,7 +155,7 @@ func parse_spells():
 			continue
 		
 		if spell_stack.size() < current_spell.inputs: # It's a modifier but its inputs cannot be filled
-			return "Couldn't parse cast"
+			return "Spell expected more inputs"
 		
 		# It's a modifier and its inputs can be filled
 		var modified_spell = current_spell.duplicate()

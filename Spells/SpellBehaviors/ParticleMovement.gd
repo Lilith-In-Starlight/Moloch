@@ -47,45 +47,28 @@ func _ready() -> void:
 #	collision_normal_cast.collision_mask = 91
 #	get_parent().add_child(collision_normal_cast)
 	
-	if spellcastinfo.modifiers.has("limited"):
-		velocity = Vector2.ZERO
-		max_requests = 1
-	if spellcastinfo.modifiers.has("acceleration"):
-		speed_multiplier *= 1.1
-		if velocity.length() < 0.01:
-			velocity = (spellcastinfo.goal - get_parent().position).normalized() * 10
-	if spellcastinfo.modifiers.has("impulse"):
-		if velocity.length() < 0.01:
-			velocity = (spellcastinfo.goal - get_parent().position).normalized() * 200
-	if spellcastinfo.modifiers.has("orthogonal"):
-		ortho = true
-	if spellcastinfo.modifiers.has("soul_wave_collider"):
-		var spell_spawner := SpellSpawner.new()
-		spell_spawner.spell = preload("res://Spells/SoulWave.tscn")
-		spell_spawner.amount = 1
-		spell_spawner.use_spell_as_caster = true
-		connect("collision_happened", spell_spawner, "_on_collision_happened")
-		get_parent().add_child(spell_spawner)
-	if spellcastinfo.modifiers.has("explosion_collider"):
-		var spell_spawner := ExplodeOnCollide.new()
-		connect("collision_happened", spell_spawner, "_on_collision_happened")
-		get_parent().add_child(spell_spawner)
-	if spellcastinfo.modifiers.has("bouncy"):
-		max_bounces = 16
-		max_requests = -1
-		if spellcastinfo.modifiers.has("up_gravity") or spellcastinfo.modifiers.has("down_gravity") and max_distance > 0:
-			velocity = velocity.normalized() * max_distance * 10
-			max_distance = -1
-	if spellcastinfo.modifiers.has("down_gravity"):
-		if velocity.length() > 800:
-			gravity = velocity.length() * 20
-		else:
-			gravity = 500
-	if spellcastinfo.modifiers.has("up_gravity"):
-		if velocity.length() > 800:
-			gravity = -velocity.length() * 20
-		else:
-			gravity = -500
+	var applier :SpellModifierApplier = SpellModifierApplier.new()
+	applier.modifiers = spellcastinfo.modifiers.duplicate()
+	applier.collision_manager = self
+	applier.applied_to = get_parent()
+	applier.spellcastinfo = spellcastinfo
+	applier.max_bounces = max_bounces
+	applier.max_distance = max_distance
+	applier.max_requests = max_requests
+	applier.speed_multiplier = speed_multiplier
+	applier.velocity = velocity
+	applier.gravity = gravity
+	applier.ortho = ortho
+	
+	applier.apply_mods()
+	
+	max_bounces = applier.max_bounces
+	max_distance = applier.max_distance
+	max_requests = applier.max_requests
+	speed_multiplier = applier.speed_multiplier
+	velocity = applier.velocity
+	gravity = applier.gravity
+	ortho = applier.ortho
 			
 	velocity = velocity.rotated(spellcastinfo.angle_offset)
 	if !collide_with_caster:
