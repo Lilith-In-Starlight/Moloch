@@ -10,13 +10,14 @@ var amount := 16
 var rotation := 0.0
 var current_rotation := 0.0
 var use_spell_as_caster := false
+var global_position : Vector2
 
 
 func spawn():
 	for i in amount:
+		global_position = get_parent().global_position
 		var new_spell := spell.instance()
 		new_spell.CastInfo = get_parent().CastInfo.duplicate()
-		new_spell.CastInfo.angle_offset = current_rotation
 		if use_spell_as_caster:
 			new_spell.CastInfo.position_caster = self
 		get_parent().get_parent().add_child(new_spell)
@@ -31,5 +32,8 @@ func _on_collision_happened(_collider, _point, _normal) -> void:
 
 
 func cast_from():
-	return get_parent().global_position
+	return global_position
 
+
+func looking_at() -> Vector2:
+	return Vector2.RIGHT.rotated(current_rotation) * 100 + global_position
