@@ -62,6 +62,7 @@ func _on_casting_spell(info: WandCastingInfo):
 				new_info.offset = info.offset - 2 + randf() * 2
 		"unify":
 			var new_info_1 :WandCastingInfo = info.duplicate()
+			info.unreference()
 			var new_info_2 :WandCastingInfo = info.duplicate()
 			new_info_1.spell = spell.input_contents[0]
 			new_info_2.spell = spell.input_contents[1]
@@ -69,6 +70,7 @@ func _on_casting_spell(info: WandCastingInfo):
 			_on_casting_spell(new_info_2)
 		"cast_collider":
 			var new_info :WandCastingInfo = info.duplicate()
+			info.unreference()
 			spell.input_contents[0].behavior_modifiers.append(["cast_collider", spell.input_contents[1]])
 			new_info.spell = spell.input_contents[0]
 			_on_casting_spell(new_info)
