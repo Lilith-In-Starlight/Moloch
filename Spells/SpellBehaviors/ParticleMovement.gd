@@ -55,10 +55,12 @@ func _ready() -> void:
 	applier.spellcastinfo = spellcastinfo
 	applier.max_bounces = max_bounces
 	applier.max_distance = max_distance
+	applier.limit_movement_to_collision = limit_movement_to_collision
 	applier.max_requests = max_requests
 	applier.speed_multiplier = speed_multiplier
 	applier.velocity = velocity
 	applier.gravity = gravity
+	applier.collision_mask = raycast.collision_mask
 	applier.ortho = ortho
 	
 	applier.apply_mods()
@@ -67,6 +69,8 @@ func _ready() -> void:
 	max_distance = applier.max_distance
 	max_requests = applier.max_requests
 	speed_multiplier = applier.speed_multiplier
+	raycast.collision_mask = applier.collision_mask
+	limit_movement_to_collision = applier.limit_movement_to_collision
 	velocity = applier.velocity
 	gravity = applier.gravity
 	ortho = applier.ortho

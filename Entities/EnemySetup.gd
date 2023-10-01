@@ -6,7 +6,8 @@ onready var player :Character = get_tree().get_nodes_in_group("Player")[0]
 
 func _process(delta: float) -> void:
 	if player.position.distance_to(get_parent().position) < 500:
-		$"../EntityProperties".get_wand().queue_free()
+		if get_node_or_null("../EntityProperties") != null and $"../EntityProperties".has_method("get_wand"):
+			$"../EntityProperties".get_wand().queue_free()
 		get_parent().queue_free()
 	var tcol :KinematicCollision2D = get_parent().move_and_collide(Vector2(0, 0), true, true, true)
 	if tcol != null:

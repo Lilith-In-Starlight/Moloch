@@ -14,8 +14,10 @@ var max_distance: float
 var max_requests :int
 
 var speed_multiplier :float
+var limit_movement_to_collision :float
 var velocity :Vector2
 var gravity :float
+var collision_mask := 91
 
 var ortho: bool
 
@@ -52,7 +54,7 @@ func apply_mods():
 				collision_manager.connect("collision_happened", spell_spawner, "_on_collision_happened")
 				applied_to.add_child(spell_spawner)
 			"bouncy":
-				max_bounces = 16
+				max_bounces = 25
 				max_requests = -1
 				if spellcastinfo.modifiers.has("up_gravity") or spellcastinfo.modifiers.has("down_gravity") and max_distance > 0:
 					velocity = velocity.normalized() * max_distance * 10
@@ -67,6 +69,8 @@ func apply_mods():
 					gravity = -velocity.length() * 20
 				else:
 					gravity = -500
+			"ghost":
+				collision_mask = 25
 			["cast_collider", var spell]:
 				var spell_spawner := SpellSpawner.new()
 				spell_spawner.spell_object = spell
