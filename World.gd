@@ -266,11 +266,12 @@ func add_enemies():
 			enemies.append(add_enemy_with_chance(area, preload("res://Enemies/MagicDrone.tscn"), 0.7))
 			enemies.append(add_enemy_with_chance(area, preload("res://Enemies/SpellMachine.tscn"), 0.3))
 			enemies.append(add_enemy_with_chance(area, preload("res://Enemies/Incomplete.tscn"), 0.1))
+			if Items.level >= 5:
+				enemies.append(add_enemy_with_chance(area, preload("res://Entities/Fireman/Fireman.tscn"), 0.32))
 			if Items.level > 1:
 				enemies.append(add_enemy_with_chance(area, preload("res://Enemies/ArmageddonMachine.tscn"), 0.001))
 			if Items.level > 2 and Items.level < 5:
 				enemies.append(add_enemy_with_chance(area, preload("res://Enemies/Citizen.tscn"), 0.25))
-				enemies.append(add_enemy_with_chance(area, preload("res://Entities/Fireman/Fireman.tscn"), 0.32))
 			if Items.level > 3:
 				enemies.append(add_enemy_with_chance(area, preload("res://Enemies/Firemoth.tscn"), 0.3))
 			if Items.level == 1:
