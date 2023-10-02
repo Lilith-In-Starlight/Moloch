@@ -64,6 +64,11 @@ var advice := [
 	"Take your time, but not enough time for an enemy to shoot you",
 	"It is a mystery",
 	"Look after your soul. You need that.",
+	"Heatstrokes are bad for your health",
+	"Dying is bad for your health",
+	"Bleeding out is bad for your health",
+	"You generally don't want to explode",
+	"There are so many things you will never understand",
 ]
 var player_died := false
 var end_times : String # How long did the run last
@@ -82,7 +87,10 @@ func _ready():
 	Map = get_tree().get_nodes_in_group("World")[0]
 	if Items.level == 1:
 		Items.using_seed = Items.WorldRNG.seed
-	UsefulAdvice.text = advice[randi()%advice.size()] + "\n"
+	if Items.level != 5:
+		UsefulAdvice.text = advice[randi()%advice.size()] + "\n"
+	else:
+		UsefulAdvice.text = "Do not forget that you're here forever\n"
 	UsefulAdvice.text += "Seed: " + str(Items.using_seed)
 	$HUD/Pause/Seed.text = "Seed: " + str(Items.using_seed)
 
