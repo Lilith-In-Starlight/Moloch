@@ -101,6 +101,10 @@ func full_heal():
 		body_module.full_heal()
 	if soul_module:
 		soul_module.full_heal()
+	if blood_module:
+		blood_module.full_heal()
+	if temperature_module:
+		temperature_module.full_heal()
 
 
 func self_terminate():

@@ -81,3 +81,7 @@ func set_from_dict(dict: Dictionary):
 func temp_change(amt: float) -> void:
 	temperature += amt
 	emit_signal("temperature_changed", amt)
+
+
+func full_heal():
+	temperature = normal

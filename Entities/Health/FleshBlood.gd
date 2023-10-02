@@ -46,3 +46,7 @@ func get_as_dict() -> Dictionary:
 func set_from_dict(dict: Dictionary):
 	for key in dict:
 		set(key, dict[key])
+
+
+func full_heal():
+	amount = maximum
