@@ -37,7 +37,7 @@ func _ready() -> void:
 	
 	wand = Wand.new()
 	wand.spells.append(new_mod)
-	wand.spells.append(Items.spells[2]["soul_wave"])
+	wand.spells.append(Items.spells[1]["soul_shatterer"])
 	Items.add_child(wand)
 	wands.append(wand)
 
