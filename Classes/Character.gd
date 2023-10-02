@@ -326,8 +326,13 @@ func animation_info(sprite:AnimatedSprite) -> void:
 func handle_wand_sprite(sprite:Node2D) -> void:
 	sprite.visible = wand != null
 	sprite.render_wand(wand, false)
-	sprite.position += (looking_at.normalized()*22 - sprite.position)/3.0
-	sprite.rotation = lerp_angle(sprite.rotation, looking_at.angle() + PI/4.0, 1/3.0)
+	var goal_angle := looking_at.angle()
+	var goal_distance := 22
+	if looking_at.length() < 22:
+		goal_angle = goal_angle + PI
+		goal_distance = 44
+	sprite.position += (looking_at.normalized()*goal_distance - sprite.position)/3.0
+	sprite.rotation = lerp_angle(sprite.rotation, goal_angle + PI/4.0, 1/3.0)
 
 
 func walking() -> void:
