@@ -254,7 +254,7 @@ func _process(delta):
 					if Items.player_wands[i] != null:
 						var d_wand :Wand = Items.player_wands[i]
 						# Which information to set
-						if Input.is_action_pressed("see_info"):
+						if true:
 							DescriptionBox.visible = true
 							var new_text := "[img]res://Sprites/Menus/WandIcon.png[/img] [color=#ffbd00]Wand[/color]"
 							if new_text != DescriptionBoxName.bbcode_text:
