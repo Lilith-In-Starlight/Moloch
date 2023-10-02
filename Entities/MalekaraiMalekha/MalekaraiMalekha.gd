@@ -31,7 +31,6 @@ func _ready() -> void:
 		n += 1
 
 func _process(delta: float) -> void:
-	print(properties.health.soul_module.amount)
 	match controller.spellcast_mode:
 		controller.WAND_MODES.surround_rotate:
 			if not controller.spin_counter_clockwise: spellcast_rotation += PI/2.0 * delta
