@@ -1,12 +1,12 @@
 extends Control
 
-class MenuOption:
+class MenuOption extends Reference:
 	var option_name := ""
 	var func_ref :FuncRef = null
 	var menu_dest := ""
 	var func_args := []
 
-class MenuSetting:
+class MenuSetting extends Reference:
 	var setting_name := ""
 	var value := 0
 	var enabled := false

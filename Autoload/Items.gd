@@ -311,6 +311,8 @@ func pick_random_modifier(rng:RandomNumberGenerator = LootRNG) -> Spell:
 
 
 func reset_player():
+	for i in get_children():
+		i.queue_free()
 	last_items = []
 	last_spells = []
 	items_picked_in_run.clear()
