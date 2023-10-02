@@ -193,7 +193,7 @@ func process_movement(delta:float) -> void:
 	wall_jump_buffer -= delta
 	last_frame_inputs = inputs.duplicate()
 	
-
+	speed = speed.normalized() * min(speed.length(), 2000)
 	last_speed_before_collision = speed
 	speed = move_and_slide(speed, Vector2(0, -1))
 

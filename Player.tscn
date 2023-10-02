@@ -248,6 +248,7 @@ visible = false
 position = Vector2( 0, -9 )
 scale = Vector2( 0.75, 1 )
 frames = SubResource( 5 )
+frame = 1
 playing = true
 
 [node name="Player" type="AnimatedSprite" parent="."]

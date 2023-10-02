@@ -19,8 +19,8 @@ onready var spell_casting_points := [
 
 func _ready() -> void:
 	var n := 0
-	properties.health.soul_module.amount = 80.0
-	properties.health.blood_module.amount = 10.0
+	properties.health.soul_module.amount = 20.0
+	properties.health.blood_module.amount = 5.0
 	properties.health.blood_module.maximum = 10.0
 	properties.health.temperature_module.max_temperature = 10000.0
 	properties.health.body_module.max_holes = 2000.0
@@ -31,6 +31,7 @@ func _ready() -> void:
 		n += 1
 
 func _process(delta: float) -> void:
+	print(properties.health.soul_module.amount)
 	match controller.spellcast_mode:
 		controller.WAND_MODES.surround_rotate:
 			if not controller.spin_counter_clockwise: spellcast_rotation += PI/2.0 * delta
