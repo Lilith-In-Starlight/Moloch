@@ -468,7 +468,7 @@ func get_player_wand():
 
 
 func is_level_boss():
-	return level == 1
+	return level == 4
 
 
 func new_player_health(add := true) -> Flesh:
