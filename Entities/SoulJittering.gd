@@ -33,7 +33,7 @@ func timeout():
 	if soul_defficiency_percent > 0.99:
 		return
 	
-	timer.wait_time = max(randf() * (soul_defficiency_percent), 0)
+	timer.wait_time = max(randf() * (soul_defficiency_percent), 0.05)
 	var n := preload("res://Particles/Soul.tscn").instance()
 	n.position = get_parent().position
 	get_parent().get_parent().add_child(n)
