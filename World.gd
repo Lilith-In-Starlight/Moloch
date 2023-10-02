@@ -112,6 +112,12 @@ func ready():
 				add_child(new_tile)
 			elif world_tiles[tile_position] == "first_boss_room":
 				new_tile = preload("res://Rooms/BossRoom/BossEntrance.tscn").instance()
+				new_tile.tile_set.tile_set_texture(0, tile_texture)
+				new_tile.position = tile_position * Rooms.tile_size * 8
+				add_child(new_tile)
+			elif world_tiles[tile_position] == "blast_room":
+				new_tile = preload("res://Rooms/BossRoom/BossEnd.tscn").instance()
+				new_tile.tile_set.tile_set_texture(0, tile_texture)
 				new_tile.position = tile_position * Rooms.tile_size * 8
 				add_child(new_tile)
 			elif world_tiles[tile_position] == "boss_climb":
@@ -120,6 +126,22 @@ func ready():
 				add_child(new_tile)
 			elif world_tiles[tile_position] == "boss_arena":
 				new_tile = preload("res://Rooms/BossRoom/BossRoom1.tscn").instance()
+				new_tile.position = tile_position * Rooms.tile_size * 8
+				add_child(new_tile)
+			elif world_tiles[tile_position] == "boss_view":
+				new_tile = preload("res://Rooms/BossRoom/BossViewport.tscn").instance()
+				new_tile.position = tile_position * Rooms.tile_size * 8
+				add_child(new_tile)
+			elif world_tiles[tile_position] == "boss_view_end":
+				new_tile = preload("res://Rooms/BossRoom/BossViewportEnd.tscn").instance()
+				new_tile.position = tile_position * Rooms.tile_size * 8
+				add_child(new_tile)
+			elif world_tiles[tile_position] == "devtiles":
+				new_tile = preload("res://Rooms/BossRoom/DevTiles.tscn").instance()
+				new_tile.position = tile_position * Rooms.tile_size * 8
+				add_child(new_tile)
+			elif world_tiles[tile_position] == "devtilesbtm":
+				new_tile = preload("res://Rooms/BossRoom/DevTilesBottom.tscn").instance()
 				new_tile.position = tile_position * Rooms.tile_size * 8
 				add_child(new_tile)
 		elif world_tiles[tile_position] == -1:
@@ -723,12 +745,15 @@ func generate_boss_world() -> Dictionary:
 	world_tiles[Vector2(0, 0)] = "first_boss_room"
 	world_tiles[Vector2(0, -1)] = "boss_climb"
 	world_tiles[Vector2(0, -2)] = "boss_arena"
-	world_tiles[Vector2(0, -3)] = "last_room"
+	world_tiles[Vector2(0, -3)] = "boss_climb"
+	world_tiles[Vector2(0, -4)] = "boss_view"
+	world_tiles[Vector2(0, -5)] = "boss_view_end"
+	world_tiles[Vector2(0, -6)] = "blast_room"
 	
 	for x in range(min_point.x, max_point.x + 1):
 		for y in range(min_point.y, max_point.y + 1):
 			if Vector2(x, y) in world_tiles: continue
-			world_tiles[Vector2(x, y)] = -1
+			else: world_tiles[Vector2(x, y)] = -1
 	return world_tiles
 
 func are_tiles_connected(start: Vector2, end: Vector2, tilemap: Dictionary) -> bool:

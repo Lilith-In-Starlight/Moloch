@@ -41,12 +41,24 @@ func _process(delta: float) -> void:
 	offset = camera_offset_by_mouse + offset_by_camera_shake * shake_amount * shake_percentage
 	var to := player.position
 	if Items.is_level_boss():
+		var world :WorldLevel = get_tree().get_nodes_in_group("World")[0]
+		if player.position.y < -268 - 268 - 268 - 268 + 128:
+			player.modulate = lerp(player.modulate, Color.webgray, 0.008)
+			world.modulate = lerp(world.modulate, Color.webgray, 0.008)
+		elif player.position.y  < -268 - 268 - 268 + 128:
+			player.modulate = lerp(player.modulate, Color.black.lightened(0.1), 0.008)
+			world.modulate = lerp(world.modulate, Color.black.lightened(0.1), 0.008)
+		else:
+			player.modulate = lerp(player.modulate, Color.white, 0.005)
+			world.modulate = lerp(world.modulate, Color.white, 0.005)
 		to.x = 263.5
 		to.y -= 100
-		if player.position.y < -268:
+		if player.position.y  < -268 - 268 - 268 - 2:
+			to = lerp(to, player.position + Vector2.UP * 128, 0.005)
+		elif player.position.y  < -268 - 268 + 32:
+			to = lerp(to, player.position, 0.005)
+		elif player.position.y < -268:
 			to = Vector2(263.5, -268 - 134)
-		if player.position.y  < -268 - 268 + 32:
-			to = player.position
 	position = lerp(position, to, 0.08 * delta * 60)
 
 

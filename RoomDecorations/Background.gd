@@ -27,6 +27,10 @@ func _process(_delta):
 			x = -1
 			y += 1
 		TileRNG.seed = Tile.rect_position.x * Tile.rect_position.y
+		if Tile.rect_position.y / TILE_SIZE.y in [-4, -5, -6] and Items.is_level_boss():
+			Tile.visible = false
+		else:
+			Tile.visible = true
 		if Map.level_tile == 0:
 			match TileRNG.randi()%2:
 				0:
