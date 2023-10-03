@@ -39,6 +39,7 @@ func _physics_process(delta: float) -> void:
 		AI_STATES.player_outside:
 			spellcast_mode = WAND_MODES.surround_rotate
 			if player.position.y < boss_arena_y_start:
+				get_tree().call_group("Title", "boss_fight", "Malekarai Malekha")
 				ai_mode = AI_STATES.prep_time
 				for x in range(22, 44):
 					for y in range(-36, -33):
