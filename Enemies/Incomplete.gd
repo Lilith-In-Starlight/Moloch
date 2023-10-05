@@ -17,9 +17,13 @@ var health := Flesh.new()
 var wand := Wand.new()
 var Map :Node2D
 
+var loaded_data := {}
+
 
 func _ready():
-	wand.fill_with_random_spells()
+	add_to_group("Persistent")
+	if wand.spells.empty():
+		wand.fill_with_random_spells()
 	Items.add_child(wand)
 	Map = get_tree().get_nodes_in_group("World")[0]
 	noise.seed = hash(self)
@@ -36,7 +40,7 @@ func _ready():
 	
 	Player = get_tree().get_nodes_in_group("Player")[0]
 	wand.recharge_cooldown = max(wand.recharge_cooldown, 1.5)
-	if Player.position.distance_to(position) < 500:
+	if Player.position.distance_to(position) < 500 and not first_check:
 		queue_free()
 
 
@@ -135,3 +139,30 @@ func _on_VisibilityEnabler2D_screen_entered() -> void:
 func _on_VisibilityEnabler2D_screen_exited() -> void:
 	$Eye.enabled = false
 	$Senses.enabled = false
+
+
+func _on_exit():
+	var data := {}
+	data["type"] = "incomplete"
+	data["position"] = position
+	data["state"] = state
+	data["speed"] = speed
+	data["search_time"] = search_time
+	data["last_seen"] = last_seen
+	data["health"] = health.get_as_dict()
+	data["first_check"] = first_check
+	data["wand"] = wand.get_json()
+	Items.saved_entity_data.append(data)
+
+
+func set_data(dict: Dictionary):
+	position = dict["position"]
+	state = dict["state"]
+	speed = dict["speed"]
+	search_time = dict["search_time"]
+	last_seen = dict["last_seen"]
+	health.set_from_dict(dict["health"])
+	first_check = dict["first_check"]
+	var json := JSON.parse(dict["wand"])
+	wand.set_from_dict(json.result)
+	loaded_data.clear()

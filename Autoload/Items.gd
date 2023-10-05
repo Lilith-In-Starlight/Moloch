@@ -70,6 +70,12 @@ var default_circle_radius_one := CircleShape2D.new()
 
 var player_hitbox : RectangleShape2D
 
+var saved_world_tiles :Dictionary = {}
+var saved_world_destruction :Dictionary = {}
+var saved_entity_data :Array = []
+var saved_chest_data :Dictionary = {}
+var retrieved_player_data :Dictionary = {}
+
 
 func _ready():
 	default_circle_radius_six.radius = 6.0
@@ -311,6 +317,10 @@ func pick_random_modifier(rng:RandomNumberGenerator = LootRNG) -> Spell:
 
 
 func reset_player():
+	saved_world_tiles.clear()
+	saved_world_destruction.clear()
+	saved_entity_data.clear()
+	saved_chest_data.clear()
 	for i in get_children():
 		i.queue_free()
 	last_items = []
@@ -352,10 +362,16 @@ func reset_player():
 	player_wands[1].spells = [spells[2].values()[LootRNG.randi()%spells[2].values().size()]]
 
 
-
 func reset_player_to_savefile():
-	using_seed = Config.playthrough_file.get_value("world", "genseed", -1)
 	Config.playthrough_file.load("user://memories.moloch")
+	saved_world_tiles = Config.playthrough_file.get_value("worldstate", "tiles", {})
+	items_picked_in_run = Config.playthrough_file.get_value("player", "items_picked_in_run", [])
+	saved_chest_data = Config.playthrough_file.get_value("worldstate", "chests", {})
+	saved_world_destruction = Config.playthrough_file.get_value("worldstate", "destruction", {})
+	saved_entity_data = Config.playthrough_file.get_value("worldstate", "entities", [])
+	retrieved_player_data["position"] = Config.playthrough_file.get_value("player", "position", Vector2(256, 200))
+	retrieved_player_data["velocity"] = Config.playthrough_file.get_value("player", "velocity", Vector2(0, 0))
+	using_seed = Config.playthrough_file.get_value("world", "genseed", -1)
 	last_items = Config.playthrough_file.get_value("player", "last_items", [])
 	last_spells = Config.playthrough_file.get_value("player", "last_spells", [])
 	last_pickup = null
@@ -495,7 +511,7 @@ func clear_player_wands() -> void:
 	while player_wands.size() > 6:
 		player_wands.pop_back()
 	for index in player_wands.size():
-		if player_wands[index] != null:
+		if is_instance_valid(player_wands[index]):
 			player_wands[index].queue_free()
 			player_wands[index] = null
 	while player_wands.size() < 6:
@@ -506,3 +522,50 @@ func player_wands_pop_at(idx: int) -> Wand:
 	var return_value = player_wands[idx]
 	player_wands[idx] = null
 	return return_value
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_QUIT_REQUEST:
+		if get_tree().current_scene.name == "MainMenu":
+			return
+		save_player_data(true, true)
+		get_tree().quit()
+
+
+func save_player_data(do_player_node := false, do_entities := false):
+	saved_chest_data.clear()
+	saved_entity_data.clear()
+	get_tree().call_group_flags(2, "Persistent", "_on_exit")	
+	var spells_array := []
+	for i in player_spells:
+		if i.is_modifier():
+			spells_array.append([i.id, str(i.level), i.description])
+		else:
+			spells_array.append(i.id)
+	
+	var wands_array := []
+	for i in player_wands:
+		if i != null:
+			wands_array.append(i.get_json())
+		else:
+			wands_array.append("null")
+		
+	Config.playthrough_file.set_value("player", "spells", spells_array)
+	Config.playthrough_file.set_value("player", "items_picked_in_run", items_picked_in_run)
+	Config.playthrough_file.set_value("player", "wands", wands_array)
+	Config.playthrough_file.set_value("player", "items", player_items)
+	Config.playthrough_file.set_value("player", "cloth_scraps", cloth_scraps)
+	Config.playthrough_file.set_value("player", "health", player_health.get_as_dict())
+	
+	Config.playthrough_file.set_value("worldstate", "tiles", saved_world_tiles)
+	Config.playthrough_file.set_value("worldstate", "destruction", saved_world_destruction)
+	
+	if do_player_node:
+		Config.playthrough_file.set_value("player", "position", get_tree().get_nodes_in_group("Player")[0].position)
+		Config.playthrough_file.set_value("player", "velocity", get_tree().get_nodes_in_group("Player")[0].speed)
+	
+	if do_entities:
+		Config.playthrough_file.set_value("worldstate", "chests", saved_chest_data)
+		Config.playthrough_file.set_value("worldstate", "entities", saved_entity_data)
+		
+	Config.playthrough_file.save("user://memories.moloch")

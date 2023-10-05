@@ -24,10 +24,14 @@ var cost := 0.1
 
 var Player :Character
 
+var id
+var loaded := false
+
 
 func _ready() -> void:
+	add_to_group("Persistent")
 	Player = get_tree().get_nodes_in_group("Player")[0]
-	swap = Items.LootRNG.randi() % PROPERTIES.size()
+	if !loaded: swap = Items.LootRNG.randi() % PROPERTIES.size()
 	$Control/ButtonsToPress/Control/Label.text = "Swap " + PROPERTIES[swap]
 	$PillarL/WandRenderSprite.visible = false
 	$PillarR/WandRenderSprite.visible = false
@@ -54,7 +58,7 @@ func add_wand_to_side():
 			left_wand = player_wand
 		1:
 			Items.player_wands[Items.selected_wand] = right_wand
-			left_wand = right_wand
+			right_wand = player_wand
 
 
 func swap_wands_success():
@@ -120,3 +124,37 @@ func _on_Pillar_body_exited(body: Node) -> void:
 
 func _on_Control_body_entered(body: Node) -> void:
 	control = true
+
+
+func _on_exit() -> void:
+	var data := {}
+	data["side"] = side
+	data["control"] = control
+	data["left_wand"] = left_wand.get_json() if left_wand else "null"
+	data["right_wand"] = right_wand.get_json() if right_wand else "null"
+	data["swap"] = swap
+	data["uses"] = uses
+	data["cost"] = cost
+	Items.saved_chest_data[id] = data
+
+
+func update_with_id() -> void:
+	loaded = true
+	var data = Items.saved_chest_data[id]
+	side = data["side"]
+	control = data["control"]
+	if data["left_wand"] != "null":
+		var wand := Wand.new()
+		var json = JSON.parse(data["left_wand"])
+		wand.set_from_dict(json.result)
+		Items.add_child(wand)
+		left_wand = wand
+	if data["right_wand"] != "null":
+		var wand := Wand.new()
+		var json = JSON.parse(data["right_wand"])
+		wand.set_from_dict(json.result)
+		Items.add_child(wand)
+		right_wand = wand
+
+
+

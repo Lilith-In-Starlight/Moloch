@@ -20,6 +20,8 @@ const antidirections = {
 var areas := []
 var doors := []
 
+var loaded_entities_from_file := false
+
 
 var max_point :Vector2
 var min_point :Vector2
@@ -46,30 +48,14 @@ class _Room extends Reference:
 
 
 func ready():
+	if Items.level != Config.playthrough_file.get_value("world", "level", Items.level):
+		Items.saved_chest_data.clear()
+		Items.saved_entity_data.clear()
+		Items.saved_world_tiles.clear()
+		Items.saved_world_destruction.clear()
 	Config.playthrough_file.set_value("world", "world_state", Items.WorldRNG.state)
 	Config.playthrough_file.set_value("world", "loot_state", Items.LootRNG.state)
 	Config.playthrough_file.set_value("world", "level", Items.level)
-	Config.playthrough_file.set_value("player", "health", Items.player_health.get_as_dict())
-	var spells_array := []
-	for i in Items.player_spells:
-		if i.is_modifier():
-			spells_array.append([i.id, str(i.level), i.description])
-		else:
-			spells_array.append(i.id)
-	
-	var wands_array := []
-	
-	for i in Items.player_wands:
-		if i != null:
-			wands_array.append(i.get_json())
-		else:
-			wands_array.append("null")
-		
-	Config.playthrough_file.set_value("player", "spells", spells_array)
-	Config.playthrough_file.set_value("player", "wands", wands_array)
-	Config.playthrough_file.set_value("player", "items", Items.player_items)
-	Config.playthrough_file.set_value("player", "cloth_scraps", Items.cloth_scraps)
-	Config.playthrough_file.save("user://memories.moloch")
 	Config.loaded_playthrough = true
 	if Items.level > 2:
 		level_tile = 1
@@ -92,7 +78,13 @@ func ready():
 	max_point = Vector2(3, 0)
 	min_point = Vector2(-3, -8)
 	print("Step 1: Generating layout of the world")
-	var world_tiles := generate_world()
+	var world_tiles := {}
+	if Items.saved_world_tiles.empty():
+		world_tiles = generate_world()
+		Items.saved_world_tiles = world_tiles
+	else:
+		world_tiles = Items.saved_world_tiles
+		Items.saved_world_tiles = {}
 	
 	while not are_tiles_connected(Vector2(0, 0), Vector2(0, min_point.y + 1), world_tiles) and not Items.is_level_boss():
 		world_tiles = generate_world()
@@ -156,12 +148,19 @@ func ready():
 		new_tile.add_to_group("WorldPiece")
 		world_tile_instances[tile_position] = new_tile
 	
+	for tile in Items.saved_world_destruction:
+		set_tiles_cellv(tile, Items.saved_world_destruction[tile])
+	Items.saved_world_destruction.clear()
+	
 	print("Step 3: Cloning all elements")
 	# this can be shrunk further if one makes the game load all files at res://Elements/* at the start
 	# then here one can use load(find_tscn_for_group(group)) and it will just return already loaded refs.
 	print("    - Chests")
 	for chest in get_tree().get_nodes_in_group("Chest"):
-		replace_layout_node_with_packed_scene(chest, preload("res://Elements/Chest.tscn"))
+		var chest_node := replace_layout_node_with_packed_scene(chest, preload("res://Elements/Chest.tscn"))
+		chest_node.id = hash(chest_node.position)
+		if Items.saved_chest_data.has(chest_node.id):
+			chest_node.update_with_id()
 	print("    - Platforms")
 	for plat in get_tree().get_nodes_in_group("Platform"):
 		replace_layout_node_with_packed_scene(plat, preload("res://Elements/Platform.tscn"))
@@ -189,10 +188,18 @@ func ready():
 	for sprite in get_tree().get_nodes_in_group("AC"):
 		replace_layout_node_with_background_packed_scene(sprite, preload("res://Elements/AC.tscn"))
 	for sprite in get_tree().get_nodes_in_group("WandMixer"):
-		replace_layout_node_with_background_packed_scene(sprite, preload("res://Elements/WandMixer.tscn"))
+		var mixer_node := replace_layout_node_with_background_packed_scene(sprite, preload("res://Elements/WandMixer.tscn"))
+		mixer_node.id = hash(mixer_node.position)
+		print(mixer_node.id)
+		if Items.saved_chest_data.has(mixer_node.id):
+			mixer_node.update_with_id()
 	for sprite in get_tree().get_nodes_in_group("Shop"):
-		replace_layout_node_with_background_packed_scene(sprite, preload("res://Elements/Shop.tscn"))
-	
+		var shop_node := replace_layout_node_with_background_packed_scene(sprite, preload("res://Elements/Shop.tscn"))
+		shop_node.id = hash(shop_node.position)
+		print(shop_node.id)
+		if Items.saved_chest_data.has(shop_node.id):
+			shop_node.update_with_id()
+	Items.saved_chest_data.clear()	
 #	print("Step 4: Passing all the room data to the world TileMap")
 #	for room in get_children():
 #		if room is TileMap:
@@ -260,7 +267,51 @@ func finalize_world():
 #	print("Step 6: Autotiling so it's pretty")
 #	update_bitmask_region(min_point, max_point)
 	print("Step 7: Adding enemies")
-	if not Items.is_level_boss(): add_enemies()
+	if not Items.is_level_boss() and Items.saved_entity_data.empty(): add_enemies()
+	elif not Items.saved_entity_data.empty():
+		loaded_entities_from_file = true
+		print("Loading entity data")
+		print(Items.saved_entity_data.size())
+		while not Items.saved_entity_data.empty():
+			var entity_data:Dictionary = Items.saved_entity_data.pop_back()
+			match entity_data["type"]:
+				"spellmachine":
+					var new_enemy = preload("res://Enemies/SpellMachine.tscn").instance()
+					new_enemy.set_data(entity_data)
+					call_deferred("add_child", new_enemy)
+				"soulmachine":
+					var new_enemy = preload("res://Enemies/MagicDrone.tscn").instance()
+					new_enemy.set_data(entity_data)
+					call_deferred("add_child", new_enemy)
+				"incomplete":
+					var new_enemy = preload("res://Enemies/Incomplete.tscn").instance()
+					new_enemy.set_data(entity_data)
+					call_deferred("add_child", new_enemy)
+				"citizen":
+					var new_enemy = preload("res://Enemies/Citizen.tscn").instance()
+					new_enemy.set_data(entity_data.duplicate(true))
+					call_deferred("add_child", new_enemy)
+				"firemoth":
+					var new_enemy = preload("res://Enemies/Firemoth.tscn").instance()
+					new_enemy.set_data(entity_data)
+					call_deferred("add_child", new_enemy)
+				"fireman":
+					var new_enemy = preload("res://Entities/Fireman/Fireman.tscn").instance()
+					new_enemy.set_data(entity_data)
+					call_deferred("add_child", new_enemy)
+				"spellitem":
+					var new_enemy = preload("res://Items/SpellEntity.tscn").instance()
+					new_enemy.set_data(entity_data)
+					call_deferred("add_child", new_enemy)
+				"itemitem":
+					var new_enemy = preload("res://Items/ItemEntity.tscn").instance()
+					new_enemy.set_data(entity_data)
+					call_deferred("add_child", new_enemy)
+				"wanditem":
+					var new_enemy = preload("res://Items/WandEntity.tscn").instance()
+					new_enemy.set_data(entity_data)
+					call_deferred("add_child", new_enemy)
+		Items.saved_entity_data.clear()
 	else:
 		var pos :Vector2 = Vector2(263.5 + 200, -268 - 32 - 8)
 		var node:Node2D = preload("res://Entities/MalekaraiMalekha/MalekaraiMalekha.tscn").instance()
@@ -474,17 +525,18 @@ func search_for(group:String, new_room, room, element)-> Array:
 				break
 	return [not_found, connected_door, new_rect]
 
-func replace_layout_node_with_scene(node, scene):
+func replace_layout_node_with_scene(node, scene) -> Node:
 	scene.position = node.global_position
 	if has_property(scene, "size"):
 		scene.size = node.size
 	add_child(scene)
 	node.queue_free()
+	return scene
 
-func replace_layout_node_with_packed_scene(node, scene: PackedScene):
-	replace_layout_node_with_scene(node,scene.instance())
+func replace_layout_node_with_packed_scene(node, scene: PackedScene) -> Node:
+	return replace_layout_node_with_scene(node,scene.instance())
 
-func replace_layout_node_with_background_packed_scene(node, scene: PackedScene):
+func replace_layout_node_with_background_packed_scene(node, scene: PackedScene)-> Node:
 	var unpacked = scene.instance()
 	replace_layout_node_with_scene(node, unpacked)
 	unpacked.z_index = -1
@@ -804,6 +856,7 @@ func set_tiles_cellv(point: Vector2, tile: int):
 		return
 	var tile_instance: TileMap = world_tile_instances[tile_position]
 	tile_instance.set_cellv(point - tile_position * Rooms.tile_size, tile)
+	Items.saved_world_destruction[point] = tile
 
 func get_round_point_to_tile(point: Vector2) -> Vector2:
 	var output_x := int(point.x / Rooms.tile_size.x)

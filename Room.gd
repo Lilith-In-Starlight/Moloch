@@ -10,6 +10,8 @@ export var bottom := 0
 
 var decos := []
 
+var source := []
+
 
 #func _ready():
 #	if not Engine.editor_hint:

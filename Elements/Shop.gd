@@ -11,8 +11,15 @@ var max_soul := 1.0
 
 var time := 0.0
 
+var id : int
+
+var loaded := false
+
 func _ready() -> void:
+	add_to_group("Persistent")
 	Player = get_tree().get_nodes_in_group("Player")[0]
+	if loaded:
+		return
 	for i in $Items.get_child_count():
 		var spr := Sprite.new()
 		$Items.get_child(i).add_child(spr)
@@ -100,9 +107,39 @@ func _process(delta: float) -> void:
 				$Items.get_child(selected).visible = false
 				Items.player_spells.append(Items.all_spells[spells[selected]])
 				Items.player_health.blood_module.amount -= prices[selected]
+
+
+func _on_exit() -> void:
+	var data := {}
+	data["children"] = []
+	for idx in $Items.get_child_count():
+		var child = $Items.get_child(idx)
+		data["children"].append(child.visible)
+	data["spells"] = []
+	for spell in spells:
+		data["spells"].append(spell)
+	data["prices"] = prices
+	data["soul_cost"] = soul_cost
+	data["soul_spell"] = soul_spell
+	Items.saved_chest_data[id] = data
 	
-	
-	
+
+func update_with_id():
+	loaded = true
+	var data = Items.saved_chest_data[id]
+	for idx in data["children"].size():
+		var child = $Items.get_child(idx)
+		child.visible = data["children"][idx]
+		if !data["children"][idx]: print(data["children"][idx])
+	for idx in data["spells"].size():
+		var child = $Items.get_child(idx)
+		var spid = data["spells"][idx]
+		var spell = Items.all_spells[spid]
+		child.get_child(0).texture = spell.texture
+		
+	prices = data["prices"]
+	soul_cost = data["soul_cost"]
+	soul_spell = data["soul_spell"]
 
 
 func get_item_in_tier(tier:int = 1) -> Item:

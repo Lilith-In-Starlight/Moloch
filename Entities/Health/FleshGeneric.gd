@@ -198,6 +198,8 @@ func _on_hyperthermia_died():
 
 
 func add_body() -> FleshBody:
+	if body_module:
+		return body_module
 	var new_module := FleshBody.new()
 	new_module.connect("hole_poked", self, "_on_poked_hole")
 	new_module.connect("max_holed", self, "_on_max_holed")
@@ -208,6 +210,8 @@ func add_body() -> FleshBody:
 
 
 func add_soul() -> FleshSoul:
+	if soul_module:
+		return soul_module
 	var new_module := FleshSoul.new()
 	new_module.connect("ran_out_of_soul", self, "_on_ran_out_of_soul")
 	add_child(new_module)
@@ -216,6 +220,8 @@ func add_soul() -> FleshSoul:
 
 
 func add_blood() -> FleshBlood:
+	if blood_module:
+		return blood_module
 	var new_module := FleshBlood.new()
 	new_module.connect("ran_out_of_blood", self, "_on_ran_out_of_blood")
 	add_child(new_module)
@@ -224,6 +230,8 @@ func add_blood() -> FleshBlood:
 
 
 func add_temperature() -> FleshTemperature:
+	if temperature_module:
+		return temperature_module
 	var new_module := FleshTemperature.new()
 	new_module.connect("hyperthermia_died", self, "_on_hyperthermia_died")
 	new_module.connect("hypothermia_died", self, "_on_hypothermia_died")

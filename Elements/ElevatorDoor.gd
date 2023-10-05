@@ -22,4 +22,5 @@ func _process(_delta):
 
 func _on_animation_finished(_anim_name):
 	if not came_from:
+		Items.save_player_data(true, true)
 		emit_signal("level_ended")

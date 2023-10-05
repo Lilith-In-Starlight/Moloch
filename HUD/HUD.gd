@@ -465,6 +465,7 @@ func _on_player_died():
 
 func _on_level_ended():
 	level_ended = true
+	Items.saved_world_tiles.clear()
 	Items.level += 1
 
 

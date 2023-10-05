@@ -24,8 +24,12 @@ onready var camera_controller :Node = get_node_or_null("CameraController")
 export var properties_path: NodePath
 onready var properties :Node = get_node_or_null(properties_path)
 
+var prepare_for_setup := {}
+
 
 func _ready() -> void:
+	if properties != null and not prepare_for_setup.empty():
+		set_data(prepare_for_setup)
 	Map = get_tree().get_nodes_in_group("World")[0]
 	health = properties.get_health()
 	health.connect("was_damaged", self, "_on_damaged")
@@ -37,6 +41,11 @@ func _ready() -> void:
 	health.body_module.connect("impacted_body_top", self, "_on_impacted_body_top")
 	health.temperature_module.connect("temperature_state_changed", self, "_on_temperature_state_changed")
 	health.soul_module.connect("soul_state_changed", self, "_on_soul_state_changed")
+	if Items.retrieved_player_data.has("position"):
+		position = Items.retrieved_player_data["position"]
+	if Items.retrieved_player_data.has("velocity"):
+		speed = Items.retrieved_player_data["velocity"]
+	Items.retrieved_player_data.clear()
 	set_physics_process(false)
 	set_process(false)
 
@@ -307,3 +316,11 @@ func _on_soul_state_changed(_previous: int, new_state: int) -> void:
 		send_message("Your soul is overwhelmed")
 	elif new_state == 2:
 		send_message("Your soul is more real than the world")
+
+
+func set_data(data: Dictionary) -> void:
+	if not properties:
+		prepare_for_setup = data
+	else:
+		properties.set_data(prepare_for_setup)
+		data.clear()

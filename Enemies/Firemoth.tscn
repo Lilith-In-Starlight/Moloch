@@ -45,7 +45,7 @@ animations = [ {
 [sub_resource type="CircleShape2D" id=8]
 radius = 7.0
 
-[node name="Firemoth" type="KinematicBody2D"]
+[node name="Firemoth" type="KinematicBody2D" groups=["Persistent"]]
 collision_layer = 24
 collision_mask = 10
 script = ExtResource( 3 )

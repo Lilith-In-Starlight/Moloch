@@ -32,3 +32,4 @@ func get_wands() -> Array:
 
 func is_cast_blocked() -> bool:
 	return get_tree().get_nodes_in_group("HUD")[0].block_cast
+

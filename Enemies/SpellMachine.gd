@@ -25,8 +25,11 @@ var first_check := false
 
 var spell :Spell = Items.pick_random_spell(Items.WorldRNG)
 
+var loaded_data := {}
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	add_to_group("Persistent")
 	noise.seed = randi()
 	health.add_body()
 	health.add_temperature()
@@ -41,13 +44,13 @@ func _ready():
 	
 	Map = get_tree().get_nodes_in_group("World")[0]
 	Player = get_tree().get_nodes_in_group("Player")[0]
-	if Player.position.distance_to(position) < 500:
+	if Player.position.distance_to(position) < 500 and not first_check:
 		queue_free()
 	
 
 func _physics_process(delta):
 	if not first_check:
-		if Player.position.distance_to(position) < 500:
+		if Player.position.distance_to(position) < 500 and not first_check:
 			queue_free()
 		var tcol :KinematicCollision2D = move_and_collide(Vector2(0, 0), true, true, true)
 		if tcol != null:
@@ -200,3 +203,26 @@ func _on_died():
 	if randf() < 0.1:
 		Map.summon_spell(spell, position, speed)
 	queue_free()
+
+
+func _on_exit():
+	var data := {}
+	data["type"] = "spellmachine"
+	data["position"] = position
+	data["state"] = state
+	data["speed"] = speed
+	data["position_timer"] = position_timer
+	data["last_seen"] = last_seen
+	data["health"] = health.get_as_dict()
+	data["first_check"] = first_check
+	Items.saved_entity_data.append(data)
+
+
+func set_data(dict: Dictionary):
+	position = dict["position"]
+	state = dict["state"]
+	speed = dict["speed"]
+	position_timer = dict["position_timer"]
+	last_seen = dict["last_seen"]
+	health.set_from_dict(dict["health"])
+	first_check = dict["first_check"]

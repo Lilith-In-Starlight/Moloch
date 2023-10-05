@@ -6,7 +6,9 @@ var tile_adjacencies := []
 
 
 func _ready() -> void:
+	add_to_group("Persistent")
 	set_process(false)
+	
 
 
 func _process(_delta):
@@ -82,6 +84,12 @@ func _draw():
 
 func _on_generated_world() -> void:
 	set_process(true)
+	var world = get_tree().get_nodes_in_group("World")[0]
+	if not world.loaded_entities_from_file:
+		return
+	tiles_player_has_been_to = Config.playthrough_file.get_value("Player", "tiles_player_has_been_to", [])
+	tiles_whose_adjacencies_been_drawn = Config.playthrough_file.get_value("Player", "tiles_whose_adjacencies_been_drawn", [])
+	tile_adjacencies = Config.playthrough_file.get_value("Player", "tile_adjacencies", [])
 
 
 func get_tile_side(tile:Vector2, side: String, all_tiles: Dictionary):
@@ -96,3 +104,9 @@ func get_tile_side(tile:Vector2, side: String, all_tiles: Dictionary):
 			return all_tiles[tile].right
 		if side == "left":
 			return all_tiles[tile].left
+
+
+func _on_exit() -> void:
+	Config.playthrough_file.set_value("Player", "tiles_player_has_been_to", tiles_player_has_been_to)
+	Config.playthrough_file.set_value("Player", "tiles_whose_adjacencies_been_drawn", tiles_whose_adjacencies_been_drawn)
+	Config.playthrough_file.set_value("Player", "tile_adjacencies", tile_adjacencies)

@@ -96,6 +96,7 @@ func _on_CameraSensitivity_value_changed(value: float) -> void:
 
 
 func _on_MainMenu_pressed() -> void:
+	Items.save_player_data(true, true)
 	get_tree().change_scene("res://MainMenu.tscn")
 
 

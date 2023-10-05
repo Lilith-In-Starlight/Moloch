@@ -120,3 +120,26 @@ func _on_VisibilityEnabler2D_screen_entered() -> void:
 
 func _on_VisibilityEnabler2D_screen_exited() -> void:
 	$RayCast.enabled = false
+
+
+func _on_exit():
+	var data := {}
+	data["type"] = "firemoth"
+	data["position"] = position
+	data["timer"] = timer
+	data["direction"] = direction
+	data["eye_dir"] = eye_dir
+	data["health"] = health.get_as_dict()
+	data["first_check"] = first_check
+	data["speed_n"] = speed_n
+	Items.saved_entity_data.append(data)
+
+
+func set_data(data: Dictionary):
+	position = data["position"]
+	timer = data["timer"]
+	direction = data["direction"]
+	eye_dir = data["eye_dir"]
+	health.set_from_dict(data["health"])
+	first_check = data["first_check"]
+	speed_n = data["speed_n"]

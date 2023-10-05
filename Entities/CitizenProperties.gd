@@ -8,6 +8,7 @@ var cloth_scraps := 3
 var current_wand := 0
 
 func _ready() -> void:
+	add_to_group("Persistent")
 	health.add_blood()
 	health.add_body()
 	health.add_soul()
@@ -42,3 +43,23 @@ func get_wands() -> Array:
 func is_cast_blocked() -> bool:
 	if get_wand() == null: return false
 	return get_wand().running
+
+
+func _on_exit() -> void:
+	var data := {}
+	data["type"] = "citizen"
+	data["health"] = health.get_as_dict()
+	data["cloth_scraps"] = cloth_scraps
+	data["wand"] = wands[0].get_json()
+	data["position"] = get_parent().position
+	data["velocity"] = get_parent().speed
+	Items.saved_entity_data.append(data)
+
+
+func set_data(data: Directory):
+	get_parent().position = get_parent().prepare_for_setup["position"]
+	get_parent().speed = get_parent().prepare_for_setup["velocity"]
+	var json := JSON.parse(get_parent().prepare_for_setup["wand"])
+	wands[0].set_from_dict(json.result)
+	cloth_scraps = get_parent().prepare_for_setup["cloth_scraps"]
+	health.set_from_dict(get_parent().prepare_for_setup["health"])

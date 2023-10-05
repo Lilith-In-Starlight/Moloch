@@ -2,10 +2,11 @@ extends Node
 
 
 onready var player :Character = get_tree().get_nodes_in_group("Player")[0]
+onready var world = get_tree().get_nodes_in_group("World")[0]
 
 
 func _process(delta: float) -> void:
-	if player.position.distance_to(get_parent().position) < 500:
+	if player.position.distance_to(get_parent().position) < 500 and not world.loaded_entities_from_file:
 		if get_node_or_null("../EntityProperties") != null and $"../EntityProperties".has_method("get_wand"):
 			$"../EntityProperties".get_wand().queue_free()
 		get_parent().queue_free()

@@ -15,10 +15,12 @@ var angle := 0.0
 onready var wands := [$SpellCastingPoint, $SpellCastingPoint2]
 
 var noise := OpenSimplexNoise.new()
+var prepare_for_setup := {}
 
 func _ready() -> void:
 	noise.seed = randi()
 	update_children_paths()
+	if not prepare_for_setup.empty(): set_data(prepare_for_setup)
 
 
 func update_children_paths() -> void:
@@ -59,3 +61,11 @@ func health_object() -> Flesh:
 
 func _on_died() -> void:
 	queue_free()
+
+
+func set_data(data: Dictionary) -> void:
+	if not properties:
+		prepare_for_setup = data
+	else:
+		properties.set_data(prepare_for_setup)
+		data.clear()

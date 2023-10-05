@@ -12,12 +12,15 @@ var open := false
 var Player :KinematicBody2D
 var Map :Node2D
 
+var id: int
+
 
 var item :Item
 var wand :Wand
 var spell
 
 func _ready():
+	add_to_group("Persistent")
 	item = Items.pick_random_item()
 	wand = Wand.new()
 	wand.fill_with_random_spells()
@@ -64,3 +67,28 @@ func _process(_delta):
 func _exit_tree() -> void:
 	if wand != null and not wand.is_inside_tree():
 		wand.queue_free()
+
+
+func update_with_id() -> void:
+	var chest_data :Dictionary = Items.saved_chest_data[id]
+	if chest_data["opened"]:
+		$Sprite.play("open")
+		open = true
+	position = chest_data["position"]
+	rotation = chest_data["rotation"]
+	linear_velocity = chest_data["linear_velocity"]
+	angular_velocity = chest_data["angular_velocity"]
+
+
+func get_chest_data() -> Dictionary:
+	var data := {}
+	data["opened"] = open
+	data["position"] = position
+	data["rotation"] = rotation
+	data["linear_velocity"] = linear_velocity
+	data["angular_velocity"] = angular_velocity
+	return data
+
+
+func _on_exit():
+	Items.saved_chest_data[id] = get_chest_data()
