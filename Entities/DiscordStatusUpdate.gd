@@ -1,37 +1,49 @@
 extends Node
 
-
-onready var health :Flesh = get_parent().health_object()
+var health :Flesh
 var temp_stage: int = 0
 var detail := ""
 
-
 func _process(delta: float) -> void:
-	if Config.discord != null:
+	if Config.discord != null and health != null:
 		temp_stage = get_parent().temp_stage
 		detail = ""
-		if health.needs_blood and health.poked_holes > 0:
+		if health.blood_module and health.body_module.holes > 0:
 			detail += "Bleeding, "
-		if health.broken_moving_appendages == 1:
-			detail += "Broken leg, "
-		elif health.broken_moving_appendages == 2:
-			detail += "Broken legs, "
-		if temp_stage == 1:
-			detail += "Too hot, "
-		elif temp_stage == 2:
-			detail += "Heat stroke, "
-		elif temp_stage == -1:
-			detail += "Too cold, "
-		elif temp_stage == -2:
-			detail += "Hypothermia, "
-		if health.soul > health.needed_soul:
-			detail += "Soulful, "
-		elif health.soul < 0.43:
-			detail += "Soulless, "
-		if health.blood_substance == "nitroglycerine":
-			detail += "Volatile, "
-		elif health.blood_substance == "water":
-			detail += "Water Blood, "
+		if health.body_module:
+			if health.body_module.broken_legs == 1:
+				detail += "Broken leg, "
+			elif health.body_module.broken_legs == 2:
+				detail += "Broken legs, "
+		else:
+			detail += "Bodyless, "
+		if health.temperature_module:
+			if health.temperature_module.temp_state == 1:
+				detail += "Too hot, "
+			elif health.temperature_module.temp_state == 2:
+				detail += "Heat stroke, "
+			elif health.temperature_module.temp_state == -1:
+				detail += "Too cold, "
+			elif health.temperature_module.temp_state == -2:
+				detail += "Hypothermia, "
+		else:
+			detail += "Temperatureless, "
+		if health.soul_module:
+			if health.soul_module.amount > health.soul_module.maximum:
+				detail += "Soulful, "
+			elif health.soul_module.amount < 0.8:
+				detail += "Lacking in Soul, "
+			elif health.soul_module.amount < 0.4:
+				detail += "Soulless, "
+		else:
+			detail += "Non-existant, "
+		if health.blood_module and health.blood_module.is_vital:
+			if health.blood_module.substance == "nitroglycerine":
+				detail += "Volatile, "
+			elif health.blood_module.substance == "water":
+				detail += "Water Blood, "
+		else:
+			detail += "Bloodless, "
 		if health.effects.has("onfire"):
 			detail += "On fire, "
 		detail = detail.rstrip(", ")

@@ -41,11 +41,7 @@ func _ready() -> void:
 	health.body_module.connect("impacted_body_top", self, "_on_impacted_body_top")
 	health.temperature_module.connect("temperature_state_changed", self, "_on_temperature_state_changed")
 	health.soul_module.connect("soul_state_changed", self, "_on_soul_state_changed")
-	if Items.retrieved_player_data.has("position"):
-		position = Items.retrieved_player_data["position"]
-	if Items.retrieved_player_data.has("velocity"):
-		speed = Items.retrieved_player_data["velocity"]
-	Items.retrieved_player_data.clear()
+	$DiscordUpdater.health = health
 	set_physics_process(false)
 	set_process(false)
 

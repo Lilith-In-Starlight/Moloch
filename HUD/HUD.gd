@@ -18,7 +18,6 @@ onready var DeathScreenInfo := $HUD/Death/Info
 onready var MessageHUD := $HUD/Messages
 onready var ScrapsAmount := $HUD/Scraps/Amount
 onready var WandHUD := $HUD/Wands
-onready var CompanionWandHUD := $HUD/CompanionWands
 onready var SpellBagHUD := $HUD/SpellBag
 onready var WandSpellHUD := $HUD/Spells
 onready var DescriptionBox := $HUD/Description
