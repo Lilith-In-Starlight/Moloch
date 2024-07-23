@@ -41,7 +41,7 @@ func _process(delta: float) -> void:
 	elif temperature < (normal + min_temperature) / 3.0:
 		temp_state = -1
 	elif temperature > (normal + min_temperature) / 3.0 and temperature < (normal + max_temperature) / 3.0:
-		temp_state = -1
+		temp_state = 0
 	elif temperature > (normal + max_temperature) / 3.0:
 		temp_state = 1
 	elif temperature > 2 * (normal + max_temperature) / 3.0:

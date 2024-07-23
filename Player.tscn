@@ -210,9 +210,6 @@ script = ExtResource( 16 )
 [node name="HUDControl" type="Node" parent="."]
 script = ExtResource( 17 )
 
-[node name="DiscordUpdater" type="Node" parent="."]
-script = ExtResource( 18 )
-
 [node name="PlayerProperties" type="Node" parent="."]
 script = ExtResource( 19 )
 
@@ -229,6 +226,9 @@ controller_path = NodePath("../InputController")
 
 [node name="SoulJittering" type="Node" parent="."]
 script = ExtResource( 23 )
+
+[node name="DiscordUpdater" type="Node" parent="."]
+script = ExtResource( 18 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource( 1 )
